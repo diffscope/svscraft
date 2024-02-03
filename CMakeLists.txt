@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
 
-project(SVSCraft VERSION 0.0.1.1 LANGUAGES CXX)
+project(svscraft VERSION 0.0.1.1 LANGUAGES CXX)
 
 # ----------------------------------
 # Build Options
