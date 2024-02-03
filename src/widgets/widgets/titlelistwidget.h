@@ -7,25 +7,24 @@
 #include <QListWidget>
 #include <QMenu>
 
-#include <QMGui/QCssValueMap.h>
-
-#include <SVSWidgets/CkSVSWidgetsGlobal.h>
+#include <QMWidgets/qcssvaluemap.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
     class TitleListWidgetPrivate;
 
-    class CKSVSWIDGETS_API TitleListWidget : public QListWidget {
+    class SVSCRAFT_WIDGETS_EXPORT TitleListWidget : public QListWidget {
         Q_OBJECT
         Q_DECLARE_PRIVATE(TitleListWidget)
-        Q_PROPERTY(QCssValueMap styleData READ styleData WRITE setStyleData)
+        Q_PROPERTY(QCssValueMap styleValues READ styleValues WRITE setStyleValues)
     public:
         explicit TitleListWidget(QWidget *parent = nullptr);
         ~TitleListWidget();
 
     public:
-        QCssValueMap styleData() const;
-        void setStyleData(const QCssValueMap &map);
+        QCssValueMap styleValues() const;
+        void setStyleValues(const QCssValueMap &map);
 
         QSize contentsSize() const;
 

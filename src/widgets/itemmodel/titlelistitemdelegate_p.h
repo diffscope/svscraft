@@ -1,11 +1,11 @@
 #ifndef TITLELISTITEMDELEGATEPRIVATE_H
 #define TITLELISTITEMDELEGATEPRIVATE_H
 
-#include <QMGui/QFontInfoEx.h>
-#include <QMGui/QPenInfo.h>
-#include <QMGui/QRectInfo.h>
+#include <QMWidgets/qfontinfoEx.h>
+#include <QMWidgets/qpeninfo.h>
+#include <QMWidgets/qrectinfo.h>
 
-#include <SVSWidgets/TitleListItemDelegate.h>
+#include <SVSCraftWidgets/titlelistitemdelegate.h>
 
 namespace SVS {
 
@@ -37,8 +37,8 @@ namespace SVS {
         QMargins m_iconMargins;
         QSize m_defaultIconSize;
 
-        QCssValueMap styleData_helper() const;
-        void setStyleData_helper(const QCssValueMap &map);
+        QCssValueMap styleValues_helper() const;
+        void setStyleValues_helper(const QCssValueMap &map);
     };
 
 }

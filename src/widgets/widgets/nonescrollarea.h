@@ -3,11 +3,11 @@
 
 #include <QFrame>
 
-#include <SVSWidgets/CkSVSWidgetsGlobal.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
-    class CKSVSWIDGETS_API NoneScrollArea : public QFrame {
+    class SVSCRAFT_WIDGETS_EXPORT NoneScrollArea : public QFrame {
         Q_OBJECT
     public:
         explicit NoneScrollArea(QWidget *parent = nullptr);

@@ -3,14 +3,14 @@
 
 #include <QStyledItemDelegate>
 
-#include <QMGui/QCssValueMap.h>
-#include <SVSWidgets/CkSVSWidgetsGlobal.h>
+#include <QMWidgets/qcssvaluemap.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
     /**
      *
-     * StyleData:
+     * StyleValues:
      *  - background: QRectStyle
      *  - underline: QPen
      *  - titleShape: QTypeFace
@@ -30,7 +30,7 @@ namespace SVS {
 
     class TitleListItemDelegatePrivate;
 
-    class CKSVSWIDGETS_API TitleListItemDelegate : public QStyledItemDelegate {
+    class SVSCRAFT_WIDGETS_EXPORT TitleListItemDelegate : public QStyledItemDelegate {
         Q_OBJECT
         Q_DECLARE_PRIVATE(TitleListItemDelegate)
     public:
@@ -39,18 +39,19 @@ namespace SVS {
 
     public:
         QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
-        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+        void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const override;
 
     public:
-        QCssValueMap styleData() const;
-        void setStyleData(const QCssValueMap &map);
+        QCssValueMap styleValues() const;
+        void setStyleValues(const QCssValueMap &map);
 
     signals:
         void clicked(const QModelIndex &index, int button);
 
     protected:
-        bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option,
-                         const QModelIndex &index) override;
+        bool editorEvent(QEvent *event, QAbstractItemModel *model,
+                         const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
     protected:
         TitleListItemDelegate(TitleListItemDelegatePrivate &d, QObject *parent = nullptr);

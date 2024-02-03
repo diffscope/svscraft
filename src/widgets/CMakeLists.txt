@@ -7,10 +7,10 @@ file(GLOB_RECURSE _src *.h *.cpp)
 
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
-    LINKS SVSCraftCore
+    LINKS SVSCraftCore qtmediate::Widgets
     QT_LINKS Core Gui Widgets
     QT_INCLUDE_PRIVATE Core Gui Widgets
-    INCLUDE_PRIVATE # contexts
+    INCLUDE_PRIVATE . itemmodel widgets
     PREFIX SVSCRAFT_WIDGETS
 )
 

@@ -2,13 +2,13 @@
 #define FULLICONBUTTON_H
 
 #include <QMWidgets/CPushButton.h>
-#include <QMWidgets/QMWidgetsMacros.h>
+#include <QMWidgets/qmwidgetsmacros.h>
 
-#include <SVSWidgets/CkSVSWidgetsGlobal.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
-    class CKSVSWIDGETS_API FullIconButton : public CPushButton {
+    class SVSCRAFT_WIDGETS_EXPORT FullIconButton : public CPushButton {
         Q_OBJECT
         Q_PROPERTY_DECLARE(QSize, iconMargin, IconMargin)
     public:

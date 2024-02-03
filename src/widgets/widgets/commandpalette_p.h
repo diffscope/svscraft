@@ -4,13 +4,12 @@
 #include <QLineEdit>
 #include <QVBoxLayout>
 
-#include <SVSWidgets/TitleListWidget.h>
-#include <SVSWidgets/CommandPalette.h>
+#include <SVSCraftWidgets/titlelistwidget.h>
+#include <SVSCraftWidgets/commandpalette.h>
 
 namespace SVS {
 
     class CommandPalettePrivate : public QObject {
-        Q_OBJECT
         Q_DECLARE_PUBLIC(CommandPalette)
     public:
         CommandPalettePrivate();

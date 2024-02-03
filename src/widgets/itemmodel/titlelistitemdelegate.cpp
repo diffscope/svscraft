@@ -1,13 +1,13 @@
-#include "TitleListItemDelegate.h"
-#include "TitleListItemDelegate_p.h"
+#include "titlelistitemdelegate.h"
+#include "titlelistitemdelegate_p.h"
 
-#include "CkSVSWidgetsNamespace.h"
+#include "svscraftwidgetsnamespace.h"
 
 #include <QDebug>
 #include <QMouseEvent>
 #include <QPainter>
 
-#include <QMGui/QMarginsImpl.h>
+#include <QMWidgets/QMarginsImpl.h>
 
 namespace SVS {
 
@@ -172,7 +172,7 @@ namespace SVS {
     void TitleListItemDelegatePrivate::init() {
     }
 
-    QCssValueMap TitleListItemDelegatePrivate::styleData_helper() const {
+    QCssValueMap TitleListItemDelegatePrivate::styleValues_helper() const {
         return {
             {"background",          QVariant::fromValue(m_backgroundType)   },
             {"underline",           QVariant::fromValue(m_underline)        },
@@ -193,7 +193,7 @@ namespace SVS {
         };
     }
 
-    void TitleListItemDelegatePrivate::setStyleData_helper(const QCssValueMap &map) {
+    void TitleListItemDelegatePrivate::setStyleValues_helper(const QCssValueMap &map) {
         auto decodeStyle = [](const QVariant &var, auto &val) {
             using Type = decltype(typename std::remove_reference<decltype(val)>::type());
             if (var.canConvert<Type>()) {
@@ -471,13 +471,13 @@ namespace SVS {
         }
     }
 
-    QCssValueMap TitleListItemDelegate::styleData() const {
+    QCssValueMap TitleListItemDelegate::styleValues() const {
         Q_D(const TitleListItemDelegate);
-        return d->styleData_helper();
+        return d->styleValues_helper();
     }
-    void TitleListItemDelegate::setStyleData(const QCssValueMap &map) {
+    void TitleListItemDelegate::setStyleValues(const QCssValueMap &map) {
         Q_D(TitleListItemDelegate);
-        d->setStyleData_helper(map);
+        d->setStyleValues_helper(map);
     }
 
     bool TitleListItemDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,

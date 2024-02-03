@@ -1,5 +1,9 @@
 qm_import(Preprocess)
 
+if(NOT TARGET qtmediate::Core)
+    find_package(qtmediate REQUIRED)
+endif()
+
 set(SVSCRAFT_PROJECT_DESCRIPTION "Cross-platform window customization framework")
 set(SVSCRAFT_PROJECT_COPYRIGHT "Copyright 2023 Stdware Collections")
 set(SVSCRAFT_GENERATED_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/../include)

@@ -1,4 +1,4 @@
-#include "LinearScrollArea.h"
+#include "linearscrollarea.h"
 
 #include <QDebug>
 #include <QEvent>

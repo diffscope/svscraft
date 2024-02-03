@@ -1,13 +1,11 @@
 #ifndef TITLELISTWIDGET_P_H
 #define TITLELISTWIDGET_P_H
 
-#include <SVSWidgets/TitleListItemDelegate.h>
-#include <SVSWidgets/TitleListWidget.h>
-
+#include <SVSCraftWidgets/titlelistitemdelegate.h>
+#include <SVSCraftWidgets/titlelistwidget.h>
 namespace SVS {
 
     class TitleListWidgetPrivate : public QObject {
-        Q_OBJECT
         Q_DECLARE_PUBLIC(TitleListWidget)
     public:
         TitleListWidgetPrivate();

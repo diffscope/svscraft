@@ -1,5 +1,5 @@
-#include "CommandPalette.h"
-#include "CommandPalette_p.h"
+#include "commandpalette.h"
+#include "commandpalette_p.h"
 
 #include <QApplication>
 #include <QDateTime>
@@ -10,7 +10,7 @@
 
 #include <QMWidgets/CLineEdit.h>
 
-#include "CkSVSWidgetsNamespace.h"
+#include "svscraftwidgetsnamespace.h"
 
 namespace SVS {
 

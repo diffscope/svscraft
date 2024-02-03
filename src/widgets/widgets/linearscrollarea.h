@@ -3,11 +3,11 @@
 
 #include <QScrollArea>
 
-#include <SVSWidgets/CkSVSWidgetsGlobal.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
-    class CKSVSWIDGETS_API LinearScrollArea : public QScrollArea {
+    class SVSCRAFT_WIDGETS_EXPORT LinearScrollArea : public QScrollArea {
         Q_OBJECT
     public:
         explicit LinearScrollArea(Qt::Orientation ori, QWidget *parent = nullptr);

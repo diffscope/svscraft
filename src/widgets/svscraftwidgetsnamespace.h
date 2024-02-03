@@ -3,11 +3,11 @@
 
 #include <QObject>
 
-#include <SVSWidgets/cksvswidgetsglobal.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
-    Q_NAMESPACE_EXPORT(CKSVSWIDGETS_API)
+    Q_NAMESPACE_EXPORT(SVSCRAFT_WIDGETS_EXPORT)
 
     enum Role {
         DisplayRole = Qt::DisplayRole,

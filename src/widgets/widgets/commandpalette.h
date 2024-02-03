@@ -4,15 +4,14 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 
-#include <QMWidgets/QMWidgetsMacros.h>
-
-#include <SVSWidgets/BaseContainer.h>
+#include <QMWidgets/qmwidgetsmacros.h>
+#include <SVSCraftWidgets/basecontainer.h>
 
 namespace SVS {
 
     class CommandPalettePrivate;
 
-    class CKSVSWIDGETS_API CommandPalette : public BaseContainer {
+    class SVSCRAFT_WIDGETS_EXPORT CommandPalette : public BaseContainer {
         Q_OBJECT
         Q_DECLARE_PRIVATE(CommandPalette)
         Q_LAYOUT_PROPERTY_DELCARE
@@ -52,7 +51,7 @@ namespace SVS {
         void currentItemChanged(QListWidgetItem *item);
         void filterKeywordChanged(const QString &text);
 
-        void styleDataChanged();
+        void styleValuesChanged();
 
     protected:
         bool event(QEvent *event) override;

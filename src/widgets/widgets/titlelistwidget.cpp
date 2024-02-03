@@ -1,9 +1,9 @@
-#include <SVSWidgets/TitleListWidget.h>
-#include "TitleListWidget_p.h"
+#include "titlelistwidget.h"
+#include "titlelistwidget_p.h"
 
 #include <private/qlistwidget_p.h>
 
-#include <QMGui/QMarginsImpl.h>
+#include <QMWidgets/QMarginsImpl.h>
 
 namespace SVS {
 
@@ -44,14 +44,14 @@ namespace SVS {
     TitleListWidget::~TitleListWidget() {
     }
 
-    QCssValueMap TitleListWidget::styleData() const {
+    QCssValueMap TitleListWidget::styleValues() const {
         Q_D(const TitleListWidget);
-        return d->m_delegate->styleData();
+        return d->m_delegate->styleValues();
     }
 
-    void TitleListWidget::setStyleData(const QCssValueMap &map) {
+    void TitleListWidget::setStyleValues(const QCssValueMap &map) {
         Q_D(TitleListWidget);
-        d->m_delegate->setStyleData(map);
+        d->m_delegate->setStyleValues(map);
         update();
     }
 

@@ -1,4 +1,4 @@
-#include "FullIconButton.h"
+#include "fulliconbutton.h"
 
 #include <QDebug>
 #include <QStyleOptionButton>

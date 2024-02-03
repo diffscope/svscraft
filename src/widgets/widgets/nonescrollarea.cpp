@@ -1,4 +1,4 @@
-#include "NoneScrollArea.h"
+#include "nonescrollarea.h"
 
 #include <QDebug>
 #include <QResizeEvent>
