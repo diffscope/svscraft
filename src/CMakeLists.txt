@@ -17,11 +17,11 @@ set(QMSETUP_DEFINITION_NUMERICAL on)
 
 qm_add_definition(SVSCRAFT_TEST_CONFIG true)
 
-qm_generate_config(${SVSCRAFT_BUILD_INCLUDE_DIR}/QWKCore/qwkconfig.h)
+qm_generate_config(${SVSCRAFT_BUILD_INCLUDE_DIR}/SVSCraftCore/svscraftconfig.h)
 
 if(SVSCRAFT_INSTALL)
-    install(FILES ${SVSCRAFT_BUILD_INCLUDE_DIR}/QWKCore/qwkconfig.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${SVSCRAFT_INSTALL_NAME}/QWKCore
+    install(FILES ${SVSCRAFT_BUILD_INCLUDE_DIR}/SVSCraftCore/svscraftconfig.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${SVSCRAFT_INSTALL_NAME}/SVSCraftCore
     )
 endif()
 
@@ -198,7 +198,7 @@ if(SVSCRAFT_INSTALL)
     )
 
     # Install shared files
-    install(DIRECTORY ../share/
-        DESTINATION share/${SVSCRAFT_INSTALL_NAME}
-    )
+    # install(DIRECTORY ../share/
+    # DESTINATION share/${SVSCRAFT_INSTALL_NAME}
+    # )
 endif()

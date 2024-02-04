@@ -21,19 +21,6 @@ namespace SVS {
         return in;
     }
 
-    //===========================================================================
-    // MusicTimeSignature
-    namespace {
-        struct initializer {
-            initializer() {
-                qRegisterMetaType<MusicTimeSignature>();
-                qRegisterMetaTypeStreamOperators<MusicTimeSignature>();
-            }
-            ~initializer() {
-            }
-        } dummy;
-    }
-
     MusicTimeSignature::MusicTimeSignature() : MusicTimeSignature(4, 4) {
     }
 
@@ -65,10 +52,18 @@ namespace SVS {
         debug.nospace() << "MusicTimeSignature(" << t.num << "/" << t.den << ")";
         return debug;
     }
-    //===========================================================================
 
-    //===========================================================================
-    // MusicTimeline
+    namespace {
+        struct initializer {
+            initializer() {
+                qRegisterMetaType<MusicTimeSignature>();
+                qRegisterMetaTypeStreamOperators<MusicTimeSignature>();
+            }
+            ~initializer() {
+            }
+        } dummy;
+    }
+    
     MusicTimelinePrivate::~MusicTimelinePrivate() {
     }
 
@@ -463,6 +458,5 @@ namespace SVS {
 
         d.init();
     }
-    //===========================================================================
 
 } // namespace SVS
