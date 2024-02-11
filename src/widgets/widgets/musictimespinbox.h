@@ -1,16 +1,15 @@
 #ifndef MUSICTIMESPINBOX_H
 #define MUSICTIMESPINBOX_H
 
-#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
-
 #include <QSpinBox>
 
 #include <SVSCraftCore/musictime.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
     class MusicTimeSpinBoxPrivate;
-    
+
     class SVSCRAFT_WIDGETS_EXPORT MusicTimeSpinBox : public QSpinBox {
         Q_OBJECT
         Q_DECLARE_PRIVATE(MusicTimeSpinBox)
@@ -29,10 +28,10 @@ namespace SVS {
         void setStepType(StepType) = delete;
 
         PersistentMusicTime maximum() const;
-        void setMaximum(const PersistentMusicTime& maximum);
+        void setMaximum(const PersistentMusicTime &maximum);
         PersistentMusicTime minimum() const;
-        void setMinimum(const PersistentMusicTime& minimum);
-        void setRange(const PersistentMusicTime& minimum, const PersistentMusicTime& maximum);
+        void setMinimum(const PersistentMusicTime &minimum);
+        void setRange(const PersistentMusicTime &minimum, const PersistentMusicTime &maximum);
 
         enum FieldType {
             Measure,
@@ -43,21 +42,21 @@ namespace SVS {
         void setFieldWidth(FieldType fieldType, int width);
 
         PersistentMusicTime value() const;
-
-    public slots:
-        void setValue(const PersistentMusicTime& value);
+        Q_INVOKABLE void setValue(const PersistentMusicTime &value);
 
     signals:
         void valueChanged(const PersistentMusicTime &value);
 
     protected:
-        QScopedPointer<MusicTimeSpinBoxPrivate> d_ptr;
         QValidator::State validate(QString &input, int &pos) const override;
         void fixup(QString &input) const override;
         int valueFromText(const QString &text) const override;
         QString textFromValue(int val) const override;
+
+    protected:
+        QScopedPointer<MusicTimeSpinBoxPrivate> d_ptr;
     };
 
-} // SVS
+}
 
 #endif // MUSICTIMESPINBOX_H

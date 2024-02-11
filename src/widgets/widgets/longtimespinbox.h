@@ -3,8 +3,8 @@
 
 #include <QSpinBox>
 
-#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 #include <SVSCraftCore/longtime.h>
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
@@ -40,21 +40,21 @@ namespace SVS {
         void setFieldWidth(FieldType fieldType, int width);
 
         LongTime value() const;
-
-    public slots:
-        void setValue(LongTime value);
+        Q_INVOKABLE void setValue(LongTime value);
 
     signals:
         void valueChanged(LongTime value);
 
     protected:
-        QScopedPointer<LongTimeSpinBoxPrivate> d_ptr;
         QValidator::State validate(QString &input, int &pos) const override;
         void fixup(QString &input) const override;
         int valueFromText(const QString &text) const override;
         QString textFromValue(int val) const override;
+
+    protected:
+        QScopedPointer<LongTimeSpinBoxPrivate> d_ptr;
     };
 
-} // SVS
+}
 
 #endif // LONGTIMESPINBOX_H

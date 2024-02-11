@@ -19,6 +19,7 @@ Common corelib and widgets for SVS application.
 ## Dependencies
 
 + [qmsetup](https://github.com/stdware/qmsetup)
++ [qtmediate](https://github.com/stdware/qtmediate)
 
 
 ## License
