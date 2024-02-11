@@ -26,8 +26,6 @@ namespace SVS {
         return t * 3600000;
     }
 
-    LongTime::LongTime(int minute, int second, int msec) : LongTime(min2ms(minute) + sec2ms(second) + msec) {
-    }
 
     QString LongTime::toString(int minuteWidth, int secondWidth, int msecWidth) const {
         QString str;
@@ -48,12 +46,15 @@ namespace SVS {
         return str;
     }
 
-    LongTime LongTime::fromString(const QString &s) {
+    LongTime LongTime::fromString(const QString &s, bool *ok) {
         QRegularExpression rx(
             R"(^\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*[.\x{3002}\x{ff0e}]?\s*(\d*)\s*$)");
         auto match = rx.match(s);
-        if (!match.hasMatch())
+        if (!match.hasMatch()) {
+            if (ok)
+                *ok = false;
             return {};
+        }
 
         LongTime res;
         auto &t = res.t;
@@ -81,6 +82,8 @@ namespace SVS {
                 t = h2ms(cap1.toInt()) + min2ms(cap2.toInt()) + sec2ms((cap3 + '.' + cap4).toDouble());
             }
         }
+        if (ok)
+            *ok = true;
         return res;
     }
 

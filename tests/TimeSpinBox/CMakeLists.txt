@@ -1,4 +1,4 @@
-project(tst_talcs_LongTimeSpinBox)
+project(tst_SVSCraft_TimeSpinBox)
 
 file(GLOB _src *.h *.cpp)
 

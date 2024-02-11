@@ -86,7 +86,7 @@ namespace SVS {
         }
 
         void swap(PersistentMusicTime &other) noexcept {
-            qSwap(d_ptr, other.d_ptr);
+            qSwap(d, other.d);
         }
 
     public:
@@ -121,7 +121,7 @@ namespace SVS {
     private:
         explicit PersistentMusicTime(PersistentMusicTimeData *d);
 
-        QSharedPointer<PersistentMusicTimeData> d_ptr;
+        QSharedPointer<PersistentMusicTimeData> d;
 
         friend class MusicTimeline;
     };

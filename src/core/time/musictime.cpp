@@ -57,7 +57,7 @@ namespace SVS {
         if (!cache.isMbtNull())
             return;
 
-        auto ret = timeline->tickToTime(totalTick);
+        auto ret = td->tickToTime(totalTick);
         cache.measure = ret.measure();
         cache.beat = ret.beat();
         cache.tick = ret.tick();
@@ -67,7 +67,7 @@ namespace SVS {
     void PersistentMusicTimeData::ensureMsecCached() {
         if (!cache.isMsecNull())
             return;
-        cache.msec = timeline->tickToMsec(totalTick);
+        cache.msec = td->tickToMsec(totalTick);
         td->msecCachedMusicTimes.insert(this);
     }
 
@@ -84,7 +84,7 @@ namespace SVS {
     PersistentMusicTime &PersistentMusicTime::operator=(const PersistentMusicTime &other) {
         if (this == &other)
             return *this;
-        d_ptr = other.d_ptr;
+        d = other.d;
         return *this;
     }
 
@@ -93,14 +93,12 @@ namespace SVS {
     }
 
     const MusicTimeline *PersistentMusicTime::timeline() const {
-        auto d = d_ptr.data();
         if (!d)
             return nullptr;
         return d->timeline;
     }
 
     int PersistentMusicTime::measure() const {
-        auto d = d_ptr.data();
         if (!d)
             return 0;
         d->ensureMbtCached();
@@ -108,7 +106,6 @@ namespace SVS {
     }
 
     int PersistentMusicTime::beat() const {
-        auto d = d_ptr.data();
         if (!d)
             return 0;
         d->ensureMbtCached();
@@ -116,7 +113,6 @@ namespace SVS {
     }
 
     int PersistentMusicTime::tick() const {
-        auto d = d_ptr.data();
         if (!d)
             return 0;
         d->ensureMbtCached();
@@ -124,7 +120,6 @@ namespace SVS {
     }
 
     double PersistentMusicTime::msec() const {
-        auto d = d_ptr.data();
         if (!d)
             return 0;
         d->ensureMsecCached();
@@ -132,21 +127,18 @@ namespace SVS {
     }
 
     int PersistentMusicTime::totalTick() const {
-        auto d = d_ptr.data();
         if (!d)
             return 0;
         return d->totalTick;
     }
 
     PersistentMusicTime PersistentMusicTime::operator+(int t) const {
-        auto d = d_ptr.data();
         if (!d)
             return {};
         return d->timeline->create(0, 0, d->totalTick + t);
     }
 
     PersistentMusicTime PersistentMusicTime::operator-(int t) const {
-        auto d = d_ptr.data();
         if (!d)
             return {};
         return d->timeline->create(0, 0, d->totalTick - t);
@@ -174,7 +166,7 @@ namespace SVS {
         return debug;
     }
 
-    PersistentMusicTime::PersistentMusicTime(SVS::PersistentMusicTimeData *d) : d_ptr(d) {
+    PersistentMusicTime::PersistentMusicTime(SVS::PersistentMusicTimeData *d) : d(d) {
     }
 
 }
