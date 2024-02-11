@@ -4,8 +4,8 @@ if(NOT TARGET qtmediate::Core)
     find_package(qtmediate REQUIRED)
 endif()
 
-set(SVSCRAFT_PROJECT_DESCRIPTION "Cross-platform window customization framework")
-set(SVSCRAFT_PROJECT_COPYRIGHT "Copyright 2023 Stdware Collections")
+set(SVSCRAFT_PROJECT_DESCRIPTION "SVS Application Foundation")
+set(SVSCRAFT_PROJECT_COPYRIGHT "Copyright 2023 Team OpenVPI")
 set(SVSCRAFT_GENERATED_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/../include)
 set(SVSCRAFT_BUILD_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/../etc/include)
 
