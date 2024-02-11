@@ -57,7 +57,6 @@ namespace SVS {
         struct initializer {
             initializer() {
                 qRegisterMetaType<MusicTimeSignature>();
-                qRegisterMetaTypeStreamOperators<MusicTimeSignature>();
             }
             ~initializer() {
             }

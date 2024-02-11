@@ -7,7 +7,35 @@
 #include <QRegularExpression>
 #include <QTextStream>
 
+namespace {
+    struct initializer {
+        initializer() {
+            qRegisterMetaType<SVS::MusicTime>();
+            qRegisterMetaType<SVS::PersistentMusicTime>();
+        }
+    } _;
+}
+
 namespace SVS {
+
+    QString MusicTime::toString(int measureWidth, int beatWidth, int tickWidth) const {
+        QString str;
+        QTextStream textStream(&str);
+        textStream.setPadChar('0');
+        textStream.setFieldAlignment(QTextStream::AlignRight);
+        textStream.setFieldWidth(measureWidth);
+        textStream << measure() + 1;
+        textStream.setFieldWidth(0);
+        textStream << ":";
+        textStream.setFieldWidth(beatWidth);
+        textStream << beat() + 1;
+        textStream.setFieldWidth(0);
+        textStream << ":";
+        textStream.setFieldWidth(tickWidth);
+        textStream << tick();
+        textStream.flush();
+        return str;
+    }
 
     QDebug operator<<(QDebug debug, const MusicTime &time) {
         QDebugStateSaver saver(debug);
@@ -132,16 +160,8 @@ namespace SVS {
         return (*this = *this - t);
     }
 
-    QString PersistentMusicTime::toString() const {
-        QString str;
-        QTextStream textStream(&str);
-        textStream << measure() + 1 << ":" << beat() + 1 << ":";
-        textStream.setFieldWidth(3);
-        textStream.setFieldAlignment(QTextStream::AlignRight);
-        textStream.setPadChar('0');
-        textStream << tick();
-        textStream.flush();
-        return str;
+    QString PersistentMusicTime::toString(int measureWidth, int beatWidth, int tickWidth) const {
+        return toTime().toString(measureWidth, beatWidth, tickWidth);
     }
 
     QDebug operator<<(QDebug debug, const PersistentMusicTime &mt) {

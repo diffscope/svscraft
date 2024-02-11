@@ -4,6 +4,14 @@
 #include <QRegularExpression>
 #include <QTextStream>
 
+namespace {
+    struct initializer {
+        initializer() {
+            qRegisterMetaType<SVS::LongTime>();
+        }
+    } _;
+}
+
 namespace SVS {
 
     static inline int min2ms(int t) {
@@ -21,20 +29,20 @@ namespace SVS {
     LongTime::LongTime(int minute, int second, int msec) : LongTime(min2ms(minute) + sec2ms(second) + msec) {
     }
 
-    QString LongTime::toString() const {
+    QString LongTime::toString(int minuteWidth, int secondWidth, int msecWidth) const {
         QString str;
         QTextStream textStream(&str);
         textStream.setPadChar('0');
-        textStream.setFieldWidth(2);
         textStream.setFieldAlignment(QTextStream::AlignRight);
+        textStream.setFieldWidth(minuteWidth);
         textStream << minute();
         textStream.setFieldWidth(0);
         textStream << ":";
-        textStream.setFieldWidth(2);
+        textStream.setFieldWidth(secondWidth);
         textStream << second();
         textStream.setFieldWidth(0);
         textStream << ".";
-        textStream.setFieldWidth(3);
+        textStream.setFieldWidth(msecWidth);
         textStream << msec();
         textStream.flush();
         return str;
@@ -84,6 +92,6 @@ namespace SVS {
 
 }
 
-uint qHash(const SVS::LongTime &time, uint seed) {
+uint qHash(const SVS::LongTime &time, size_t seed) {
     return qHash(time.totalMsec(), seed);
 }

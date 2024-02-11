@@ -29,6 +29,8 @@ namespace SVS {
 
         Q_DECL_CONSTEXPR inline bool isValid() const;
 
+        QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const;
+
     private:
         int m, b, t;
 
@@ -112,7 +114,7 @@ namespace SVS {
         PersistentMusicTime &operator+=(int t);
         PersistentMusicTime &operator-=(int t);
 
-        QString toString() const;
+        QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const;
 
         friend SVSCRAFT_CORE_EXPORT QDebug operator<<(QDebug debug, const PersistentMusicTime &mt);
 
@@ -125,7 +127,7 @@ namespace SVS {
     };
 
     MusicTime PersistentMusicTime::toTime() const {
-        return MusicTime(measure(), beat(), tick());
+        return {measure(), beat(), tick()};
     }
 
     inline bool PersistentMusicTime::operator==(const PersistentMusicTime &other) const {
@@ -155,5 +157,7 @@ namespace SVS {
 } // namespace SVS
 
 Q_DECLARE_METATYPE(SVS::MusicTime)
+
+Q_DECLARE_METATYPE(SVS::PersistentMusicTime)
 
 #endif // MUSICTIME_H

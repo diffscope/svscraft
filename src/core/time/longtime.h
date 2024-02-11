@@ -11,7 +11,7 @@ namespace SVS {
     class SVSCRAFT_CORE_EXPORT LongTime {
     public:
         Q_DECL_CONSTEXPR inline LongTime();
-        Q_DECL_CONSTEXPR inline LongTime(int msec);
+        Q_DECL_CONSTEXPR explicit inline LongTime(int msec);
         LongTime(int minute, int second, int msec);
 
         Q_DECL_CONSTEXPR inline int minute() const;
@@ -19,7 +19,7 @@ namespace SVS {
         Q_DECL_CONSTEXPR inline int msec() const;
         Q_DECL_CONSTEXPR inline int totalMsec() const;
 
-        QString toString() const;
+        QString toString(int minuteWidth = 1, int secondWidth = 2, int msecWidth = 3) const;
         static LongTime fromString(const QString &s);
 
         Q_DECL_CONSTEXPR bool operator==(const LongTime &other) const;
@@ -83,7 +83,7 @@ namespace SVS {
 
 }
 
-SVSCRAFT_CORE_EXPORT uint qHash(const SVS::LongTime &time, uint seed);
+SVSCRAFT_CORE_EXPORT uint qHash(const SVS::LongTime &time, size_t seed);
 
 Q_DECLARE_METATYPE(SVS::LongTime)
 
