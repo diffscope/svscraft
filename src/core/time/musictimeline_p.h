@@ -10,6 +10,7 @@ namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT MusicTimelinePrivate {
         Q_DECLARE_PUBLIC(MusicTimeline)
+        friend class PersistentMusicTime;
     public:
         MusicTimelinePrivate();
         virtual ~MusicTimelinePrivate();
@@ -36,11 +37,15 @@ namespace SVS {
         void timeSignatureChanged();
         void tempoChanged();
 
-    public:
         int findNearestTickWithTimeSignature(int tick) const;
         double findNearestMsecWithTempo(double msec) const;
 
-        friend class PersistentMusicTime;
+        MusicTime tickToTime(int totalTick) const;
+        double tickToMsec(int totalTick) const;
+
+        int timeToTick(int measure, int beat, int tick) const;
+        int stringToTick(const QString &str, bool *ok) const;
+        int msecToTick(double msec) const;
     };
 
 }

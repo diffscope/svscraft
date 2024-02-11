@@ -49,6 +49,6 @@ qm_init_directories()
 # ----------------------------------
 add_subdirectory(src)
 
-if(QTMEDIATE_BUILD_TESTS)
+if(SVSCRAFT_BUILD_TESTS)
     add_subdirectory(tests)
 endif()

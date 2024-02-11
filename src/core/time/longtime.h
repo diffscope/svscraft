@@ -10,17 +10,17 @@ namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT LongTime {
     public:
-        Q_DECL_CONSTEXPR inline LongTime();
-        Q_DECL_CONSTEXPR explicit inline LongTime(int msec);
-        LongTime(int minute, int second, int msec);
+        Q_DECL_CONSTEXPR LongTime();
+        Q_DECL_CONSTEXPR explicit LongTime(int msec);
+        Q_DECL_CONSTEXPR LongTime(int minute, int second, int msec);
 
-        Q_DECL_CONSTEXPR inline int minute() const;
-        Q_DECL_CONSTEXPR inline int second() const;
-        Q_DECL_CONSTEXPR inline int msec() const;
-        Q_DECL_CONSTEXPR inline int totalMsec() const;
+        Q_DECL_CONSTEXPR int minute() const;
+        Q_DECL_CONSTEXPR int second() const;
+        Q_DECL_CONSTEXPR int msec() const;
+        Q_DECL_CONSTEXPR int totalMsec() const;
 
         QString toString(int minuteWidth = 1, int secondWidth = 2, int msecWidth = 3) const;
-        static LongTime fromString(const QString &s);
+        static LongTime fromString(const QString &s, bool *ok = nullptr);
 
         Q_DECL_CONSTEXPR bool operator==(const LongTime &other) const;
         Q_DECL_CONSTEXPR bool operator!=(const LongTime &other) const;
@@ -39,6 +39,9 @@ namespace SVS {
     }
 
     Q_DECL_CONSTEXPR LongTime::LongTime(int msec) : t(qMax(msec, 0)) {
+    }
+
+    Q_DECL_CONSTEXPR LongTime::LongTime(int minute, int second, int msec) : LongTime(60000 * minute + 1000 * second + msec) {
     }
 
     Q_DECL_CONSTEXPR inline int LongTime::minute() const {

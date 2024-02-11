@@ -28,15 +28,15 @@ int main(int argc, char **argv) {
     layout->addWidget(tempoLabel);
     dlg.setLayout(layout);
 
-    tempoLabel->setText(timeline.timeSignature(0).toString());
+    tempoLabel->setText(timeline.timeSignatureAt(0).toString());
 
     QObject::connect(modifyTimeSigBtn, &QPushButton::clicked, [&] {
-        if (timeline.timeSignature(0) == MusicTimeSignature(4, 4)) {
-            timeline.addTimeSignature(0, {2, 4});
+        if (timeline.timeSignatureAt(0) == MusicTimeSignature(4, 4)) {
+            timeline.setTimeSignature(0, {2, 4});
         } else {
-            timeline.addTimeSignature(0, {4, 4});
+            timeline.setTimeSignature(0, {4, 4});
         }
-        tempoLabel->setText(timeline.timeSignature(0).toString());
+        tempoLabel->setText(timeline.timeSignatureAt(0).toString());
     });
 
     dlg.show();

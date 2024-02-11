@@ -75,38 +75,28 @@ namespace SVS {
         ~MusicTimeline();
 
     public:
-        inline void addTimeSignature(int bar, const MusicTimeSignature &timeSignature);
+        inline void setTimeSignature(int bar, const MusicTimeSignature &timeSignature);
         inline void removeTimeSignature(int bar);
-        void addTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList);
-        void removeTimeSignatures(const QList<int> &bars);
+        void setMultipleTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList);
+        void removeMultipleTimeSignatures(const QList<int> &bars);
         QList<QPair<int, MusicTimeSignature>> timeSignatures() const;
-        QMap<int, MusicTimeSignature> timeSignatureMap() const;
-        QList<int> timeSignatureBars() const;
-        MusicTimeSignature timeSignature(int bar) const;
-        int nearestTimeSignatureBar(int bar) const;
+        QList<int> barsWithTimeSignature() const;
+        MusicTimeSignature timeSignatureAt(int bar) const;
+        int nearestTimeSignatureTo(int bar) const;
 
-        inline void addTempo(int tick, double tempo);
+        inline void setTempo(int tick, double tempo);
         inline void removeTempo(int tick);
-        void addTempos(const QList<QPair<int, double>> &tempos);
-        void removeTempos(const QList<int> &ticks);
+        void setMultipleTempos(const QList<QPair<int, double>> &tempos);
+        void removeMultipleTempos(const QList<int> &ticks);
         QList<QPair<int, double>> tempos() const;
-        QMap<int, double> tempoMap() const;
-        QList<int> tempoTicks() const;
-        double tempo(int tick) const;
-        int nearestTempoTick(int tick) const;
+        QList<int> ticksWithTempo() const;
+        double tempoAt(int tick) const;
+        int nearestTempoTo(int tick) const;
 
     public:
-        MusicTime tickToTime(int totalTick) const;
-        double tickToMsec(int totalTick) const;
-
-        inline int timeToTick(const MusicTime &time) const;
-        int timeToTick(int measure, int beat, int tick) const;
-        int stringToTick(const QString &str) const;
-        int msecToTick(double msec) const;
-
         inline PersistentMusicTime create(const MusicTime &time) const;
         PersistentMusicTime create(int measure, int beat, int tick) const;
-        PersistentMusicTime create(const QString &str) const;
+        PersistentMusicTime create(const QString &str, bool *ok = nullptr) const;
         PersistentMusicTime create(double msec) const;
 
     signals:
@@ -118,35 +108,29 @@ namespace SVS {
         MusicTimeline(MusicTimelinePrivate &d, QObject *parent = nullptr);
 
         QScopedPointer<MusicTimelinePrivate> d_ptr;
-
-        friend class PersistentMusicTime;
     };
 
-    inline void MusicTimeline::addTimeSignature(int bar, const SVS::MusicTimeSignature &timeSignature) {
-        addTimeSignatures({
+    inline void MusicTimeline::setTimeSignature(int bar, const SVS::MusicTimeSignature &timeSignature) {
+        setMultipleTimeSignatures({
             {bar, timeSignature}
         });
     }
 
     inline void MusicTimeline::removeTimeSignature(int bar) {
-        removeTimeSignatures({bar});
+        removeMultipleTimeSignatures({bar});
     }
 
-    inline void MusicTimeline::addTempo(int tick, double tempo) {
-        addTempos({
+    inline void MusicTimeline::setTempo(int tick, double tempo) {
+        setMultipleTempos({
             {tick, tempo}
         });
     }
 
     inline void MusicTimeline::removeTempo(int tick) {
-        removeTempos({tick});
+        removeMultipleTempos({tick});
     }
 
-    int MusicTimeline::timeToTick(const MusicTime &time) const {
-        return timeToTick(time.measure(), time.beat(), time.tick());
-    }
-
-    PersistentMusicTime MusicTimeline::create(const MusicTime &time) const {
+    inline PersistentMusicTime MusicTimeline::create(const MusicTime &time) const {
         return create(time.measure(), time.beat(), time.tick());
     }
 

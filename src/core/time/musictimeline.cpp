@@ -171,7 +171,7 @@ namespace SVS {
     MusicTimeline::~MusicTimeline() {
     }
 
-    void MusicTimeline::addTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList) {
+    void MusicTimeline::setMultipleTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList) {
         Q_D(MusicTimeline);
 
         bool isChanged = false;
@@ -204,7 +204,7 @@ namespace SVS {
         }
     }
 
-    void MusicTimeline::removeTimeSignatures(const QList<int> &bars) {
+    void MusicTimeline::removeMultipleTimeSignatures(const QList<int> &bars) {
         Q_D(MusicTimeline);
 
         bool isChanged = false;
@@ -236,22 +236,17 @@ namespace SVS {
         return list;
     }
 
-    QMap<int, MusicTimeSignature> MusicTimeline::timeSignatureMap() const {
-        Q_D(const MusicTimeline);
-        return d->timeSignatureMap;
-    }
-
-    QList<int> MusicTimeline::timeSignatureBars() const {
+    QList<int> MusicTimeline::barsWithTimeSignature() const {
         Q_D(const MusicTimeline);
         return d->timeSignatureMap.keys();
     }
 
-    MusicTimeSignature MusicTimeline::timeSignature(int bar) const {
+    MusicTimeSignature MusicTimeline::timeSignatureAt(int bar) const {
         Q_D(const MusicTimeline);
-        return d->timeSignatureMap.value(nearestTimeSignatureBar(bar));
+        return d->timeSignatureMap.value(nearestTimeSignatureTo(bar));
     }
 
-    int MusicTimeline::nearestTimeSignatureBar(int bar) const {
+    int MusicTimeline::nearestTimeSignatureTo(int bar) const {
         Q_D(const MusicTimeline);
         if (bar < 0) {
             qWarning() << "Position of a time signature must be positive or zero.";
@@ -264,7 +259,7 @@ namespace SVS {
         return d->timeSignatureMap.lastKey();
     }
 
-    void MusicTimeline::addTempos(const QList<QPair<int, double>> &tempos) {
+    void MusicTimeline::setMultipleTempos(const QList<QPair<int, double>> &tempos) {
         Q_D(MusicTimeline);
 
         bool isChanged = false;
@@ -296,7 +291,7 @@ namespace SVS {
         }
     }
 
-    void MusicTimeline::removeTempos(const QList<int> &ticks) {
+    void MusicTimeline::removeMultipleTempos(const QList<int> &ticks) {
         Q_D(MusicTimeline);
         bool isChanged = false;
 
@@ -328,22 +323,17 @@ namespace SVS {
         return list;
     }
 
-    QMap<int, double> MusicTimeline::tempoMap() const {
-        Q_D(const MusicTimeline);
-        return d->tempoMap;
-    }
-
-    QList<int> MusicTimeline::tempoTicks() const {
+    QList<int> MusicTimeline::ticksWithTempo() const {
         Q_D(const MusicTimeline);
         return d->tempoMap.keys();
     }
 
-    double MusicTimeline::tempo(int tick) const {
+    double MusicTimeline::tempoAt(int tick) const {
         Q_D(const MusicTimeline);
-        return d->tempoMap.value(nearestTempoTick(tick));
+        return d->tempoMap.value(nearestTempoTo(tick));
     }
 
-    int MusicTimeline::nearestTempoTick(int tick) const {
+    int MusicTimeline::nearestTempoTo(int tick) const {
         Q_D(const MusicTimeline);
         if (tick < 0) {
             qWarning() << "Position of a tempo must be positive or zero.";
@@ -357,77 +347,81 @@ namespace SVS {
     }
 
 
-    MusicTime MusicTimeline::tickToTime(int totalTick) const {
-        Q_D(const MusicTimeline);
-        int refTick = d->findNearestTickWithTimeSignature(totalTick);
-        int refMeasure = d->measureMap[refTick];
-        MusicTimeSignature timeSig = d->timeSignatureMap[refMeasure];
+    MusicTime MusicTimelinePrivate::tickToTime(int totalTick) const {
+        int refTick = findNearestTickWithTimeSignature(totalTick);
+        int refMeasure = measureMap[refTick];
+        MusicTimeSignature timeSig = timeSignatureMap[refMeasure];
         return {
-            refMeasure + (totalTick - refTick) / timeSig.ticksPerBar(d->resolution),
-            ((totalTick - refTick) % timeSig.ticksPerBar(d->resolution)) / timeSig.ticksPerBeat(d->resolution),
-            ((totalTick - refTick) % timeSig.ticksPerBar(d->resolution)) % timeSig.ticksPerBeat(d->resolution),
+            refMeasure + (totalTick - refTick) / timeSig.ticksPerBar(resolution),
+            ((totalTick - refTick) % timeSig.ticksPerBar(resolution)) / timeSig.ticksPerBeat(resolution),
+            ((totalTick - refTick) % timeSig.ticksPerBar(resolution)) % timeSig.ticksPerBeat(resolution),
         };
     }
 
-    double MusicTimeline::tickToMsec(int totalTick) const {
-        Q_D(const MusicTimeline);
-        auto refTick = nearestTempoTick(totalTick);
-        auto tempo = d->tempoMap[refTick];
-        auto refMsec = d->msecSumMap[refTick];
-        return refMsec + (totalTick - refTick) * (60.0 * 1000.0) / (d->resolution * tempo);
+    double MusicTimelinePrivate::tickToMsec(int totalTick) const {
+        Q_Q(const MusicTimeline);
+        auto refTick = q->nearestTempoTo(totalTick);
+        auto tempo = tempoMap[refTick];
+        auto refMsec = msecSumMap[refTick];
+        return refMsec + (totalTick - refTick) * (60.0 * 1000.0) / (resolution * tempo);
     }
 
-    int MusicTimeline::timeToTick(int measure, int beat, int tick) const {
-        Q_D(const MusicTimeline);
+    int MusicTimelinePrivate::timeToTick(int measure, int beat, int tick) const {
+        Q_Q(const MusicTimeline);
         if (measure < 0 || beat < 0 || tick < 0)
             return 0;
         if (measure == 0 && beat == 0) {
             return tick;
         }
 
-        auto timeSig = timeSignature(measure);
-        auto refMeasure = nearestTimeSignatureBar(measure);
-        auto refTick = d->revMeasureMap[refMeasure];
-        tick += refTick + (measure - refMeasure) * timeSig.ticksPerBar(d->resolution);
-        tick += beat * timeSig.ticksPerBeat(d->resolution);
+        auto timeSig = q->timeSignatureAt(measure);
+        auto refMeasure = q->nearestTimeSignatureTo(measure);
+        auto refTick = revMeasureMap[refMeasure];
+        tick += refTick + (measure - refMeasure) * timeSig.ticksPerBar(resolution);
+        tick += beat * timeSig.ticksPerBeat(resolution);
         return tick;
     }
 
-    int MusicTimeline::stringToTick(const QString &str) const {
+    int MusicTimelinePrivate::stringToTick(const QString &str, bool *ok) const {
         QRegularExpression rx(R"(^\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*$)");
         auto match = rx.match(str);
-        if (!match.hasMatch())
-            return false;
+        if (!match.hasMatch()) {
+            if (ok)
+                *ok = false;
+            return 0;
+        }
+        if (ok)
+            *ok = true;
         return timeToTick(match.captured(1).isEmpty() ? 0 : (match.captured(1).toInt() - 1),
                           match.captured(2).isEmpty() ? 0 : (match.captured(2).toInt() - 1), match.captured(3).toInt());
     }
 
-    int MusicTimeline::msecToTick(double msec) const {
-        Q_D(const MusicTimeline);
+    int MusicTimelinePrivate::msecToTick(double msec) const {
+        Q_Q(const MusicTimeline);
         if (msec < 0)
-            return false;
-        auto refMsec = d->findNearestMsecWithTempo(msec);
-        auto refTick = d->revMsecSumMap[refMsec];
-        auto tempo = d->tempoMap[refTick];
-        auto deltaTick = (int) qRound((msec - refMsec) / (60.0 * 1000.0) * (d->resolution * tempo));
+            return 0;
+        auto refMsec = findNearestMsecWithTempo(msec);
+        auto refTick = revMsecSumMap[refMsec];
+        auto tempo = tempoMap[refTick];
+        auto deltaTick = (int) qRound((msec - refMsec) / (60.0 * 1000.0) * (resolution * tempo));
         return refTick + deltaTick;
     }
 
     PersistentMusicTime MusicTimeline::create(int measure, int beat, int tick) const {
         Q_D(const MusicTimeline);
-        auto container = new PersistentMusicTimeData(this, d, timeToTick(measure, beat, tick));
+        auto container = new PersistentMusicTimeData(this, d, d->timeToTick(measure, beat, tick));
         return PersistentMusicTime(container);
     }
 
-    PersistentMusicTime MusicTimeline::create(const QString &str) const {
+    PersistentMusicTime MusicTimeline::create(const QString &str, bool *ok) const {
         Q_D(const MusicTimeline);
-        auto container = new PersistentMusicTimeData(this, d, stringToTick(str));
+        auto container = new PersistentMusicTimeData(this, d, d->stringToTick(str, ok));
         return PersistentMusicTime(container);
     }
 
     PersistentMusicTime MusicTimeline::create(double msec) const {
         Q_D(const MusicTimeline);
-        auto container = new PersistentMusicTimeData(this, d, msecToTick(msec));
+        auto container = new PersistentMusicTimeData(this, d, d->msecToTick(msec));
         return PersistentMusicTime(container);
     }
 
