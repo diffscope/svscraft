@@ -63,7 +63,7 @@ namespace SVS {
         stackedWidget = new QStackedWidget();
 
         rightLayout = new QVBoxLayout();
-        rightLayout->setMargin(0);
+        rightLayout->setContentsMargins(0, 0, 0, 0);
         rightLayout->setSpacing(0);
 
         rightLayout->addWidget(titleLabel);
@@ -81,7 +81,7 @@ namespace SVS {
         splitter->addWidget(rightWidget);
 
         mainLayout = new QVBoxLayout();
-        mainLayout->setMargin(0);
+        mainLayout->setContentsMargins(0, 0, 0, 0);
         mainLayout->setSpacing(0);
         mainLayout->addWidget(splitter);
         q->setLayout(mainLayout);
@@ -113,7 +113,7 @@ namespace SVS {
     }
 
     QString WorkflowPagePrivate::buttonText(WorkflowPage::Button button) const {
-        auto &data = buttonsData[button];
+        const auto &data = buttonsData[button];
         return data.overrideText.isEmpty() ? data.text : data.overrideText;
     }
 

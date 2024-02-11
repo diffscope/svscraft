@@ -68,7 +68,13 @@ namespace SVS {
             }
 
             QString tagName = match.captured(1);
-            double ratio = tagName.midRef(1).toDouble();
+            double ratio =
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+                           tagName.midRef(1).toDouble()
+#else
+                           QStringView(tagName).mid(1).toDouble()
+#endif
+                           ;
             if (ratio == 0)
                 ratio = 1;
             result.append(processString1(match.captured(2), ratio));
