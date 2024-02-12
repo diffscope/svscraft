@@ -96,7 +96,7 @@ namespace SVS {
     public:
         inline PersistentMusicTime create(const MusicTime &time) const;
         PersistentMusicTime create(int measure, int beat, int tick) const;
-        PersistentMusicTime create(const QString &str, bool *ok = nullptr) const;
+        PersistentMusicTime create(QStringView str, bool *ok = nullptr) const;
         PersistentMusicTime create(double msec) const;
 
     signals:

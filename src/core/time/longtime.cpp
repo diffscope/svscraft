@@ -46,7 +46,7 @@ namespace SVS {
         return str;
     }
 
-    LongTime LongTime::fromString(const QString &s, bool *ok) {
+    LongTime LongTime::fromString(QStringView s, bool *ok) {
         QRegularExpression rx(
             R"(^\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*[.\x{3002}\x{ff0e}]?\s*(\d*)\s*$)");
         auto match = rx.match(s);
@@ -59,12 +59,12 @@ namespace SVS {
         LongTime res;
         auto &t = res.t;
 
-        auto cap1 = match.captured(1);
-        auto capColon1 = match.captured(2);
-        auto cap2 = match.captured(3);
-        auto capColon2 = match.captured(4);
-        auto cap3 = match.captured(5);
-        auto cap4 = match.captured(6);
+        auto cap1 = match.capturedView(1);
+        auto capColon1 = match.capturedView(2);
+        auto cap2 = match.capturedView(3);
+        auto capColon2 = match.capturedView(4);
+        auto cap3 = match.capturedView(5);
+        auto cap4 = match.capturedView(6);
         if (cap4.isEmpty()) {
             if (cap2.isEmpty() && cap3.isEmpty()) {
                 t = sec2ms(cap1.toInt());
@@ -74,12 +74,13 @@ namespace SVS {
                 t = h2ms(cap1.toInt()) + min2ms(cap2.toInt()) + sec2ms(cap3.toInt());
             }
         } else {
+            int msec = sec2ms(("." + cap4.toString()).toDouble());
             if (capColon1.isEmpty() && capColon2.isEmpty()) {
-                t = sec2ms((cap1 + '.' + cap4).toDouble());
+                t = sec2ms(cap1.toInt()) + msec;
             } else if (capColon2.isEmpty()) {
-                t = min2ms(cap1.toInt()) + sec2ms((cap2 + '.' + cap4).toDouble());
+                t = min2ms(cap1.toInt()) + sec2ms(cap2.toInt()) + msec;
             } else {
-                t = h2ms(cap1.toInt()) + min2ms(cap2.toInt()) + sec2ms((cap3 + '.' + cap4).toDouble());
+                t = h2ms(cap1.toInt()) + min2ms(cap2.toInt()) + sec2ms(cap3.toInt()) + msec;
             }
         }
         if (ok)

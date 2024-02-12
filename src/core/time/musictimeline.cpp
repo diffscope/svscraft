@@ -382,7 +382,7 @@ namespace SVS {
         return tick;
     }
 
-    int MusicTimelinePrivate::stringToTick(const QString &str, bool *ok) const {
+    int MusicTimelinePrivate::stringToTick(QStringView str, bool *ok) const {
         QRegularExpression rx(R"(^\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*$)");
         auto match = rx.match(str);
         if (!match.hasMatch()) {
@@ -392,8 +392,8 @@ namespace SVS {
         }
         if (ok)
             *ok = true;
-        return timeToTick(match.captured(1).isEmpty() ? 0 : (match.captured(1).toInt() - 1),
-                          match.captured(2).isEmpty() ? 0 : (match.captured(2).toInt() - 1), match.captured(3).toInt());
+        return timeToTick(match.capturedView(1).isEmpty() ? 0 : (match.capturedView(1).toInt() - 1),
+                          match.capturedView(2).isEmpty() ? 0 : (match.capturedView(2).toInt() - 1), match.capturedView(3).toInt());
     }
 
     int MusicTimelinePrivate::msecToTick(double msec) const {
@@ -413,7 +413,7 @@ namespace SVS {
         return PersistentMusicTime(container);
     }
 
-    PersistentMusicTime MusicTimeline::create(const QString &str, bool *ok) const {
+    PersistentMusicTime MusicTimeline::create(QStringView str, bool *ok) const {
         Q_D(const MusicTimeline);
         auto container = new PersistentMusicTimeData(this, d, d->stringToTick(str, ok));
         return PersistentMusicTime(container);

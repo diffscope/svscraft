@@ -20,7 +20,7 @@ namespace SVS {
         Q_DECL_CONSTEXPR int totalMsec() const;
 
         QString toString(int minuteWidth = 1, int secondWidth = 2, int msecWidth = 3) const;
-        static LongTime fromString(const QString &s, bool *ok = nullptr);
+        static LongTime fromString(QStringView s, bool *ok = nullptr);
 
         Q_DECL_CONSTEXPR bool operator==(const LongTime &other) const;
         Q_DECL_CONSTEXPR bool operator!=(const LongTime &other) const;

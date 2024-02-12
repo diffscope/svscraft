@@ -119,7 +119,10 @@ namespace SVS {
 
     void MusicTimeSpinBox::fixup(QString &input) const {
         Q_D(const MusicTimeSpinBox);
-        input = d->timeline->create(input).toString(d->measureWidth, d->beatWidth, d->tickWidth);
+        bool ok;
+        auto ret = d->timeline->create(input, &ok).toString(d->measureWidth, d->beatWidth, d->tickWidth);
+        if (ok)
+            input = ret;
     }
 
     int MusicTimeSpinBox::valueFromText(const QString &text) const {

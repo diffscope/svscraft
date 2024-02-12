@@ -95,7 +95,10 @@ namespace SVS {
 
     void LongTimeSpinBox::fixup(QString &input) const {
         Q_D(const LongTimeSpinBox);
-        input = LongTime::fromString(input).toString(d->minuteWidth, d->secondWidth, d->msecWidth);
+        bool ok;
+        auto ret = LongTime::fromString(input, &ok).toString(d->minuteWidth, d->secondWidth, d->msecWidth);
+        if (ok)
+            input = ret;
     }
 
     void LongTimeSpinBox::setValue(LongTime value) {

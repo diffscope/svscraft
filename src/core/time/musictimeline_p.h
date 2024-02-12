@@ -44,7 +44,7 @@ namespace SVS {
         double tickToMsec(int totalTick) const;
 
         int timeToTick(int measure, int beat, int tick) const;
-        int stringToTick(const QString &str, bool *ok) const;
+        int stringToTick(QStringView str, bool *ok) const;
         int msecToTick(double msec) const;
     };
 
