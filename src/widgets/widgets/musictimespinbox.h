@@ -27,6 +27,11 @@ namespace SVS {
         StepType stepType() const = delete;
         void setStepType(StepType) = delete;
 
+        QString prefix() const = delete;
+        void setPrefix(const QString &) = delete;
+        QString suffix() const = delete;
+        void setSuffix(const QString &) = delete;
+
         PersistentMusicTime maximum() const;
         void setMaximum(const PersistentMusicTime &maximum);
         PersistentMusicTime minimum() const;

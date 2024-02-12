@@ -30,6 +30,11 @@ namespace SVS {
         void setMinimum(int minimum) = delete;
         void setRange(int minimum, int maximum) = delete;
 
+        QString prefix() const = delete;
+        void setPrefix(const QString &) = delete;
+        QString suffix() const = delete;
+        void setSuffix(const QString &) = delete;
+
         bool isWildcardEnabled() const;
         void setWildcardEnabled(bool enabled);
 
