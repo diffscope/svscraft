@@ -20,7 +20,7 @@ Common corelib and widgets for SVS application.
 
 + [qmsetup](https://github.com/stdware/qmsetup)
 + [qtmediate](https://github.com/stdware/qtmediate)
-
++ [tinyexpr](https://github.com/codeplea/tinyexpr)
 
 ## License
 

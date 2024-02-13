@@ -120,6 +120,8 @@ endfunction()
 # ----------------------------------
 # Main Project
 # ----------------------------------
+add_subdirectory(3rdparty)
+
 add_subdirectory(core)
 
 add_subdirectory(widgets)
