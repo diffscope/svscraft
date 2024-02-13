@@ -28,7 +28,7 @@ endif()
 # ----------------------------------
 # CMake API
 # ----------------------------------
-function(svs_add_library _target)
+macro(svs_add_library _target)
     set(options AUTOGEN NO_SYNC_INCLUDE NO_WIN_RC)
     set(oneValueArgs SYNC_INCLUDE_PREFIX PREFIX)
     set(multiValueArgs SYNC_INCLUDE_OPTIONS)
@@ -50,7 +50,6 @@ function(svs_add_library _target)
 
     if(WIN32 AND NOT FUNC_NO_WIN_RC AND(${_type} STREQUAL "SHARED"))
         qm_add_win_rc(${_target}
-            NAME ${SVSCRAFT_INSTALL_NAME}
             DESCRIPTION ${SVSCRAFT_PROJECT_DESCRIPTION}
             COPYRIGHT ${SVSCRAFT_PROJECT_COPYRIGHT}
         )
@@ -70,6 +69,7 @@ function(svs_add_library _target)
 
     # Add include directories
     target_include_directories(${_target} PRIVATE ${SVSCRAFT_BUILD_INCLUDE_DIR})
+    target_include_directories(${_target} PRIVATE .)
 
     # Library name
     if(${_target} MATCHES "^SVSCraft(.+)")
@@ -115,7 +115,10 @@ function(svs_add_library _target)
             "$<BUILD_INTERFACE:${SVSCRAFT_GENERATED_INCLUDE_DIR}>"
         )
     endif()
-endfunction()
+
+    # Add to translate targets
+    set_property(GLOBAL APPEND PROPERTY SVSCRAFT_TRANSLATE_TARGETS ${_target})
+endmacro()
 
 # ----------------------------------
 # Main Project
