@@ -15,19 +15,16 @@ namespace SVS {
 
     class MusicTime {
     public:
-        Q_DECL_CONSTEXPR inline MusicTime() noexcept;
-        Q_DECL_CONSTEXPR inline MusicTime(int measure, int beat, int tick);
+        constexpr inline MusicTime() noexcept;
+        constexpr inline MusicTime(int measure, int beat, int tick);
 
-        Q_DECL_CONSTEXPR inline int measure() const;
-        Q_RELAXED_CONSTEXPR inline void setMeasure(int measure);
+        constexpr inline int measure() const;
 
-        Q_DECL_CONSTEXPR inline int beat() const;
-        Q_RELAXED_CONSTEXPR inline void setBeat(int beat);
+        constexpr inline int beat() const;
 
-        Q_DECL_CONSTEXPR inline int tick() const;
-        Q_RELAXED_CONSTEXPR inline void setTick(int tick);
+        constexpr inline int tick() const;
 
-        Q_DECL_CONSTEXPR inline bool isValid() const;
+        constexpr inline bool isValid() const;
 
         QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const;
 
@@ -37,37 +34,25 @@ namespace SVS {
         friend SVSCRAFT_CORE_EXPORT QDebug operator<<(QDebug debug, const MusicTime &time);
     };
 
-    Q_DECL_CONSTEXPR MusicTime::MusicTime() noexcept : m(0), b(0), t(0) {
+    constexpr MusicTime::MusicTime() noexcept : m(0), b(0), t(0) {
     }
 
-    Q_DECL_CONSTEXPR MusicTime::MusicTime(int measure, int beat, int tick) : m(measure), b(beat), t(tick) {
+    constexpr MusicTime::MusicTime(int measure, int beat, int tick) : m(measure), b(beat), t(tick) {
     }
 
-    Q_DECL_CONSTEXPR int MusicTime::measure() const {
+    constexpr int MusicTime::measure() const {
         return m;
     }
 
-    Q_DECL_RELAXED_CONSTEXPR void MusicTime::setMeasure(int measure) {
-        m = measure;
-    }
-
-    Q_DECL_CONSTEXPR int MusicTime::beat() const {
+    constexpr int MusicTime::beat() const {
         return b;
     }
 
-    Q_DECL_RELAXED_CONSTEXPR void MusicTime::setBeat(int beat) {
-        b = beat;
-    }
-
-    Q_DECL_CONSTEXPR int MusicTime::tick() const {
+    constexpr int MusicTime::tick() const {
         return t;
     }
 
-    Q_DECL_RELAXED_CONSTEXPR void MusicTime::setTick(int tick) {
-        t = tick;
-    }
-
-    Q_DECL_CONSTEXPR bool MusicTime::isValid() const {
+    constexpr bool MusicTime::isValid() const {
         return m >= 0 && b >= 0 && t >= 0;
     }
 

@@ -10,24 +10,24 @@ namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT LongTime {
     public:
-        Q_DECL_CONSTEXPR LongTime();
-        Q_DECL_CONSTEXPR explicit LongTime(int msec);
-        Q_DECL_CONSTEXPR LongTime(int minute, int second, int msec);
+        constexpr LongTime();
+        constexpr explicit LongTime(int msec);
+        constexpr LongTime(int minute, int second, int msec);
 
-        Q_DECL_CONSTEXPR int minute() const;
-        Q_DECL_CONSTEXPR int second() const;
-        Q_DECL_CONSTEXPR int msec() const;
-        Q_DECL_CONSTEXPR int totalMsec() const;
+        constexpr int minute() const;
+        constexpr int second() const;
+        constexpr int msec() const;
+        constexpr int totalMsec() const;
 
         QString toString(int minuteWidth = 1, int secondWidth = 2, int msecWidth = 3) const;
         static LongTime fromString(QStringView s, bool *ok = nullptr);
 
-        Q_DECL_CONSTEXPR bool operator==(const LongTime &other) const;
-        Q_DECL_CONSTEXPR bool operator!=(const LongTime &other) const;
-        Q_DECL_CONSTEXPR bool operator<(const LongTime &other) const;
-        Q_DECL_CONSTEXPR bool operator<=(const LongTime &other) const;
-        Q_DECL_CONSTEXPR bool operator>(const LongTime &other) const;
-        Q_DECL_CONSTEXPR bool operator>=(const LongTime &other) const;
+        constexpr bool operator==(const LongTime &other) const;
+        constexpr bool operator!=(const LongTime &other) const;
+        constexpr bool operator<(const LongTime &other) const;
+        constexpr bool operator<=(const LongTime &other) const;
+        constexpr bool operator>(const LongTime &other) const;
+        constexpr bool operator>=(const LongTime &other) const;
 
         friend SVSCRAFT_CORE_EXPORT QDebug operator<<(QDebug debug, const LongTime &lt);
 
@@ -35,52 +35,52 @@ namespace SVS {
         int t;
     };
 
-    Q_DECL_CONSTEXPR LongTime::LongTime() : t(0) {
+    constexpr LongTime::LongTime() : t(0) {
     }
 
-    Q_DECL_CONSTEXPR LongTime::LongTime(int msec) : t(qMax(msec, 0)) {
+    constexpr LongTime::LongTime(int msec) : t(qMax(msec, 0)) {
     }
 
-    Q_DECL_CONSTEXPR LongTime::LongTime(int minute, int second, int msec) : LongTime(60000 * minute + 1000 * second + msec) {
+    constexpr LongTime::LongTime(int minute, int second, int msec) : LongTime(60000 * minute + 1000 * second + msec) {
     }
 
-    Q_DECL_CONSTEXPR inline int LongTime::minute() const {
+    constexpr inline int LongTime::minute() const {
         return t / 60000;
     }
 
-    Q_DECL_CONSTEXPR inline int LongTime::second() const {
+    constexpr inline int LongTime::second() const {
         return t % 60000 / 1000;
     }
 
-    Q_DECL_CONSTEXPR inline int LongTime::msec() const {
+    constexpr inline int LongTime::msec() const {
         return t % 1000;
     }
 
-    Q_DECL_CONSTEXPR inline int LongTime::totalMsec() const {
+    constexpr inline int LongTime::totalMsec() const {
         return t;
     }
 
-    Q_DECL_CONSTEXPR bool LongTime::operator==(const LongTime &other) const {
+    constexpr bool LongTime::operator==(const LongTime &other) const {
         return t == other.t;
     }
 
-    Q_DECL_CONSTEXPR bool LongTime::operator!=(const LongTime &other) const {
+    constexpr bool LongTime::operator!=(const LongTime &other) const {
         return t != other.t;
     }
 
-    Q_DECL_CONSTEXPR bool LongTime::operator<(const LongTime &other) const {
+    constexpr bool LongTime::operator<(const LongTime &other) const {
         return t < other.t;
     }
 
-    Q_DECL_CONSTEXPR bool LongTime::operator<=(const LongTime &other) const {
+    constexpr bool LongTime::operator<=(const LongTime &other) const {
         return t <= other.t;
     }
 
-    Q_DECL_CONSTEXPR bool LongTime::operator>(const LongTime &other) const {
+    constexpr bool LongTime::operator>(const LongTime &other) const {
         return t > other.t;
     }
 
-    Q_DECL_CONSTEXPR bool LongTime::operator>=(const LongTime &other) const {
+    constexpr bool LongTime::operator>=(const LongTime &other) const {
         return t >= other.t;
     }
 
