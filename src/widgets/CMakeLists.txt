@@ -8,6 +8,7 @@ file(GLOB_RECURSE _src *.h *.cpp)
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
     LINKS SVSCraftCore qtmediate::Widgets
+    LINKS_PRIVATE tinyexpr
     QT_LINKS Core Gui Widgets
     QT_INCLUDE_PRIVATE Core Gui Widgets
     INCLUDE_PRIVATE . itemmodel widgets
