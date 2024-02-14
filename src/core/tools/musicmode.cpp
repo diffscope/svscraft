@@ -2,41 +2,18 @@
 
 namespace SVS {
 
-    MusicMode::MusicMode() : MusicMode(Ionian) {
-    }
-
-    MusicMode::MusicMode(MusicMode::Type type, int offset) : m_offset(offset % 12) {
-        switch (type) {
-            case Dorian:
-                m_keys.val = 1 & (1 << 2);
-                break;
-
-            case Phrygian:
-                break;
-
-            case Lydian:
-                break;
-
-            case Mixolydian:
-                break;
-
-            case Aeolian:
-                break;
-
-            case Locrian:
-                break;
-
-            default:
-                m_keys.val = 1 | (1 << 2) | (1 << 4) | (1 << 5) | (1 << 7) | (1 << 9) | (1 << 11);
-                break;
+    QList<MusicPitch> MusicMode::scale(MusicPitch tonic) const {
+        QList<MusicPitch> pitches;
+        for (int i = 0; i < 12; i++) {
+            if ((1 << i) & flags) {
+                if (tonic.isWildcard()) {
+                    pitches.append(MusicPitch(qint8(tonic.key() + i % 12), MusicPitch::Wildcard));
+                } else if (tonic.pitch() + i < 128) {
+                    pitches.append(MusicPitch(qint8(tonic.pitch() + i)));
+                }
+            }
         }
-    }
-
-    MusicMode::MusicMode(const QList<int> &keys, int offset) : m_offset(offset) {
-        m_keys.val = 0;
-        for (const auto &i : keys) {
-            m_keys.val |= 1 << i;
-        }
+        return pitches;
     }
 
 }
