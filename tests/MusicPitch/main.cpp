@@ -1,6 +1,6 @@
 #include <QtTest/QtTest>
 
-#include <SVSCraftCore/musicnote.h>
+#include <SVSCraftCore/musicpitch.h>
 
 using namespace SVS;
 
@@ -27,7 +27,7 @@ private slots:
         QFETCH(bool, result);
 
         bool ok;
-        auto n = MusicNote::fromString(string, &ok);
+        auto n = MusicPitch::fromString(string, &ok);
         QCOMPARE(ok, result);
         QCOMPARE(n.pitch(), pitch);
     };

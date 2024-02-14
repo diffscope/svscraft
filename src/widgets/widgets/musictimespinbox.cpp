@@ -4,6 +4,14 @@
 
 namespace SVS {
 
+    namespace {
+        struct initializer {
+            initializer() {
+                qRegisterMetaType<PersistentMusicTime>();
+            }
+        } _;
+    }
+
     class MusicTimeSpinBoxPrivate : public QObject {
         Q_DECLARE_PUBLIC(MusicTimeSpinBox)
     public:

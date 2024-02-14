@@ -3,18 +3,18 @@
 
 #include <QSpinBox>
 
-#include <SVSCraftCore/musicnote.h>
+#include <SVSCraftCore/musicpitch.h>
 
 namespace SVS {
 
-    class MusicNoteSpinBoxPrivate;
+    class MusicPitchSpinBoxPrivate;
 
-    class MusicNoteSpinBox : public QSpinBox {
+    class MusicPitchSpinBox : public QSpinBox {
         Q_OBJECT
-        Q_DECLARE_PRIVATE(MusicNoteSpinBox)
+        Q_DECLARE_PRIVATE(MusicPitchSpinBox)
     public:
-        MusicNoteSpinBox(QWidget *parent = nullptr);
-        ~MusicNoteSpinBox() override;
+        MusicPitchSpinBox(QWidget *parent = nullptr);
+        ~MusicPitchSpinBox() override;
         
         QString cleanText() const = delete;
         int displayIntegerBase() const = delete;
@@ -38,16 +38,16 @@ namespace SVS {
         bool isWildcardEnabled() const;
         void setWildcardEnabled(bool enabled);
 
-        MusicNote::Accidental accidental() const;
-        void setAccidental(MusicNote::Accidental accidental);
+        MusicPitch::Accidental accidental() const;
+        void setAccidental(MusicPitch::Accidental accidental);
 
-        MusicNote value() const;
+        MusicPitch value() const;
 
     public slots:
-        void setValue(MusicNote value);
+        void setValue(MusicPitch value);
 
     signals:
-        void valueChanged(MusicNote value);
+        void valueChanged(MusicPitch value);
 
     protected:
         QValidator::State validate(QString &input, int &pos) const override;
@@ -56,7 +56,7 @@ namespace SVS {
         QString textFromValue(int val) const override;
 
     protected:
-        QScopedPointer<MusicNoteSpinBoxPrivate> d_ptr;
+        QScopedPointer<MusicPitchSpinBoxPrivate> d_ptr;
     };
 
 } // SVS

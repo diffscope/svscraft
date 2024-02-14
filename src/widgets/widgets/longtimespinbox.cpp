@@ -2,6 +2,14 @@
 
 namespace SVS {
 
+    namespace {
+        struct initializer {
+            initializer() {
+                qRegisterMetaType<LongTime>();
+            }
+        } _;
+    }
+
     class LongTimeSpinBoxPrivate : public QObject {
         Q_DECLARE_PUBLIC(LongTimeSpinBox);
 

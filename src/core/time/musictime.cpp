@@ -7,15 +7,6 @@
 #include <QRegularExpression>
 #include <QTextStream>
 
-namespace {
-    struct initializer {
-        initializer() {
-            qRegisterMetaType<SVS::MusicTime>();
-            qRegisterMetaType<SVS::PersistentMusicTime>();
-        }
-    } _;
-}
-
 namespace SVS {
 
     QString MusicTime::toString(int measureWidth, int beatWidth, int tickWidth) const {

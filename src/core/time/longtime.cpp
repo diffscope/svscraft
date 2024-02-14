@@ -4,14 +4,6 @@
 #include <QRegularExpression>
 #include <QTextStream>
 
-namespace {
-    struct initializer {
-        initializer() {
-            qRegisterMetaType<SVS::LongTime>();
-        }
-    } _;
-}
-
 namespace SVS {
 
     static inline int min2ms(int t) {

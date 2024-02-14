@@ -1,4 +1,4 @@
-project(tst_SVSCraft_MusicNote)
+project(tst_SVSCraft_MusicPitch)
 
 set(CMAKE_AUTOUIC on)
 set(CMAKE_AUTOMOC on)

@@ -1,3 +1,3 @@
 add_subdirectory(TimeSpinBox)
 
-add_subdirectory(MusicNote)
+add_subdirectory(MusicPitch)
