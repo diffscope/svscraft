@@ -51,6 +51,7 @@ namespace SVS {
     private:
         int flags;
     };
+    
 }
 
 Q_DECLARE_METATYPE(SVS::MusicMode)

@@ -85,7 +85,7 @@ namespace SVS {
         qint8 n;
     };
 
-} // SVS
+}
 
 Q_DECLARE_METATYPE(SVS::MusicPitch)
 

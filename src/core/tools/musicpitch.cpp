@@ -112,4 +112,4 @@ namespace SVS {
         return QList<MusicPitch>(pitches.cbegin(), pitches.cend());
     }
 
-} // SVS
+}

@@ -6,6 +6,7 @@
 #include <QDoubleSpinBox>
 
 namespace SVS {
+
     class SVSCRAFT_WIDGETS_EXPORT ExpressionDoubleSpinBox : public QDoubleSpinBox {
         Q_OBJECT
     public:
@@ -22,6 +23,7 @@ namespace SVS {
         QValidator::State validate(QString &input, int &pos) const override;
         void fixup(QString &str) const override;
     };
+
 }
 
 #endif //EXPRESSIONDOUBLESPINBOX_H

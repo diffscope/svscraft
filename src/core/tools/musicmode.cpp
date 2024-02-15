@@ -4,6 +4,7 @@ namespace SVS {
 
     QList<MusicPitch> MusicMode::scale(MusicPitch tonic) const {
         QList<MusicPitch> pitches;
+        pitches.reserve(12);
         for (int i = 0; i < 12; i++) {
             if ((1 << i) & flags) {
                 if (tonic.isWildcard()) {

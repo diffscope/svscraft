@@ -11,7 +11,7 @@ svs_add_library(${PROJECT_NAME} AUTOGEN
     LINKS_PRIVATE tinyexpr
     QT_LINKS Core Gui Widgets
     QT_INCLUDE_PRIVATE Core Gui Widgets
-    INCLUDE_PRIVATE . itemmodel widgets
+    INCLUDE_PRIVATE . dialogs itemmodel widgets
     PREFIX SVSCRAFT_WIDGETS
 )
 
