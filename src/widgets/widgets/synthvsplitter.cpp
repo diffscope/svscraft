@@ -156,7 +156,7 @@ namespace SVS {
         Q_Q(SynthVSplitter);
 
         layout = new QBoxLayout(QBoxLayout::BottomToTop);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         q->setLayout(layout);
 
@@ -246,7 +246,7 @@ namespace SVS {
                          vbar->minimum() < vbar->maximum() && !vbar->sizeHint().isEmpty())));
 
         QStyleOption opt(0);
-        opt.init(area);
+        opt.initFrom(area);
 
         const int hscrollOverlap =
             hbar->style()->pixelMetric(QStyle::PM_ScrollView_ScrollBarOverlap, &opt, hbar);
@@ -617,7 +617,7 @@ namespace SVS {
         auto handle = new SynthVSplitterHandle(this);
         if (titleBar) {
             auto layout = new QHBoxLayout();
-            layout->setMargin(0);
+            layout->setContentsMargins(0, 0, 0, 0);
             layout->setSpacing(0);
             layout->addWidget(titleBar);
             handle->setLayout(layout);
