@@ -1,15 +1,15 @@
-#ifndef SEEKBARACCESSIBLEPLUGIN_H
-#define SEEKBARACCESSIBLEPLUGIN_H
+#ifndef ACCESSIBLEPLUGIN_H
+#define ACCESSIBLEPLUGIN_H
 
 #define QT_STATICPLUGIN
 
 #include <QAccessiblePlugin>
 
-class SeekBarAccessiblePlugin : public QAccessiblePlugin {
+class AccessiblePlugin : public QAccessiblePlugin {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QAccessibleFactoryInterface_iid FILE "plugin.json")
 public:
     QAccessibleInterface *create(const QString &key, QObject *object) override;
 };
 
-#endif // SEEKBARACCESSIBLEPLUGIN_H
+#endif // ACCESSIBLEPLUGIN_H

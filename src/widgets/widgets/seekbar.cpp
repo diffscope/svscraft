@@ -115,14 +115,14 @@ namespace SVS {
         if (!qFuzzyCompare(value_, sliderValue)) {
             sliderValue = value_;
             if (isSliderDown)
-                emit q->sliderMoved(value_);
+                Q_EMIT q->sliderMoved(value_);
             q->update();
         }
         if (hasTracking && !qFuzzyCompare(value_, value)) {
             value = value_;
             QAccessibleValueChangeEvent event(q, value);
             QAccessible::updateAccessibility(&event);
-            emit q->valueChanged(value_);
+            Q_EMIT q->valueChanged(value_);
         }
     }
 
@@ -132,14 +132,14 @@ namespace SVS {
         if (!qFuzzyCompare(value_, sliderValue)) {
             sliderValue = value_;
             if (isSliderDown)
-                emit q->sliderMoved(value_);
+                Q_EMIT q->sliderMoved(value_);
             q->update();
         }
         if (!qFuzzyCompare(value_, value)) {
             value = value_;
-            QAccessibleValueChangeEvent event(q, value_);
+            QAccessibleValueChangeEvent event(q, q->displayValueFromActualValue(value_));
             QAccessible::updateAccessibility(&event);
-            emit q->valueChanged(value_);
+            Q_EMIT q->valueChanged(value_);
         }
     }
 
@@ -398,6 +398,14 @@ namespace SVS {
         }
     }
 
+    double SeekBar::displayValue() const {
+        Q_D(const SeekBar);
+        return displayValueFromActualValue(d->value);
+    }
+
+    double SeekBar::displayValueFromActualValue(double value) const {
+        return value;
+    }
 
     SeekBar::SeekBar(QWidget *parent, SeekBarPrivate &d) : QWidget(parent), d_ptr(&d) {
     }

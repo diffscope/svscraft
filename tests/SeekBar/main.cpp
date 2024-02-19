@@ -7,12 +7,19 @@
 
 using namespace SVS;
 
+class MySeekBar : public SeekBar {
+protected:
+    double displayValueFromActualValue(double value) const override {
+        return std::log(value);
+    }
+};
+
 int main(int argc, char **argv) {
     QApplication a(argc, argv);
 
     QDialog dlg;
     auto layout = new QVBoxLayout;
-    auto slider = new SeekBar;
+    auto slider = new MySeekBar;
     layout->addWidget(slider);
     auto valueLabel = new QLabel;
     layout->addWidget(valueLabel);

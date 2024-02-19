@@ -47,11 +47,13 @@ namespace SVS {
         double defaultValue() const;
         void setDefaultValue(double value);
 
-    public slots:
+        double displayValue() const;
+
+    public Q_SLOTS:
         void setValue(double value);
         void resetValue();
 
-    signals:
+    Q_SIGNALS:
         void sliderPressed();
         void sliderReleased();
         void sliderMoved(double value);
@@ -68,6 +70,8 @@ namespace SVS {
         void keyPressEvent(QKeyEvent *event) override;
 
         explicit SeekBar(QWidget *parent, SeekBarPrivate &d);
+
+        virtual double displayValueFromActualValue(double value) const;
 
     private:
         QScopedPointer<SeekBarPrivate> d_ptr;

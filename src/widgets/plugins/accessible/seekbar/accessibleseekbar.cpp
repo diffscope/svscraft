@@ -27,7 +27,7 @@ namespace SVS {
     }
     QString AccessibleSeekBar::text(QAccessible::Text t) const {
         if (t == QAccessible::Value) {
-            return QString::number(seekBar()->value());
+            return QString::number(seekBar()->displayValue());
         }
         return QAccessibleWidget::text(t);
     }

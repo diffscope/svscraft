@@ -13,6 +13,7 @@ svs_add_library(${PROJECT_NAME} AUTOGEN
     QT_INCLUDE_PRIVATE Core Gui Widgets
     INCLUDE_PRIVATE . dialogs itemmodel widgets
     PREFIX SVSCRAFT_WIDGETS
+    SYNC_INCLUDE_OPTIONS EXCLUDE "plugins/.+"
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
