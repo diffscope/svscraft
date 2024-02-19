@@ -34,7 +34,7 @@ namespace SVS {
         void updateGeometries() override;
         void mouseReleaseEvent(QMouseEvent *event) override;
 
-    signals:
+    Q_SIGNALS:
         void itemClickedEx(const QModelIndex &index, int button);
         void contentsSizeUpdated(const QSize &size);
     };

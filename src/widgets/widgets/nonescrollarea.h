@@ -35,7 +35,7 @@ namespace SVS {
 
         void resizeEvent(QResizeEvent *event) override;
 
-    signals:
+    Q_SIGNALS:
         void resized(const QSize &oldSize, const QSize &size);
     };
 

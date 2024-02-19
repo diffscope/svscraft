@@ -60,10 +60,10 @@ namespace SVS {
 
         bool editing() const;
 
-    public slots:
+    public Q_SLOTS:
         void setEditing(bool editing);
 
-    signals:
+    Q_SIGNALS:
         void editingChanged(bool editing);
         void textChanged(const QString &text);
 

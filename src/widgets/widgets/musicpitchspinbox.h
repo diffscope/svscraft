@@ -43,10 +43,10 @@ namespace SVS {
 
         MusicPitch value() const;
 
-    public slots:
+    public Q_SLOTS:
         void setValue(MusicPitch value);
 
-    signals:
+    Q_SIGNALS:
         void valueChanged(MusicPitch value);
 
     protected:

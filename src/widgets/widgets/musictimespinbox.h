@@ -49,7 +49,7 @@ namespace SVS {
         PersistentMusicTime value() const;
         Q_INVOKABLE void setValue(const PersistentMusicTime &value);
 
-    signals:
+    Q_SIGNALS:
         void valueChanged(const PersistentMusicTime &value);
 
     protected:

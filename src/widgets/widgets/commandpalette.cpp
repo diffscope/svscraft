@@ -167,7 +167,7 @@ namespace SVS {
                         break;
                     }
                     case Qt::Key_Tab:
-                        emit q->tabPressed();
+                        Q_EMIT q->tabPressed();
                         return true;
                         break;
                     case Qt::Key_Escape:
@@ -237,17 +237,17 @@ namespace SVS {
             m_listWidget->setCurrentItem(item);
         }
 
-        emit q->filterKeywordChanged(text);
+        Q_EMIT q->filterKeywordChanged(text);
     }
 
     void CommandPalettePrivate::_q_currentRowChanged(int row) {
         Q_Q(CommandPalette);
-        emit q->currentRowChanged(row);
+        Q_EMIT q->currentRowChanged(row);
     }
 
     void CommandPalettePrivate::_q_currentItemChanged(QListWidgetItem *cur, QListWidgetItem *prev) {
         Q_Q(CommandPalette);
-        emit q->currentItemChanged(cur);
+        Q_EMIT q->currentItemChanged(cur);
     }
 
     void CommandPalettePrivate::_q_delegateClicked(const QModelIndex &index, int button) {
@@ -258,9 +258,9 @@ namespace SVS {
 
         auto idx = index.row();
         if (idx >= 0) {
-            emit q->activate(idx);
+            Q_EMIT q->activate(idx);
         } else {
-            emit q->abandon();
+            Q_EMIT q->abandon();
         }
     }
 
@@ -346,8 +346,8 @@ namespace SVS {
         }
 
         hide();
-        emit activated(index);
-        emit finished(d->m_listWidget->item(index));
+        Q_EMIT activated(index);
+        Q_EMIT finished(d->m_listWidget->item(index));
         d->clearPalette();
     }
 

@@ -37,12 +37,12 @@ namespace SVS {
         QString filterKeyword() const;
         void setFilterKeyword(const QString &keyword);
 
-    public slots:
+    public Q_SLOTS:
         void start();
         void activate(int index);
         void abandon();
 
-    signals:
+    Q_SIGNALS:
         void activated(int index);
         void finished(QListWidgetItem *item);
         void tabPressed();

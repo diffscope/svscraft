@@ -17,7 +17,7 @@ namespace SVS {
         MusicPitch::Accidental accidental = MusicPitch::Flat;
         void _q_valueChanged(int value) {
             Q_Q(MusicPitchSpinBox);
-            emit q->valueChanged(MusicPitch(qint8(value)));
+            Q_EMIT q->valueChanged(MusicPitch(qint8(value)));
         }
     };
 

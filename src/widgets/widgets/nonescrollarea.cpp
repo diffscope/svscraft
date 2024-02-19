@@ -84,7 +84,7 @@ namespace SVS {
 
     void NoneScrollArea::resizeEvent(QResizeEvent *event) {
         auto e = static_cast<QResizeEvent *>(event);
-        emit resized(e->oldSize(), e->size());
+        Q_EMIT resized(e->oldSize(), e->size());
         QWidget::resizeEvent(event);
     }
 

@@ -47,7 +47,7 @@ namespace SVS {
         LongTime value() const;
         Q_INVOKABLE void setValue(LongTime value);
 
-    signals:
+    Q_SIGNALS:
         void valueChanged(LongTime value);
 
     protected:

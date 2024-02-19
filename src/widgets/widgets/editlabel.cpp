@@ -6,6 +6,8 @@
 
 #include <QMouseEvent>
 
+#include <QMWidgets/qmdecoratorv2.h>
+
 namespace SVS {
 
     class EditLabelPrivate : public QObject {
@@ -24,10 +26,10 @@ namespace SVS {
         void postAddLineEdit(QLineEdit *lineEdit) const;
         void postAddSpinBox(QAbstractSpinBox *spinBox) const;
         void updateLabelText();
-
         QString editWidgetText() const;
-
         void exitEdit();
+
+        void reloadStrings() const;
     };
 
     void EditLabelPrivate::addEditWidgetToStackedWidget(QWidget *w) {
@@ -49,7 +51,7 @@ namespace SVS {
         w->installEventFilter(q);
         updateLabelText();
         if (oldEditing)
-            emit q->editingChanged(false);
+            Q_EMIT q->editingChanged(false);
     }
 
     void EditLabelPrivate::postAddLineEdit(QLineEdit *lineEdit) const {
@@ -69,7 +71,7 @@ namespace SVS {
         auto text = prefix + q->editToLabel(editWidgetText()) + suffix;
         if (label->text() != text) {
             label->setText(text);
-            emit q->textChanged(text);
+            Q_EMIT q->textChanged(text);
         }
     }
 
@@ -88,7 +90,11 @@ namespace SVS {
         updateLabelText();
         q->QStackedWidget::setCurrentWidget(label);
         if (oldEditing)
-            emit q->editingChanged(false);
+            Q_EMIT q->editingChanged(false);
+    }
+
+    void EditLabelPrivate::reloadStrings() const {
+        label->setAccessibleDescription(tr("Press enter to edit."));
     }
 
 
@@ -104,8 +110,10 @@ namespace SVS {
         d->label->setFocusPolicy(Qt::StrongFocus);
         d->label->setCursor(Qt::PointingHandCursor);
         d->label->installEventFilter(this);
-        d->label->setAccessibleDescription(tr("Press enter or space to edit."));
+        d->reloadStrings();
         setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        qIDec->installLocale(d, [d] { d->reloadStrings(); });
     }
 
     EditLabel::~EditLabel() {
@@ -173,7 +181,7 @@ namespace SVS {
             QStackedWidget::setCurrentWidget(d->label);
         }
         if (oldEditing != editing())
-            emit editingChanged(!oldEditing);
+            Q_EMIT editingChanged(!oldEditing);
     }
 
     QLabel *EditLabel::label() const {

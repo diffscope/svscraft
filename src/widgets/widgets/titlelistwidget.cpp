@@ -32,7 +32,7 @@ namespace SVS {
 
     void TitleListWidgetPrivate::_q_delegateClicked(const QModelIndex &index, int button) {
         Q_Q(TitleListWidget);
-        emit q->itemClickedEx(index, button);
+        Q_EMIT q->itemClickedEx(index, button);
     }
 
     TitleListWidget::TitleListWidget(QWidget *parent) : QListWidget(parent), d_ptr(new TitleListWidgetPrivate()) {
@@ -67,7 +67,7 @@ namespace SVS {
         QSize size = contentsSize();
         if (d->oldContentsSize != size) {
             d->oldContentsSize = size;
-            emit contentsSizeUpdated(size);
+            Q_EMIT contentsSizeUpdated(size);
         }
     }
 
