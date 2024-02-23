@@ -1,6 +1,5 @@
 #include "musictimeline.h"
 #include "musictimeline_p.h"
-
 #include "musictime_p.h"
 
 #include <QDataStream>

@@ -1,8 +1,9 @@
 #ifndef EDITLABEL_H
 #define EDITLABEL_H
 
-#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 #include <QStackedWidget>
+
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 class QLabel;
 class QLineEdit;

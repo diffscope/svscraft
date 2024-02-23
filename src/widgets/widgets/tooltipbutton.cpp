@@ -1,9 +1,9 @@
 #include "tooltipbutton.h"
 
+#include <QApplication>
+#include <QBasicTimer>
 #include <QMouseEvent>
 #include <QStyle>
-#include <QBasicTimer>
-#include <QApplication>
 
 // #include "tooltip.h"
 

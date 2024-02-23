@@ -3,6 +3,7 @@
 
 #include <SVSCraftWidgets/titlelistitemdelegate.h>
 #include <SVSCraftWidgets/titlelistwidget.h>
+
 namespace SVS {
 
     class TitleListWidgetPrivate : public QObject {

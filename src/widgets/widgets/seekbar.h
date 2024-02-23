@@ -1,9 +1,9 @@
 #ifndef SEEKBAR_H
 #define SEEKBAR_H
 
-#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
-
 #include <QWidget>
+
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 

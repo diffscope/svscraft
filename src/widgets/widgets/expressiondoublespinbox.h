@@ -1,9 +1,9 @@
 #ifndef EXPRESSIONDOUBLESPINBOX_H
 #define EXPRESSIONDOUBLESPINBOX_H
 
-#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
-
 #include <QDoubleSpinBox>
+
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 

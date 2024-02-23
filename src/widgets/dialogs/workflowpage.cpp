@@ -1,10 +1,10 @@
 #include "workflowpage.h"
 
 #include <QLabel>
+#include <QMap>
+#include <QSplitter>
 #include <QStackedWidget>
 #include <QVBoxLayout>
-#include <QSplitter>
-#include <QMap>
 
 #include <QMWidgets/qmdecoratorv2.h>
 

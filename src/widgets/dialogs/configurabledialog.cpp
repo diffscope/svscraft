@@ -1,7 +1,7 @@
 #include "configurabledialog.h"
 
-#include <QMWidgets/qmdecoratorv2.h>
 #include <QMWidgets/ctabbutton.h>
+#include <QMWidgets/qmdecoratorv2.h>
 #include <QMWidgets/qmequalboxlayout.h>
 
 namespace SVS {

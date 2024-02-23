@@ -1,11 +1,10 @@
 #include "seekbar.h"
 
-#include <QVariantAnimation>
-#include <QTimer>
-#include <QPainter>
-
-#include <QMouseEvent>
 #include <QAccessible>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QTimer>
+#include <QVariantAnimation>
 
 namespace SVS {
 

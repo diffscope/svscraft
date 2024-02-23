@@ -1,11 +1,11 @@
 #ifndef MUSICNOTE_H
 #define MUSICNOTE_H
 
-#include <SVSCraftCore/svscraftcoreglobal.h>
-
-#include <QString>
 #include <QList>
 #include <QMetaType>
+#include <QString>
+
+#include <SVSCraftCore/svscraftcoreglobal.h>
 
 namespace SVS {
 

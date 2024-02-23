@@ -1,9 +1,8 @@
 #include "switchbutton.h"
 
-#include <QVariantAnimation>
-#include <QPainter>
-
 #include <QEvent>
+#include <QPainter>
+#include <QVariantAnimation>
 
 namespace SVS {
 

@@ -1,9 +1,8 @@
 #include "editlabel.h"
 
+#include <QAbstractSpinBox>
 #include <QLabel>
 #include <QLineEdit>
-#include <QAbstractSpinBox>
-
 #include <QMouseEvent>
 
 #include <QMWidgets/qmdecoratorv2.h>

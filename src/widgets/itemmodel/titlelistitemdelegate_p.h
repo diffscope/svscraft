@@ -4,7 +4,6 @@
 #include <QMWidgets/qfontinfoEx.h>
 #include <QMWidgets/qpeninfo.h>
 #include <QMWidgets/qrectinfo.h>
-
 #include <SVSCraftWidgets/titlelistitemdelegate.h>
 
 namespace SVS {

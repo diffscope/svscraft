@@ -3,7 +3,6 @@
 
 #include <QMWidgets/ctoolbutton.h>
 #include <QMWidgets/qmwidgetsmacros.h>
-
 #include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {

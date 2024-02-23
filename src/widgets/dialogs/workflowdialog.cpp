@@ -1,8 +1,8 @@
 #include "workflowdialog.h"
 
-#include <QResizeEvent>
-#include <QPropertyAnimation>
 #include <QLabel>
+#include <QPropertyAnimation>
+#include <QResizeEvent>
 
 #include <QMWidgets/ctabbutton.h>
 #include <QMWidgets/qmequalboxlayout.h>

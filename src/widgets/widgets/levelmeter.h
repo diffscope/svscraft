@@ -1,8 +1,9 @@
 #ifndef LEVELMETER_H
 #define LEVELMETER_H
 
-#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 #include <QWidget>
+
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 

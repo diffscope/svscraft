@@ -6,11 +6,10 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QScrollBar>
 #include <QStyle>
 #include <QStyleOption>
 #include <QWidgetItem>
-#include <QScrollBar>
-
 #include <private/qlayout_p.h>
 #include <private/qscrollbar_p.h>
 

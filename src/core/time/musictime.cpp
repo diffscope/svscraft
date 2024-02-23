@@ -1,6 +1,5 @@
 #include "musictime.h"
 #include "musictime_p.h"
-
 #include "musictimeline_p.h"
 
 #include <QDebugStateSaver>

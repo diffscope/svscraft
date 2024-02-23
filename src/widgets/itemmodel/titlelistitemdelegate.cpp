@@ -1,6 +1,5 @@
 #include "titlelistitemdelegate.h"
 #include "titlelistitemdelegate_p.h"
-
 #include "svscraftwidgetsnamespace.h"
 
 #include <QDebug>

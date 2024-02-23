@@ -7,7 +7,6 @@
 #include <QSplitter>
 
 #include <QMWidgets/qmwidgetsmacros.h>
-
 #include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
