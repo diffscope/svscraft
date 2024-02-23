@@ -46,13 +46,15 @@ namespace SVS {
         QTimer *timer;
         bool doubleClickLocked = false;
         QVariantAnimation *thumbHoverAnimation;
+
+
         QColor trackInactiveColor = QColor(0, 0, 0, 32);
         QColor trackActiveColor = QColor(112, 156, 255);
+        QColor thumbFillColor = QColor(112, 156, 255);
         QColor thumbBorderColor = QColor(255, 255, 255);
-        // TODO bind to stylesheet
-
-        // Animation
         int animationDuration = 200;
+
+
         int thumbBorderRatio = 102; // ratio max = 255;
         void setThumbBorderRatio(const QVariant &ratio);
 
@@ -319,7 +321,7 @@ namespace SVS {
         pen.setColor(d->thumbBorderColor);
         pen.setWidthF(d->handlePenWidth);
         painter.setPen(pen);
-        painter.setBrush(d->trackActiveColor);
+        painter.setBrush(d->thumbFillColor);
         painter.drawEllipse(d->activeEndPoint, d->handleRadius, d->handleRadius);
 
         painter.end();
@@ -408,6 +410,52 @@ namespace SVS {
     }
 
     SeekBar::SeekBar(QWidget *parent, SeekBarPrivate &d) : QWidget(parent), d_ptr(&d) {
+    }
+
+    QColor SeekBar::trackInactiveColor() const {
+        Q_D(const SeekBar);
+        return d->trackInactiveColor;
+    }
+    void SeekBar::setTrackInactiveColor(const QColor &color) {
+        Q_D(SeekBar);
+        d->trackInactiveColor = color;
+        update();
+    }
+    QColor SeekBar::trackActiveColor() const {
+        Q_D(const SeekBar);
+        return d->trackActiveColor;
+    }
+    void SeekBar::setTrackActiveColor(const QColor &color) {
+        Q_D(SeekBar);
+        d->trackActiveColor = color;
+        update();
+    }
+    QColor SeekBar::thumbFillColor() const {
+        Q_D(const SeekBar);
+        return d->thumbFillColor;
+    }
+    void SeekBar::setThumbFillColor(const QColor &color) {
+        Q_D(SeekBar);
+        d->thumbFillColor = color;
+        update();
+    }
+    QColor SeekBar::thumbBorderColor() const {
+        Q_D(const SeekBar);
+        return d->thumbBorderColor;
+    }
+    void SeekBar::setThumbBorderColor(const QColor &color) {
+        Q_D(SeekBar);
+        d->thumbBorderColor = color;
+        update();
+    }
+    int SeekBar::animationDuration() const {
+        Q_D(const SeekBar);
+        return d->animationDuration;
+    }
+    void SeekBar::setAnimationDuration(int dur) {
+        Q_D(SeekBar);
+        d->animationDuration = dur;
+        d->thumbHoverAnimation->setDuration(d->animationDuration);
     }
 
 } // SVS

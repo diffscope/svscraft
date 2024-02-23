@@ -12,6 +12,11 @@ namespace SVS {
     class SVSCRAFT_WIDGETS_EXPORT SeekBar : public QWidget {
         Q_OBJECT
         Q_DECLARE_PRIVATE(SeekBar)
+        Q_PROPERTY(QColor trackInactiveColor READ trackInactiveColor WRITE setTrackInactiveColor)
+        Q_PROPERTY(QColor trackActiveColor READ trackActiveColor WRITE setTrackActiveColor)
+        Q_PROPERTY(QColor thumbFillColor READ thumbFillColor WRITE setThumbFillColor)
+        Q_PROPERTY(QColor thumbBorderColor READ thumbBorderColor WRITE setThumbBorderColor)
+        Q_PROPERTY(int animationDuration READ animationDuration WRITE setAnimationDuration)
     public:
         explicit SeekBar(QWidget *parent = nullptr);
         ~SeekBar() override;
@@ -75,6 +80,17 @@ namespace SVS {
 
     private:
         QScopedPointer<SeekBarPrivate> d_ptr;
+
+        QColor trackInactiveColor() const;
+        void setTrackInactiveColor(const QColor &color);
+        QColor trackActiveColor() const;
+        void setTrackActiveColor(const QColor &color);
+        QColor thumbFillColor() const;
+        void setThumbFillColor(const QColor &color);
+        QColor thumbBorderColor() const;
+        void setThumbBorderColor(const QColor &color);
+        int animationDuration() const;
+        void setAnimationDuration(int dur);
 
     };
 
