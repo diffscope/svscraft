@@ -20,6 +20,42 @@
     </message>
 </context>
 <context>
+    <name>SVS::EditLabelPrivate</name>
+    <message>
+        <location filename="../../src/widgets/widgets/editlabel.cpp" line="96"/>
+        <source>Press enter to edit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SVS::LevelMeterPrivate</name>
+    <message>
+        <location filename="../../src/widgets/widgets/levelmeter.cpp" line="37"/>
+        <source>Clipping was detected in left and right channel during playback. Press enter to reset.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/widgets/levelmeter.cpp" line="39"/>
+        <source>Clipping was detected in left channel during playback. Press enter to reset.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/widgets/levelmeter.cpp" line="41"/>
+        <source>Clipping was detected in right channel during playback. Press enter to reset.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/widgets/levelmeter.cpp" line="43"/>
+        <source>No clipping detected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/widgets/levelmeter.cpp" line="49"/>
+        <source>Level meter</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SVS::WorkflowPage</name>
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="107"/>

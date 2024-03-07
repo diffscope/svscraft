@@ -29,9 +29,3 @@ if(SVSCRAFT_BUILD_TRANSLATIONS)
         )
     endif()
 endif()
-
-if(SVSCRAFT_INSTALL)
-    install(DIRECTORY doc/
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/${SVSCRAFT_INSTALL_NAME}
-    )
-endif()
