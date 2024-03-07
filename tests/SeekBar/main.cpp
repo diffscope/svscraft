@@ -5,6 +5,8 @@
 #include <SVSCraftWidgets/seekbar.h>
 #include <QAccessibleWidget>
 
+#include <cmath>
+
 using namespace SVS;
 
 class MySeekBar : public SeekBar {

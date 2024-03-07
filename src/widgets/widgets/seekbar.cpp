@@ -144,8 +144,6 @@ namespace SVS {
         }
     }
 
-
-
     SeekBar::SeekBar(QWidget *parent) : SeekBar(parent, *new SeekBarPrivate) {
         Q_D(SeekBar);
         d->q_ptr = this;

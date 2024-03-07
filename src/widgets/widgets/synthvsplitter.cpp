@@ -155,7 +155,7 @@ namespace SVS {
         Q_Q(SynthVSplitter);
 
         layout = new QBoxLayout(QBoxLayout::BottomToTop);
-        layout->setContentsMargins(0, 0, 0, 0);
+        layout->setContentsMargins({});
         layout->setSpacing(0);
         q->setLayout(layout);
 
@@ -616,7 +616,7 @@ namespace SVS {
         auto handle = new SynthVSplitterHandle(this);
         if (titleBar) {
             auto layout = new QHBoxLayout();
-            layout->setContentsMargins(0, 0, 0, 0);
+            layout->setContentsMargins({});
             layout->setSpacing(0);
             layout->addWidget(titleBar);
             handle->setLayout(layout);

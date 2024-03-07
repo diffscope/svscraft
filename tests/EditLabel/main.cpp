@@ -16,8 +16,8 @@ int main(int argc, char **argv) {
     auto layout = new QFormLayout;
     auto editLabel = new EditLabel;
     auto spinBox = new ExpressionDoubleSpinBox;
-    qDebug() << spinBox->sizePolicy();
-    qDebug() << editLabel->sizePolicy();
+    // qDebug() << spinBox->sizePolicy();
+    // qDebug() << editLabel->sizePolicy();
     editLabel->setSuffix(" dB");
     editLabel->setEditWidget(spinBox);
     layout->addRow("&Gain", editLabel);
