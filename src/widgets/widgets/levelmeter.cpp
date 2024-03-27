@@ -210,5 +210,41 @@ namespace SVS {
         Q_D(const LevelMeter);
         return d->minimum;
     }
+    QColor LevelMeter::colorBackground() const {
+        Q_D(const LevelMeter);
+        return d->colorBackground;
+    }
+    void LevelMeter::setColorBackground(const QColor &color) {
+        Q_D(LevelMeter);
+        d->colorBackground = color;
+        update();
+    }
+    QColor LevelMeter::colorSafe() const {
+        Q_D(const LevelMeter);
+        return d->colorSafe;
+    }
+    void LevelMeter::setColorSafe(const QColor &color) {
+        Q_D(LevelMeter);
+        d->colorSafe = color;
+        update();
+    }
+    QColor LevelMeter::colorWarn() const {
+        Q_D(const LevelMeter);
+        return d->colorWarn;
+    }
+    void LevelMeter::setColorWarn(const QColor &color) {
+        Q_D(LevelMeter);
+        d->colorWarn = color;
+        update();
+    }
+    QColor LevelMeter::colorCritical() const {
+        Q_D(const LevelMeter);
+        return d->colorCritical;
+    }
+    void LevelMeter::setColorCritical(const QColor &color) {
+        Q_D(LevelMeter);
+        d->colorCritical = color;
+        update();
+    }
 
 } // SVS

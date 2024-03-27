@@ -65,6 +65,7 @@ namespace SVS {
 
         q->setMinimumSize(40, 20);
         q->setMaximumSize(40, 20);
+        q->setCheckable(true);
         calculateParams();
     }
     void SwitchButtonPrivate::calculateParams() {

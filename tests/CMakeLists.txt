@@ -7,3 +7,5 @@ add_subdirectory(EditLabel)
 add_subdirectory(SeekBar)
 
 add_subdirectory(LevelMeter)
+
+add_subdirectory(SwitchButton)
