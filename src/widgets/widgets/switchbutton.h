@@ -3,11 +3,13 @@
 
 #include <QAbstractButton>
 
+#include <SVSCraftWidgets/svscraftwidgetsglobal.h>
+
 namespace SVS {
 
     class SwitchButtonPrivate;
 
-    class SwitchButton : public QAbstractButton {
+    class SVSCRAFT_WIDGETS_EXPORT SwitchButton : public QAbstractButton {
         Q_OBJECT
         Q_DECLARE_PRIVATE(SwitchButton)
         Q_PROPERTY(QColor thumbColor READ thumbColor WRITE setThumbColor)
