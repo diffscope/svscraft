@@ -134,7 +134,7 @@ namespace SVS {
         return create(time.measure(), time.beat(), time.tick());
     }
 
-} // namespace SVS
+}
 
 Q_DECLARE_METATYPE(SVS::MusicTimeSignature)
 

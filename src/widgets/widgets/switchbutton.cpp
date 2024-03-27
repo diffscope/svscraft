@@ -32,7 +32,6 @@ namespace SVS {
         QColor activeColor = QColor(112, 156, 255);
         int valueAnimationDuration = 250;
         int thumbHoverAnimationDuration = 200;
-
     };
 
     void SwitchButtonPrivate::init() {
@@ -58,10 +57,11 @@ namespace SVS {
         thumbHoverAnimation = new QVariantAnimation(q);
         thumbHoverAnimation->setDuration(thumbHoverAnimationDuration);
         thumbHoverAnimation->setEasingCurve(QEasingCurve::OutCubic);
-        connect(thumbHoverAnimation, &QVariantAnimation::valueChanged, this, [=](const QVariant &value) {
-            thumbScaleRatio = value.toInt();
-            q->repaint();
-        });
+        connect(thumbHoverAnimation, &QVariantAnimation::valueChanged, this,
+                [=](const QVariant &value) {
+                    thumbScaleRatio = value.toInt();
+                    q->repaint();
+                });
 
         q->setMinimumSize(40, 20);
         q->setMaximumSize(40, 20);
@@ -155,7 +155,8 @@ namespace SVS {
         }
         return QObject::eventFilter(object, event);
     }
-    SwitchButton::SwitchButton(QWidget *parent, SwitchButtonPrivate &d) : QAbstractButton(parent), d_ptr(&d) {
+    SwitchButton::SwitchButton(QWidget *parent, SwitchButtonPrivate &d)
+        : QAbstractButton(parent), d_ptr(&d) {
     }
 
     QColor SwitchButton::thumbColor() const {
@@ -203,4 +204,5 @@ namespace SVS {
         d->thumbHoverAnimationDuration = dur;
         d->thumbHoverAnimation->setDuration(d->thumbHoverAnimationDuration);
     }
+
 } // SVS

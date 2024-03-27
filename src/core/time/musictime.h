@@ -139,7 +139,7 @@ namespace SVS {
         return totalTick() >= other.totalTick();
     }
 
-} // namespace SVS
+}
 
 Q_DECLARE_METATYPE(SVS::MusicTime)
 
