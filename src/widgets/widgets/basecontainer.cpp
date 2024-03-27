@@ -6,9 +6,7 @@
 
 namespace SVS {
 
-    BaseContainer::BaseContainer(QWidget *parent) : QFrame(parent) {
-        setAttribute(Qt::WA_StyledBackground);
-
+    BaseContainer::BaseContainer(QWidget *parent) : CBasicFrame(parent) {
         m_wallpaper = Qt::transparent;
         m_borderColor = Qt::transparent;
     }

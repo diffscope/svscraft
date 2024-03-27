@@ -10,7 +10,7 @@ svs_add_library(${PROJECT_NAME} AUTOGEN
     LINKS
     QT_LINKS Core
     QT_INCLUDE_PRIVATE Core
-    INCLUDE_PRIVATE time tools
+    INCLUDE_PRIVATE *
     PREFIX SVSCRAFT_CORE
 )
 

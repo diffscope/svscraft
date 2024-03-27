@@ -4,12 +4,12 @@
 #include <QFrame>
 #include <QWidget>
 
-#include <QMWidgets/qmwidgetsmacros.h>
+#include <QMWidgets/cbasicframe.h>
 #include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 
 namespace SVS {
 
-    class SVSCRAFT_WIDGETS_EXPORT BaseContainer : public QFrame {
+    class SVSCRAFT_WIDGETS_EXPORT BaseContainer : public CBasicFrame {
         Q_OBJECT
         Q_PROPERTY_DECLARE(QMargins, margins, Margins)
         Q_PROPERTY_DECLARE(QColor, borderColor, BorderColor)
