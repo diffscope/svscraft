@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-#include <QMWidgets/QMarginsImpl.h>
+#include <QMWidgets/qmarginsimpl.h>
 
 namespace SVS {
 

@@ -20,7 +20,7 @@ if(SVSCRAFT_BUILD_TRANSLATIONS)
 
     if(SVSCRAFT_INSTALL)
         install(CODE "
-            execute_process(COMMAND \"${CMAKE_COMMAND}\" --build \"${CMAKE_BINARY_DIR}\" --target svscraft_lupdate_task)
+            # execute_process(COMMAND \"${CMAKE_COMMAND}\" --build \"${CMAKE_BINARY_DIR}\" --target svscraft_lupdate_task)
             execute_process(COMMAND \"${CMAKE_COMMAND}\" --build \"${CMAKE_BINARY_DIR}\" --target svscraft_lrelease_task)
         ")
         install(DIRECTORY ${_qm_dir}/

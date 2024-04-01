@@ -1,7 +1,7 @@
 #ifndef FULLICONBUTTON_H
 #define FULLICONBUTTON_H
 
-#include <QMWidgets/CPushButton.h>
+#include <QMWidgets/cpushbutton.h>
 #include <QMWidgets/qmwidgetsmacros.h>
 #include <SVSCraftWidgets/svscraftwidgetsglobal.h>
 

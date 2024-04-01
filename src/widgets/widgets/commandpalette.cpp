@@ -8,7 +8,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 
-#include <QMWidgets/CLineEdit.h>
+#include <QMWidgets/clineedit.h>
 
 #include "svscraftwidgetsnamespace.h"
 

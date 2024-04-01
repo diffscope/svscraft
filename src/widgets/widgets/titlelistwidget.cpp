@@ -3,7 +3,7 @@
 
 #include <private/qlistwidget_p.h>
 
-#include <QMWidgets/QMarginsImpl.h>
+#include <QMWidgets/qmarginsimpl.h>
 
 namespace SVS {
 

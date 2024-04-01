@@ -1,7 +1,7 @@
 #ifndef TITLELISTITEMDELEGATEPRIVATE_H
 #define TITLELISTITEMDELEGATEPRIVATE_H
 
-#include <QMWidgets/qfontinfoEx.h>
+#include <QMWidgets/qfontinfoex.h>
 #include <QMWidgets/qpeninfo.h>
 #include <QMWidgets/qrectinfo.h>
 #include <SVSCraftWidgets/titlelistitemdelegate.h>
