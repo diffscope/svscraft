@@ -46,7 +46,7 @@ namespace SVS {
 
     void LevelMeterPrivate::reloadStrings() {
         Q_Q(LevelMeter);
-        q->setAccessibleName(tr("Level meter"));
+        q->setAccessibleName(LevelMeter::tr("Level meter"));
         setAccessibleClipIndicator();
     }
 

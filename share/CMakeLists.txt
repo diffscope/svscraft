@@ -9,7 +9,7 @@ if(SVSCRAFT_BUILD_TRANSLATIONS)
     get_property(_targets GLOBAL PROPERTY SVSCRAFT_TRANSLATE_TARGETS)
     set(_qm_dir ${CMAKE_BUILD_SHARE_DIR}/${SVSCRAFT_INSTALL_NAME}/translations)
     qm_add_translation(svscraft_translations
-        LOCALES ja_JP zh_CN zh_HK
+        LOCALES ja_JP zh_CN zh_TW
         PREFIX svscraft
         TARGETS ${_targets}
         TS_DIR translations

@@ -93,13 +93,8 @@ namespace SVS {
     }
 
     void EditLabelPrivate::reloadStrings() const {
-        label->setAccessibleDescription(tr("Press enter to edit."));
+        label->setAccessibleDescription(EditLabel::tr("Press enter to edit."));
     }
-
-
-
-
-
 
     EditLabel::EditLabel(QWidget *parent) : EditLabel(parent, *new EditLabelPrivate) {
         Q_D(EditLabel);
