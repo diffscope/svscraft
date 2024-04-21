@@ -1,5 +1,7 @@
 #include "seekbar.h"
 
+#include <cmath>
+
 #include <QAccessible>
 #include <QMouseEvent>
 #include <QPainter>
