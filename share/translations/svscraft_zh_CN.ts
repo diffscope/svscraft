@@ -6,17 +6,17 @@
     <message>
         <location filename="../../src/widgets/dialogs/configurabledialog.cpp" line="69"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/configurabledialog.cpp" line="70"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/configurabledialog.cpp" line="71"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>应用</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../../src/widgets/widgets/editlabel.cpp" line="96"/>
         <source>Press enter to edit.</source>
-        <translation type="unfinished"></translation>
+        <translation>按回车键编辑。</translation>
     </message>
 </context>
 <context>
@@ -60,32 +60,32 @@
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="107"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>上一步</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="108"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
+        <translation>下一步</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="109"/>
         <source>Finish</source>
-        <translation type="unfinished"></translation>
+        <translation>完成</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="110"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>确定</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="111"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../src/widgets/dialogs/workflowpage.cpp" line="112"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>帮助</translation>
     </message>
 </context>
 </TS>
