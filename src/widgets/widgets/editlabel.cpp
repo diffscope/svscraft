@@ -107,7 +107,7 @@ namespace SVS {
         d->reloadStrings();
         setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
-        qIDec->installLocale(d, [d] { d->reloadStrings(); });
+        qIDec->installLocale(d);
     }
 
     EditLabel::~EditLabel() {

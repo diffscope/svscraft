@@ -90,7 +90,7 @@ namespace SVS {
         descriptionLabel->hide();
         emptyWidget->hide();
 
-        qIDec->installLocale(this, _LOC(WorkflowPagePrivate, this));
+        qIDec->installLocale(this);
     }
 
     void WorkflowPagePrivate::reloadStrings() {

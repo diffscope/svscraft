@@ -59,10 +59,9 @@ namespace SVS {
 
         connect(okButton, &QPushButton::clicked, q, &ConfigurableDialog::accept);
         connect(cancelButton, &QPushButton::clicked, q, &ConfigurableDialog::reject);
-        connect(applyButton, &QPushButton::clicked, this,
-                &ConfigurableDialogPrivate::apply_helper);
+        connect(applyButton, &QPushButton::clicked, this, &ConfigurableDialogPrivate::apply_helper);
 
-        qIDec->installLocale(this, _LOC(ConfigurableDialogPrivate, this));
+        qIDec->installLocale(this);
     }
 
     void ConfigurableDialogPrivate::reloadStrings() {
