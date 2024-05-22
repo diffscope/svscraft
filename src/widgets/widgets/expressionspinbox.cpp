@@ -10,7 +10,7 @@ namespace SVS {
     ExpressionSpinBox::~ExpressionSpinBox() = default;
 
     QValidator::State ExpressionSpinBox::validate(QString &input, int &pos) const {
-        if (QString::number(input.toInt()) == input)
+        if (textFromValue(valueFromText(input)) == input)
             return QValidator::Acceptable;
         else
             return QValidator::Intermediate;
@@ -24,9 +24,10 @@ namespace SVS {
                 c.unicode() -= 0xfee0;
             }
         }
-        double ret = te_interp(s.toLatin1(), &err);
+        s.replace(QLocale().decimalPoint(), '.');
+        double ret = te_interp(s.toUtf8(), &err);
         if (err == 0) {
-            str = QString::number(int(ret));
+            str = textFromValue(int(ret));
         }
     }
 }

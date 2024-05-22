@@ -24,6 +24,7 @@ namespace SVS {
                 c.unicode() -= 0xfee0;
             }
         }
+        s.replace(QLocale().decimalPoint(), '.');
         double ret = te_interp(s.toLatin1(), &err);
         if (err == 0) {
             str = textFromValue(ret);
