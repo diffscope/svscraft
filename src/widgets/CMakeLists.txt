@@ -1,5 +1,5 @@
 project(SVSCraftWidgets
-    VERSION ${SVSCRAFT_VERSION}
+    VERSION ${IDECORE_VERSION}
     LANGUAGES CXX
 )
 

@@ -34,7 +34,7 @@ endif()
 # ----------------------------------
 # Project Variables
 # ----------------------------------
-set(SVSCRAFT_VERSION ${PROJECT_VERSION})
+set(IDECORE_VERSION ${PROJECT_VERSION})
 set(SVSCRAFT_INSTALL_NAME ${PROJECT_NAME})
 
 # ----------------------------------

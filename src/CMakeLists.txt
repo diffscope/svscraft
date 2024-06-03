@@ -50,6 +50,7 @@ macro(svs_add_library _target)
 
     if(WIN32 AND NOT FUNC_NO_WIN_RC AND(${_type} STREQUAL "SHARED"))
         qm_add_win_rc(${_target}
+            NAME ${SVSCRAFT_INSTALL_NAME}
             DESCRIPTION ${SVSCRAFT_PROJECT_DESCRIPTION}
             COPYRIGHT ${SVSCRAFT_PROJECT_COPYRIGHT}
         )
