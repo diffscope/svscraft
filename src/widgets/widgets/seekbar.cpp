@@ -34,6 +34,8 @@ namespace SVS {
         bool hasTracking = true;
         bool isSliderDown = false;
 
+        bool resetOnDoubleClick = true;
+
         double sliderValue = 0;
         double value = 0;
         double defaultValue = 0;
@@ -62,6 +64,8 @@ namespace SVS {
         double boundAndRound(double value) const;
         void setSliderPosition(double value);
         void setValue(double value);
+
+        std::function<double(double)> displayValueConverter = [](double v) { return v; };
     };
 
     void SeekBarPrivate::calculateParams() {
@@ -140,7 +144,7 @@ namespace SVS {
         }
         if (!qFuzzyCompare(value_, value)) {
             value = value_;
-            QAccessibleValueChangeEvent event(q, q->displayValueFromActualValue(value_));
+            QAccessibleValueChangeEvent event(q, displayValueConverter(value_));
             QAccessible::updateAccessibility(&event);
             Q_EMIT q->valueChanged(value_);
         }
@@ -159,7 +163,7 @@ namespace SVS {
         setMinimumHeight(20);
         setMaximumHeight(20);
         setAttribute(Qt::WA_Hover, true);
-        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         setFocusPolicy(Qt::StrongFocus);
         installEventFilter(this);
         d->thumbHoverAnimation = new QVariantAnimation(this);
@@ -241,6 +245,17 @@ namespace SVS {
         return d->sliderValue;
     }
     void SeekBar::setSliderPosition(double position) {
+        Q_D(SeekBar);
+        position = d->boundAndRound(position);
+        if (qFuzzyCompare(position, d->sliderValue))
+            return;
+        d->sliderValue = position;
+        if (!d->hasTracking)
+            update();
+        if (d->isSliderDown)
+            emit sliderMoved(position);
+        if (d->hasTracking)
+            setValue(d->sliderValue);
     }
     double SeekBar::trackActiveStartValue() const {
         Q_D(const SeekBar);
@@ -339,7 +354,7 @@ namespace SVS {
     void SeekBar::mouseDoubleClickEvent(QMouseEvent *event) {
         Q_D(SeekBar);
         auto pos = event->pos();
-        if (d->mouseOnHandle(pos))
+        if (d->resetOnDoubleClick && d->mouseOnHandle(pos))
             resetValue();
         QWidget::mouseDoubleClickEvent(event);
     }
@@ -401,11 +416,12 @@ namespace SVS {
 
     double SeekBar::displayValue() const {
         Q_D(const SeekBar);
-        return displayValueFromActualValue(d->value);
+        return d->displayValueConverter(d->value);
     }
 
-    double SeekBar::displayValueFromActualValue(double value) const {
-        return value;
+    void SeekBar::setDisplayValueConverter(const std::function<double(double)> &converter) {
+        Q_D(SeekBar);
+        d->displayValueConverter = converter;
     }
 
     SeekBar::SeekBar(QWidget *parent, SeekBarPrivate &d) : QWidget(parent), d_ptr(&d) {
@@ -455,6 +471,15 @@ namespace SVS {
         Q_D(SeekBar);
         d->animationDuration = dur;
         d->thumbHoverAnimation->setDuration(d->animationDuration);
+    }
+
+    bool SeekBar::resetOnDoubleClick() const {
+        Q_D(const SeekBar);
+        return d->resetOnDoubleClick;
+    }
+    void SeekBar::setResetOnDoubleClick(bool a) {
+        Q_D(SeekBar);
+        d->resetOnDoubleClick = a;
     }
 
 } // SVS

@@ -1,6 +1,8 @@
 #ifndef SEEKBAR_H
 #define SEEKBAR_H
 
+#include <functional>
+
 #include <QWidget>
 
 #include <SVSCraftWidgets/svscraftwidgetsglobal.h>
@@ -17,6 +19,7 @@ namespace SVS {
         Q_PROPERTY(QColor thumbFillColor READ thumbFillColor WRITE setThumbFillColor)
         Q_PROPERTY(QColor thumbBorderColor READ thumbBorderColor WRITE setThumbBorderColor)
         Q_PROPERTY(int animationDuration READ animationDuration WRITE setAnimationDuration)
+        Q_PROPERTY(bool resetOnDoubleClick READ resetOnDoubleClick WRITE setResetOnDoubleClick)
     public:
         explicit SeekBar(QWidget *parent = nullptr);
         ~SeekBar() override;
@@ -53,6 +56,13 @@ namespace SVS {
         void setDefaultValue(double value);
 
         double displayValue() const;
+        void setDisplayValueConverter(const std::function<double(double)> &converter);
+
+        int animationDuration() const;
+        void setAnimationDuration(int dur);
+
+        bool resetOnDoubleClick() const;
+        void setResetOnDoubleClick(bool);
 
     public Q_SLOTS:
         void setValue(double value);
@@ -76,8 +86,6 @@ namespace SVS {
 
         explicit SeekBar(QWidget *parent, SeekBarPrivate &d);
 
-        virtual double displayValueFromActualValue(double value) const;
-
     private:
         QScopedPointer<SeekBarPrivate> d_ptr;
 
@@ -89,8 +97,6 @@ namespace SVS {
         void setThumbFillColor(const QColor &color);
         QColor thumbBorderColor() const;
         void setThumbBorderColor(const QColor &color);
-        int animationDuration() const;
-        void setAnimationDuration(int dur);
 
     };
 
