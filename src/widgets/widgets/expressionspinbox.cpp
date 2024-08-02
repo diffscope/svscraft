@@ -24,7 +24,7 @@ namespace SVS {
                 c.unicode() -= 0xfee0;
             }
         }
-        s.replace(QLocale().decimalPoint(), '.');
+        s.replace(QLocale().decimalPoint(), ".");
         double ret = te_interp(s.toUtf8(), &err);
         if (err == 0) {
             str = textFromValue(int(ret));
