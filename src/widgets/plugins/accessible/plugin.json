@@ -1,3 +1,6 @@
 {
-  "Keys": ["SVS::SeekBar"]
+  "Keys": [
+    "SVS::SeekBar",
+    "SVS::EditLabel"
+  ]
 }

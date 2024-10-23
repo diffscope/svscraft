@@ -50,7 +50,6 @@ namespace SVS {
         enum Trigger {
             MousePress = 0x01,
             MouseDblClick = 0x02,
-            KeyboardFocusIn = 0x04,
         };
         Q_DECLARE_FLAGS(Triggers, Trigger)
         Q_FLAG(Triggers)
@@ -72,6 +71,8 @@ namespace SVS {
         QLabel *label() const;
         virtual QString editToLabel(const QString &editText) const;
         bool eventFilter(QObject *watched, QEvent *event) override;
+        void keyPressEvent(QKeyEvent *event) override;
+        void paintEvent(QPaintEvent *event) override;
 
         explicit EditLabel(QWidget *parent, EditLabelPrivate &d);
 

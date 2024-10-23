@@ -30,5 +30,8 @@ int main(int argc, char **argv) {
     dlg.setLayout(layout);
     dlg.show();
 
+    spinBox->setValue(3);
+    lineEdit->setText("This is a test");
+
     a.exec();
 }

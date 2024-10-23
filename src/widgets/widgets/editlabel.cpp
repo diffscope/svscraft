@@ -1,9 +1,13 @@
 #include "editlabel.h"
 
 #include <QAbstractSpinBox>
+#include <QApplication>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMouseEvent>
+#include <QSpinBox>
+#include <QStyleOption>
+#include <QStylePainter>
 
 #include <QMWidgets/qmdecoratorv2.h>
 
@@ -19,7 +23,7 @@ namespace SVS {
         QLabel *label;
         QWidget *editWidget = nullptr;
 
-        EditLabel::Triggers triggers = EditLabel::Triggers(EditLabel::MousePress | EditLabel::MouseDblClick | EditLabel::KeyboardFocusIn);
+        EditLabel::Triggers triggers = EditLabel::MousePress;
 
         void addEditWidgetToStackedWidget(QWidget *w);
         void postAddLineEdit(QLineEdit *lineEdit) const;
@@ -28,7 +32,9 @@ namespace SVS {
         QString editWidgetText() const;
         void exitEdit();
 
-        void reloadStrings() const;
+        QKeyEvent *attemptingKeyEvent = nullptr;
+        bool attemptingKeyEventIsAccepted = false;
+
     };
 
     void EditLabelPrivate::addEditWidgetToStackedWidget(QWidget *w) {
@@ -57,12 +63,18 @@ namespace SVS {
         if (!lineEdit)
             return;
         connect(lineEdit, &QLineEdit::editingFinished, this, &EditLabelPrivate::exitEdit);
+        connect(lineEdit, &QLineEdit::textChanged, this, &EditLabelPrivate::updateLabelText);
     }
 
     void EditLabelPrivate::postAddSpinBox(QAbstractSpinBox *spinBox) const {
         if (!spinBox)
             return;
         connect(spinBox, &QAbstractSpinBox::editingFinished, this, &EditLabelPrivate::exitEdit);
+        if (auto qSpinBox = qobject_cast<QSpinBox *>(spinBox)) {
+            connect(qSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &EditLabelPrivate::updateLabelText);
+        } else if (auto qDoubleSpinBox = qobject_cast<QDoubleSpinBox *>(spinBox)) {
+            connect(qDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditLabelPrivate::updateLabelText);
+        }
     }
 
     void EditLabelPrivate::updateLabelText() {
@@ -92,22 +104,17 @@ namespace SVS {
             Q_EMIT q->editingChanged(false);
     }
 
-    void EditLabelPrivate::reloadStrings() const {
-        label->setAccessibleDescription(EditLabel::tr("Press enter to edit."));
-    }
-
     EditLabel::EditLabel(QWidget *parent) : EditLabel(parent, *new EditLabelPrivate) {
         Q_D(EditLabel);
         d->q_ptr = this;
         d->label = new QLabel;
         QStackedWidget::addWidget(d->label);
-        d->label->setFocusPolicy(Qt::StrongFocus);
         d->label->setCursor(Qt::PointingHandCursor);
+        d->label->setTextFormat(Qt::PlainText);
         d->label->installEventFilter(this);
-        d->reloadStrings();
         setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-        qIDec->installLocale(d);
+        setFocusPolicy(Qt::StrongFocus);
+        setAttribute(Qt::WA_MacShowFocusRect);
     }
 
     EditLabel::~EditLabel() {
@@ -193,36 +200,23 @@ namespace SVS {
     bool EditLabel::eventFilter(QObject *watched, QEvent *event) {
         Q_D(EditLabel);
         if (watched == d->label) {
-            if ((d->triggers & KeyboardFocusIn) && event->type() == QEvent::FocusIn) {
-                auto focusEvent = static_cast<QFocusEvent *>(event);
-                if (focusEvent->reason() == Qt::FocusReason::TabFocusReason || focusEvent->reason() == Qt::BacktabFocusReason || focusEvent->reason() == Qt::ShortcutFocusReason) {
-                    setEditing(true);
-                    return true;
-                }
-                return false;
+            if (event->type() == QEvent::FocusIn) {
+                setFocus();
             }
-            if ((d->triggers & MousePress) && event->type() == QEvent::MouseButtonPress) {
+            if ((d->triggers & MousePress) && event->type() == QEvent::MouseButtonPress || (d->triggers & MouseDblClick) && event->type() == QEvent::MouseButtonDblClick) {
                 setEditing(true);
-                return true;
-            }
-            if ((d->triggers & MouseDblClick) && event->type() == QEvent::MouseButtonDblClick) {
-                setEditing(true);
-                return true;
-            }
-            if (event->type() == QEvent::KeyPress) {
-                auto keyEvent = static_cast<QKeyEvent *>(event);
-                if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space) {
-                    setEditing(true);
-                    return true;
+                if (d->editWidget) {
+                    d->editWidget->setFocus();
                 }
-                return false;
+                return true;
             }
             return false;
         } else {
             if (event->type() == QEvent::FocusOut) {
                 setEditing(false);
                 return false;
-            } else if (event->type() == QEvent::KeyPress) {
+            }
+            if (event->type() == QEvent::KeyPress) {
                 auto keyEvent = static_cast<QKeyEvent *>(event);
                 if (keyEvent->key() == Qt::Key_Return) {
                     setEditing(false);
@@ -232,5 +226,56 @@ namespace SVS {
             return false;
         }
     }
+    void EditLabel::keyPressEvent(QKeyEvent *event) {
+        Q_D(EditLabel);
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Space) {
+            setEditing(true);
+            if (d->editWidget)
+                d->editWidget->setFocus();
+            event->accept();
+        } else {
+            QStackedWidget::keyPressEvent(event);
+            if (!event->isAccepted()) {
+                if (d->editWidget) {
+                    if (hasFocus()) {
+                        if (auto lineEdit = qobject_cast<QLineEdit *>(d->editWidget)) {
+                            lineEdit->selectAll();
+                        } else if (auto spinBox = qobject_cast<QAbstractSpinBox *>(d->editWidget)) {
+                            spinBox->selectAll();
+                        }
+                    }
+                    d->attemptingKeyEventIsAccepted = true;
+                    if (event != d->attemptingKeyEvent) {
+                        d->attemptingKeyEvent = event;
+                        QApplication::sendEvent(d->editWidget, event);
+                        d->attemptingKeyEvent = nullptr;
+                        if (d->attemptingKeyEventIsAccepted) {
+                            setEditing(true);
+                            d->editWidget->setFocus();
+                        }
+                    } else {
+                        d->attemptingKeyEventIsAccepted = false;
+                    }
+                }
+            }
+        }
+    }
+
+    void EditLabel::paintEvent(QPaintEvent *event) {
+        if (hasFocus()) {
+            QStylePainter painter(this);
+            painter.setRenderHint(QPainter::Antialiasing);
+            QStyleOptionFocusRect option;
+            option.initFrom(this);
+            option.backgroundColor = palette().dark().color();
+            painter.drawPrimitive(QStyle::PE_FrameFocusRect, option);
+        }
+    }
+
+
+
+
 
 } // SVS
+
+#include "editlabel.moc"
