@@ -29,7 +29,7 @@ endif()
 # CMake API
 # ----------------------------------
 macro(svs_add_library _target)
-    set(options AUTOGEN NO_SYNC_INCLUDE NO_WIN_RC)
+    set(options AUTOGEN NO_SYNC_INCLUDE NO_WIN_RC STATIC) # FIXME temporarily overrides library type to make SVSCraftQuick static before zjzj fixes building
     set(oneValueArgs SYNC_INCLUDE_PREFIX PREFIX)
     set(multiValueArgs SYNC_INCLUDE_OPTIONS)
     cmake_parse_arguments(FUNC "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -40,7 +40,7 @@ macro(svs_add_library _target)
         set(CMAKE_AUTORCC ON)
     endif()
 
-    if(SVSCRAFT_BUILD_STATIC)
+    if(FUNC_STATIC OR SVSCRAFT_BUILD_STATIC)
         set(_type STATIC)
     else()
         set(_type SHARED)
@@ -129,6 +129,8 @@ add_subdirectory(3rdparty)
 add_subdirectory(core)
 
 add_subdirectory(widgets)
+
+add_subdirectory(quick)
 
 # ----------------------------------
 # Documentation

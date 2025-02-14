@@ -1,0 +1,18 @@
+#ifndef SVSCRAFTQUICKGLOBAL_H
+#define SVSCRAFTQUICKGLOBAL_H
+
+#include <QtGlobal>
+
+#ifndef SVSCRAFT_QUICK_EXPORT
+#  ifdef SVSCRAFT_QUICK_STATIC
+#    define SVSCRAFT_QUICK_EXPORT
+#  else
+#    ifdef SVSCRAFT_QUICK_LIBRARY
+#      define SVSCRAFT_QUICK_EXPORT Q_DECL_EXPORT
+#    else
+#      define SVSCRAFT_QUICK_EXPORT Q_DECL_IMPORT
+#    endif
+#  endif
+#endif
+
+#endif // SVSCRAFTQUICKGLOBAL_H

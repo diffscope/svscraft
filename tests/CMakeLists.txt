@@ -9,3 +9,5 @@ add_subdirectory(SeekBar)
 add_subdirectory(LevelMeter)
 
 add_subdirectory(SwitchButton)
+
+add_subdirectory(UIComponents)
