@@ -14,10 +14,10 @@ T.Button {
     padding: 6
     horizontalPadding: 8
     spacing: 4
-    icon.width: 12
-    icon.height: 12
+    icon.width: 16
+    icon.height: 16
     icon.color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-                control.pressed ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
+                control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
                 control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
                 Theme.foregroundPrimaryColor
     Behavior on icon.color {
@@ -37,7 +37,7 @@ T.Button {
         font: control.font
 
         color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-               control.pressed ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
+               control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
                control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
                Theme.foregroundPrimaryColor
 
@@ -52,12 +52,13 @@ T.Button {
     background: Rectangle {
         implicitWidth: 64
         implicitHeight: 20
-        color: !control.enabled && !control.flat ? Theme.controlDisabledColorChange.apply(Theme.controlColor(control.ThemedItem.controlType)) :
-               control.pressed ? Theme.controlPressedColorChange.apply(Theme.controlColor(control.ThemedItem.controlType)) :
-               control.hovered ? Theme.controlHoveredColorChange.apply(Theme.controlColor(control.ThemedItem.controlType)) :
-               !control.flat ? Theme.controlColor(control.ThemedItem.controlType) : "transparent"
+        property color _baseColor: control.checkable ? control.checked ? Theme.accentColor : Theme.buttonColor : Theme.controlColor(control.ThemedItem.controlType)
+        color: !control.enabled && !control.flat ? Theme.controlDisabledColorChange.apply(_baseColor) :
+               control.down && control.enabled ? Theme.controlPressedColorChange.apply(_baseColor) :
+               control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(_baseColor) :
+               !control.flat ? _baseColor : control.checkable && control.checked ? Theme.accentColor : "transparent"
         border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
-        border.width: control.visualFocus ? 2 : control.flat || control.ThemedItem.controlType !== Theme.CT_Normal ? 0 : 1
+        border.width: control.visualFocus ? 2 : control.flat || control.ThemedItem.controlType !== Theme.CT_Normal || control.checkable && control.checked ? 0 : 1
         radius: 4
 
         Behavior on color {

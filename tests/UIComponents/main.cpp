@@ -5,7 +5,7 @@
 #include <QQuickStyle>
 
 #include <SVSCraftQuick/theme.h>
-#include <SVSCraftQuick/colorchange.h>
+#include <SVSCraftGui/colorchange.h>
 
 using namespace SVS;
 
@@ -19,16 +19,24 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setAccentColor(0x5566ff);
     Theme::instance()->setWarningColor(0xeeaa66);
     Theme::instance()->setErrorColor(0xcc4455);
-    Theme::instance()->setButtonColor(0x292a2b);
+    Theme::instance()->setButtonColor(0x333437);
     Theme::instance()->setBorderColor(0x4a4b4c);
+
+    Theme::instance()->setBackgroundPrimaryColor(0x212124);
+    Theme::instance()->setBackgroundSecondaryColor(0x232427);
+    Theme::instance()->setBackgroundTertiaryColor(0x252629);
+    Theme::instance()->setBackgroundQuaternaryColor(0x313235);
+
     Theme::instance()->setForegroundPrimaryColor(0xdadada);
-    Theme::instance()->setControlDisabledColorChange({1, 0.75});
-    Theme::instance()->setForegroundDisabledColorChange({1, 0.75, 0.75});
-    Theme::instance()->setControlHoveredColorChange({0.9, 1.1});
+
+    Theme::instance()->setControlDisabledColorChange({QColor::fromRgba(0x33000000)});
+    Theme::instance()->setForegroundDisabledColorChange({{}, 0.5});
+    Theme::instance()->setControlHoveredColorChange({QColor::fromRgba(0x1affffff)});
     Theme::instance()->setForegroundHoveredColorChange({});
     Theme::instance()->setControlPressedColorChange({});
-    Theme::instance()->setForegroundPressedColorChange({1, 1, 0.8});
+    Theme::instance()->setForegroundPressedColorChange({{}, 0.8});
     Theme::instance()->setColorAnimationDuration(250);
+    Theme::instance()->setVisualEffectAnimationDuration(250);
 
     QQuickStyle::setStyle("SVSCraft.UIComponents");
     QQuickStyle::setFallbackStyle("Basic");

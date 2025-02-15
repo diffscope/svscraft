@@ -38,6 +38,19 @@ namespace SVS {
         }
         return {};
     }
+    QColor Theme::backgroundColor(SVS::Theme::BackgroundLevel backgroundLevel) const {
+        switch (backgroundLevel) {
+            case BL_Primary:
+                return backgroundPrimaryColor();
+            case BL_Secondary:
+                return backgroundSecondaryColor();
+            case BL_Tertiary:
+                return backgroundTertiaryColor();
+            case BL_Quaternary:
+                return backgroundQuaternaryColor();
+        }
+        return {};
+    }
     QColor Theme::accentColor() const {
         Q_D(const Theme);
         return d->accentColor;

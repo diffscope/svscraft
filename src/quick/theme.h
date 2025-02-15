@@ -58,6 +58,7 @@ namespace SVS {
             CT_Error,
         };
         Q_ENUM(ControlType)
+        Q_INVOKABLE QColor controlColor(SVS::Theme::ControlType controlType) const;
 
         enum BackgroundLevel {
             BL_Primary,
@@ -66,14 +67,13 @@ namespace SVS {
             BL_Quaternary,
         };
         Q_ENUM(BackgroundLevel)
+        Q_INVOKABLE QColor backgroundColor(SVS::Theme::BackgroundLevel backgroundLevel) const;
 
         enum ForegroundLevel {
             FL_Primary,
             FL_Secondary,
         };
         Q_ENUM(ForegroundLevel)
-
-        Q_INVOKABLE QColor controlColor(SVS::Theme::ControlType controlType) const;
 
         QColor accentColor() const;
         void setAccentColor(const QColor &accentColor);

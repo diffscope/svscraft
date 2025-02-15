@@ -9,6 +9,10 @@ namespace SVS {
     public:
         ThemeAttachedType *q_ptr;
         Theme::ControlType controlType = Theme::CT_Normal;
+        Theme::BackgroundLevel backgroundLevel = Theme::BL_Primary;
+        bool foldable = false;
+        bool folded = false;
+        double trackStart = 0.0;
     };
 }
 

@@ -18,4 +18,48 @@ namespace SVS {
             emit controlTypeChanged(value);
         }
     }
+    SVS::Theme::BackgroundLevel ThemeAttachedType::backgroundLevel() const {
+        Q_D(const ThemeAttachedType);
+        return d->backgroundLevel;
+    }
+    void ThemeAttachedType::setBackgroundLevel(SVS::Theme::BackgroundLevel value) {
+        Q_D(ThemeAttachedType);
+        if (d->backgroundLevel != value) {
+            d->backgroundLevel = value;
+            emit backgroundLevelChanged(d->backgroundLevel);
+        }
+    }
+    bool ThemeAttachedType::foldable() const {
+        Q_D(const ThemeAttachedType);
+        return d->foldable;
+    }
+    void ThemeAttachedType::setFoldable(bool value) {
+        Q_D(ThemeAttachedType);
+        if (d->foldable != value) {
+            d->foldable = value;
+            emit foldableChanged(value);
+        }
+    }
+    bool ThemeAttachedType::folded() const {
+        Q_D(const ThemeAttachedType);
+        return d->folded;
+    }
+    void ThemeAttachedType::setFolded(bool value) {
+        Q_D(ThemeAttachedType);
+        if (d->folded != value) {
+            d->folded = value;
+            emit foldedChanged(value);
+        }
+    }
+    double ThemeAttachedType::trackStart() const {
+        Q_D(const ThemeAttachedType);
+        return d->trackStart;
+    }
+    void ThemeAttachedType::setTrackStart(double value) {
+        Q_D(ThemeAttachedType);
+        if (d->trackStart != value) {
+            d->trackStart = value;
+            emit trackStartChanged(value);
+        }
+    }
 }
