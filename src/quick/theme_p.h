@@ -5,7 +5,8 @@
 
 #include <QColor>
 
-#include <SVSCraftQuick/colorchange.h>
+#include <SVSCraftGui/colorchange.h>
+
 #include <SVSCraftQuick/themeattachedtype.h>
 
 class QQmlEngine;

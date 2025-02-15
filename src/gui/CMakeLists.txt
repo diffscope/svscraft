@@ -1,4 +1,4 @@
-project(SVSCraftCore
+project(SVSCraftGui
     VERSION ${IDECORE_VERSION}
     LANGUAGES CXX
 )
@@ -7,11 +7,11 @@ file(GLOB_RECURSE _src *.h *.cpp)
 
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
-    LINKS
-    QT_LINKS Core
-    QT_INCLUDE_PRIVATE Core
+    LINKS SVSCraftCore
+    QT_LINKS Core Gui
+    QT_INCLUDE_PRIVATE Core Gui
     INCLUDE_PRIVATE *
-    PREFIX SVSCRAFT_CORE
+    PREFIX SVSCRAFT_GUI
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
