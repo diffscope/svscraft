@@ -17,7 +17,7 @@ T.Slider {
         implicitWidth: 12
         implicitHeight: 12
         radius: width / 2
-        width: control.pressed ? implicitWidth : control.hovered ? implicitWidth * 1.25 : implicitWidth * 1.1
+        width: implicitWidth * (!control.enabled ? 1.1 : control.pressed ? 1 : control.hovered ? 1.25 : 1.1)
         height: width
         color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
                control.pressed ? Theme.controlPressedColorChange.apply(Theme.foregroundPrimaryColor) :
