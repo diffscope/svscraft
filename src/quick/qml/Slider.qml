@@ -11,6 +11,15 @@ T.Slider {
 
     padding: 6
 
+    Rectangle {
+        width: control.width
+        height: control.height
+        border.width: control.visualFocus ? 2 : 0
+        color: "transparent"
+        border.color: Theme.navigationColor
+        radius: 4
+    }
+
     handle: Rectangle {
         x: control.leftPadding + (control.horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
@@ -35,8 +44,6 @@ T.Slider {
                 easing.type: Easing.OutCubic
             }
         }
-        border.width: control.visualFocus ? 2 : 0
-        border.color: Theme.navigationColor
     }
 
     background: Rectangle {

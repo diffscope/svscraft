@@ -1,6 +1,7 @@
 #ifndef THEME_H
 #define THEME_H
 
+#include <QColor>
 #include <QObject>
 #include <qqmlintegration.h>
 
@@ -22,6 +23,7 @@ namespace SVS {
 
         Q_PROPERTY(QColor buttonColor READ buttonColor WRITE setButtonColor NOTIFY buttonColorChanged)
         Q_PROPERTY(QColor textFieldColor READ textFieldColor WRITE setTextFieldColor NOTIFY textFieldColorChanged)
+        Q_PROPERTY(QColor scrollBarColor READ scrollBarColor WRITE setScrollBarColor NOTIFY scrollBarColorChanged)
         Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
 
         Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor WRITE setBackgroundPrimaryColor NOTIFY backgroundPrimaryColorChanged)
@@ -87,6 +89,9 @@ namespace SVS {
         QColor buttonColor() const;
         void setButtonColor(const QColor &buttonColor);
 
+        QColor scrollBarColor() const;
+        void setScrollBarColor(const QColor &scrollBarColor);
+
         QColor textFieldColor() const;
         void setTextFieldColor(const QColor &textFieldColor);
 
@@ -150,6 +155,7 @@ namespace SVS {
         void errorColorChanged(const QColor &errorColor);
         void buttonColorChanged(const QColor &buttonColor);
         void textFieldColorChanged(const QColor &textFieldColor);
+        void scrollBarColorChanged(const QColor &scrollBarColor);
         void borderColorChanged(const QColor &borderColor);
         void backgroundPrimaryColorChanged(const QColor &backgroundPrimaryColor);
         void backgroundSecondaryColorChanged(const QColor &backgroundSecondaryColor);

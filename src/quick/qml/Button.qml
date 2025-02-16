@@ -1,7 +1,7 @@
 import QtQml
 import QtQuick
 import QtQuick.Templates as T
-import QtQuick.Controls.impl
+import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft.UIComponents
 

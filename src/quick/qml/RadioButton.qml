@@ -22,9 +22,9 @@ T.RadioButton {
 
         property color _baseColor: control.checked ? Theme.accentColor : Theme.buttonColor
         color: !control.enabled ? Theme.controlDisabledColorChange.apply(_baseColor) :
-            control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
-                control.hovered ? Theme.controlHoveredColorChange.apply(_baseColor) :
-                    _baseColor
+               control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
+               control.hovered ? Theme.controlHoveredColorChange.apply(_baseColor) :
+               _baseColor
         border.width: control.visualFocus ? 2 : 1
         border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
         radius: height / 2

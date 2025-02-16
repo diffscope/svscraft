@@ -95,6 +95,17 @@ namespace SVS {
             emit buttonColorChanged(d->buttonColor);
         }
     }
+    QColor Theme::scrollBarColor() const {
+        Q_D(const Theme);
+        return d->scrollBarColor;
+    }
+    void Theme::setScrollBarColor(const QColor &scrollBarColor) {
+        Q_D(Theme);
+        if (d->scrollBarColor != scrollBarColor) {
+            d->scrollBarColor = scrollBarColor;
+            emit scrollBarColorChanged(d->scrollBarColor);
+        }
+    }
     QColor Theme::textFieldColor() const {
         Q_D(const Theme);
         return d->textFieldColor;

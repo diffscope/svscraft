@@ -20,6 +20,8 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setWarningColor(0xeeaa66);
     Theme::instance()->setErrorColor(0xcc4455);
     Theme::instance()->setButtonColor(0x333437);
+    Theme::instance()->setTextFieldColor(0x27282b);
+    Theme::instance()->setScrollBarColor(QColor::fromRgba(0x7f7f7f7f));
     Theme::instance()->setBorderColor(0x4a4b4c);
 
     Theme::instance()->setBackgroundPrimaryColor(0x212124);
@@ -28,6 +30,9 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setBackgroundQuaternaryColor(0x313235);
 
     Theme::instance()->setForegroundPrimaryColor(0xdadada);
+    Theme::instance()->setForegroundSecondaryColor(0x888888);
+
+    Theme::instance()->setNavigationColor(0xffffff);
 
     Theme::instance()->setControlDisabledColorChange({QColor::fromRgba(0x33000000)});
     Theme::instance()->setForegroundDisabledColorChange({{}, 0.5});

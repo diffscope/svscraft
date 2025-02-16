@@ -43,6 +43,7 @@ namespace SVS {
         QColor errorColor;
         QColor buttonColor;
         QColor textFieldColor;
+        QColor scrollBarColor;
         QColor borderColor;
         QColor backgroundPrimaryColor;
         QColor backgroundSecondaryColor;

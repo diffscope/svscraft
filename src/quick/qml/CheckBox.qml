@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Effects
+import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft.UIComponents
 
@@ -36,29 +37,20 @@ T.CheckBox {
             }
         }
 
-        Image {
-            id: checkmark
+        ColorImage {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
             source: "../assets/Checkmark16Filled.svg"
-            visible: false
-        }
-        MultiEffect {
-            source: checkmark
-            anchors.fill: checkmark
-            brightness: 1.0
-            colorization: 1.0
-            opacity: colorizationColor.a
+            opacity: color.a
             property color _baseColor: control.checkState === Qt.Checked ? Theme.foregroundPrimaryColor : "transparent"
-            colorizationColor: !control.enabled ? Theme.foregroundDisabledColorChange.apply(_baseColor) :
-                               _baseColor
-            Behavior on colorizationColor {
+            color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(_baseColor) :
+                   _baseColor
+            Behavior on color {
                 ColorAnimation {
                     duration: Theme.colorAnimationDuration
                     easing.type: Easing.OutCubic
                 }
             }
-
         }
 
         Rectangle {
