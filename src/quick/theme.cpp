@@ -51,6 +51,15 @@ namespace SVS {
         }
         return {};
     }
+    QColor Theme::foregroundColor(SVS::Theme::ForegroundLevel foregroundLevel) const {
+        switch (foregroundLevel) {
+            case FL_Primary:
+                return foregroundPrimaryColor();
+            case FL_Secondary:
+                return foregroundSecondaryColor();
+        }
+        return {};
+    }
     QColor Theme::accentColor() const {
         Q_D(const Theme);
         return d->accentColor;
@@ -225,6 +234,17 @@ namespace SVS {
         if (d->navigationColor != navigationColor) {
             d->navigationColor = navigationColor;
             emit navigationColorChanged(d->navigationColor);
+        }
+    }
+    QColor Theme::shadowColor() const {
+        Q_D(const Theme);
+        return d->shadowColor;
+    }
+    void Theme::setShadowColor(const QColor &shadowColor) {
+        Q_D(Theme);
+        if (d->shadowColor != shadowColor) {
+            d->shadowColor = shadowColor;
+            emit shadowColorChanged(d->shadowColor);
         }
     }
     ColorChange Theme::controlDisabledColorChange() const {

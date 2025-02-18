@@ -128,7 +128,7 @@ Window {
 
                 GroupBox {
                     id: groupBox
-                    title: "组合框 & 框架"
+                    title: "分组框 & 框架"
                     Layout.fillWidth: true
                     ThemedItem.foldable: foldableCheckBox.checked
                     enabled: !disabledCheckBox.checked
@@ -161,11 +161,12 @@ Window {
                         anchors.fill: parent
                         spacing: 8
                         Slider {
+                            id: slider1
                             ThemedItem.trackStart: 0.25
                             orientation: Qt.Horizontal
                         }
                         Slider {
-                            ThemedItem.trackStart: 0.25
+                            ThemedItem.trackStart: slider1.position
                             orientation: Qt.Vertical
                         }
                         enabled: !disabledCheckBox.checked
@@ -181,6 +182,151 @@ Window {
                             placeholderText: "placeholder"
                         }
                         enabled: !disabledCheckBox.checked
+                    }
+                }
+
+                GroupBox {
+                    title: "组合框"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        ComboBox {
+                            model: ["Test 1", "Test 2", "Test 3"]
+                        }
+                        ComboBox {
+                            model: ["Editable"]
+                            editable: true
+                        }
+                        enabled: !disabledCheckBox.checked
+                    }
+                }
+
+                GroupBox {
+                    title: "标签栏"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        TabBar {
+                            TabButton {
+                                text: "Test 1"
+                                icon.source: "icon.svg"
+                            }
+                            TabButton {
+                                text: "Test 2"
+                                icon.source: "icon.svg"
+                            }
+                            TabButton {
+                                text: "Test 3"
+                                icon.source: "icon.svg"
+                            }
+                        }
+                        TabBar {
+                            ThemedItem.flat: true
+                            TabButton {
+                                text: "Flat Top"
+                                icon.source: "icon.svg"
+                                width: implicitWidth
+                                ThemedItem.tabIndicator: SVS.Theme.TI_Top
+                            }
+                            TabButton {
+                                text: "Flat Bottom"
+                                icon.source: "icon.svg"
+                                width: implicitWidth
+                                ThemedItem.tabIndicator: SVS.Theme.TI_Bottom
+                            }
+                            TabButton {
+                                text: "Flat Left"
+                                icon.source: "icon.svg"
+                                width: implicitWidth
+                                ThemedItem.tabIndicator: SVS.Theme.TI_Left
+                            }
+                            TabButton {
+                                text: "Flat Right"
+                                icon.source: "icon.svg"
+                                width: implicitWidth
+                                ThemedItem.tabIndicator: SVS.Theme.TI_Right
+                            }
+                            TabButton {
+                                text: "Flat Fill"
+                                icon.source: "icon.svg"
+                                width: implicitWidth
+                            }
+                        }
+                        enabled: !disabledCheckBox.checked
+                    }
+                }
+
+                GroupBox {
+                    title: "弹窗"
+                    Popup {
+                        id: popup
+                        anchors.centerIn: Overlay.overlay
+                        width: 320
+                        height: 200
+                    }
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Button {
+                            text: "Show Modal"
+                            onClicked: () => {
+                                popup.modal = true
+                                popup.open()
+                            }
+                        }
+                        Button {
+                            text: "Show Modeless"
+                            onClicked: () => {
+                                popup.modal = false
+                                popup.open()
+                            }
+                        }
+                    }
+                }
+
+                GroupBox {
+                    title: "菜单"
+                    Menu {
+                        id: menu
+                        Action {
+                            text: "Normal"
+                        }
+                        Action {
+                            text: "Icon"
+                            icon.source: "icon.svg"
+                        }
+                        Action {
+                            text: "Checkable"
+                            checkable: true
+                            shortcut: "Ctrl+A"
+                        }
+                        Menu {
+                            title: "Submenu"
+                            Action {
+                                text: "Test"
+                                shortcut: "Ctrl+B"
+                            }
+                        }
+                        Action {
+                            text: "Disabled"
+                            enabled: false
+                            icon.source: "icon.svg"
+                            shortcut: "Ctrl+C"
+                        }
+                        Action {
+                            text: "Disabled"
+                            enabled: false
+                            checkable: true
+                            checked: true
+                        }
+                    }
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Button {
+                            text: "Show"
+                            onClicked: menu.popup()
+                        }
                     }
                 }
 

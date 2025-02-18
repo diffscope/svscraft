@@ -62,4 +62,26 @@ namespace SVS {
             emit trackStartChanged(value);
         }
     }
+    bool ThemeAttachedType::flat() const {
+        Q_D(const ThemeAttachedType);
+        return d->flat;
+    }
+    void ThemeAttachedType::setFlat(bool value) {
+        Q_D(ThemeAttachedType);
+        if (d->flat != value) {
+            d->flat = value;
+            emit flatChanged(value);
+        }
+    }
+    Theme::TabIndicator ThemeAttachedType::tabIndicator() const {
+        Q_D(const ThemeAttachedType);
+        return d->tabIndicator;
+    }
+    void ThemeAttachedType::setTabIndicator(Theme::TabIndicator value) {
+        Q_D(ThemeAttachedType);
+        if (d->tabIndicator != value) {
+            d->tabIndicator = value;
+            emit tabIndicatorChanged(value);
+        }
+    }
 }

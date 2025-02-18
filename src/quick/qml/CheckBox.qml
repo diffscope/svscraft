@@ -41,7 +41,7 @@ T.CheckBox {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
             source: "../assets/Checkmark16Filled.svg"
-            opacity: color.a
+            opacity: color.a ? 1 : 0
             property color _baseColor: control.checkState === Qt.Checked ? Theme.foregroundPrimaryColor : "transparent"
             color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(_baseColor) :
                    _baseColor

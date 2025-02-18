@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setForegroundSecondaryColor(0x888888);
 
     Theme::instance()->setNavigationColor(0xffffff);
+    Theme::instance()->setShadowColor(0x101113);
 
     Theme::instance()->setControlDisabledColorChange({QColor::fromRgba(0x33000000)});
     Theme::instance()->setForegroundDisabledColorChange({{}, 0.5});

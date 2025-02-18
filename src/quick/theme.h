@@ -37,6 +37,7 @@ namespace SVS {
         Q_PROPERTY(QColor linkColor READ linkColor WRITE setLinkColor NOTIFY linkColorChanged)
 
         Q_PROPERTY(QColor navigationColor READ navigationColor WRITE setNavigationColor NOTIFY navigationColorChanged)
+        Q_PROPERTY(QColor shadowColor READ shadowColor WRITE setShadowColor NOTIFY shadowColorChanged)
 
         Q_PROPERTY(ColorChange controlDisabledColorChange READ controlDisabledColorChange WRITE setControlDisabledColorChange NOTIFY controlDisabledColorChangeChanged)
         Q_PROPERTY(ColorChange foregroundDisabledColorChange READ foregroundDisabledColorChange WRITE setForegroundDisabledColorChange NOTIFY foregroundDisabledColorChangeChanged)
@@ -76,6 +77,12 @@ namespace SVS {
             FL_Secondary,
         };
         Q_ENUM(ForegroundLevel)
+        Q_INVOKABLE QColor foregroundColor(SVS::Theme::ForegroundLevel foregroundLevel) const;
+
+        enum TabIndicator {
+            TI_Fill, TI_Top, TI_Bottom, TI_Left, TI_Right,
+        };
+        Q_ENUM(TabIndicator)
 
         QColor accentColor() const;
         void setAccentColor(const QColor &accentColor);
@@ -125,6 +132,9 @@ namespace SVS {
         QColor navigationColor() const;
         void setNavigationColor(const QColor &navigationColor);
 
+        QColor shadowColor() const;
+        void setShadowColor(const QColor &shadowColor);
+
         ColorChange controlDisabledColorChange() const;
         void setControlDisabledColorChange(const ColorChange &controlDisabledColorChange);
 
@@ -166,6 +176,7 @@ namespace SVS {
         void foregroundSecondaryColorChanged(const QColor &foregroundSecondaryColor);
         void linkColorChanged(const QColor &linkColor);
         void navigationColorChanged(const QColor &navigationColor);
+        void shadowColorChanged(const QColor &shadowColor);
         void controlDisabledColorChangeChanged(const SVS::ColorChange &controlDisabledColorChange);
         void foregroundDisabledColorChangeChanged(const SVS::ColorChange &foregroundDisabledColorChange);
         void controlHoveredColorChangeChanged(const SVS::ColorChange &controlHoveredColorChange);

@@ -20,6 +20,8 @@ namespace SVS {
         Q_PROPERTY(bool foldable READ foldable WRITE setFoldable NOTIFY foldableChanged)
         Q_PROPERTY(bool folded READ folded WRITE setFolded NOTIFY foldedChanged)
         Q_PROPERTY(double trackStart READ trackStart WRITE setTrackStart NOTIFY trackStartChanged)
+        Q_PROPERTY(bool flat READ flat WRITE setFlat NOTIFY flatChanged)
+        Q_PROPERTY(SVS::Theme::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
     public:
         ~ThemeAttachedType() override;
 
@@ -38,12 +40,20 @@ namespace SVS {
         double trackStart() const;
         void setTrackStart(double value);
 
+        bool flat() const;
+        void setFlat(bool value);
+
+        Theme::TabIndicator tabIndicator() const;
+        void setTabIndicator(Theme::TabIndicator value);
+
     signals:
         void controlTypeChanged(SVS::Theme::ControlType value);
         void backgroundLevelChanged(SVS::Theme::BackgroundLevel value);
         void foldableChanged(bool value);
         void foldedChanged(bool value);
         void trackStartChanged(double value);
+        void flatChanged(bool value);
+        void tabIndicatorChanged(SVS::Theme::TabIndicator value);
 
     private:
         friend class ThemedItem;

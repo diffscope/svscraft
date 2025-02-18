@@ -54,6 +54,7 @@ namespace SVS {
         QColor foregroundSecondaryColor;
         QColor linkColor;
         QColor navigationColor;
+        QColor shadowColor;
         ColorChange controlDisabledColorChange;
         ColorChange foregroundDisabledColorChange;
         ColorChange controlHoveredColorChange;

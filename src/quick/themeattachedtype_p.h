@@ -12,7 +12,9 @@ namespace SVS {
         Theme::BackgroundLevel backgroundLevel = Theme::BL_Primary;
         bool foldable = false;
         bool folded = false;
+        bool flat = false;
         double trackStart = 0.0;
+        Theme::TabIndicator tabIndicator = Theme::TI_Fill;
     };
 }
 
