@@ -7,20 +7,10 @@
 
 #include <SVSCraftGui/colorchange.h>
 
-#include <SVSCraftQuick/themeattachedtype.h>
-
 class QQmlEngine;
 class QJSEngine;
 
 namespace SVS {
-
-    class ThemedItem : public QObject {
-        Q_OBJECT
-        QML_ELEMENT
-        QML_ATTACHED(ThemeAttachedType)
-    public:
-        static ThemeAttachedType *qmlAttachedProperties(QObject *object);
-    };
 
     class ThemeForeign {
         Q_GADGET
@@ -63,6 +53,8 @@ namespace SVS {
         ColorChange foregroundPressedColorChange;
         int colorAnimationDuration{};
         int visualEffectAnimationDuration{};
+        int toolTipDelay{};
+        int toolTipTimeout = -1;
 
     };
 }

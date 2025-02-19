@@ -76,6 +76,16 @@ ApplicationWindow {
         enabled: !disabledCheckBox.checked
     }
 
+    footer: ToolBar {
+        Row {
+            anchors.fill: parent
+            spacing: 4
+            Label {
+                text: DescriptiveText.statusText
+            }
+        }
+    }
+
     Pane {
         anchors.fill: parent
         ScrollView {
@@ -376,6 +386,20 @@ ApplicationWindow {
                         spacing: 8
                         Label {
                             text: "Normal Text <a href='#a'>Link Text</a>"
+                        }
+                    }
+                }
+
+                GroupBox {
+                    title: "工具提示 & 状态提示"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Button {
+                            text: "Hover me"
+                            DescriptiveText.activated: hovered
+                            DescriptiveText.toolTip: "Tool tip"
+                            DescriptiveText.statusTip: "Status tip"
                         }
                     }
                 }

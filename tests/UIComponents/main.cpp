@@ -46,6 +46,8 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setColorAnimationDuration(250);
     Theme::instance()->setVisualEffectAnimationDuration(250);
 
+    Theme::instance()->setToolTipDelay(1000);
+
     QQuickStyle::setStyle("SVSCraft.UIComponents");
     QQuickStyle::setFallbackStyle("Basic");
 

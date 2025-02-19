@@ -49,6 +49,9 @@ namespace SVS {
         Q_PROPERTY(int colorAnimationDuration READ colorAnimationDuration WRITE setColorAnimationDuration NOTIFY colorAnimationDurationChanged)
         Q_PROPERTY(int visualEffectAnimationDuration READ visualEffectAnimationDuration WRITE setVisualEffectAnimationDuration NOTIFY visualEffectAnimationDurationChanged)
 
+        Q_PROPERTY(int toolTipDelay READ toolTipDelay WRITE setToolTipDelay NOTIFY toolTipDelayChanged)
+        Q_PROPERTY(int toolTipTimeout READ toolTipTimeout WRITE setToolTipTimeout NOTIFY toolTipTimeoutChanged)
+
     public:
         ~Theme() override;
 
@@ -158,6 +161,12 @@ namespace SVS {
         int visualEffectAnimationDuration() const;
         void setVisualEffectAnimationDuration(int visualEffectAnimationDuration);
 
+        int toolTipDelay() const;
+        void setToolTipDelay(int toolTipDelay);
+
+        int toolTipTimeout() const;
+        void setToolTipTimeout(int toolTipTimeout);
+
     signals:
         void accentColorChanged(const QColor &accentColor);
         void warningColorChanged(const QColor &warningColor);
@@ -184,6 +193,8 @@ namespace SVS {
         void foregroundPressedColorChangeChanged(const SVS::ColorChange &foregroundPressedColorChange);
         void colorAnimationDurationChanged(int colorAnimationDuration);
         void visualEffectAnimationDurationChanged(int visualEffectAnimationDuration);
+        void toolTipDelayChanged(int toolTipDelay);
+        void toolTipTimeoutChanged(int toolTipTimeout);
 
     private:
         explicit Theme(QObject *parent = nullptr);

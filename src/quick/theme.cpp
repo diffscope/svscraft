@@ -10,9 +10,6 @@ namespace SVS {
         QJSEngine::setObjectOwnership(instance, QJSEngine::CppOwnership);
         return instance;
     }
-    ThemeAttachedType *ThemedItem::qmlAttachedProperties(QObject *object) {
-        return new ThemeAttachedType(object);
-    }
 
     Theme ThemePrivate::instance;
 
@@ -346,6 +343,28 @@ namespace SVS {
         if (d->visualEffectAnimationDuration != visualEffectAnimationDuration) {
             d->visualEffectAnimationDuration = visualEffectAnimationDuration;
             emit visualEffectAnimationDurationChanged(d->visualEffectAnimationDuration);
+        }
+    }
+    int Theme::toolTipDelay() const {
+        Q_D(const Theme);
+        return d->toolTipDelay;
+    }
+    void Theme::setToolTipDelay(int toolTipDelay) {
+        Q_D(Theme);
+        if (d->toolTipDelay != toolTipDelay) {
+            d->toolTipDelay = toolTipDelay;
+            emit toolTipDelayChanged(d->toolTipDelay);
+        }
+    }
+    int Theme::toolTipTimeout() const {
+        Q_D(const Theme);
+        return d->toolTipTimeout;
+    }
+    void Theme::setToolTipTimeout(int toolTipTimeout) {
+        Q_D(Theme);
+        if (d->toolTipTimeout != toolTipTimeout) {
+            d->toolTipTimeout = toolTipTimeout;
+            emit toolTipTimeoutChanged(d->toolTipTimeout);
         }
     }
 }

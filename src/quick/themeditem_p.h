@@ -1,18 +1,18 @@
-#ifndef THEMEATTACHEDTYPE_H
-#define THEMEATTACHEDTYPE_H
+#ifndef THEMEDITEM_P_H
+#define THEMEDITEM_P_H
 
 #include <QObject>
 #include <SVSCraftQuick/theme.h>
 
 namespace SVS {
 
-    class ThemedItem;
+    class ThemedItemAttachedType;
 
-    class ThemeAttachedTypePrivate;
+    class ThemedItemPrivate;
 
-    class ThemeAttachedType : public QObject {
+    class ThemedItem : public QObject {
         Q_OBJECT
-        Q_DECLARE_PRIVATE(ThemeAttachedType)
+        Q_DECLARE_PRIVATE(ThemedItem)
         QML_ANONYMOUS
 
         Q_PROPERTY(SVS::Theme::ControlType controlType READ controlType WRITE setControlType NOTIFY controlTypeChanged)
@@ -24,7 +24,7 @@ namespace SVS {
         Q_PROPERTY(SVS::Theme::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
         Q_PROPERTY(SVS::Theme::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
     public:
-        ~ThemeAttachedType() override;
+        ~ThemedItem() override;
 
         Theme::ControlType controlType() const;
         void setControlType(Theme::ControlType value);
@@ -51,21 +51,21 @@ namespace SVS {
         void setDividerStroke(Theme::DividerStroke value);
 
     signals:
-        void controlTypeChanged(SVS::Theme::ControlType value);
-        void backgroundLevelChanged(SVS::Theme::BackgroundLevel value);
-        void foldableChanged(bool value);
-        void foldedChanged(bool value);
-        void trackStartChanged(double value);
-        void flatChanged(bool value);
-        void tabIndicatorChanged(SVS::Theme::TabIndicator value);
-        void dividerStrokeChanged(SVS::Theme::DividerStroke value);
+        void controlTypeChanged();
+        void backgroundLevelChanged();
+        void foldableChanged();
+        void foldedChanged();
+        void trackStartChanged();
+        void flatChanged();
+        void tabIndicatorChanged();
+        void dividerStrokeChanged();
 
     private:
-        friend class ThemedItem;
-        explicit ThemeAttachedType(QObject *parent = nullptr);
-        QScopedPointer<ThemeAttachedTypePrivate> d_ptr;
+        friend class ThemedItemAttachedType;
+        explicit ThemedItem(QObject *parent = nullptr);
+        QScopedPointer<ThemedItemPrivate> d_ptr;
     };
 
 }
 
-#endif //THEMEATTACHEDTYPE_H
+#endif //THEMEDITEM_P_H
