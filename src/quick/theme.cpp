@@ -60,6 +60,19 @@ namespace SVS {
         }
         return {};
     }
+    QColor Theme::dividerStrokeColor(SVS::Theme::DividerStroke dividerStroke, const QColor &autoColor) const {
+        switch (dividerStroke) {
+            case DS_Auto:
+                return autoColor;
+            case DS_None:
+                return Qt::transparent;
+            case DS_Border:
+                return borderColor();
+            case DS_Splitter:
+                return splitterColor();
+        }
+        return {};
+    }
     QColor Theme::accentColor() const {
         Q_D(const Theme);
         return d->accentColor;

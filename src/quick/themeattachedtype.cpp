@@ -84,4 +84,15 @@ namespace SVS {
             emit tabIndicatorChanged(value);
         }
     }
+    Theme::DividerStroke ThemeAttachedType::dividerStroke() const {
+        Q_D(const ThemeAttachedType);
+        return d->dividerStroke;
+    }
+    void ThemeAttachedType::setDividerStroke(Theme::DividerStroke value) {
+        Q_D(ThemeAttachedType);
+        if (d->dividerStroke != value) {
+            d->dividerStroke = value;
+            emit dividerStrokeChanged(value);
+        }
+    }
 }

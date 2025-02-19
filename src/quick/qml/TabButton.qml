@@ -68,13 +68,6 @@ T.TabButton {
             }
         }
 
-        Behavior on border.color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
-
         Rectangle {
             visible: control.ThemedItem.tabIndicator !== Theme.TI_Fill
             anchors.top: control.ThemedItem.tabIndicator === Theme.TI_Top ? parent.top : undefined

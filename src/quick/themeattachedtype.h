@@ -22,6 +22,7 @@ namespace SVS {
         Q_PROPERTY(double trackStart READ trackStart WRITE setTrackStart NOTIFY trackStartChanged)
         Q_PROPERTY(bool flat READ flat WRITE setFlat NOTIFY flatChanged)
         Q_PROPERTY(SVS::Theme::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
+        Q_PROPERTY(SVS::Theme::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
     public:
         ~ThemeAttachedType() override;
 
@@ -46,6 +47,9 @@ namespace SVS {
         Theme::TabIndicator tabIndicator() const;
         void setTabIndicator(Theme::TabIndicator value);
 
+        Theme::DividerStroke dividerStroke() const;
+        void setDividerStroke(Theme::DividerStroke value);
+
     signals:
         void controlTypeChanged(SVS::Theme::ControlType value);
         void backgroundLevelChanged(SVS::Theme::BackgroundLevel value);
@@ -54,6 +58,7 @@ namespace SVS {
         void trackStartChanged(double value);
         void flatChanged(bool value);
         void tabIndicatorChanged(SVS::Theme::TabIndicator value);
+        void dividerStrokeChanged(SVS::Theme::DividerStroke value);
 
     private:
         friend class ThemedItem;

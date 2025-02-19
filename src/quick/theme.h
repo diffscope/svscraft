@@ -55,26 +55,19 @@ namespace SVS {
         static Theme *instance();
 
         enum ControlType {
-            CT_Normal,
-            CT_Accent,
-            CT_Warning,
-            CT_Error,
+            CT_Normal, CT_Accent, CT_Warning, CT_Error,
         };
         Q_ENUM(ControlType)
         Q_INVOKABLE QColor controlColor(SVS::Theme::ControlType controlType) const;
 
         enum BackgroundLevel {
-            BL_Primary,
-            BL_Secondary,
-            BL_Tertiary,
-            BL_Quaternary,
+            BL_Primary, BL_Secondary, BL_Tertiary, BL_Quaternary,
         };
         Q_ENUM(BackgroundLevel)
         Q_INVOKABLE QColor backgroundColor(SVS::Theme::BackgroundLevel backgroundLevel) const;
 
         enum ForegroundLevel {
-            FL_Primary,
-            FL_Secondary,
+            FL_Primary, FL_Secondary,
         };
         Q_ENUM(ForegroundLevel)
         Q_INVOKABLE QColor foregroundColor(SVS::Theme::ForegroundLevel foregroundLevel) const;
@@ -83,6 +76,12 @@ namespace SVS {
             TI_Fill, TI_Top, TI_Bottom, TI_Left, TI_Right,
         };
         Q_ENUM(TabIndicator)
+
+        enum DividerStroke {
+            DS_Auto, DS_None, DS_Border, DS_Splitter,
+        };
+        Q_ENUM(DividerStroke)
+        Q_INVOKABLE QColor dividerStrokeColor(SVS::Theme::DividerStroke dividerStroke, const QColor &autoColor = Qt::transparent) const;
 
         QColor accentColor() const;
         void setAccentColor(const QColor &accentColor);

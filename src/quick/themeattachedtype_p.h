@@ -10,11 +10,12 @@ namespace SVS {
         ThemeAttachedType *q_ptr;
         Theme::ControlType controlType = Theme::CT_Normal;
         Theme::BackgroundLevel backgroundLevel = Theme::BL_Primary;
+        Theme::TabIndicator tabIndicator = Theme::TI_Fill;
+        Theme::DividerStroke dividerStroke = Theme::DS_Auto;
         bool foldable = false;
         bool folded = false;
         bool flat = false;
         double trackStart = 0.0;
-        Theme::TabIndicator tabIndicator = Theme::TI_Fill;
     };
 }
 

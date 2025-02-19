@@ -5,10 +5,76 @@ import QtQuick.Layouts
 
 import SVSCraft.UIComponents as SVS
 
-Window {
+ApplicationWindow {
     visible: true
     width: 1024
     height: 800
+
+    menuBar: MenuBar {
+        ThemedItem.dividerStroke: SVS.Theme.DS_Border
+        Menu {
+            title: "&File"
+            Action {
+                text: "&Normal"
+            }
+            Action {
+                text: "&Icon"
+                icon.source: "icon.svg"
+            }
+            Action {
+                text: "&Checkable"
+                checkable: true
+                shortcut: "Ctrl+A"
+            }
+            MenuSeparator {
+            }
+            Menu {
+                title: "&Submenu"
+                Action {
+                    text: "Test"
+                    shortcut: "Ctrl+B"
+                }
+            }
+            Action {
+                text: "&Disabled"
+                enabled: false
+                icon.source: "icon.svg"
+                shortcut: "Ctrl+C"
+            }
+            Action {
+                text: "&Disabled"
+                enabled: false
+                checkable: true
+                checked: true
+            }
+        }
+        Menu {
+            title: "&Edit"
+            Action {
+                text: "&Test"
+            }
+        }
+    }
+
+    header: ToolBar {
+        ThemedItem.dividerStroke: SVS.Theme.DS_Border
+        Row {
+            anchors.fill: parent
+            spacing: 4
+            ToolButton {
+                text: "Normal"
+            }
+            ToolButton {
+                text: "Checkable"
+                icon.source: "icon.svg"
+                checkable: true
+            }
+            ToolButton {
+                icon.source: "icon.svg"
+            }
+        }
+        enabled: !disabledCheckBox.checked
+    }
 
     Pane {
         anchors.fill: parent
@@ -52,6 +118,9 @@ Window {
                             ThemedItem.controlType: SVS.Theme.CT_Normal
                             text: "Normal Flat"
                             flat: true
+                            icon.source: "icon.svg"
+                        }
+                        Button {
                             icon.source: "icon.svg"
                         }
                         Button {
@@ -285,47 +354,28 @@ Window {
                 }
 
                 GroupBox {
-                    title: "菜单"
-                    Menu {
-                        id: menu
-                        Action {
-                            text: "Normal"
-                        }
-                        Action {
-                            text: "Icon"
-                            icon.source: "icon.svg"
-                        }
-                        Action {
-                            text: "Checkable"
-                            checkable: true
-                            shortcut: "Ctrl+A"
-                        }
-                        Menu {
-                            title: "Submenu"
-                            Action {
-                                text: "Test"
-                                shortcut: "Ctrl+B"
-                            }
-                        }
-                        Action {
-                            text: "Disabled"
-                            enabled: false
-                            icon.source: "icon.svg"
-                            shortcut: "Ctrl+C"
-                        }
-                        Action {
-                            text: "Disabled"
-                            enabled: false
-                            checkable: true
-                            checked: true
-                        }
-                    }
+                    title: "菜单 & 菜单栏"
                     RowLayout {
                         anchors.fill: parent
                         spacing: 8
-                        Button {
-                            text: "Show"
-                            onClicked: menu.popup()
+                    }
+                }
+
+                GroupBox {
+                    title: "工具按钮 & 工具栏"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                    }
+                }
+
+                GroupBox {
+                    title: "标签"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Label {
+                            text: "Normal Text <a href='#a'>Link Text</a>"
                         }
                     }
                 }

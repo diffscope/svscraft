@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setForegroundPrimaryColor(0xdadada);
     Theme::instance()->setForegroundSecondaryColor(0x888888);
 
+    Theme::instance()->setLinkColor(0x5566ff);
+
     Theme::instance()->setNavigationColor(0xffffff);
     Theme::instance()->setShadowColor(0x101113);
 

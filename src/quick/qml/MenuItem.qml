@@ -10,7 +10,7 @@ T.MenuItem {
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding, implicitIndicatorHeight + topPadding + bottomPadding)
 
-    padding: 6
+    padding: 4
     spacing: 4
 
     icon.width: 16
@@ -107,19 +107,21 @@ T.MenuItem {
 
     background: Rectangle {
         implicitWidth: 200
-        implicitHeight: 28
+        implicitHeight: 24
         width: control.width
         height: control.height
-        color: !control.enabled ? "transparent" :
-                control.down ? Theme.controlPressedColorChange.apply(Theme.accentColor) :
-                control.hovered ? Theme.controlHoveredColorChange.apply(Theme.accentColor) :
-                "transparent"
+        color: !control.enabled ? Theme.buttonColor :
+               control.down ? Theme.controlPressedColorChange.apply(Theme.accentColor) :
+               control.hovered ? Theme.controlHoveredColorChange.apply(Theme.accentColor) :
+               Theme.buttonColor
+        border.color: Theme.navigationColor
+        border.width: control.visualFocus ? 2 : 0
         Behavior on color {
             ColorAnimation {
                 duration: Theme.colorAnimationDuration
                 easing.type: Easing.OutCubic
             }
         }
-        radius: 4
+        radius: 2
     }
 }

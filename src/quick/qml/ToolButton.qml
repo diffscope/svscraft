@@ -5,14 +5,13 @@ import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft.UIComponents
 
-T.Button {
+T.ToolButton {
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
 
-    padding: 6
-    horizontalPadding: control.text ? 8 : 6
+    padding: 4
     spacing: 4
     icon.width: 16
     icon.height: 16
@@ -50,25 +49,18 @@ T.Button {
     }
 
     background: Rectangle {
-        implicitWidth: control.text ? 64 : 28
-        implicitHeight: 28
-        property color _baseColor: control.checkable ? control.checked ? Theme.accentColor : Theme.buttonColor : Theme.controlColor(control.ThemedItem.controlType)
-        color: !control.enabled && !control.flat ? Theme.controlDisabledColorChange.apply(_baseColor) :
+        implicitWidth: 24
+        implicitHeight: 24
+        property color _baseColor: control.checkable && control.checked ? Theme.accentColor : Theme.buttonColor
+        color: !control.enabled ? control.checkable && control.checked ? Theme.controlDisabledColorChange.apply(Theme.accentColor) : "transparent" :
                control.down && control.enabled ? Theme.controlPressedColorChange.apply(_baseColor) :
                control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(_baseColor) :
-               !control.flat ? _baseColor : control.checkable && control.checked ? Theme.accentColor : "transparent"
-        border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
-        border.width: control.visualFocus ? 2 : control.flat || control.ThemedItem.controlType !== Theme.CT_Normal || control.checkable && control.checked ? 0 : 1
+               control.checkable && control.checked ? Theme.accentColor : "transparent"
+        border.color: Theme.navigationColor
+        border.width: control.visualFocus ? 2 : 0
         radius: 4
 
         Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
-
-        Behavior on border.color {
             ColorAnimation {
                 duration: Theme.colorAnimationDuration
                 easing.type: Easing.OutCubic

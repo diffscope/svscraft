@@ -12,7 +12,7 @@ T.Menu {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
 
     margins: 0
-    overlap: 1
+    padding: 3
 
     delegate: MenuItem {
 
