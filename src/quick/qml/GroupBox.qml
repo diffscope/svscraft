@@ -32,7 +32,8 @@ T.GroupBox {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.rightMargin: control.rightPadding
-            width: height
+            width: 20
+            height: 20
             padding: 2
             horizontalPadding: 2
             icon.source: "../assets/ChevronDown12Filled.svg"
