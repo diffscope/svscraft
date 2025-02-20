@@ -11,3 +11,5 @@ add_subdirectory(LevelMeter)
 add_subdirectory(SwitchButton)
 
 add_subdirectory(UIComponents)
+
+add_subdirectory(DockingView)
