@@ -19,6 +19,7 @@ namespace SVS {
         ThemedItem *q_ptr;
         Theme::ControlType controlType = Theme::CT_Normal;
         Theme::BackgroundLevel backgroundLevel = Theme::BL_Primary;
+        Theme::ForegroundLevel foregroundLevel = Theme::FL_Primary;
         Theme::TabIndicator tabIndicator = Theme::TI_Fill;
         Theme::DividerStroke dividerStroke = Theme::DS_Auto;
         bool foldable = false;

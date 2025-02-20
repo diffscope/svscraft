@@ -17,6 +17,7 @@ namespace SVS {
 
         Q_PROPERTY(SVS::Theme::ControlType controlType READ controlType WRITE setControlType NOTIFY controlTypeChanged)
         Q_PROPERTY(SVS::Theme::BackgroundLevel backgroundLevel READ backgroundLevel WRITE setBackgroundLevel NOTIFY backgroundLevelChanged)
+        Q_PROPERTY(SVS::Theme::ForegroundLevel foregroundLevel READ foregroundLevel WRITE setForegroundLevel NOTIFY foregroundLevelChanged)
         Q_PROPERTY(bool foldable READ foldable WRITE setFoldable NOTIFY foldableChanged)
         Q_PROPERTY(bool folded READ folded WRITE setFolded NOTIFY foldedChanged)
         Q_PROPERTY(double trackStart READ trackStart WRITE setTrackStart NOTIFY trackStartChanged)
@@ -31,6 +32,9 @@ namespace SVS {
 
         SVS::Theme::BackgroundLevel backgroundLevel() const;
         void setBackgroundLevel(SVS::Theme::BackgroundLevel value);
+
+        SVS::Theme::ForegroundLevel foregroundLevel() const;
+        void setForegroundLevel(SVS::Theme::ForegroundLevel value);
 
         bool foldable() const;
         void setFoldable(bool value);
@@ -53,6 +57,7 @@ namespace SVS {
     signals:
         void controlTypeChanged();
         void backgroundLevelChanged();
+        void foregroundLevelChanged();
         void foldableChanged();
         void foldedChanged();
         void trackStartChanged();

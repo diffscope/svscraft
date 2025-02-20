@@ -34,6 +34,17 @@ namespace SVS {
             emit backgroundLevelChanged();
         }
     }
+    SVS::Theme::ForegroundLevel ThemedItem::foregroundLevel() const {
+        Q_D(const ThemedItem);
+        return d->foregroundLevel;
+    }
+    void ThemedItem::setForegroundLevel(SVS::Theme::ForegroundLevel value) {
+        Q_D(ThemedItem);
+        if (d->foregroundLevel != value) {
+            d->foregroundLevel = value;
+            emit foregroundLevelChanged();
+        }
+    }
     bool ThemedItem::foldable() const {
         Q_D(const ThemedItem);
         return d->foldable;

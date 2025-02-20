@@ -17,6 +17,8 @@ Popup {
     property string keySequenceRole: "keySequence"
     property string recentlyUsedRole: "recentlyUsed"
     property string placeholderText: ""
+    property string emptyText: ""
+    property string recentlyUsedText: ""
     property string filterText: ""
     property int currentIndex: 0
     Binding {
@@ -51,6 +53,8 @@ Popup {
             Keys.onUpPressed: listView.currentIndex = Math.max(0, listView.currentIndex - 1)
             Keys.onDownPressed: listView.currentIndex = Math.min(listView.count - 1, listView.currentIndex + 1)
             Keys.onReturnPressed: () => {
+                if (popup.currentIndex === -1)
+                    return
                 popup.accepted()
                 popup.close()
             }
@@ -63,6 +67,7 @@ Popup {
             property int _descriptionIndex: _hoveredIndex !== -1 ? _hoveredIndex : currentIndex
             DescriptiveText.statusTip: model.descriptionAt(_descriptionIndex) || " "
             DescriptiveText.activated: popup.opened
+            ScrollBar.vertical: ScrollBar {}
             clip: true
             model: CommandPaletteHelper.createFilterModel(popup.model, popup)
             delegate: ItemDelegate {
@@ -132,7 +137,7 @@ Popup {
                         }
                         Text {
                             visible: itemDelegate.model[popup.recentlyUsedRole] ?? false
-                            text: qsTr("recently used")
+                            text: popup.recentlyUsedText
                             color: itemDelegate._titleColor
                         }
                     }
@@ -142,6 +147,13 @@ Popup {
                         textFormat: Qt.RichText
                     }
                 }
+            }
+            Label {
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: listView.count === 0
+                ThemedItem.foregroundLevel: Theme.FL_Secondary
+                text: popup.emptyText
             }
         }
     }

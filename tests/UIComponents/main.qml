@@ -89,6 +89,8 @@ ApplicationWindow {
     CommandPalette {
         id: commandPalette
         placeholderText: "placeholder"
+        emptyText: "empty"
+        recentlyUsedText: "recently used"
         model: ListModel {
             ListElement {
                 title: "Test 1"
