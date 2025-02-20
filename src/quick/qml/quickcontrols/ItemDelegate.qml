@@ -51,10 +51,10 @@ T.ItemDelegate {
         implicitWidth: 100
         implicitHeight: 28
         property color _baseColor: control.highlighted ? Theme.accentColor : Theme.buttonColor
-        color: !control.enabled ? Theme.controlDisabledColorChange.apply(_baseColor) :
-               control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
-               control.hovered ? Theme.controlHoveredColorChange.apply(_baseColor) :
-               _baseColor
+        color: !control.enabled ? control.ThemedItem.flat ? "transparent" : Theme.controlDisabledColorChange.apply(_baseColor) :
+               control.down && control.enabled ? Theme.controlPressedColorChange.apply(_baseColor) :
+               control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(_baseColor) :
+                   control.highlighted ? Theme.accentColor : control.ThemedItem.flat ? "transparent" : Theme.buttonColor
         Behavior on color {
             ColorAnimation {
                 duration: Theme.colorAnimationDuration

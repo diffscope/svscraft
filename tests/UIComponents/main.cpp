@@ -30,12 +30,13 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setBackgroundQuaternaryColor(0x313235);
 
     Theme::instance()->setForegroundPrimaryColor(0xdadada);
-    Theme::instance()->setForegroundSecondaryColor(0x888888);
+    Theme::instance()->setForegroundSecondaryColor(QColor::fromRgba(0xa0dadada));
 
     Theme::instance()->setLinkColor(0x5566ff);
 
     Theme::instance()->setNavigationColor(0xffffff);
     Theme::instance()->setShadowColor(0x101113);
+    Theme::instance()->setHighlightColor(0xb28300);
 
     Theme::instance()->setControlDisabledColorChange({QColor::fromRgba(0x33000000)});
     Theme::instance()->setForegroundDisabledColorChange({{}, 0.5});

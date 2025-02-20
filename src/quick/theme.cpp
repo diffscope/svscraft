@@ -257,6 +257,17 @@ namespace SVS {
             emit shadowColorChanged(d->shadowColor);
         }
     }
+    QColor Theme::highlightColor() const {
+        Q_D(const Theme);
+        return d->highlightColor;
+    }
+    void Theme::setHighlightColor(const QColor &highlightColor) {
+        Q_D(Theme);
+        if (d->highlightColor != highlightColor) {
+            d->highlightColor = highlightColor;
+            emit highlightColorChanged(d->highlightColor);
+        }
+    }
     ColorChange Theme::controlDisabledColorChange() const {
         Q_D(const Theme);
         return d->controlDisabledColorChange;

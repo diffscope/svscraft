@@ -38,6 +38,7 @@ namespace SVS {
 
         Q_PROPERTY(QColor navigationColor READ navigationColor WRITE setNavigationColor NOTIFY navigationColorChanged)
         Q_PROPERTY(QColor shadowColor READ shadowColor WRITE setShadowColor NOTIFY shadowColorChanged)
+        Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor NOTIFY highlightColorChanged)
 
         Q_PROPERTY(ColorChange controlDisabledColorChange READ controlDisabledColorChange WRITE setControlDisabledColorChange NOTIFY controlDisabledColorChangeChanged)
         Q_PROPERTY(ColorChange foregroundDisabledColorChange READ foregroundDisabledColorChange WRITE setForegroundDisabledColorChange NOTIFY foregroundDisabledColorChangeChanged)
@@ -138,6 +139,9 @@ namespace SVS {
         QColor shadowColor() const;
         void setShadowColor(const QColor &shadowColor);
 
+        QColor highlightColor() const;
+        void setHighlightColor(const QColor &highlightColor);
+
         ColorChange controlDisabledColorChange() const;
         void setControlDisabledColorChange(const ColorChange &controlDisabledColorChange);
 
@@ -189,6 +193,7 @@ namespace SVS {
         void linkColorChanged(const QColor &linkColor);
         void navigationColorChanged(const QColor &navigationColor);
         void shadowColorChanged(const QColor &shadowColor);
+        void highlightColorChanged(const QColor &highlightColor);
         void controlDisabledColorChangeChanged(const SVS::ColorChange &controlDisabledColorChange);
         void foregroundDisabledColorChangeChanged(const SVS::ColorChange &foregroundDisabledColorChange);
         void controlHoveredColorChangeChanged(const SVS::ColorChange &controlHoveredColorChange);

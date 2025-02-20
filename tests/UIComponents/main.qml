@@ -3,7 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import SVSCraft.UIComponents as SVS
+import SVSCraft.UIComponents
 
 ApplicationWindow {
     visible: true
@@ -11,7 +11,7 @@ ApplicationWindow {
     height: 800
 
     menuBar: MenuBar {
-        ThemedItem.dividerStroke: SVS.Theme.DS_Border
+        ThemedItem.dividerStroke: Theme.DS_Border
         Menu {
             title: "&File"
             Action {
@@ -57,7 +57,7 @@ ApplicationWindow {
     }
 
     header: ToolBar {
-        ThemedItem.dividerStroke: SVS.Theme.DS_Border
+        ThemedItem.dividerStroke: Theme.DS_Border
         Row {
             anchors.fill: parent
             spacing: 4
@@ -86,6 +86,34 @@ ApplicationWindow {
         }
     }
 
+    CommandPalette {
+        id: commandPalette
+        placeholderText: "placeholder"
+        model: ListModel {
+            ListElement {
+                title: "Test 1"
+                subtitle: "test 1"
+                description: "Description of Test 1"
+                keySequence: "Ctrl+A"
+                recentlyUsed: true
+            }
+            ListElement {
+                title: "Test 2"
+                subtitle: "test 2"
+                description: "Description of Test 2"
+                keySequence: "Ctrl+B"
+            }
+            ListElement { title: "Test 3"; subtitle: "test 3" }
+            ListElement { title: "Test 4"; subtitle: "test 4" }
+            ListElement { title: "Test 5"; subtitle: "test 5" }
+            ListElement { title: "Test 6"; subtitle: "test 6" }
+            ListElement { title: "Test 7"; subtitle: "test 7" }
+            ListElement { title: "Test 8"; subtitle: "test 8" }
+        }
+        onCurrentIndexChanged: console.log("command palette: currentIndex =", currentIndex)
+        onAccepted: console.log("command palette: committed", currentIndex)
+    }
+
     Pane {
         anchors.fill: parent
         ScrollView {
@@ -112,34 +140,34 @@ ApplicationWindow {
                         RowLayout {
                             spacing: 8
                             Button {
-                                ThemedItem.controlType: SVS.Theme.CT_Normal
+                                ThemedItem.controlType: Theme.CT_Normal
                                 text: "Normal"
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: SVS.Theme.CT_Accent
+                                ThemedItem.controlType: Theme.CT_Accent
                                 text: "Accent"
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                ThemedItem.controlType: Theme.CT_Error
                                 text: "Error"
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: SVS.Theme.CT_Normal
+                                ThemedItem.controlType: Theme.CT_Normal
                                 text: "Normal Flat"
                                 flat: true
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: SVS.Theme.CT_Accent
+                                ThemedItem.controlType: Theme.CT_Accent
                                 text: "Accent Flat"
                                 flat: true
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                ThemedItem.controlType: Theme.CT_Error
                                 text: "Error Flat"
                                 flat: true
                                 icon.source: "icon.svg"
@@ -155,7 +183,7 @@ ApplicationWindow {
                             Button {
                                 text: "Checkable Error"
                                 checkable: true
-                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                ThemedItem.controlType: Theme.CT_Error
                                 icon.source: "icon.svg"
                             }
                             Button {
@@ -167,14 +195,14 @@ ApplicationWindow {
                             Button {
                                 text: "Checkable Flat Accent"
                                 checkable: true
-                                ThemedItem.controlType: SVS.Theme.CT_Accent
+                                ThemedItem.controlType: Theme.CT_Accent
                                 flat: true
                                 icon.source: "icon.svg"
                             }
                             Button {
                                 text: "Checkable Flat Error"
                                 checkable: true
-                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                ThemedItem.controlType: Theme.CT_Error
                                 flat: true
                                 icon.source: "icon.svg"
                             }
@@ -248,13 +276,13 @@ ApplicationWindow {
                         visible: implicitHeight !== 0
                         Behavior on implicitHeight {
                             NumberAnimation {
-                                duration: SVS.Theme.visualEffectAnimationDuration
+                                duration: Theme.visualEffectAnimationDuration
                                 easing.type: Easing.OutCubic
                             }
                         }
                         Frame {
                             anchors.fill: parent
-                            ThemedItem.backgroundLevel: SVS.Theme.BL_Secondary
+                            ThemedItem.backgroundLevel: Theme.BL_Secondary
                             CheckBox {
                                 id: foldableCheckBox
                                 text: "Foldable"
@@ -335,25 +363,25 @@ ApplicationWindow {
                                 text: "Flat Top"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: SVS.Theme.TI_Top
+                                ThemedItem.tabIndicator: Theme.TI_Top
                             }
                             TabButton {
                                 text: "Flat Bottom"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: SVS.Theme.TI_Bottom
+                                ThemedItem.tabIndicator: Theme.TI_Bottom
                             }
                             TabButton {
                                 text: "Flat Left"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: SVS.Theme.TI_Left
+                                ThemedItem.tabIndicator: Theme.TI_Left
                             }
                             TabButton {
                                 text: "Flat Right"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: SVS.Theme.TI_Right
+                                ThemedItem.tabIndicator: Theme.TI_Right
                             }
                             TabButton {
                                 text: "Flat Fill"
@@ -439,6 +467,18 @@ ApplicationWindow {
                     RowLayout {
                         anchors.fill: parent
                         spacing: 8
+                    }
+                }
+
+                GroupBox {
+                    title: "命令面板"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Button {
+                            text: "显示"
+                            onClicked: commandPalette.open()
+                        }
                     }
                 }
 
