@@ -3,6 +3,7 @@ import QtQuick.Templates as T
 import QtQuick.Effects
 
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.ToolTip {
     id: control
@@ -34,6 +35,14 @@ T.ToolTip {
             to: 0.0
             duration: Theme.visualEffectAnimationDuration
         }
+    }
+
+    onAboutToShow: () => {
+        if (!parent)
+            return
+        let p = parent.mapFromGlobal(GlobalHelper.cursorPos())
+        x = p.x
+        y = p.y + 24
     }
 
     contentItem: Text {

@@ -58,7 +58,7 @@ T.MenuItem {
         width: 12
         height: 12
         visible: control.checked
-        source: control.checkable ? "../assets/Checkmark12Filled.svg" : ""
+        source: control.checkable ? "qrc:/qt/qml/SVSCraft/UIComponents/assets/Checkmark12Filled.svg" : ""
         color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
                control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
                control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
@@ -90,7 +90,7 @@ T.MenuItem {
             mirror: control.mirrored
             width: 12
             height: 12
-            source: control.subMenu ? "../assets/ChevronRight12Filled.svg" : ""
+            source: control.subMenu ? "qrc:/qt/qml/SVSCraft/UIComponents/assets/ChevronRight12Filled.svg" : ""
             color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
                    control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
                    control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :

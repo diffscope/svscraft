@@ -323,6 +323,17 @@ namespace SVS {
             emit foregroundPressedColorChangeChanged(d->foregroundPressedColorChange);
         }
     }
+    ColorChange Theme::controlCheckedColorChange() const {
+        Q_D(const Theme);
+        return d->controlCheckedColorChange;
+    }
+    void Theme::setControlCheckedColorChange(const ColorChange &controlCheckedColorChange) {
+        Q_D(Theme);
+        if (d->controlCheckedColorChange != controlCheckedColorChange) {
+            d->controlCheckedColorChange = controlCheckedColorChange;
+            emit controlCheckedColorChangeChanged(d->controlCheckedColorChange);
+        }
+    }
     int Theme::colorAnimationDuration() const {
         Q_D(const Theme);
         return d->colorAnimationDuration;

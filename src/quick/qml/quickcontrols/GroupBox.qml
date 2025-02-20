@@ -36,7 +36,7 @@ T.GroupBox {
             height: 20
             padding: 2
             horizontalPadding: 2
-            icon.source: "../assets/ChevronDown12Filled.svg"
+            icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/ChevronDown12Filled.svg"
             icon.name: control.ThemedItem.folded ? qsTr("Expand") : qsTr("Collapse")
             Accessible.name: icon.name
             flat: true

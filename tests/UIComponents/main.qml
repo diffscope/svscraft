@@ -105,64 +105,94 @@ ApplicationWindow {
 
                 GroupBox {
                     title: "按钮"
-                    RowLayout {
+                    ColumnLayout {
                         id: buttonRowLayout
                         spacing: 8
                         enabled: !disabledCheckBox.checked
-                        Button {
-                            ThemedItem.controlType: SVS.Theme.CT_Normal
-                            text: "Normal"
-                            icon.source: "icon.svg"
+                        RowLayout {
+                            spacing: 8
+                            Button {
+                                ThemedItem.controlType: SVS.Theme.CT_Normal
+                                text: "Normal"
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                ThemedItem.controlType: SVS.Theme.CT_Accent
+                                text: "Accent"
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                text: "Error"
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                ThemedItem.controlType: SVS.Theme.CT_Normal
+                                text: "Normal Flat"
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                ThemedItem.controlType: SVS.Theme.CT_Accent
+                                text: "Accent Flat"
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                text: "Error Flat"
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
                         }
-                        Button {
-                            ThemedItem.controlType: SVS.Theme.CT_Accent
-                            text: "Accent"
-                            icon.source: "icon.svg"
+                        RowLayout {
+                            spacing: 8
+                            Button {
+                                text: "Checkable Normal/Accent"
+                                checkable: true
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                text: "Checkable Error"
+                                checkable: true
+                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                text: "Checkable Flat Normal"
+                                checkable: true
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                text: "Checkable Flat Accent"
+                                checkable: true
+                                ThemedItem.controlType: SVS.Theme.CT_Accent
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
+                            Button {
+                                text: "Checkable Flat Error"
+                                checkable: true
+                                ThemedItem.controlType: SVS.Theme.CT_Error
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
                         }
-                        Button {
-                            ThemedItem.controlType: SVS.Theme.CT_Error
-                            text: "Error"
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            ThemedItem.controlType: SVS.Theme.CT_Normal
-                            text: "Normal Flat"
-                            flat: true
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            ThemedItem.controlType: SVS.Theme.CT_Accent
-                            text: "Accent Flat"
-                            flat: true
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            ThemedItem.controlType: SVS.Theme.CT_Error
-                            text: "Error Flat"
-                            flat: true
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            text: "Checkable"
-                            checkable: true
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            text: "Checkable Flat"
-                            checkable: true
-                            flat: true
-                            icon.source: "icon.svg"
-                        }
-                        Button {
-                            text: "Uncolorized Icon"
-                            icon.source: "icon_alt.svg"
-                            icon.color: "transparent"
+                        RowLayout {
+                            spacing: 8
+                            Button {
+                                icon.source: "icon.svg"
+                                DescriptiveText.activated: hovered
+                                DescriptiveText.toolTip: "Icon only"
+                            }
+                            Button {
+                                text: "Uncolorized Icon"
+                                icon.source: "icon_alt.svg"
+                                icon.color: "transparent"
+                            }
                         }
                     }
-
                 }
 
                 GroupBox {

@@ -45,6 +45,7 @@ namespace SVS {
         Q_PROPERTY(ColorChange foregroundHoveredColorChange READ foregroundHoveredColorChange WRITE setForegroundHoveredColorChange NOTIFY foregroundHoveredColorChangeChanged)
         Q_PROPERTY(ColorChange controlPressedColorChange READ controlPressedColorChange WRITE setControlPressedColorChange NOTIFY controlPressedColorChangeChanged)
         Q_PROPERTY(ColorChange foregroundPressedColorChange READ foregroundPressedColorChange WRITE setForegroundPressedColorChange NOTIFY foregroundPressedColorChangeChanged)
+        Q_PROPERTY(ColorChange controlCheckedColorChange READ controlCheckedColorChange WRITE setControlCheckedColorChange NOTIFY controlCheckedColorChangeChanged)
 
         Q_PROPERTY(int colorAnimationDuration READ colorAnimationDuration WRITE setColorAnimationDuration NOTIFY colorAnimationDurationChanged)
         Q_PROPERTY(int visualEffectAnimationDuration READ visualEffectAnimationDuration WRITE setVisualEffectAnimationDuration NOTIFY visualEffectAnimationDurationChanged)
@@ -155,6 +156,9 @@ namespace SVS {
         ColorChange foregroundPressedColorChange() const;
         void setForegroundPressedColorChange(const ColorChange &foregroundPressedColorChange);
 
+        ColorChange controlCheckedColorChange() const;
+        void setControlCheckedColorChange(const ColorChange &controlCheckedColorChange);
+
         int colorAnimationDuration() const;
         void setColorAnimationDuration(int colorAnimationDuration);
 
@@ -191,6 +195,7 @@ namespace SVS {
         void foregroundHoveredColorChangeChanged(const SVS::ColorChange &foregroundHoveredColorChange);
         void controlPressedColorChangeChanged(const SVS::ColorChange &controlPressedColorChange);
         void foregroundPressedColorChangeChanged(const SVS::ColorChange &foregroundPressedColorChange);
+        void controlCheckedColorChangeChanged(const SVS::ColorChange &controlCheckedColorChange);
         void colorAnimationDurationChanged(int colorAnimationDuration);
         void visualEffectAnimationDurationChanged(int visualEffectAnimationDuration);
         void toolTipDelayChanged(int toolTipDelay);

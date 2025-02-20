@@ -38,7 +38,7 @@ T.ComboBox {
             anchors.centerIn: parent
             color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
                 Theme.foregroundPrimaryColor
-            source: "../assets/ChevronDown12Filled.svg"
+            source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/ChevronDown12Filled.svg"
             Behavior on color {
                 ColorAnimation {
                     duration: Theme.colorAnimationDuration

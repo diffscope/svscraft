@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
     Theme::instance()->setForegroundHoveredColorChange({});
     Theme::instance()->setControlPressedColorChange({});
     Theme::instance()->setForegroundPressedColorChange({{}, 0.8});
+    Theme::instance()->setControlCheckedColorChange({QColor::fromRgba(0x1affffff)});
     Theme::instance()->setColorAnimationDuration(250);
     Theme::instance()->setVisualEffectAnimationDuration(250);
 

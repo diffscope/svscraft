@@ -134,6 +134,8 @@ add_subdirectory(widgets)
 
 add_subdirectory(quick)
 
+add_subdirectory(quickimpl)
+
 # ----------------------------------
 # Documentation
 # ----------------------------------
