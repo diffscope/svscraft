@@ -55,8 +55,8 @@ T.ToolButton {
         implicitWidth: 24
         implicitHeight: 24
         property color _checkedColor: control.flat ? control.ThemedItem.controlType === Theme.CT_Normal ? Theme.controlCheckedColorChange.apply(Theme.buttonColor) : Theme.controlColor(control.ThemedItem.controlType) : control.ThemedItem.controlType === Theme.CT_Normal ? Theme.accentColor : Theme.controlColor(control.ThemedItem.controlType)
-        property color _baseColor: control.checkable ? control.checked ? _checkedColor : Theme.buttonColor : Theme.controlColor(control.ThemedItem.controlType)
-        property color _unactiveColor: control.checkable ? control.checked ? _checkedColor : control.flat ? "transparent" : Theme.buttonColor : control.flat ? "transparent" : Theme.controlColor(control.ThemedItem.controlType)
+        property color _baseColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : Theme.buttonColor : Theme.controlColor(control.ThemedItem.controlType)
+        property color _unactiveColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : control.flat ? "transparent" : Theme.buttonColor : control.flat ? "transparent" : Theme.controlColor(control.ThemedItem.controlType)
         property color _statusColor: control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
                                      control.hovered? Theme.controlHoveredColorChange.apply(_baseColor) :
                                      _unactiveColor
