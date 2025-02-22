@@ -191,7 +191,7 @@ Item {
                         Drag.keys: ["SVSCraft.UIComponent.DockingView"]
                         Drag.hotSpot.x: width / 2
                         Drag.hotSpot.y: height / 2
-                        Drag.active: mouseArea.drag.active
+                        Drag.active: !tabItem._isStretch && mouseArea.drag.active
                         function remove() {
                             view.removeContent(tabItem.index)
                         }
