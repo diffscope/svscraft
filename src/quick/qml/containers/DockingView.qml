@@ -13,6 +13,39 @@ Item {
     property int edge: Qt.LeftEdge
     property int currentIndex: -1
     readonly property QtObject currentItem: currentIndex < 0 ? null : contentData[currentIndex]
+    implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
+    implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
+
+    function removeContent(index) {
+        let previousCurrentIndex = currentIndex
+        tabBar.currentIndex = -1
+        view.contentData = [...view.contentData.slice(0, index), ...view.contentData.slice(index + 1)]
+        if (index === previousCurrentIndex)
+            previousCurrentIndex = -1
+        else if (index < previousCurrentIndex)
+            previousCurrentIndex--
+        tabBar.currentIndex = previousCurrentIndex
+    }
+
+    function insertContent(index, content, current) {
+        let previousCurrentIndex = currentIndex
+        tabBar.currentIndex = -1
+        view.contentData = [...view.contentData.slice(0, index), content, ...view.contentData.slice(index)]
+        if (index <= previousCurrentIndex)
+            previousCurrentIndex++
+        if (current)
+            previousCurrentIndex = index
+        tabBar.currentIndex = previousCurrentIndex
+    }
+
+    function moveContent(sourceIndex, targetIndex, current) {
+        let content = view.contentData[sourceIndex]
+        removeContent(sourceIndex)
+        if (sourceIndex < targetIndex)
+            targetIndex--
+        insertContent(targetIndex, content, current)
+    }
+
     Component {
         id: floatingWindow
         Window {
@@ -30,8 +63,6 @@ Item {
             }
         }
     }
-    implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
-    implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
     Pane {
         id: tabBar
         implicitWidth: 40
@@ -91,7 +122,7 @@ Item {
                         modelData.window.y = p.y
                     }
                     Connections {
-                        target: tabItem.modelData
+                        target: tabItem.modelData instanceof DockingPane ? tabItem.modelData : null
                         enabled: tabItem.modelData instanceof DockingPane
                         function onDockChanged() {
                             if (tabItem.modelData.dock && modelData.window?.visible) {
@@ -121,7 +152,7 @@ Item {
                                 return
                             }
                             if (modelData.dock) {
-                                if (highlighted) {
+                                if (view.currentIndex === index) {
                                     tabBar.currentIndex = -1
                                 } else {
                                     tabBar.currentIndex = index
@@ -140,6 +171,7 @@ Item {
                         id: dragTarget
                         readonly property QtObject modelData: tabItem.modelData
                         readonly property QtObject container: tabBar
+                        readonly property bool current: view.currentIndex === tabItem.index
                         width: 28
                         height: 28
                         Popup {
@@ -160,6 +192,12 @@ Item {
                         Drag.hotSpot.x: width / 2
                         Drag.hotSpot.y: height / 2
                         Drag.active: mouseArea.drag.active
+                        function remove() {
+                            view.removeContent(tabItem.index)
+                        }
+                        function move(index) {
+                            view.moveContent(tabItem.index, index, current)
+                        }
                     }
                     DropArea {
                         id: dropArea
@@ -169,12 +207,14 @@ Item {
                         readonly property bool _dropBefore: tabItem.index < tabBar.stretchIndex || (tabItem.index === tabBar.stretchIndex && ((view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge) && drag.y <= height / 2 || (view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge) && drag.x <= width / 2))
                         onDropped: (drop) => {
                             let sourceModelData = drop.source.modelData
+                            let current = drop.source.current
                             if (sourceModelData === tabItem.modelData)
                                 return
                             if (drop.source.container === tabBar) {
-                                console.log("same tab bar")
+                                drop.source.move(tabItem.index + (_dropBefore ? 0 : 1))
                             } else {
-                                console.log("other tab bar")
+                                drop.source.remove()
+                                view.insertContent(tabItem.index + (_dropBefore ? 0 : 1), sourceModelData, current)
                             }
                         }
                     }
@@ -210,7 +250,7 @@ Item {
                         y: parent.height + 2
                         color: Theme.accentColor
                         visible: (view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge) && dropArea.containsDrag && !dropArea._dropBefore
-                        }
+                    }
                     Rectangle {
                         id: leftDropIndicator
                         width: 2
@@ -254,4 +294,4 @@ Item {
             z: 10
         }
     }
-}
+    }
