@@ -425,61 +425,77 @@ ApplicationWindow {
 
                 GroupBox {
                     title: "菜单 & 菜单栏"
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 8
-                    }
                 }
 
                 GroupBox {
                     title: "工具按钮 & 工具栏"
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 8
-                    }
                 }
 
                 GroupBox {
                     title: "标签"
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 8
-                        Label {
-                            text: "Normal Text <a href='#a'>Link Text</a>"
-                        }
+                    Label {
+                        text: "Normal Text <a href='#a'>Link Text</a>"
                     }
                 }
 
                 GroupBox {
                     title: "工具提示 & 状态提示"
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 8
-                        Button {
-                            text: "Hover me"
-                            DescriptiveText.activated: hovered
-                            DescriptiveText.toolTip: "Tool tip"
-                            DescriptiveText.statusTip: "Status tip"
-                        }
+                    Button {
+                        text: "Hover me"
+                        DescriptiveText.activated: hovered
+                        DescriptiveText.toolTip: "Tool tip"
+                        DescriptiveText.statusTip: "Status tip"
                     }
                 }
 
                 GroupBox {
                     title: "滚动条 & 滚动视图"
-                    RowLayout {
-                        anchors.fill: parent
-                        spacing: 8
-                    }
                 }
 
                 GroupBox {
                     title: "命令面板"
-                    RowLayout {
+                    Button {
+                        text: "显示"
+                        onClicked: commandPalette.open()
+                    }
+                }
+
+                GroupBox {
+                    title: "表单"
+                    Layout.fillWidth: true
+                    ColumnLayout {
                         anchors.fill: parent
                         spacing: 8
-                        Button {
-                            text: "显示"
-                            onClicked: commandPalette.open()
+                        FormGroup {
+                            label: "Form Group"
+                            rowItem: Switch {}
+                            columnItem: TextField {}
+                            Layout.fillWidth: true
+                        }
+                        FormGroup {
+                            label: "Form Group w/o Row Item"
+                            columnItem: TextField {}
+                            Layout.fillWidth: true
+                        }
+                        FormGroup {
+                            label: "Form Group w/o Column Item"
+                            rowItem: Switch {}
+                            Layout.fillWidth: true
+                        }
+                        FormGroup {
+                            columnItem: TextField {
+                                placeholderText: "Form Group w/o Label"
+                            }
+                            Layout.fillWidth: true
+                        }
+                        FormGroup {
+                            label: Label {
+                                color: "red"
+                                text: "Form Group with Custom Label Item"
+                            }
+                            rowItem: Switch {}
+                            columnItem: TextField {}
+                            Layout.fillWidth: true
                         }
                     }
                 }
