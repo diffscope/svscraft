@@ -26,6 +26,7 @@ ApplicationWindow {
 
     SplitView {
         anchors.fill: parent
+        ThemedItem.splitHandleEnabled: rightDock.panelOpened
         SplitView {
             SplitView.minimumWidth: leftDock.SplitView.minimumWidth + main.minimumPanelSize
             SplitView.fillWidth: true
