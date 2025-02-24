@@ -25,7 +25,7 @@ endif()
 qt_add_qml_module(${PROJECT_NAME}
     URI SVSCraft.Test.UIComponents
     QML_FILES ${_qml_files}
-    RESOURCES icon.svg icon_alt.svg
+    RESOURCES icon.svg icon_alt.svg crs.png
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

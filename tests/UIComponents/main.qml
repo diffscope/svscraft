@@ -1,4 +1,5 @@
 import QtQml
+import QtQml.Models
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -314,10 +315,13 @@ ApplicationWindow {
 
                 GroupBox {
                     title: "文本框"
-                    RowLayout {
+                    ColumnLayout {
                         anchors.fill: parent
                         spacing: 8
                         TextField {
+                            placeholderText: "placeholder"
+                        }
+                        TextArea {
                             placeholderText: "placeholder"
                         }
                         enabled: !disabledCheckBox.checked
@@ -496,6 +500,64 @@ ApplicationWindow {
                             rowItem: Switch {}
                             columnItem: TextField {}
                             Layout.fillWidth: true
+                        }
+                    }
+                }
+
+                GroupBox {
+                    title: "卡片"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Card {
+                            image: "qrc:/qt/qml/SVSCraft/Test/UIComponents/crs.png"
+                            title: "CRS"
+                            subtitle: "CrSjimo"
+                            toolBar: Button {
+                                flat: true
+                                icon.source: "icon.svg"
+                            }
+                        }
+
+                        ColumnLayout {
+                            width: 300
+                            spacing: 0
+                            Card {
+                                atTop: true
+                                atBottom: false
+                                image: Rectangle {
+                                    color: "red"
+                                }
+                                title: "Custom Image Item"
+                                subtitle: "Custom Image Item"
+                            }
+                            Card {
+                                atTop: false
+                                atBottom: false
+                                image: "qrc:/qt/qml/SVSCraft/Test/UIComponents/crs.png"
+                                title: Text {
+                                    text: "Custom Title Item"
+                                    color: "red"
+                                }
+                                subtitle: TextField {
+                                    text: "Custom Subtitle Item"
+                                }
+                                toolBar: Button {
+                                    flat: true
+                                    icon.source: "icon.svg"
+                                }
+                            }
+                            Card {
+                                atTop: false
+                                atBottom: true
+                                image: "qrc:/qt/qml/SVSCraft/Test/UIComponents/crs.png"
+                                title: "Bottom"
+                                subtitle: "Bottom"
+                                toolBar: Button {
+                                    flat: true
+                                    icon.source: "icon.svg"
+                                }
+                            }
                         }
                     }
                 }

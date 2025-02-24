@@ -3,7 +3,7 @@ import QtQuick.Templates as T
 
 import SVSCraft.UIComponents
 
-T.Pane {
+T.Frame {
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)

@@ -18,7 +18,7 @@ T.GroupBox {
         width: control.availableWidth
         text: control.title
         font.family: control.font.family
-        font.weight: 600
+        font.weight: Font.DemiBold
         font.pointSize: 1.25 * control.font.pointSize
         color: Theme.foregroundPrimaryColor
         elide: Text.ElideRight

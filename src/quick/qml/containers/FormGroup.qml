@@ -16,7 +16,7 @@ Item {
     implicitWidth: column.row.width
     ThemedItem.foregroundLevel: SVS.FL_Secondary
     onLabelChanged: () => {
-        if (typeof(group.label) !== "string")
+        if (group.label instanceof Item)
             return
         if (rowItem)
             rowItem.Accessible.name = group.label
@@ -27,14 +27,14 @@ Item {
         if (!rowItem)
             return
         rowItem.Layout.alignment = Qt.AlignHCenter
-        if (typeof(group.label) === "string")
+        if (!(group.label instanceof Item))
             rowItem.Accessible.name = group.label
     }
     onColumnItemChanged: () => {
         if (!columnItem)
             return
         columnItem.Layout.fillWidth = true
-        if (typeof(group.label) === "string")
+        if (!(group.label instanceof Item))
             columnItem.Accessible.name = group.label
     }
     ColumnLayout {
@@ -45,8 +45,8 @@ Item {
             spacing: group.horizontalSpacing
             visible: group.label || group.rowItem
             readonly property Label labelItem: Label {
-                text: typeof(group.label) === "string" ? group.label : ""
-                visible: typeof(group.label) === "string"
+                text: group.label instanceof Item ? "" : group.label
+                visible: !(group.label instanceof Item)
                 Layout.alignment: Qt.AlignHCenter
                 ThemedItem.foregroundLevel: group.ThemedItem.foregroundLevel
             }
