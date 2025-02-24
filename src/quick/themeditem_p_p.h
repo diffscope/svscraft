@@ -22,10 +22,13 @@ namespace SVS {
         SVSQmlNamespace::ForegroundLevel foregroundLevel = SVSQmlNamespace::FL_Primary;
         SVSQmlNamespace::TabIndicator tabIndicator = SVSQmlNamespace::TI_Fill;
         SVSQmlNamespace::DividerStroke dividerStroke = SVSQmlNamespace::DS_Auto;
+        double trackStart = 0.0;
         bool foldable = false;
         bool folded = false;
         bool flat = false;
-        double trackStart = 0.0;
+        bool splitHandleVisible = true;
+        bool splitHandleEnabled = true;
+
     };
 }
 

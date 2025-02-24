@@ -453,6 +453,21 @@ ApplicationWindow {
                 }
 
                 GroupBox {
+                    title: "分割视图"
+                    SplitView {
+                        implicitWidth: 400
+                        implicitHeight: 200
+                        Rectangle {
+                            color: Theme.backgroundSecondaryColor
+                        }
+                        Rectangle {
+                            color: Theme.backgroundTertiaryColor
+                        }
+                        enabled: !disabledCheckBox.checked
+                    }
+                }
+
+                GroupBox {
                     title: "滚动条 & 滚动视图"
                 }
 
@@ -561,6 +576,8 @@ ApplicationWindow {
                         }
                     }
                 }
+
+                Item { height: 64 }
 
             }
         }

@@ -13,6 +13,9 @@ Item {
     property int edge: Qt.LeftEdge
     property int currentIndex: -1
     readonly property QtObject currentItem: currentIndex < 0 ? null : contentData[currentIndex]
+    property int barSize: 40
+    property int panelSize: 400
+    readonly property bool panelOpened: panel.visible
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
 
@@ -65,14 +68,14 @@ Item {
     }
     Pane {
         id: tabBar
-        implicitWidth: 40
-        implicitHeight: 40
+        implicitWidth: view.barSize
+        implicitHeight: view.barSize
         width: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? parent.width : undefined
         height: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? parent.height: undefined
         anchors.right: view.edge === Qt.RightEdge ? parent.right : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? parent.bottom : undefined
         property QtObject _currentItem: null
-        property int currentIndex: -1
+        property int currentIndex: view.currentIndex
         function indexOfStretch(model) {
             for (let i = 0; i < model.length; i++) {
                 if (model[i] instanceof DockingStretch)
@@ -114,6 +117,8 @@ Item {
                     }
                     function undockPanelOnDrag() {
                         if (!(modelData instanceof DockingPane))
+                            return
+                        if (modelData.locked)
                             return
                         modelData.dock = false
                         createWindow()
@@ -172,13 +177,13 @@ Item {
                         readonly property QtObject modelData: tabItem.modelData
                         readonly property QtObject container: tabBar
                         readonly property bool current: view.currentIndex === tabItem.index
-                        width: 28
-                        height: 28
+                        width: parent.width
+                        height: parent.height
                         Popup {
                             background: Item {}
                             padding: 0
-                            width: 28
-                            height: 28
+                            width: parent.width
+                            height: parent.height
                             visible: mouseArea.drag.active
                             IconLabel {
                                 anchors.fill: parent
@@ -235,7 +240,7 @@ Item {
                     }
                     Rectangle {
                         id: topDropIndicator
-                        width: 36
+                        width: view.barSize - 2
                         height: 2
                         anchors.horizontalCenter: parent.horizontalCenter
                         y: -4
@@ -244,7 +249,7 @@ Item {
                     }
                     Rectangle {
                         id: bottomDropIndicator
-                        width: 36
+                        width: view.barSize - 2
                         height: 2
                         anchors.horizontalCenter: parent.horizontalCenter
                         y: parent.height + 2
@@ -254,7 +259,7 @@ Item {
                     Rectangle {
                         id: leftDropIndicator
                         width: 2
-                        height: 36
+                        height: view.barSize - 2
                         anchors.verticalCenter: parent.verticalCenter
                         x: -4
                         color: Theme.accentColor
@@ -263,7 +268,7 @@ Item {
                     Rectangle {
                         id: rightDropIndicator
                         width: 2
-                        height: 36
+                        height: view.barSize - 2
                         anchors.verticalCenter: parent.verticalCenter
                         x: parent.width + 2
                         color: Theme.accentColor
@@ -277,6 +282,8 @@ Item {
         id: panel
         pane: view.currentItem
         visible: view.currentItem !== null
+        implicitWidth: view.panelSize
+        implicitHeight: view.panelSize
         width: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? parent.width * (visible ? 1 : 0) : undefined
         height: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? parent.height * (visible ? 1 : 0) : undefined
         anchors.left: view.edge === Qt.LeftEdge ? tabBar.right : undefined
@@ -294,4 +301,4 @@ Item {
             z: 10
         }
     }
-    }
+}

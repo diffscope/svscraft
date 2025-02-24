@@ -111,4 +111,27 @@ namespace SVS {
             emit dividerStrokeChanged();
         }
     }
+    bool ThemedItem::splitHandleVisible() const {
+        Q_D(const ThemedItem);
+        return d->splitHandleVisible;
+    }
+    void ThemedItem::setSplitHandleVisible(bool value) {
+        Q_D(ThemedItem);
+        if (d->splitHandleVisible != value) {
+            d->splitHandleVisible = value;
+            emit splitHandleVisibleChanged();
+        }
+    }
+    bool ThemedItem::splitHandleEnabled() const {
+        Q_D(const ThemedItem);
+        return d->splitHandleEnabled;
+    }
+    void ThemedItem::setSplitHandleEnabled(bool value) {
+        Q_D(ThemedItem);
+        if (d->splitHandleEnabled != value) {
+            d->splitHandleEnabled = value;
+            emit splitHandleEnabledChanged();
+        }
+    }
+
 }

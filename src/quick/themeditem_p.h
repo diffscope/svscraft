@@ -26,6 +26,8 @@ namespace SVS {
         Q_PROPERTY(bool flat READ flat WRITE setFlat NOTIFY flatChanged)
         Q_PROPERTY(SVS::SVSQmlNamespace::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
         Q_PROPERTY(SVS::SVSQmlNamespace::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
+        Q_PROPERTY(bool splitHandleVisible READ splitHandleVisible WRITE setSplitHandleVisible NOTIFY splitHandleVisibleChanged)
+        Q_PROPERTY(bool splitHandleEnabled READ splitHandleEnabled WRITE setSplitHandleEnabled NOTIFY splitHandleEnabledChanged)
     public:
         ~ThemedItem() override;
 
@@ -56,6 +58,12 @@ namespace SVS {
         SVSQmlNamespace::DividerStroke dividerStroke() const;
         void setDividerStroke(SVSQmlNamespace::DividerStroke value);
 
+        bool splitHandleVisible() const;
+        void setSplitHandleVisible(bool value);
+
+        bool splitHandleEnabled() const;
+        void setSplitHandleEnabled(bool value);
+
     signals:
         void controlTypeChanged();
         void backgroundLevelChanged();
@@ -66,6 +74,8 @@ namespace SVS {
         void flatChanged();
         void tabIndicatorChanged();
         void dividerStrokeChanged();
+        void splitHandleVisibleChanged();
+        void splitHandleEnabledChanged();
 
     private:
         friend class ThemedItemAttachedType;

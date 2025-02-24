@@ -20,7 +20,7 @@ Pane {
         id: header
         anchors.top: parent.top
         width: parent.width
-        height: 36
+        height: 40
         RowLayout {
             spacing: 4
             anchors.fill: parent
@@ -80,11 +80,13 @@ Pane {
                 Layout.topMargin: 4
                 Layout.bottomMargin: 4
                 color: Theme.borderColor
+                visible: !container.pane?.locked || (container.pane?.menu ?? false)
             }
             ToolButton {
                 icon.source: container.pane?.dock ?
                     "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelSeparateWindow20Filled.svg" :
                     `qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelLeft16Filled.svg`
+                visible: !container.pane?.locked
                 DescriptiveText.activated: hovered
                 DescriptiveText.toolTip: container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
                 Layout.alignment: Qt.AlignVCenter
@@ -100,12 +102,6 @@ Pane {
                 visible: container.pane?.menu ?? false
                 onClicked: container.pane.menu.popup()
             }
-        }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: 1
-            color: Theme.splitterColor
         }
     }
     Item {
@@ -133,5 +129,11 @@ Pane {
             if (pane)
                 pane.height = height
         }
+    }
+    Rectangle {
+        anchors.top: header.bottom
+        width: header.width
+        height: 1
+        color: Theme.splitterColor
     }
 }
