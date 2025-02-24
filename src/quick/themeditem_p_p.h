@@ -17,11 +17,11 @@ namespace SVS {
         Q_DECLARE_PUBLIC(ThemedItem)
     public:
         ThemedItem *q_ptr;
-        Theme::ControlType controlType = Theme::CT_Normal;
-        Theme::BackgroundLevel backgroundLevel = Theme::BL_Primary;
-        Theme::ForegroundLevel foregroundLevel = Theme::FL_Primary;
-        Theme::TabIndicator tabIndicator = Theme::TI_Fill;
-        Theme::DividerStroke dividerStroke = Theme::DS_Auto;
+        SVSQmlNamespace::ControlType controlType = SVSQmlNamespace::CT_Normal;
+        SVSQmlNamespace::BackgroundLevel backgroundLevel = SVSQmlNamespace::BL_Primary;
+        SVSQmlNamespace::ForegroundLevel foregroundLevel = SVSQmlNamespace::FL_Primary;
+        SVSQmlNamespace::TabIndicator tabIndicator = SVSQmlNamespace::TI_Fill;
+        SVSQmlNamespace::DividerStroke dividerStroke = SVSQmlNamespace::DS_Auto;
         bool foldable = false;
         bool folded = false;
         bool flat = false;

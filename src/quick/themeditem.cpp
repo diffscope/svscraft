@@ -12,33 +12,33 @@ namespace SVS {
         d->q_ptr = this;
     }
     ThemedItem::~ThemedItem() = default;
-    Theme::ControlType ThemedItem::controlType() const {
+    SVSQmlNamespace::ControlType ThemedItem::controlType() const {
         Q_D(const ThemedItem);
         return d->controlType;
     }
-    void ThemedItem::setControlType(Theme::ControlType value) {
+    void ThemedItem::setControlType(SVSQmlNamespace::ControlType value) {
         Q_D(ThemedItem);
         if (d->controlType != value) {
             d->controlType = value;
             emit controlTypeChanged();
         }
     }
-    SVS::Theme::BackgroundLevel ThemedItem::backgroundLevel() const {
+    SVS::SVSQmlNamespace::BackgroundLevel ThemedItem::backgroundLevel() const {
         Q_D(const ThemedItem);
         return d->backgroundLevel;
     }
-    void ThemedItem::setBackgroundLevel(SVS::Theme::BackgroundLevel value) {
+    void ThemedItem::setBackgroundLevel(SVS::SVSQmlNamespace::BackgroundLevel value) {
         Q_D(ThemedItem);
         if (d->backgroundLevel != value) {
             d->backgroundLevel = value;
             emit backgroundLevelChanged();
         }
     }
-    SVS::Theme::ForegroundLevel ThemedItem::foregroundLevel() const {
+    SVS::SVSQmlNamespace::ForegroundLevel ThemedItem::foregroundLevel() const {
         Q_D(const ThemedItem);
         return d->foregroundLevel;
     }
-    void ThemedItem::setForegroundLevel(SVS::Theme::ForegroundLevel value) {
+    void ThemedItem::setForegroundLevel(SVS::SVSQmlNamespace::ForegroundLevel value) {
         Q_D(ThemedItem);
         if (d->foregroundLevel != value) {
             d->foregroundLevel = value;
@@ -89,22 +89,22 @@ namespace SVS {
             emit flatChanged();
         }
     }
-    Theme::TabIndicator ThemedItem::tabIndicator() const {
+    SVSQmlNamespace::TabIndicator ThemedItem::tabIndicator() const {
         Q_D(const ThemedItem);
         return d->tabIndicator;
     }
-    void ThemedItem::setTabIndicator(Theme::TabIndicator value) {
+    void ThemedItem::setTabIndicator(SVSQmlNamespace::TabIndicator value) {
         Q_D(ThemedItem);
         if (d->tabIndicator != value) {
             d->tabIndicator = value;
             emit tabIndicatorChanged();
         }
     }
-    Theme::DividerStroke ThemedItem::dividerStroke() const {
+    SVSQmlNamespace::DividerStroke ThemedItem::dividerStroke() const {
         Q_D(const ThemedItem);
         return d->dividerStroke;
     }
-    void ThemedItem::setDividerStroke(Theme::DividerStroke value) {
+    void ThemedItem::setDividerStroke(SVSQmlNamespace::DividerStroke value) {
         Q_D(ThemedItem);
         if (d->dividerStroke != value) {
             d->dividerStroke = value;

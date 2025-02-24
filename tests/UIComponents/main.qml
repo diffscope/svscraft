@@ -11,7 +11,7 @@ ApplicationWindow {
     height: 800
 
     menuBar: MenuBar {
-        ThemedItem.dividerStroke: Theme.DS_Border
+        ThemedItem.dividerStroke: SVS.DS_Border
         Menu {
             title: "&File"
             Action {
@@ -57,7 +57,7 @@ ApplicationWindow {
     }
 
     header: ToolBar {
-        ThemedItem.dividerStroke: Theme.DS_Border
+        ThemedItem.dividerStroke: SVS.DS_Border
         Row {
             anchors.fill: parent
             spacing: 4
@@ -142,34 +142,34 @@ ApplicationWindow {
                         RowLayout {
                             spacing: 8
                             Button {
-                                ThemedItem.controlType: Theme.CT_Normal
+                                ThemedItem.controlType: SVS.CT_Normal
                                 text: "Normal"
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: Theme.CT_Accent
+                                ThemedItem.controlType: SVS.CT_Accent
                                 text: "Accent"
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: Theme.CT_Error
+                                ThemedItem.controlType: SVS.CT_Error
                                 text: "Error"
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: Theme.CT_Normal
+                                ThemedItem.controlType: SVS.CT_Normal
                                 text: "Normal Flat"
                                 flat: true
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: Theme.CT_Accent
+                                ThemedItem.controlType: SVS.CT_Accent
                                 text: "Accent Flat"
                                 flat: true
                                 icon.source: "icon.svg"
                             }
                             Button {
-                                ThemedItem.controlType: Theme.CT_Error
+                                ThemedItem.controlType: SVS.CT_Error
                                 text: "Error Flat"
                                 flat: true
                                 icon.source: "icon.svg"
@@ -185,7 +185,7 @@ ApplicationWindow {
                             Button {
                                 text: "Checkable Error"
                                 checkable: true
-                                ThemedItem.controlType: Theme.CT_Error
+                                ThemedItem.controlType: SVS.CT_Error
                                 icon.source: "icon.svg"
                             }
                             Button {
@@ -197,14 +197,14 @@ ApplicationWindow {
                             Button {
                                 text: "Checkable Flat Accent"
                                 checkable: true
-                                ThemedItem.controlType: Theme.CT_Accent
+                                ThemedItem.controlType: SVS.CT_Accent
                                 flat: true
                                 icon.source: "icon.svg"
                             }
                             Button {
                                 text: "Checkable Flat Error"
                                 checkable: true
-                                ThemedItem.controlType: Theme.CT_Error
+                                ThemedItem.controlType: SVS.CT_Error
                                 flat: true
                                 icon.source: "icon.svg"
                             }
@@ -284,7 +284,7 @@ ApplicationWindow {
                         }
                         Frame {
                             anchors.fill: parent
-                            ThemedItem.backgroundLevel: Theme.BL_Secondary
+                            ThemedItem.backgroundLevel: SVS.BL_Secondary
                             CheckBox {
                                 id: foldableCheckBox
                                 text: "Foldable"
@@ -365,25 +365,25 @@ ApplicationWindow {
                                 text: "Flat Top"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: Theme.TI_Top
+                                ThemedItem.tabIndicator: SVS.TI_Top
                             }
                             TabButton {
                                 text: "Flat Bottom"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: Theme.TI_Bottom
+                                ThemedItem.tabIndicator: SVS.TI_Bottom
                             }
                             TabButton {
                                 text: "Flat Left"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: Theme.TI_Left
+                                ThemedItem.tabIndicator: SVS.TI_Left
                             }
                             TabButton {
                                 text: "Flat Right"
                                 icon.source: "icon.svg"
                                 width: implicitWidth
-                                ThemedItem.tabIndicator: Theme.TI_Right
+                                ThemedItem.tabIndicator: SVS.TI_Right
                             }
                             TabButton {
                                 text: "Flat Fill"

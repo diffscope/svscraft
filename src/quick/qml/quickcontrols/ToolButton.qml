@@ -54,7 +54,7 @@ T.ToolButton {
     background: Rectangle {
         implicitWidth: 24
         implicitHeight: 24
-        property color _checkedColor: control.flat ? control.ThemedItem.controlType === Theme.CT_Normal ? Theme.controlCheckedColorChange.apply(Theme.buttonColor) : Theme.controlColor(control.ThemedItem.controlType) : control.ThemedItem.controlType === Theme.CT_Normal ? Theme.accentColor : Theme.controlColor(control.ThemedItem.controlType)
+        property color _checkedColor: control.flat ? control.ThemedItem.controlType === SVS.CT_Normal ? Theme.controlCheckedColorChange.apply(Theme.buttonColor) : Theme.controlColor(control.ThemedItem.controlType) : control.ThemedItem.controlType === SVS.CT_Normal ? Theme.accentColor : Theme.controlColor(control.ThemedItem.controlType)
         property color _baseColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : Theme.buttonColor : Theme.controlColor(control.ThemedItem.controlType)
         property color _unactiveColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : control.flat ? "transparent" : Theme.buttonColor : control.flat ? "transparent" : Theme.controlColor(control.ThemedItem.controlType)
         property color _statusColor: control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
@@ -63,7 +63,7 @@ T.ToolButton {
         color: !control.enabled ? _unactiveColor.a ? Theme.controlDisabledColorChange.apply(_unactiveColor) : "transparent" :
                _statusColor
         border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
-        border.width: control.visualFocus ? 2 : control.flat || !control.checkable && control.ThemedItem.controlType !== Theme.CT_Normal || control.checkable && control.checked ? 0 : 1
+        border.width: control.visualFocus ? 2 : control.flat || !control.checkable && control.ThemedItem.controlType !== SVS.CT_Normal || control.checkable && control.checked ? 0 : 1
         radius: 4
 
         Behavior on color {

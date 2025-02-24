@@ -14,7 +14,7 @@ Item {
     property int verticalSpacing: 0
     implicitHeight: column.height
     implicitWidth: column.row.width
-    ThemedItem.foregroundLevel: Theme.FL_Secondary
+    ThemedItem.foregroundLevel: SVS.FL_Secondary
     onLabelChanged: () => {
         if (typeof(group.label) !== "string")
             return

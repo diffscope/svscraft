@@ -152,7 +152,7 @@ Popup {
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: listView.count === 0
-                ThemedItem.foregroundLevel: Theme.FL_Secondary
+                ThemedItem.foregroundLevel: SVS.FL_Secondary
                 text: popup.emptyText
             }
         }

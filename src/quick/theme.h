@@ -1,8 +1,8 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include <QColor>
-#include <QObject>
+#include <QSharedDataPointer>
+#include <QQuickAttachedPropertyPropagator>
 #include <qqmlintegration.h>
 
 #include <SVSCraftQuick/svscraftquickglobal.h>
@@ -11,11 +11,13 @@ namespace SVS {
 
     class ColorChange;
 
+    class ThemeAttachedType;
+
     class ThemePrivate;
 
-    class SVSCRAFT_QUICK_EXPORT Theme : public QObject {
+    class SVSCRAFT_QUICK_EXPORT Theme : public QQuickAttachedPropertyPropagator {
         Q_OBJECT
-        Q_DECLARE_PRIVATE(Theme)
+        QML_ANONYMOUS
 
         Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor NOTIFY accentColorChanged)
         Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor NOTIFY warningColorChanged)
@@ -57,36 +59,8 @@ namespace SVS {
     public:
         ~Theme() override;
 
-        static Theme *instance();
-
-        enum ControlType {
-            CT_Normal, CT_Accent, CT_Warning, CT_Error,
-        };
-        Q_ENUM(ControlType)
-        Q_INVOKABLE QColor controlColor(SVS::Theme::ControlType controlType) const;
-
-        enum BackgroundLevel {
-            BL_Primary, BL_Secondary, BL_Tertiary, BL_Quaternary,
-        };
-        Q_ENUM(BackgroundLevel)
-        Q_INVOKABLE QColor backgroundColor(SVS::Theme::BackgroundLevel backgroundLevel) const;
-
-        enum ForegroundLevel {
-            FL_Primary, FL_Secondary,
-        };
-        Q_ENUM(ForegroundLevel)
-        Q_INVOKABLE QColor foregroundColor(SVS::Theme::ForegroundLevel foregroundLevel) const;
-
-        enum TabIndicator {
-            TI_Fill, TI_Top, TI_Bottom, TI_Left, TI_Right,
-        };
-        Q_ENUM(TabIndicator)
-
-        enum DividerStroke {
-            DS_Auto, DS_None, DS_Border, DS_Splitter,
-        };
-        Q_ENUM(DividerStroke)
-        Q_INVOKABLE QColor dividerStrokeColor(SVS::Theme::DividerStroke dividerStroke, const QColor &autoColor = Qt::transparent) const;
+        static Theme *get(QObject *item);
+        static Theme *defaultTheme();
 
         QColor accentColor() const;
         void setAccentColor(const QColor &accentColor);
@@ -175,6 +149,12 @@ namespace SVS {
         int toolTipTimeout() const;
         void setToolTipTimeout(int toolTipTimeout);
 
+        Q_INVOKABLE QColor controlColor(int controlType) const;
+        Q_INVOKABLE QColor backgroundColor(int backgroundLevel) const;
+        Q_INVOKABLE QColor foregroundColor(int foregroundLevel) const;
+        Q_INVOKABLE QColor dividerStrokeColor(int dividerStroke) const;
+        Q_INVOKABLE QColor dividerStrokeColor(int dividerStroke, const QColor &autoColor) const;
+
     signals:
         void accentColorChanged(const QColor &accentColor);
         void warningColorChanged(const QColor &warningColor);
@@ -206,9 +186,15 @@ namespace SVS {
         void toolTipDelayChanged(int toolTipDelay);
         void toolTipTimeoutChanged(int toolTipTimeout);
 
+    protected:
+        void attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) override;
+
     private:
+        friend class ThemeAttachedType;
+        friend class ThemePrivate;
         explicit Theme(QObject *parent = nullptr);
-        QScopedPointer<ThemePrivate> d_ptr;
+        explicit Theme(ThemePrivate *d);
+        QSharedDataPointer<ThemePrivate> d;
 
     };
 

@@ -4,6 +4,7 @@
 #include <SVSCraftQuick/theme.h>
 
 #include <QColor>
+#include <QSharedData>
 
 #include <SVSCraftGui/colorchange.h>
 
@@ -12,21 +13,17 @@ class QJSEngine;
 
 namespace SVS {
 
-    class ThemeForeign {
-        Q_GADGET
+    class ThemeAttachedType : public QObject {
+        Q_OBJECT
         QML_NAMED_ELEMENT(Theme)
-        QML_FOREIGN(Theme)
-        QML_SINGLETON
-
+        QML_ATTACHED(Theme)
     public:
-        static Theme *create(QQmlEngine *engine, QJSEngine *);
+        static Theme *qmlAttachedProperties(QObject *object);
     };
-    class ThemePrivate {
-        Q_DECLARE_PUBLIC(Theme)
+    class ThemePrivate : public QSharedData {
     public:
-        Theme *q_ptr;
-
-        static Theme instance;
+        static void inherit(Theme *object, Theme *parent);
+        static Theme defaultTheme;
 
         QColor accentColor;
         QColor warningColor;

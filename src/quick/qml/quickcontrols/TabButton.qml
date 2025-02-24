@@ -52,7 +52,7 @@ T.TabButton {
     background: Rectangle {
         implicitWidth: 64
         implicitHeight: 20
-        property color _baseColor: control.checked && control.ThemedItem.tabIndicator === Theme.TI_Fill ? Theme.accentColor : "transparent"
+        property color _baseColor: control.checked && control.ThemedItem.tabIndicator === SVS.TI_Fill ? Theme.accentColor : "transparent"
         color: !control.enabled && _baseColor.a ? Theme.controlDisabledColorChange.apply(_baseColor) :
                control.down && control.enabled ? Theme.controlPressedColorChange.apply(_baseColor) :
                control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(_baseColor) :
@@ -69,15 +69,15 @@ T.TabButton {
         }
 
         Rectangle {
-            visible: control.ThemedItem.tabIndicator !== Theme.TI_Fill
-            anchors.top: control.ThemedItem.tabIndicator === Theme.TI_Top ? parent.top : undefined
-            anchors.bottom: control.ThemedItem.tabIndicator === Theme.TI_Bottom ? parent.bottom : undefined
-            anchors.left: control.ThemedItem.tabIndicator === Theme.TI_Left && !control.mirrored || control.ThemedItem.tabIndicator === Theme.TI_Right && control.mirrored ? parent.left : undefined
-            anchors.right: control.ThemedItem.tabIndicator === Theme.TI_Left && control.mirrored || control.ThemedItem.tabIndicator === Theme.TI_Right && !control.mirrored ? parent.right : undefined
-            anchors.verticalCenter: control.ThemedItem.tabIndicator === Theme.TI_Left || control.ThemedItem.tabIndicator === Theme.TI_Right ? parent.verticalCenter : undefined
-            anchors.horizontalCenter: control.ThemedItem.tabIndicator === Theme.TI_Top || control.ThemedItem.tabIndicator === Theme.TI_Bottom ? parent.horizontalCenter : undefined
-            width: control.ThemedItem.tabIndicator === Theme.TI_Top || control.ThemedItem.tabIndicator === Theme.TI_Bottom ? parent.width * 0.75 : 2
-            height: control.ThemedItem.tabIndicator === Theme.TI_Left || control.ThemedItem.tabIndicator === Theme.TI_Right ? parent.height * 0.75 : 2
+            visible: control.ThemedItem.tabIndicator !== SVS.TI_Fill
+            anchors.top: control.ThemedItem.tabIndicator === SVS.TI_Top ? parent.top : undefined
+            anchors.bottom: control.ThemedItem.tabIndicator === SVS.TI_Bottom ? parent.bottom : undefined
+            anchors.left: control.ThemedItem.tabIndicator === SVS.TI_Left && !control.mirrored || control.ThemedItem.tabIndicator === SVS.TI_Right && control.mirrored ? parent.left : undefined
+            anchors.right: control.ThemedItem.tabIndicator === SVS.TI_Left && control.mirrored || control.ThemedItem.tabIndicator === SVS.TI_Right && !control.mirrored ? parent.right : undefined
+            anchors.verticalCenter: control.ThemedItem.tabIndicator === SVS.TI_Left || control.ThemedItem.tabIndicator === SVS.TI_Right ? parent.verticalCenter : undefined
+            anchors.horizontalCenter: control.ThemedItem.tabIndicator === SVS.TI_Top || control.ThemedItem.tabIndicator === SVS.TI_Bottom ? parent.horizontalCenter : undefined
+            width: control.ThemedItem.tabIndicator === SVS.TI_Top || control.ThemedItem.tabIndicator === SVS.TI_Bottom ? parent.width * 0.75 : 2
+            height: control.ThemedItem.tabIndicator === SVS.TI_Left || control.ThemedItem.tabIndicator === SVS.TI_Right ? parent.height * 0.75 : 2
             radius: 1
             property color _baseColor: control.checked ? Theme.accentColor : "transparent"
             color: !control.enabled && _baseColor.a ? Theme.controlDisabledColorChange.apply(_baseColor) : _baseColor

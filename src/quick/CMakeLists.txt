@@ -20,8 +20,8 @@ endforeach()
 svs_add_library(${PROJECT_NAME} AUTOGEN STATIC
     SOURCES ${_src}
     LINKS SVSCraftCore SVSCraftGui SVSCraftQuickImpl SVSCraftQuickImplplugin
-    QT_LINKS Core Gui Qml Quick
-    QT_INCLUDE_PRIVATE Core Gui Qml Quick
+    QT_LINKS Core Gui Qml Quick QuickControls2
+    QT_INCLUDE_PRIVATE Core Gui Qml Quick QuickControls2
     INCLUDE_PRIVATE *
     PREFIX SVSCRAFT_QUICK
 )
@@ -29,12 +29,16 @@ svs_add_library(${PROJECT_NAME} AUTOGEN STATIC
 if(QT_KNOWN_POLICY_QTP0001)
     qt_policy(SET QTP0001 NEW)
 endif()
+if(QT_KNOWN_POLICY_QTP0004)
+    qt_policy(SET QTP0004 NEW)
+endif()
 
 qt_add_qml_module(${PROJECT_NAME}
     URI SVSCraft.UIComponents
     QML_FILES ${_qml_files}
     RESOURCES ${_resource_files}
     NAMESPACE SVS
+    OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SVSCraft/UIComponents
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
