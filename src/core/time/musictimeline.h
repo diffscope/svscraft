@@ -93,11 +93,13 @@ namespace SVS {
         double tempoAt(int tick) const;
         int nearestTempoTo(int tick) const;
 
-    public:
         inline PersistentMusicTime create(const MusicTime &time) const;
         PersistentMusicTime create(int measure, int beat, int tick) const;
         PersistentMusicTime create(QStringView str, bool *ok = nullptr) const;
         PersistentMusicTime create(double msec) const;
+
+        static void setTicksPerQuarterNote(int ticks);
+        static int ticksPerQuarterNote();
 
     signals:
         void timeSignatureChanged();

@@ -423,6 +423,14 @@ namespace SVS {
         auto container = new PersistentMusicTimeData(this, d, d->msecToTick(msec));
         return PersistentMusicTime(container);
     }
+    void MusicTimeline::setTicksPerQuarterNote(int ticks) {
+        MusicTimelinePrivate::resolution = ticks;
+    }
+    int MusicTimeline::ticksPerQuarterNote() {
+        return MusicTimelinePrivate::resolution;
+    }
+
+    int MusicTimelinePrivate::resolution = 480;
 
     MusicTimelinePrivate::MusicTimelinePrivate() {
         timeSignatureMap = {
