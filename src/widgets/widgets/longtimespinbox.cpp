@@ -45,7 +45,7 @@ namespace SVS {
     }
 
     void LongTimeSpinBox::setMaximum(LongTime maximum) {
-        QSpinBox::setMaximum(maximum.totalMsec());
+        QSpinBox::setMaximum(maximum.totalMillisecond());
     }
 
     LongTime LongTimeSpinBox::minimum() const {
@@ -53,11 +53,11 @@ namespace SVS {
     }
 
     void LongTimeSpinBox::setMinimum(LongTime minimum) {
-        QSpinBox::setMinimum(minimum.totalMsec());
+        QSpinBox::setMinimum(minimum.totalMillisecond());
     }
 
     void LongTimeSpinBox::setRange(LongTime minimum, LongTime maximum) {
-        QSpinBox::setRange(minimum.totalMsec(), maximum.totalMsec());
+        QSpinBox::setRange(minimum.totalMillisecond(), maximum.totalMillisecond());
     }
 
     int LongTimeSpinBox::fieldWidth(LongTimeSpinBox::FieldType fieldType) const {
@@ -110,11 +110,11 @@ namespace SVS {
     }
 
     void LongTimeSpinBox::setValue(LongTime value) {
-        QSpinBox::setValue(value.totalMsec());
+        QSpinBox::setValue(value.totalMillisecond());
     }
 
     int LongTimeSpinBox::valueFromText(const QString &text) const {
-        return LongTime::fromString(text).totalMsec();
+        return LongTime::fromString(text).totalMillisecond();
     }
 
     QString LongTimeSpinBox::textFromValue(int val) const {

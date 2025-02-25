@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 
     QObject::connect(spinBox, &LongTimeSpinBox::valueChanged, [&](LongTime value) {
         QSignalBlocker blocker(mSpinBox);
-        mSpinBox->setValue(timeline.create(value.totalMsec()));
+        mSpinBox->setValue(timeline.create(value.totalMillisecond()));
     });
 
     QObject::connect(mSpinBox, &MusicTimeSpinBox::valueChanged, [=](const PersistentMusicTime& value) {

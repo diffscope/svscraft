@@ -13,3 +13,5 @@ add_subdirectory(SwitchButton)
 add_subdirectory(UIComponents)
 
 add_subdirectory(DockingView)
+
+add_subdirectory(Validators)

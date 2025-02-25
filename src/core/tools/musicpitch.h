@@ -1,5 +1,5 @@
-#ifndef MUSICNOTE_H
-#define MUSICNOTE_H
+#ifndef MUSICPITCH_H
+#define MUSICPITCH_H
 
 #include <QList>
 #include <QMetaType>
@@ -10,15 +10,28 @@
 namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT MusicPitch {
+        Q_GADGET
+        Q_PROPERTY(int key READ key CONSTANT)
+        Q_PROPERTY(int octave READ octave CONSTANT)
+        Q_PROPERTY(int pitch READ pitch CONSTANT)
+        Q_PROPERTY(bool isWildcard READ isWildcard CONSTANT)
+        Q_PROPERTY(QList<MusicPitch> matchedNotes READ matchedNotes CONSTANT)
     public:
         enum SpecialValue {
             Wildcard = -1,
         };
+        Q_ENUM(SpecialValue)
 
         enum Accidental {
             Flat,
             Sharp,
         };
+        Q_ENUM(Accidental)
+
+        enum Key {
+            C, D, E, F, G, A, B
+        };
+        Q_ENUM(Key)
 
         constexpr MusicPitch() : n(0) {
         }
@@ -34,16 +47,16 @@ namespace SVS {
         }
 
         static MusicPitch fromString(QStringView s, bool *ok = nullptr);
-        QString toString(Accidental accidental) const;
+        Q_INVOKABLE QString toString(Accidental accidental) const;
 
         constexpr qint8 key() const {
-            return qint8((n + 12) % 12);
+            return static_cast<qint8>((n + 12) % 12);
         }
 
         QString keyName(Accidental accidental) const;
 
         constexpr qint8 octave() const {
-            return qint8((n + 12) / 12 - 1);
+            return static_cast<qint8>((n + 12) / 12 - 1);
         }
 
         constexpr qint8 pitch() const {
@@ -56,28 +69,12 @@ namespace SVS {
 
         QList<MusicPitch> matchedNotes() const;
 
-        constexpr bool isMatched(MusicPitch note) const {
+        Q_INVOKABLE constexpr bool isMatched(MusicPitch note) const {
             return n < 0 && key() == note.key();
         }
 
-        constexpr bool operator==(const MusicPitch &rhs) const {
-            return n == rhs.n;
-        }
-        constexpr bool operator!=(const MusicPitch &rhs) const {
-            return n != rhs.n;
-        }
-        constexpr bool operator<(const MusicPitch &rhs) const {
-            return n < rhs.n;
-        }
-        constexpr bool operator>(const MusicPitch &rhs) const {
-            return n > rhs.n;
-        }
-        constexpr bool operator<=(const MusicPitch &rhs) const {
-            return n <= rhs.n;
-        }
-        constexpr bool operator>=(const MusicPitch &rhs) const {
-            return n >= rhs.n;
-        }
+        constexpr auto operator<=>(const MusicPitch &other) const = default;
+        constexpr bool operator==(const MusicPitch &other) const = default;
 
         static QList<MusicPitch> range(MusicPitch a, MusicPitch b);
 
@@ -87,6 +84,4 @@ namespace SVS {
 
 }
 
-Q_DECLARE_METATYPE(SVS::MusicPitch)
-
-#endif // MUSICNOTE_H
+#endif // MUSICPITCH_H

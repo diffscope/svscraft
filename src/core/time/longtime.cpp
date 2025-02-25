@@ -24,6 +24,8 @@ namespace SVS {
         QTextStream textStream(&str);
         textStream.setPadChar('0');
         textStream.setFieldAlignment(QTextStream::AlignRight);
+        if (negative())
+            textStream << '-';
         textStream.setFieldWidth(minuteWidth);
         textStream << minute();
         textStream.setFieldWidth(0);
@@ -33,14 +35,14 @@ namespace SVS {
         textStream.setFieldWidth(0);
         textStream << ".";
         textStream.setFieldWidth(msecWidth);
-        textStream << msec();
+        textStream << millisecond();
         textStream.flush();
         return str;
     }
 
     LongTime LongTime::fromString(QStringView s, bool *ok) {
         QRegularExpression rx(
-            R"(^\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*[.\x{3002}\x{ff0e}]?\s*(\d*)\s*$)");
+            R"(^\s*(-?)\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*([:\x{ff1a}]?)\s*(\d*)\s*[.\x{3002}\x{ff0e}]?\s*(\d*)\s*$)");
         auto match = rx.match(s);
         if (!match.hasMatch()) {
             if (ok)
@@ -51,12 +53,13 @@ namespace SVS {
         LongTime res;
         auto &t = res.t;
 
-        auto cap1 = match.capturedView(1);
-        auto capColon1 = match.capturedView(2);
-        auto cap2 = match.capturedView(3);
-        auto capColon2 = match.capturedView(4);
-        auto cap3 = match.capturedView(5);
-        auto cap4 = match.capturedView(6);
+        auto capMinus = match.capturedView(1);
+        auto cap1 = match.capturedView(2);
+        auto capColon1 = match.capturedView(3);
+        auto cap2 = match.capturedView(4);
+        auto capColon2 = match.capturedView(5);
+        auto cap3 = match.capturedView(6);
+        auto cap4 = match.capturedView(7);
         if (cap4.isEmpty()) {
             if (cap2.isEmpty() && cap3.isEmpty()) {
                 t = sec2ms(cap1.toInt());
@@ -77,6 +80,8 @@ namespace SVS {
         }
         if (ok)
             *ok = true;
+        if (!capMinus.isEmpty())
+            t *= -1;
         return res;
     }
 
@@ -89,5 +94,5 @@ namespace SVS {
 }
 
 uint qHash(const SVS::LongTime &time, size_t seed) {
-    return qHash(time.totalMsec(), seed);
+    return qHash(time.totalMillisecond(), seed);
 }

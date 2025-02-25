@@ -11,7 +11,7 @@ namespace SVS {
     static int natureKeyPitch[7] = {9, 11, 0, 2, 4, 5, 7};
 
     MusicPitch MusicPitch::fromString(QStringView s, bool *ok) {
-        QRegularExpression rx(R"(^\s*([A-G])([b#]*)\s*(\?|\d+)\s*$)");
+        QRegularExpression rx(R"(^\s*([A-G])([b#]*)\s*(\?|\d*)\s*$)");
         auto match = rx.match(s);
         if (!match.hasMatch()) {
             if (ok)
@@ -26,6 +26,11 @@ namespace SVS {
         keyName -= int(std::count(capAccidental.begin(), capAccidental.end(), 'b'));
         keyName += int(std::count(capAccidental.begin(), capAccidental.end(), '#'));
 
+        if (capOctave.isEmpty()) {
+            if (ok)
+                *ok = false;
+            return MusicPitch(static_cast<qint8>(keyName));
+        }
         if (capOctave[0] == '?') {
             if (ok)
                 *ok = true;
@@ -35,7 +40,7 @@ namespace SVS {
         if (pitch < 0 || pitch >= 128) {
             if (ok)
                 *ok = false;
-            return {};
+            return MusicPitch(static_cast<qint8>(qBound(0, pitch, 127)));
         }
         if (ok)
             *ok = true;
