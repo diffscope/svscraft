@@ -10,6 +10,5 @@ Pane {
     property url iconSource: ""
     property bool locked: false
     property bool dock: true
-    property Window window: null
     property Menu menu: null
 }

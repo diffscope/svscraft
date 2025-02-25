@@ -24,6 +24,44 @@ ApplicationWindow {
         text: "Action triggered"
     }
 
+    menuBar: MenuBar {
+        Menu {
+            title: "Actions"
+            Action {
+                text: "Show Docking Window"
+                onTriggered: () => {
+                    if (dockingWindowPane.Docking.dockingView) {
+                        dockingWindowPane.Docking.dockingView.showPane(dockingWindowPane)
+                    } else {
+                        dockingWindow.show()
+                    }
+                }
+            }
+        }
+    }
+
+    DockingWindow {
+        id: dockingWindow
+        visible: true
+        width: 400
+        height: 400
+        DockingPane {
+            id: dockingWindowPane
+            title: "Docking Window"
+            iconSource: "qrc:/qt/qml/SVSCraft/Test/DockingView/Window16Filled.svg"
+            menu: Menu {
+                Action {
+                    text: "Eject from Docking View"
+                    enabled: dockingWindowPane.Docking.dockingView
+                    onTriggered: () => {
+                        dockingWindowPane.Docking.dockingView.removeContent(dockingWindowPane)
+                        dockingWindow.show()
+                    }
+                }
+            }
+        }
+    }
+
     SplitView {
         anchors.fill: parent
         ThemedItem.splitHandleEnabled: rightDock.panelOpened
@@ -106,10 +144,10 @@ ApplicationWindow {
                             if (panelSize > 0)
                                 preferredPanelSize = panelSize
                         }
-                        currentIndex: 0
                         DockingPane {
                             title: "编曲面板"
                             iconSource: "qrc:/qt/qml/SVSCraft/Test/DockingView/icon5.svg"
+                            Component.onCompleted: Docking.dockingView.showPane(this)
                         }
                         DockingStretch {
                         }
@@ -136,10 +174,10 @@ ApplicationWindow {
                             if (panelSize > 0)
                                 preferredPanelSize = panelSize
                         }
-                        currentIndex: 0
                         DockingPane {
                             title: "钢琴卷帘"
                             iconSource: "qrc:/qt/qml/SVSCraft/Test/DockingView/icon6.svg"
+                            Component.onCompleted: Docking.dockingView.showPane(this)
                         }
                         DockingStretch {
                         }

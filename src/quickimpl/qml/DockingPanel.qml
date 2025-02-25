@@ -15,6 +15,9 @@ Pane {
         paneArea.set()
     }
     property DockingPane pane: null
+    property bool undockToolButtonVisible: true
+    property bool dockingWindow: false
+    signal removed()
     onPaneChanged: set()
     Item {
         id: header
@@ -26,6 +29,7 @@ Pane {
             anchors.fill: parent
             anchors.margins: 4
             IconLabel {
+                id: iconLabel
                 spacing: 4
                 leftPadding: 4
                 rightPadding: 4
@@ -40,8 +44,8 @@ Pane {
             Rectangle {
                 width: 1
                 Layout.fillHeight: true
-                Layout.topMargin: 4
-                Layout.bottomMargin: 4
+                Layout.topMargin: 6
+                Layout.bottomMargin: 6
                 color: Theme.borderColor
             }
             Item {
@@ -77,23 +81,57 @@ Pane {
             Rectangle {
                 width: 1
                 Layout.fillHeight: true
-                Layout.topMargin: 4
-                Layout.bottomMargin: 4
+                Layout.topMargin: 6
+                Layout.bottomMargin: 6
                 color: Theme.borderColor
                 visible: !container.pane?.locked || (container.pane?.menu ?? false)
             }
             ToolButton {
-                icon.source: container.pane?.dock ?
-                    "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelSeparateWindow20Filled.svg" :
-                    `qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelLeft16Filled.svg`
-                visible: !container.pane?.locked
+                icon.source: container.dockingWindow ?
+                        "qrc:/qt/qml/SVSCraft/UIComponents/assets/Drag24Filled.svg" :
+                    container.pane?.dock ?
+                        "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelSeparateWindow20Filled.svg" :
+                        "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelLeft16Filled.svg"
+                visible: container.undockToolButtonVisible && !container.pane?.locked
                 DescriptiveText.activated: hovered
-                DescriptiveText.toolTip: container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
+                DescriptiveText.toolTip: container.dockingWindow ? qsTr("Drag to Dock") : container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: () => {
-                    if (!container.pane)
+                    if (!container.pane || container.dockingWindow)
                         return
                     container.pane.dock = !container.pane.dock
+                }
+                down: mouseArea.pressed
+                Item {
+                    id: dragTarget
+                    readonly property QtObject modelData: container.pane
+                    readonly property QtObject container: null
+                    readonly property bool current: true
+                    anchors.fill: parent
+                    Drag.keys: ["SVSCraft.UIComponent.DockingView"]
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
+                    Drag.mimeData: {
+                        "SVSCraft.UIComponent.DockingView": ""
+                    }
+                    Drag.dragType: Drag.Automatic
+                    Drag.active: container.dockingWindow && mouseArea.drag.active
+                    function remove() {
+                        container.removed()
+                    }
+                }
+                MouseArea {
+                    id: mouseArea
+                    drag.target: dragTarget
+                    anchors.fill: parent
+                    onClicked: parent.click()
+                    onReleased: () => {
+                        if (!drag.active)
+                            return
+                        if (dragTarget.Drag.target) {
+                            dragTarget.Drag.drop()
+                        }
+                    }
                 }
             }
             ToolButton {

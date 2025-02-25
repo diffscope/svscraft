@@ -11,7 +11,7 @@ Item {
     id: view
     default property list<QtObject> contentData: []
     property int edge: Qt.LeftEdge
-    property int currentIndex: -1
+    readonly property int currentIndex: tabBar.currentIndex
     readonly property QtObject currentItem: currentIndex < 0 ? null : contentData[currentIndex]
     property int barSize: 40
     property int panelSize: 400
@@ -20,8 +20,21 @@ Item {
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
 
     function removeContent(index) {
+        if (typeof(index) !== "number") {
+            for (let i = 0; i < view.contentData.length; i++) {
+                if (view.contentData[i] === index) {
+                    index = i
+                    break
+                }
+            }
+        }
+        if (typeof(index) !== "number" || index < 0 || index >= view.contentData.length)
+            return
         let previousCurrentIndex = currentIndex
         tabBar.currentIndex = -1
+        let itemToRemove = view.contentData[index]
+        itemToRemove.DockingImpl.dockingView = null
+        itemToRemove.DockingImpl.window?.destroy()
         view.contentData = [...view.contentData.slice(0, index), ...view.contentData.slice(index + 1)]
         if (index === previousCurrentIndex)
             previousCurrentIndex = -1
@@ -31,22 +44,60 @@ Item {
     }
 
     function insertContent(index, content, current) {
+        if (index < 0 || index > view.contentData.length)
+            return
         let previousCurrentIndex = currentIndex
         tabBar.currentIndex = -1
         view.contentData = [...view.contentData.slice(0, index), content, ...view.contentData.slice(index)]
         if (index <= previousCurrentIndex)
             previousCurrentIndex++
-        if (current)
+        if (current) {
+            content.dock = true
             previousCurrentIndex = index
+        }
         tabBar.currentIndex = previousCurrentIndex
     }
 
     function moveContent(sourceIndex, targetIndex, current) {
+        if (sourceIndex < 0 || sourceIndex >= view.contentData.length)
+            return
+        if (targetIndex < 0 || targetIndex > view.contentData.length)
+            return
         let content = view.contentData[sourceIndex]
         removeContent(sourceIndex)
         if (sourceIndex < targetIndex)
             targetIndex--
         insertContent(targetIndex, content, current)
+    }
+
+    function showPane(content) {
+        let index = -1
+        if (!(content instanceof DockingPane))
+            return
+        for (let i = 0; i < view.contentData.length; i++) {
+            if (view.contentData[i] === content) {
+                index = i
+                break
+            }
+        }
+        if (index === -1)
+            return
+        if (content.dock) {
+            tabBar.currentIndex = index
+        } else {
+            createWindow(content)
+        }
+    }
+
+    function createWindow(content) {
+        if (!content.Docking.window) {
+            content.DockingImpl.window = floatingWindow.createObject(content, {
+                width: content.implicitWidth >= 200 ? content.implicitWidth : (view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? view.width: 400),
+                height: content.implicitHeight >= 200 ? content.implicitHeight : (view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? view.height: 400),
+                currentItem: content,
+            })
+        }
+        content.Docking.window.show()
     }
 
     Component {
@@ -75,7 +126,7 @@ Item {
         anchors.right: view.edge === Qt.RightEdge ? parent.right : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? parent.bottom : undefined
         property QtObject _currentItem: null
-        property int currentIndex: view.currentIndex
+        property int currentIndex: -1
         function indexOfStretch(model) {
             for (let i = 0; i < model.length; i++) {
                 if (model[i] instanceof DockingStretch)
@@ -84,9 +135,6 @@ Item {
             return 0
         }
         property int stretchIndex: indexOfStretch(view.contentData)
-        Binding {
-            view.currentIndex: tabBar.currentIndex
-        }
         GridLayout {
             rowSpacing: 6
             columnSpacing: 6
@@ -103,39 +151,30 @@ Item {
                     property bool _isStretch: !(modelData instanceof DockingPane || modelData instanceof Action)
                     Layout.fillWidth: (view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge) && _isStretch
                     Layout.fillHeight: (view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge) && _isStretch
+                    Component.onCompleted: modelData.DockingImpl.dockingView = view
                     width: 28
                     height: 28
-                    function createWindow() {
-                        if (!modelData.window) {
-                            modelData.window = floatingWindow.createObject(modelData, {
-                                width: modelData.implicitWidth >= 200 ? modelData.implicitWidth : (view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? view.width: 400),
-                                height: modelData.implicitHeight >= 200 ? modelData.implicitHeight : (view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? view.height: 400),
-                                currentItem: modelData,
-                            })
-                        }
-                        modelData.window.show()
-                    }
                     function undockPanelOnDrag() {
                         if (!(modelData instanceof DockingPane))
                             return
                         if (modelData.locked)
                             return
                         modelData.dock = false
-                        createWindow()
+                        view.createWindow(modelData)
                         let p = GlobalHelper.cursorPos()
-                        modelData.window.x = p.x
-                        modelData.window.y = p.y
+                        modelData.Docking.window.x = p.x
+                        modelData.Docking.window.y = p.y
                     }
                     Connections {
                         target: tabItem.modelData instanceof DockingPane ? tabItem.modelData : null
                         enabled: tabItem.modelData instanceof DockingPane
                         function onDockChanged() {
-                            if (tabItem.modelData.dock && modelData.window?.visible) {
-                                tabItem.modelData.window.close()
+                            if (tabItem.modelData.dock && modelData.Docking.window?.visible) {
+                                tabItem.modelData.Docking.window.close()
                                 tabBar.currentIndex = tabItem.index
                             } else if (!tabItem.modelData.dock && tabBar.currentIndex === tabItem.index) {
                                 tabBar.currentIndex = -1
-                                tabItem.createWindow()
+                                view.createWindow(tabItem.modelData)
                             }
                         }
                     }
@@ -147,7 +186,7 @@ Item {
                         down: mouseArea.pressed
                         icon.source: !_isStretch ? modelData.iconSource : ""
                         display: AbstractButton.IconOnly
-                        highlighted: modelData instanceof DockingPane && (modelData.dock && view.currentIndex === index || !modelData.dock && modelData.window && modelData.window.visible)
+                        highlighted: modelData instanceof DockingPane && (modelData.dock && view.currentIndex === index || !modelData.dock && modelData.Docking.window && modelData.Docking.window.visible)
                         action: modelData instanceof Action ? modelData : null
                         DescriptiveText.activated: hovered && !_isStretch
                         DescriptiveText.toolTip: mouseArea.drag.active ? "" : (modelData instanceof Action ? modelData.text : modelData.title) ?? ""
@@ -163,10 +202,10 @@ Item {
                                     tabBar.currentIndex = index
                                 }
                             } else {
-                                if (modelData.window?.visible) {
-                                    modelData.window.close()
+                                if (modelData.Docking.window?.visible) {
+                                    modelData.Docking.window.close()
                                 } else {
-                                    createWindow()
+                                    view.createWindow(modelData)
                                 }
                             }
                         }

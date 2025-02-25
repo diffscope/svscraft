@@ -25,7 +25,7 @@ endif()
 qt_add_qml_module(${PROJECT_NAME}
     URI SVSCraft.Test.DockingView
     QML_FILES ${_qml_files}
-    RESOURCES icon1.svg icon2.svg icon3.svg icon4.svg icon5.svg icon6.svg icon7.svg icon8.svg
+    RESOURCES icon1.svg icon2.svg icon3.svg icon4.svg icon5.svg icon6.svg icon7.svg icon8.svg Window16Filled.svg
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
