@@ -9,17 +9,23 @@ import SVSCraft.UIComponents.impl
 
 Item {
     id: view
+
+    readonly property int firstIndex: tabBar.firstIndex
+    readonly property int lastIndex: tabBar.lastIndex
+    readonly property DockingPane firstItem: firstIndex < 0 ? null : contentData[firstIndex]
+    readonly property DockingPane lastItem: lastIndex < 0 ? null : contentData[lastIndex]
+    readonly property int stretchIndex: tabBar.stretchIndex
+    readonly property bool panelOpened: panel.visible
+
     default property list<QtObject> contentData: []
     property int edge: Qt.LeftEdge
-    readonly property int currentIndex: tabBar.currentIndex
-    readonly property QtObject currentItem: currentIndex < 0 ? null : contentData[currentIndex]
     property int barSize: 40
     property int panelSize: 400
-    readonly property bool panelOpened: panel.visible
+
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
 
-    function removeContent(index) {
+    function removeContent(index, keepWindow) {
         if (typeof(index) !== "number") {
             for (let i = 0; i < view.contentData.length; i++) {
                 if (view.contentData[i] === index) {
@@ -30,65 +36,135 @@ Item {
         }
         if (typeof(index) !== "number" || index < 0 || index >= view.contentData.length)
             return
-        let previousCurrentIndex = currentIndex
-        tabBar.currentIndex = -1
+        let previousFirstIndex = firstIndex
+        tabBar.firstIndex = -1
+        let previousLastIndex = lastIndex
+        tabBar.lastIndex = -1
         let itemToRemove = view.contentData[index]
         itemToRemove.DockingImpl.dockingView = null
-        itemToRemove.DockingImpl.window?.destroy()
+        if (!keepWindow)
+            itemToRemove.DockingImpl.window?.destroy()
         view.contentData = [...view.contentData.slice(0, index), ...view.contentData.slice(index + 1)]
-        if (index === previousCurrentIndex)
-            previousCurrentIndex = -1
-        else if (index < previousCurrentIndex)
-            previousCurrentIndex--
-        tabBar.currentIndex = previousCurrentIndex
+        if (index === previousFirstIndex)
+            previousFirstIndex = -1
+        else if (index < previousFirstIndex)
+            previousFirstIndex--
+        if (index === previousLastIndex)
+            previousLastIndex = -1
+        else if (index < previousLastIndex)
+            previousLastIndex--
+        tabBar.firstIndex = previousFirstIndex
+        tabBar.lastIndex = previousLastIndex
     }
-
     function insertContent(index, content, current) {
         if (index < 0 || index > view.contentData.length)
             return
-        let previousCurrentIndex = currentIndex
-        tabBar.currentIndex = -1
+        let previousFirstIndex = firstIndex
+        tabBar.firstIndex = -1
+        let previousLastIndex = lastIndex
+        tabBar.lastIndex = -1
         view.contentData = [...view.contentData.slice(0, index), content, ...view.contentData.slice(index)]
-        if (index <= previousCurrentIndex)
-            previousCurrentIndex++
-        if (current) {
-            content.dock = true
-            previousCurrentIndex = index
-        }
-        tabBar.currentIndex = previousCurrentIndex
+        if (index <= previousFirstIndex)
+            previousFirstIndex++
+        if (index <= previousLastIndex)
+            previousLastIndex++
+        tabBar.firstIndex = previousFirstIndex
+        tabBar.lastIndex = previousLastIndex
+        if (current)
+            showPane(index)
     }
-
     function moveContent(sourceIndex, targetIndex, current) {
         if (sourceIndex < 0 || sourceIndex >= view.contentData.length)
             return
         if (targetIndex < 0 || targetIndex > view.contentData.length)
             return
         let content = view.contentData[sourceIndex]
-        removeContent(sourceIndex)
+
+        let previousFirstIndex = firstIndex
+        tabBar.firstIndex = -1
+        let previousLastIndex = lastIndex
+        tabBar.lastIndex = -1
+
+        let contentData = [...view.contentData.slice(0, sourceIndex), ...view.contentData.slice(sourceIndex + 1)]
+        if (sourceIndex === previousFirstIndex)
+            previousFirstIndex = -1
+        else if (sourceIndex < previousLastIndex)
+            previousLastIndex--
+        if (sourceIndex === previousLastIndex)
+            previousLastIndex = -1
+        else if (sourceIndex < previousLastIndex)
+            previousLastIndex--
+
         if (sourceIndex < targetIndex)
             targetIndex--
-        insertContent(targetIndex, content, current)
-    }
 
+        view.contentData = [...contentData.slice(0, targetIndex), content, ...contentData.slice(targetIndex)]
+        if (targetIndex <= previousFirstIndex)
+            previousFirstIndex++
+        if (targetIndex <= previousLastIndex)
+            previousLastIndex++
+        tabBar.firstIndex = previousFirstIndex
+        tabBar.lastIndex = previousLastIndex
+
+        if (current)
+            showPane(targetIndex)
+    }
     function showPane(content) {
         let index = -1
-        if (!(content instanceof DockingPane))
-            return
-        for (let i = 0; i < view.contentData.length; i++) {
-            if (view.contentData[i] === content) {
-                index = i
-                break
+        let pane = null
+        if (typeof(content) === "number") {
+            index = content
+            pane = view.contentData[index]
+        } else {
+            for (let i = 0; i < view.contentData.length; i++) {
+                if (view.contentData[i] === content) {
+                    index = i
+                    pane = content
+                    break
+                }
             }
         }
         if (index === -1)
             return
-        if (content.dock) {
-            tabBar.currentIndex = index
+        if (!(pane instanceof DockingPane))
+            return
+        if (pane.dock) {
+            if (index < stretchIndex)
+                tabBar.firstIndex = index
+            else
+                tabBar.lastIndex = index
         } else {
-            createWindow(content)
+            createWindow(pane)
         }
     }
-
+    function hidePane(content) {
+        let index = -1
+        let pane = null
+        if (typeof(content) === "number") {
+            index = content
+            pane = view.contentData[index]
+        } else {
+            for (let i = 0; i < view.contentData.length; i++) {
+                if (view.contentData[i] === content) {
+                    index = i
+                    pane = content
+                    break
+                }
+            }
+        }
+        if (index === -1)
+            return
+        if (!(pane instanceof DockingPane))
+            return
+        if (pane.dock) {
+            if (firstIndex === index)
+                tabBar.firstIndex = -1
+            else if (lastIndex === index)
+                tabBar.lastIndex = -1
+        } else {
+            pane.Docking.window?.close()
+        }
+    }
     function createWindow(content) {
         if (!content.Docking.window) {
             content.DockingImpl.window = floatingWindow.createObject(content, {
@@ -125,14 +201,23 @@ Item {
         height: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? parent.height: undefined
         anchors.right: view.edge === Qt.RightEdge ? parent.right : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? parent.bottom : undefined
-        property QtObject _currentItem: null
-        property int currentIndex: -1
+        property int firstIndex: -1
+        property int lastIndex: -1
         function indexOfStretch(model) {
+            let index = -1
             for (let i = 0; i < model.length; i++) {
-                if (model[i] instanceof DockingStretch)
-                    return i
+                if (model[i] instanceof DockingStretch) {
+                    if (index === -1) {
+                        index = i
+                    } else {
+                        throw new Error("More than one DockingStretches in DockingView")
+                    }
+                }
             }
-            return 0
+            if (index === -1) {
+                throw new Error("No DockingStretch in DockingView")
+            }
+            return index
         }
         property int stretchIndex: indexOfStretch(view.contentData)
         GridLayout {
@@ -171,10 +256,15 @@ Item {
                         function onDockChanged() {
                             if (tabItem.modelData.dock && modelData.Docking.window?.visible) {
                                 tabItem.modelData.Docking.window.close()
-                                tabBar.currentIndex = tabItem.index
-                            } else if (!tabItem.modelData.dock && tabBar.currentIndex === tabItem.index) {
-                                tabBar.currentIndex = -1
-                                view.createWindow(tabItem.modelData)
+                                showPane(tabItem.modelData)
+                            } else if (!tabItem.modelData.dock) {
+                                if (tabBar.firstIndex === tabItem.index) {
+                                    tabBar.firstIndex = -1
+                                    view.createWindow(tabItem.modelData)
+                                } else if (tabBar.lastIndex === tabItem.index) {
+                                    tabBar.lastIndex = -1
+                                    view.createWindow(tabItem.modelData)
+                                }
                             }
                         }
                     }
@@ -186,7 +276,7 @@ Item {
                         down: mouseArea.pressed
                         icon.source: !_isStretch ? modelData.iconSource : ""
                         display: AbstractButton.IconOnly
-                        highlighted: modelData instanceof DockingPane && (modelData.dock && view.currentIndex === index || !modelData.dock && modelData.Docking.window && modelData.Docking.window.visible)
+                        highlighted: modelData instanceof DockingPane && (modelData.dock && (view.firstIndex === index || view.lastIndex === index) || !modelData.dock && modelData.Docking.window && modelData.Docking.window.visible)
                         action: modelData instanceof Action ? modelData : null
                         DescriptiveText.activated: hovered && !_isStretch
                         DescriptiveText.toolTip: mouseArea.drag.active ? "" : (modelData instanceof Action ? modelData.text : modelData.title) ?? ""
@@ -195,18 +285,10 @@ Item {
                             if (modelData instanceof Action) {
                                 return
                             }
-                            if (modelData.dock) {
-                                if (view.currentIndex === index) {
-                                    tabBar.currentIndex = -1
-                                } else {
-                                    tabBar.currentIndex = index
-                                }
+                            if (highlighted) {
+                                hidePane(tabItem.modelData)
                             } else {
-                                if (modelData.Docking.window?.visible) {
-                                    modelData.Docking.window.close()
-                                } else {
-                                    view.createWindow(modelData)
-                                }
+                                showPane(tabItem.modelData)
                             }
                         }
 
@@ -215,7 +297,7 @@ Item {
                         id: dragTarget
                         readonly property QtObject modelData: tabItem.modelData
                         readonly property QtObject container: tabBar
-                        readonly property bool current: view.currentIndex === tabItem.index
+                        readonly property bool current: tabButton.highlighted
                         width: parent.width
                         height: parent.height
                         Popup {
@@ -237,7 +319,7 @@ Item {
                         Drag.hotSpot.y: height / 2
                         Drag.active: !tabItem._isStretch && mouseArea.drag.active
                         function remove() {
-                            view.removeContent(tabItem.index)
+                            view.removeContent(tabItem.index, true)
                         }
                         function move(index) {
                             view.moveContent(tabItem.index, index, current)
@@ -317,10 +399,9 @@ Item {
             }
         }
     }
-    DockingPanel {
+    Item {
         id: panel
-        pane: view.currentItem
-        visible: view.currentItem !== null
+        visible: view.firstItem !== null || view.lastItem !== null
         implicitWidth: view.panelSize
         implicitHeight: view.panelSize
         width: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? parent.width * (visible ? 1 : 0) : undefined
@@ -338,6 +419,23 @@ Item {
             implicitWidth: 1
             color: Theme.splitterColor
             z: 10
+        }
+        SplitView {
+            id: splitView
+            anchors.fill: parent
+            orientation: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? Qt.Horizontal : Qt.Vertical
+            DockingPanel {
+                pane: view.firstItem
+                visible: view.firstItem !== null
+                SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) / 2 : undefined
+                SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) / 2 : undefined
+            }
+            DockingPanel {
+                pane: view.lastItem
+                visible: view.lastItem !== null
+                SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) / 2 : undefined
+                SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) / 2 : undefined
+            }
         }
     }
 }

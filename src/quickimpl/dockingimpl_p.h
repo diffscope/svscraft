@@ -2,6 +2,7 @@
 #define DOCKINGIMPL_H
 
 #include <QObject>
+#include <QPointer>
 #include <qqmlintegration.h>
 
 class QQuickWindow;
@@ -42,8 +43,8 @@ namespace SVS {
         friend class DockingImplAttachedType;
         explicit DockingImpl(QObject *parent = nullptr);
 
-        QObject *m_dockingView;
-        QQuickWindow *m_window;
+        QPointer<QObject> m_dockingView;
+        QPointer<QQuickWindow> m_window;
     };
 }
 

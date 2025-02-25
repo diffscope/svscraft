@@ -126,13 +126,16 @@ ApplicationWindow {
                 }
             }
             SplitView {
+                id: middleSplitView
                 orientation: Qt.Vertical
                 SplitView.fillWidth: true
+                SplitView.fillHeight: true
                 SplitView.minimumWidth: main.minimumPanelSize
                 ThemedItem.splitHandleVisible: topDock.panelOpened || bottomDock.panelOpened
                 Item {
-                    SplitView.minimumHeight: topDock.barSize + (topDock.panelOpened ? main.minimumPanelSize : 0)
-                    SplitView.preferredHeight: topDock.barSize + topDock.preferredPanelSize
+                    SplitView.minimumHeight: !bottomDock.panelOpened ? middleSplitView.height - bottomDock.barSize - 1 : topDock.barSize + (topDock.panelOpened ? main.minimumPanelSize : 0)
+                    SplitView.preferredHeight: (middleSplitView.height - 1) / 2
+                    SplitView.maximumHeight: Math.max(SplitView.minimumHeight, !topDock.panelOpened ? topDock.barSize : Infinity)
                     DockingView {
                         id: topDock
                         width: parent.width
@@ -162,7 +165,8 @@ ApplicationWindow {
                 }
                 Item {
                     SplitView.minimumHeight: bottomDock.barSize + (bottomDock.panelOpened ? main.minimumPanelSize : 0)
-                    SplitView.preferredHeight: bottomDock.barSize + bottomDock.preferredPanelSize
+                    SplitView.preferredHeight: (middleSplitView.height - 1) / 2
+                    SplitView.maximumHeight: Math.max(SplitView.minimumHeight, !bottomDock.panelOpened ? bottomDock.barSize : Infinity)
                     DockingView {
                         id: bottomDock
                         width: parent.width
