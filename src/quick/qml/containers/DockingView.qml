@@ -272,6 +272,7 @@ Item {
                         id: tabButton
                         anchors.fill: parent
                         enabled: !tabItem._isStretch
+                        visible: !tabItem._isStretch
                         background.opacity: _isStretch ? 0 : 1
                         down: mouseArea.pressed
                         icon.source: !_isStretch ? modelData.iconSource : ""

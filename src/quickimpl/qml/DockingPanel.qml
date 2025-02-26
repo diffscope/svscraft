@@ -29,16 +29,16 @@ Pane {
             anchors.fill: parent
             anchors.margins: 4
             IconLabel {
-                id: iconLabel
-                spacing: 4
                 leftPadding: 4
-                rightPadding: 4
                 icon.source: container.pane?.iconSource ?? ""
                 icon.color: Theme.foregroundPrimaryColor
                 icon.width: 16
                 icon.height: 16
+                Layout.alignment: Qt.AlignVCenter
+            }
+            Label {
+                rightPadding: 4
                 text: container.pane?.title ?? ""
-                color: Theme.foregroundPrimaryColor
                 Layout.alignment: Qt.AlignVCenter
             }
             Rectangle {
