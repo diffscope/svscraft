@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
     Theme::defaultTheme()->setBackgroundSecondaryColor(0x232427);
     Theme::defaultTheme()->setBackgroundTertiaryColor(0x252629);
     Theme::defaultTheme()->setBackgroundQuaternaryColor(0x313235);
+    Theme::defaultTheme()->setSplitterColor(0x121315);
 
     Theme::defaultTheme()->setForegroundPrimaryColor(0xdadada);
     Theme::defaultTheme()->setForegroundSecondaryColor(QColor::fromRgba(0xa0dadada));

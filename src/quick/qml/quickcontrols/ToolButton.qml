@@ -18,10 +18,10 @@ T.ToolButton {
 
     icon.width: 16
     icon.height: 16
-    icon.color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-                control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
-                control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
-                Theme.foregroundPrimaryColor
+    icon.color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
+                control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
+                control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
+                Theme.foregroundColor(control.ThemedItem.foregroundLevel)
     Behavior on icon.color {
         ColorAnimation {
             duration: Theme.colorAnimationDuration
@@ -38,10 +38,10 @@ T.ToolButton {
         text: control.text
         font: control.font
 
-        color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-               control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
-               control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
-               Theme.foregroundPrimaryColor
+        color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
+               control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
+               control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
+               Theme.foregroundColor(control.ThemedItem.foregroundLevel)
 
         Behavior on color {
             ColorAnimation {

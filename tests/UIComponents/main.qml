@@ -577,6 +577,66 @@ ApplicationWindow {
                     }
                 }
 
+                GroupBox {
+                    title: "注释"
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        RowLayout {
+                            spacing: 8
+                            Annotation {
+                                ThemedItem.controlType: SVS.CT_Normal
+                                text: "Normal"
+                            }
+                            Annotation {
+                                ThemedItem.controlType: SVS.CT_Accent
+                                text: "Accent"
+                            }
+                            Annotation {
+                                ThemedItem.controlType: SVS.CT_Warning
+                                text: "Warning"
+                            }
+                            Annotation {
+                                ThemedItem.controlType: SVS.CT_Error
+                                text: "Error"
+                            }
+                        }
+                        RowLayout {
+                            Annotation {
+                                id: closableAnnotation
+                                ThemedItem.controlType: SVS.CT_Normal
+                                text: "Closable"
+                                closable: true
+                            }
+                            Annotation {
+                                ThemedItem.controlType: SVS.CT_Normal
+                                text: "Action"
+                                action: Action {
+                                    text: "Action"
+                                    icon.source: "qrc:/qt/qml/SVSCraft/Test/UIComponents/icon.svg"
+                                    onTriggered: console.log("Action")
+                                }
+                            }
+                            Annotation {
+                                id: closableWithActionAnnotation
+                                ThemedItem.controlType: SVS.CT_Normal
+                                text: "Closable with Action"
+                                closable: true
+                                action: Action {
+                                    text: "Action"
+                                    icon.source: "qrc:/qt/qml/SVSCraft/Test/UIComponents/icon.svg"
+                                    onTriggered: console.log("Action")
+                                }
+                            }
+                            Button {
+                                text: "Reset Visibility"
+                                onClicked: closableAnnotation.visible = closableWithActionAnnotation.visible = true
+                            }
+                        }
+                    }
+
+                }
+
                 Item { height: 64 }
 
             }
