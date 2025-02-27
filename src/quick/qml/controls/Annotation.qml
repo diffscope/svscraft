@@ -23,7 +23,7 @@ Frame {
         property color color: rowLayout._color
         property bool cache: true
     }
-    property string text: ""
+    property var label: ""
     property bool closable: false
     property Action action: null
 
@@ -53,13 +53,24 @@ Frame {
             icon.cache: annotation.icon.cache
             Layout.alignment: Qt.AlignVCenter
         }
-        Label {
-            id: label
-            text: annotation.text
-            color: rowLayout._color
-            wrapMode: Text.Wrap
+        RowLayout {
+            id: labelContainer
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
+            property Label labelItem: Label {
+                id: label
+                text: typeof(annotation.label) === "string" ? annotation.label : ""
+                wrapMode: Text.Wrap
+            }
+            property Label realLabelItem: typeof(annotation.label) === "string" ? labelItem : annotation.label instanceof Label ? annotation.label : null
+            data: [realLabelItem]
+            onRealLabelItemChanged: () => {
+                if (realLabelItem) {
+                    realLabelItem.color = Qt.binding(() => rowLayout._color)
+                    realLabelItem.Layout.alignment = Qt.AlignVCenter
+                    realLabelItem.Layout.fillWidth = true
+                }
+            }
         }
         ToolButton {
             visible: annotation.action !== null

@@ -586,31 +586,31 @@ ApplicationWindow {
                             spacing: 8
                             Annotation {
                                 ThemedItem.controlType: SVS.CT_Normal
-                                text: "Normal"
+                                label: "Normal"
                             }
                             Annotation {
                                 ThemedItem.controlType: SVS.CT_Accent
-                                text: "Accent"
+                                label: "Accent"
                             }
                             Annotation {
                                 ThemedItem.controlType: SVS.CT_Warning
-                                text: "Warning"
+                                label: "Warning"
                             }
                             Annotation {
                                 ThemedItem.controlType: SVS.CT_Error
-                                text: "Error"
+                                label: "Error"
                             }
                         }
                         RowLayout {
                             Annotation {
                                 id: closableAnnotation
                                 ThemedItem.controlType: SVS.CT_Normal
-                                text: "Closable"
+                                label: "Closable"
                                 closable: true
                             }
                             Annotation {
                                 ThemedItem.controlType: SVS.CT_Normal
-                                text: "Action"
+                                label: "Action"
                                 action: Action {
                                     text: "Action"
                                     icon.source: "qrc:/qt/qml/SVSCraft/Test/UIComponents/icon.svg"
@@ -620,12 +620,18 @@ ApplicationWindow {
                             Annotation {
                                 id: closableWithActionAnnotation
                                 ThemedItem.controlType: SVS.CT_Normal
-                                text: "Closable with Action"
+                                label: "Closable with Action"
                                 closable: true
                                 action: Action {
                                     text: "Action"
                                     icon.source: "qrc:/qt/qml/SVSCraft/Test/UIComponents/icon.svg"
                                     onTriggered: console.log("Action")
+                                }
+                            }
+                            Annotation {
+                                ThemedItem.controlType: SVS.CT_Normal
+                                label: Label {
+                                    text: "Custom Label <a href='#b'>Link</a>"
                                 }
                             }
                             Button {
