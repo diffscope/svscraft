@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls.impl
 import QtQuick.Templates as T
-import QtQuick.Effects
 
 import SVSCraft.UIComponents
 
@@ -18,6 +17,8 @@ T.Menu {
 
     }
 
+    popupType: Popup.Window
+
     contentItem: ListView {
         implicitHeight: contentHeight
         model: control.contentModel
@@ -28,22 +29,13 @@ T.Menu {
         ScrollIndicator.vertical: ScrollIndicator {}
     }
 
-    background: Item {
+    background: Rectangle {
+        id: backgroundArea
         implicitWidth: 200
         implicitHeight: 28
-        Rectangle {
-            id: backgroundArea
-            anchors.fill: parent
-            color: Theme.buttonColor
-            border.color: Theme.borderColor
-            radius: 4
-        }
-        MultiEffect {
-            source: backgroundArea
-            anchors.fill: parent
-            shadowEnabled: true
-            shadowColor: Theme.shadowColor
-        }
+        color: Theme.buttonColor
+        border.color: Theme.borderColor
+        radius: 4
     }
 
     T.Overlay.modal: Rectangle {

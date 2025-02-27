@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Controls.impl
-import QtQuick.Effects
 
 import SVSCraft.UIComponents
 
@@ -104,6 +103,7 @@ T.ComboBox {
         height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         topMargin: 6
         bottomMargin: 6
+        popupType: T.Popup.Window
 
         contentItem: ListView {
             clip: true
@@ -124,19 +124,10 @@ T.ComboBox {
             T.ScrollIndicator.vertical: ScrollIndicator { }
         }
 
-        background: Item {
-            Rectangle {
-                id: backgroundArea
-                anchors.fill: parent
-                color: Theme.buttonColor
-                radius: 4
-            }
-            MultiEffect {
-                source: backgroundArea
-                anchors.fill: parent
-                shadowEnabled: true
-                shadowColor: Theme.shadowColor
-            }
+        background: Rectangle {
+            id: backgroundArea
+            color: Theme.buttonColor
+            radius: 4
         }
     }
 }
