@@ -372,6 +372,24 @@ namespace SVS {
             emit controlCheckedColorChangeChanged(d->controlCheckedColorChange);
         }
     }
+    ColorChange Theme::annotationPopupTitleColorChange() const {
+        return d->annotationPopupTitleColorChange;
+    }
+    void Theme::setAnnotationPopupTitleColorChange(const ColorChange &annotationPopupTitleColorChange) {
+        if (d->annotationPopupTitleColorChange != annotationPopupTitleColorChange) {
+            d->annotationPopupTitleColorChange = annotationPopupTitleColorChange;
+            emit annotationPopupTitleColorChangeChanged(d->annotationPopupTitleColorChange);
+        }
+    }
+    ColorChange Theme::annotationPopupContentColorChange() const {
+        return d->annotationPopupContentColorChange;
+    }
+    void Theme::setAnnotationPopupContentColorChange(const ColorChange &annotationPopupContentColorChange) {
+        if (d->annotationPopupContentColorChange != annotationPopupContentColorChange) {
+            d->annotationPopupContentColorChange = annotationPopupContentColorChange;
+            emit annotationPopupContentColorChangeChanged(d->annotationPopupContentColorChange);
+        }
+    }
     int Theme::colorAnimationDuration() const {
         return d->colorAnimationDuration;
     }

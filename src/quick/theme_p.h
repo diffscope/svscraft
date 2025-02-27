@@ -50,6 +50,8 @@ namespace SVS {
         ColorChange controlPressedColorChange;
         ColorChange foregroundPressedColorChange;
         ColorChange controlCheckedColorChange;
+        ColorChange annotationPopupTitleColorChange;
+        ColorChange annotationPopupContentColorChange;
         int colorAnimationDuration{};
         int visualEffectAnimationDuration{};
         int toolTipDelay{};

@@ -50,6 +50,10 @@ namespace SVS {
         Q_PROPERTY(ColorChange foregroundPressedColorChange READ foregroundPressedColorChange WRITE setForegroundPressedColorChange NOTIFY foregroundPressedColorChangeChanged)
         Q_PROPERTY(ColorChange controlCheckedColorChange READ controlCheckedColorChange WRITE setControlCheckedColorChange NOTIFY controlCheckedColorChangeChanged)
 
+        Q_PROPERTY(ColorChange annotationPopupTitleColorChange READ annotationPopupTitleColorChange WRITE setAnnotationPopupTitleColorChange NOTIFY annotationPopupTitleColorChangeChanged)
+        Q_PROPERTY(ColorChange annotationPopupContentColorChange READ annotationPopupContentColorChange WRITE setAnnotationPopupContentColorChange NOTIFY annotationPopupContentColorChangeChanged)
+
+
         Q_PROPERTY(int colorAnimationDuration READ colorAnimationDuration WRITE setColorAnimationDuration NOTIFY colorAnimationDurationChanged)
         Q_PROPERTY(int visualEffectAnimationDuration READ visualEffectAnimationDuration WRITE setVisualEffectAnimationDuration NOTIFY visualEffectAnimationDurationChanged)
 
@@ -137,6 +141,12 @@ namespace SVS {
         ColorChange controlCheckedColorChange() const;
         void setControlCheckedColorChange(const ColorChange &controlCheckedColorChange);
 
+        ColorChange annotationPopupTitleColorChange() const;
+        void setAnnotationPopupTitleColorChange(const ColorChange &annotationPopupTitleColorChange);
+
+        ColorChange annotationPopupContentColorChange() const;
+        void setAnnotationPopupContentColorChange(const ColorChange &annotationPopupContentColorChange);
+
         int colorAnimationDuration() const;
         void setColorAnimationDuration(int colorAnimationDuration);
 
@@ -181,6 +191,8 @@ namespace SVS {
         void controlPressedColorChangeChanged(const SVS::ColorChange &controlPressedColorChange);
         void foregroundPressedColorChangeChanged(const SVS::ColorChange &foregroundPressedColorChange);
         void controlCheckedColorChangeChanged(const SVS::ColorChange &controlCheckedColorChange);
+        void annotationPopupTitleColorChangeChanged(const SVS::ColorChange &annotationPopupTitleColorChange);
+        void annotationPopupContentColorChangeChanged(const SVS::ColorChange &annotationPopupContentColorChange);
         void colorAnimationDurationChanged(int colorAnimationDuration);
         void visualEffectAnimationDurationChanged(int visualEffectAnimationDuration);
         void toolTipDelayChanged(int toolTipDelay);

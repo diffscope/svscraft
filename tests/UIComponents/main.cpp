@@ -46,6 +46,10 @@ int main(int argc, char *argv[]) {
     Theme::defaultTheme()->setControlPressedColorChange({});
     Theme::defaultTheme()->setForegroundPressedColorChange({{}, 0.8});
     Theme::defaultTheme()->setControlCheckedColorChange({QColor::fromRgba(0x1affffff)});
+
+    Theme::defaultTheme()->setAnnotationPopupTitleColorChange({{}, 0.72, 0x212124});
+    Theme::defaultTheme()->setAnnotationPopupContentColorChange({{}, 0.16, 0x212124});
+
     Theme::defaultTheme()->setColorAnimationDuration(250);
     Theme::defaultTheme()->setVisualEffectAnimationDuration(250);
 

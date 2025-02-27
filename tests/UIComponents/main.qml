@@ -640,7 +640,69 @@ ApplicationWindow {
                             }
                         }
                     }
+                }
 
+                GroupBox {
+                    title: "注释弹窗"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        Button {
+                            text: "Normal"
+                            property AnnotationPopup annotationPopup: AnnotationPopup {
+                                anchors.centerIn: Overlay.overlay
+                                ThemedItem.controlType: SVS.CT_Normal
+                                title: "Title"
+                                content: "Content"
+                                closable: true
+                            }
+                            onClicked: annotationPopup.open()
+                        }
+                        Button {
+                            text: "Accent"
+                            property AnnotationPopup annotationPopup: AnnotationPopup {
+                                anchors.centerIn: Overlay.overlay
+                                ThemedItem.controlType: SVS.CT_Accent
+                                title: "Title"
+                                content: "Content"
+                                closable: true
+                            }
+                            onClicked: annotationPopup.open()
+                        }
+                        Button {
+                            text: "Warning"
+                            property AnnotationPopup annotationPopup: AnnotationPopup {
+                                anchors.centerIn: Overlay.overlay
+                                ThemedItem.controlType: SVS.CT_Warning
+                                title: "Title"
+                                content: "Content"
+                                closable: true
+                            }
+                            onClicked: annotationPopup.open()
+                        }
+                        Button {
+                            text: "Error"
+                            property AnnotationPopup annotationPopup: AnnotationPopup {
+                                anchors.centerIn: Overlay.overlay
+                                ThemedItem.controlType: SVS.CT_Error
+                                title: "Title"
+                                content: "Content"
+                                closable: true
+                            }
+                            onClicked: annotationPopup.open()
+                        }
+                        Button {
+                            text: "Auto Close"
+                            property AnnotationPopup annotationPopup: AnnotationPopup {
+                                anchors.centerIn: Overlay.overlay
+                                title: "Title"
+                                content: "Content"
+                                closable: true
+                                timeout: 5000
+                            }
+                            onClicked: annotationPopup.open()
+                        }
+                    }
                 }
 
                 Item { height: 64 }
