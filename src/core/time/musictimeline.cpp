@@ -1,66 +1,11 @@
 #include "musictimeline.h"
 #include "musictimeline_p.h"
-#include "musictime_p.h"
 
 #include <QDataStream>
 #include <QDebug>
 #include <QRegularExpression>
 
 namespace SVS {
-
-    QDataStream &operator<<(QDataStream &out, const MusicTimeSignature &ts) {
-        out << ts.numerator() << ts.denominator();
-        return out;
-    }
-
-    QDataStream &operator>>(QDataStream &in, MusicTimeSignature &ts) {
-        int n, d;
-        in >> n >> d;
-        ts = MusicTimeSignature(n, d);
-        return in;
-    }
-
-    MusicTimeSignature::MusicTimeSignature() : MusicTimeSignature(4, 4) {
-    }
-
-    MusicTimeSignature::MusicTimeSignature(int numerator, int denominator) : num(numerator), den(denominator) {
-    }
-
-    Q_DECL_CONSTEXPR bool MusicTimeSignature::isValid() const {
-        if (num <= 0)
-            return false;
-        if (den < 1 || den > 32)
-            return false;
-        return !(den & (den - 1));
-    }
-
-    Q_DECL_CONSTEXPR int MusicTimeSignature::ticksPerBar(int resolution) const {
-        return resolution * num * 4 / den;
-    }
-
-    Q_DECL_CONSTEXPR int MusicTimeSignature::ticksPerBeat(int resolution) const {
-        return resolution * 4 / den;
-    }
-
-    QString MusicTimeSignature::toString() const {
-        return QString::asprintf("%d/%d", num, den);
-    }
-
-    QDebug operator<<(QDebug debug, const MusicTimeSignature &t) {
-        QDebugStateSaver saver(debug);
-        debug.nospace() << "MusicTimeSignature(" << t.num << "/" << t.den << ")";
-        return debug;
-    }
-
-    namespace {
-        struct initializer {
-            initializer() {
-                qRegisterMetaType<MusicTimeSignature>();
-            }
-            ~initializer() {
-            }
-        } dummy;
-    }
     
     MusicTimelinePrivate::~MusicTimelinePrivate() {
     }
@@ -90,13 +35,13 @@ namespace SVS {
         auto iter = timeSignatureMap.lowerBound(barFrom);
         if (iter == timeSignatureMap.begin())
             iter++;
-        for (auto it = measureMap.upperBound(revMeasureMap[(iter - 1).key()]); it != measureMap.end();) {
+        for (auto it = measureMap.upperBound(revMeasureMap[std::prev(iter).key()]); it != measureMap.end();) {
             revMeasureMap.remove(it.value());
             it = measureMap.erase(it);
         }
         for (; iter != timeSignatureMap.end(); iter++) {
-            auto prevMeasure = (iter - 1).key();
-            auto prevTimeSig = (iter - 1).value();
+            auto prevMeasure = std::prev(iter).key();
+            auto prevTimeSig = std::prev(iter).value();
             auto prevTickPos = revMeasureMap[prevMeasure];
             auto currentTickPos = prevTickPos + (iter.key() - prevMeasure) * prevTimeSig.ticksPerBar(resolution);
             measureMap[currentTickPos] = iter.key();
@@ -108,13 +53,13 @@ namespace SVS {
         auto iter = tempoMap.lowerBound(tickFrom);
         if (iter == tempoMap.begin())
             iter++;
-        for (auto it = msecSumMap.upperBound((iter - 1).key()); it != msecSumMap.end();) {
+        for (auto it = msecSumMap.upperBound(std::prev(iter).key()); it != msecSumMap.end();) {
             revMsecSumMap.remove(it.value());
             it = msecSumMap.erase(it);
         }
         for (; iter != tempoMap.end(); iter++) {
-            auto prevTick = (iter - 1).key();
-            auto prevTempo = (iter - 1).value();
+            auto prevTick = std::prev(iter).key();
+            auto prevTempo = std::prev(iter).value();
             auto prevMsec = msecSumMap[prevTick];
             auto currentMsec = prevMsec + (iter.key() - prevTick) * (60.0 * 1000.0) / (resolution * prevTempo);
             msecSumMap[iter.key()] = currentMsec;
@@ -149,7 +94,7 @@ namespace SVS {
             return 0;
         auto it = measureMap.upperBound(tick);
         if (it != measureMap.end()) {
-            return (it - 1).key();
+            return std::prev(it).key();
         }
         return measureMap.lastKey();
     }
@@ -159,7 +104,7 @@ namespace SVS {
             return 0;
         auto it = revMsecSumMap.upperBound(msec);
         if (it != revMsecSumMap.end()) {
-            return (it - 1).key();
+            return std::prev(it).key();
         }
         return revMsecSumMap.lastKey();
     }
@@ -169,21 +114,16 @@ namespace SVS {
 
     MusicTimeline::~MusicTimeline() {
     }
-
-    void MusicTimeline::setMultipleTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList) {
+    void MusicTimeline::setTimeSignature(int bar, const MusicTimeSignature &timeSignature) {
+        setTimeSignatures({{bar, timeSignature}});
+    }
+    void MusicTimeline::setTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList) {
         Q_D(MusicTimeline);
 
         bool isChanged = false;
         int minPos = std::numeric_limits<int>::max();
         for (const auto &pair : timeSignatureList) {
-            if (pair.first < 0) {
-                qWarning() << "Position of a time signature must be positive or zero, but read" << pair.first << ".";
-                continue;
-            }
-            if (!pair.second.isValid()) {
-                qWarning() << "Invalid time signature '" << pair.second.toString() << "'.";
-                continue;
-            }
+            Q_ASSERT(pair.first >= 0 && pair.second.isValid());
             auto it = d->timeSignatureMap.find(pair.first);
             if (it == d->timeSignatureMap.end()) {
                 d->timeSignatureMap.insert(pair.first, pair.second);
@@ -203,18 +143,15 @@ namespace SVS {
         }
     }
 
-    void MusicTimeline::removeMultipleTimeSignatures(const QList<int> &bars) {
+    void MusicTimeline::removeTimeSignatures(const QList<int> &bars) {
         Q_D(MusicTimeline);
 
         bool isChanged = false;
         int minPos = std::numeric_limits<int>::max();
         for (auto barPos : bars) {
-            if (barPos <= 0) {
-                qWarning() << "Position of a time signature must be positive, but read" << barPos << ".";
-                continue;
-            }
+            Q_ASSERT(barPos > 0);
             if (!d->timeSignatureMap.remove(barPos)) {
-                qWarning() << "Bar" << barPos << "does not have time signature.";
+                qWarning() << "SVS::MusicTimeline: Bar" << barPos << "does not have time signature.";
                 continue;
             }
             isChanged = true;
@@ -242,36 +179,26 @@ namespace SVS {
 
     MusicTimeSignature MusicTimeline::timeSignatureAt(int bar) const {
         Q_D(const MusicTimeline);
-        return d->timeSignatureMap.value(nearestTimeSignatureTo(bar));
+        return d->timeSignatureMap.value(nearestBarWithTimeSignatureTo(bar));
     }
 
-    int MusicTimeline::nearestTimeSignatureTo(int bar) const {
+    int MusicTimeline::nearestBarWithTimeSignatureTo(int bar) const {
         Q_D(const MusicTimeline);
-        if (bar < 0) {
-            qWarning() << "Position of a time signature must be positive or zero.";
-            return 0;
-        }
+        Q_ASSERT(bar >= 0);
         auto it = d->timeSignatureMap.upperBound(bar);
         if (it != d->timeSignatureMap.end()) {
-            return (it - 1).key();
+            return std::prev(it).key();
         }
         return d->timeSignatureMap.lastKey();
     }
 
-    void MusicTimeline::setMultipleTempos(const QList<QPair<int, double>> &tempos) {
+    void MusicTimeline::setTempi(const QList<QPair<int, double>> &tempos) {
         Q_D(MusicTimeline);
 
         bool isChanged = false;
         int minPos = std::numeric_limits<int>::max();
         for (const auto &pair : tempos) {
-            if (pair.first < 0) {
-                qWarning() << "Position of a tempo must be positive or zero, but read " << pair.first << " .";
-                continue;
-            }
-            if (pair.second <= 0) {
-                qWarning() << "Invalid tempo '" << pair.second << "'.";
-                continue;
-            }
+            Q_ASSERT(pair.first >= 0 && pair.second > 0);
             auto it = d->tempoMap.find(pair.first);
             if (it == d->tempoMap.end()) {
                 d->tempoMap.insert(pair.first, pair.second);
@@ -290,18 +217,15 @@ namespace SVS {
         }
     }
 
-    void MusicTimeline::removeMultipleTempos(const QList<int> &ticks) {
+    void MusicTimeline::removeTempi(const QList<int> &ticks) {
         Q_D(MusicTimeline);
         bool isChanged = false;
 
         int minPos = std::numeric_limits<int>::max();
         for (const auto tickPos : ticks) {
-            if (tickPos <= 0) {
-                qWarning() << "Position of a tempo must be positive, but read" << tickPos << ".";
-                continue;
-            }
+            Q_ASSERT(tickPos > 0);
             if (!d->tempoMap.remove(tickPos)) {
-                qWarning() << "Tick" << tickPos << "does not have tempo.";
+                qWarning() << "SVS::MusicTimeline: Tick" << tickPos << "does not have tempo.";
                 continue;
             }
             isChanged = true;
@@ -313,7 +237,7 @@ namespace SVS {
         }
     }
 
-    QList<QPair<int, double>> MusicTimeline::tempos() const {
+    QList<QPair<int, double>> MusicTimeline::tempi() const {
         Q_D(const MusicTimeline);
         QList<QPair<int, double>> list;
         for (auto it = d->tempoMap.begin(); it != d->tempoMap.end(); ++it) {
@@ -329,18 +253,15 @@ namespace SVS {
 
     double MusicTimeline::tempoAt(int tick) const {
         Q_D(const MusicTimeline);
-        return d->tempoMap.value(nearestTempoTo(tick));
+        return d->tempoMap.value(nearestTickWithTempoTo(tick));
     }
 
-    int MusicTimeline::nearestTempoTo(int tick) const {
+    int MusicTimeline::nearestTickWithTempoTo(int tick) const {
         Q_D(const MusicTimeline);
-        if (tick < 0) {
-            qWarning() << "Position of a tempo must be positive or zero.";
-            return 0;
-        }
+        Q_ASSERT(tick >= 0);
         auto it = d->tempoMap.upperBound(tick);
         if (it != d->tempoMap.end()) {
-            return (it - 1).key();
+            return std::prev(it).key();
         }
         return d->tempoMap.lastKey();
     }
@@ -359,7 +280,7 @@ namespace SVS {
 
     double MusicTimelinePrivate::tickToMsec(int totalTick) const {
         Q_Q(const MusicTimeline);
-        auto refTick = q->nearestTempoTo(totalTick);
+        auto refTick = q->nearestTickWithTempoTo(totalTick);
         auto tempo = tempoMap[refTick];
         auto refMsec = msecSumMap[refTick];
         return refMsec + (totalTick - refTick) * (60.0 * 1000.0) / (resolution * tempo);
@@ -374,7 +295,7 @@ namespace SVS {
         }
 
         auto timeSig = q->timeSignatureAt(measure);
-        auto refMeasure = q->nearestTimeSignatureTo(measure);
+        auto refMeasure = q->nearestBarWithTimeSignatureTo(measure);
         auto refTick = revMeasureMap[refMeasure];
         tick += refTick + (measure - refMeasure) * timeSig.ticksPerBar(resolution);
         tick += beat * timeSig.ticksPerBeat(resolution);
@@ -382,17 +303,8 @@ namespace SVS {
     }
 
     int MusicTimelinePrivate::stringToTick(QStringView str, bool *ok) const {
-        QRegularExpression rx(R"(^\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*$)");
-        auto match = rx.match(str);
-        if (!match.hasMatch()) {
-            if (ok)
-                *ok = false;
-            return 0;
-        }
-        if (ok)
-            *ok = true;
-        return timeToTick(match.capturedView(1).isEmpty() ? 0 : (match.capturedView(1).toInt() - 1),
-                          match.capturedView(2).isEmpty() ? 0 : (match.capturedView(2).toInt() - 1), match.capturedView(3).toInt());
+        auto t = MusicTime::fromString(str, ok);
+        return timeToTick(t.measure(), t.beat(), t.tick());
     }
 
     int MusicTimelinePrivate::msecToTick(double msec) const {
@@ -406,6 +318,9 @@ namespace SVS {
         return refTick + deltaTick;
     }
 
+    PersistentMusicTime MusicTimeline::create(const MusicTime &time) const {
+        return create(time.measure(), time.beat(), time.tick());
+    }
     PersistentMusicTime MusicTimeline::create(int measure, int beat, int tick) const {
         Q_D(const MusicTimeline);
         auto container = new PersistentMusicTimeData(this, d, d->timeToTick(measure, beat, tick));

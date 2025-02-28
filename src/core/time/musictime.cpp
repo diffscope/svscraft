@@ -8,6 +8,18 @@
 
 namespace SVS {
 
+    MusicTime MusicTime::fromString(QStringView str, bool *ok) {
+        QRegularExpression rx(R"(^\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*$)");
+        auto match = rx.matchView(str);
+        if (!match.hasMatch()) {
+            if (ok)
+                *ok = false;
+            return {};
+        }
+        if (ok)
+            *ok = true;
+        return {match.capturedView(1).isEmpty() ? 0 : (match.capturedView(1).toInt() - 1), match.capturedView(2).isEmpty() ? 0 : (match.capturedView(2).toInt() - 1), match.capturedView(3).toInt()};
+    }
     QString MusicTime::toString(int measureWidth, int beatWidth, int tickWidth) const {
         QString str;
         QTextStream textStream(&str);
@@ -35,16 +47,20 @@ namespace SVS {
 
     PersistentMusicTimeData::PersistentMusicTimeData(const MusicTimeline *timeline, const MusicTimelinePrivate *td,
                                                      int totalTick)
-        : timeline(timeline), td(td), totalTick(totalTick) {
+        : timeline(const_cast<MusicTimeline *>(timeline)), td(td), totalTick(totalTick) {
     }
 
     PersistentMusicTimeData::~PersistentMusicTimeData() {
+        if (!timeline)
+            return;
         td->mbtCachedMusicTimes.remove(this);
         td->msecCachedMusicTimes.remove(this);
     }
 
     void PersistentMusicTimeData::ensureMbtCached() {
         if (!cache.isMbtNull())
+            return;
+        if (!timeline)
             return;
 
         auto ret = td->tickToTime(totalTick);
@@ -57,32 +73,21 @@ namespace SVS {
     void PersistentMusicTimeData::ensureMsecCached() {
         if (!cache.isMsecNull())
             return;
+        if (!timeline)
+            return;
         cache.msec = td->tickToMsec(totalTick);
         td->msecCachedMusicTimes.insert(this);
     }
 
-    PersistentMusicTime::PersistentMusicTime() {
-    }
+    PersistentMusicTime::PersistentMusicTime() = default;
+    PersistentMusicTime::~PersistentMusicTime() = default;
+    PersistentMusicTime::PersistentMusicTime(const PersistentMusicTime &other) = default;
+    PersistentMusicTime &PersistentMusicTime::operator=(const PersistentMusicTime &other) = default;
 
-    PersistentMusicTime::~PersistentMusicTime() {
-    }
+    PersistentMusicTime::PersistentMusicTime(PersistentMusicTime &&other) noexcept = default;
+    PersistentMusicTime &PersistentMusicTime::operator=(PersistentMusicTime &&other) noexcept = default;
 
-    PersistentMusicTime::PersistentMusicTime(const PersistentMusicTime &other) {
-        *this = other;
-    }
-
-    PersistentMusicTime &PersistentMusicTime::operator=(const PersistentMusicTime &other) {
-        if (this == &other)
-            return *this;
-        d = other.d;
-        return *this;
-    }
-
-    PersistentMusicTime::PersistentMusicTime(SVS::PersistentMusicTime &&other) noexcept {
-        swap(other);
-    }
-
-    const MusicTimeline *PersistentMusicTime::timeline() const {
+    MusicTimeline *PersistentMusicTime::timeline() const {
         if (!d)
             return nullptr;
         return d->timeline;
@@ -109,7 +114,7 @@ namespace SVS {
         return d->cache.tick;
     }
 
-    double PersistentMusicTime::msec() const {
+    double PersistentMusicTime::millisecond() const {
         if (!d)
             return 0;
         d->ensureMsecCached();
@@ -121,7 +126,6 @@ namespace SVS {
             return 0;
         return d->totalTick;
     }
-
     PersistentMusicTime PersistentMusicTime::operator+(int t) const {
         if (!d)
             return {};
@@ -152,7 +156,7 @@ namespace SVS {
         debug << "tick=" << mt.totalTick() << ", "
               << "mbt="
               << "(" << mt.measure() << ", " << mt.beat() << ", " << mt.tick() << ", " << mt.toString() << "), "
-              << "msec=" << mt.msec() << ")";
+              << "msec=" << mt.millisecond() << ")";
         return debug;
     }
 

@@ -48,12 +48,12 @@ int main(int argc, char **argv) {
 
     QObject::connect(mSpinBox, &MusicTimeSpinBox::valueChanged, [=](const PersistentMusicTime& value) {
         QSpinBox blocker(spinBox);
-        spinBox->setValue(LongTime(value.msec()));
+        spinBox->setValue(LongTime(value.millisecond()));
     });
 
     QObject::connect(&timeline, &MusicTimeline::tempoChanged, [=] {
         QSpinBox blocker(spinBox);
-        spinBox->setValue(LongTime(mSpinBox->value().msec()));
+        spinBox->setValue(LongTime(mSpinBox->value().millisecond()));
     });
 
     a.exec();

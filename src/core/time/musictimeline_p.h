@@ -5,13 +5,14 @@
 #include <QSet>
 
 #include <SVSCraftCore/musictimeline.h>
+#include <SVSCraftCore/private/musictime_p.h>
+#include <SVSCraftCore/musictimesignature.h>
 
 namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT MusicTimelinePrivate {
-        Q_DECLARE_PUBLIC(MusicTimeline)
-        friend class PersistentMusicTime;
     public:
+        Q_DECLARE_PUBLIC(MusicTimeline)
         MusicTimelinePrivate();
         virtual ~MusicTimelinePrivate();
 

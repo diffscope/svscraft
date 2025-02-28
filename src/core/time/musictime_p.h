@@ -40,7 +40,7 @@ namespace SVS {
         PersistentMusicTimeData(const MusicTimeline *timeline, const MusicTimelinePrivate *td, int totalTick);
         ~PersistentMusicTimeData();
 
-        const MusicTimeline *timeline;
+        QPointer<MusicTimeline> timeline;
         const MusicTimelinePrivate *td;
 
         int totalTick;
