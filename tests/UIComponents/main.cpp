@@ -6,6 +6,7 @@
 
 #include <SVSCraftQuick/theme.h>
 #include <SVSCraftGui/colorchange.h>
+#include <SVSCraftCore/longtime.h>
 
 using namespace SVS;
 
@@ -58,7 +59,8 @@ int main(int argc, char *argv[]) {
     QQuickStyle::setStyle("SVSCraft.UIComponents");
     QQuickStyle::setFallbackStyle("Basic");
 
-    QQmlApplicationEngine engine(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
+    QQmlApplicationEngine engine;
+    engine.load(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
 
     return a.exec();
 }

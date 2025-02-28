@@ -13,7 +13,7 @@ namespace SVS {
 
     class PersistentMusicTimeData;
 
-    class MusicTime {
+    class SVSCRAFT_CORE_EXPORT MusicTime {
         Q_GADGET
         Q_PROPERTY(int measure READ measure CONSTANT)
         Q_PROPERTY(int beat READ beat CONSTANT)

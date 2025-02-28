@@ -4,7 +4,7 @@
 #include <QObject>
 
 #include <SVSCraftQuick/theme.h>
-#include <SVSCraftQuick/private/svsqmlnamespace_p.h>
+#include <SVSCraftQml/private/svsqmlnamespace_p.h>
 
 namespace SVS {
 

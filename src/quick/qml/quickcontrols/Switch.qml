@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Effects
 
+import SVSCraft
 import SVSCraft.UIComponents
 
 T.Switch {

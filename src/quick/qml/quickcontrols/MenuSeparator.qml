@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Templates as T
 
+import SVSCraft
 import SVSCraft.UIComponents
 
 T.MenuSeparator {

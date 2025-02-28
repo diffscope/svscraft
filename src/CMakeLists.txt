@@ -132,6 +132,8 @@ add_subdirectory(gui)
 
 add_subdirectory(widgets)
 
+add_subdirectory(qml)
+
 add_subdirectory(quick)
 
 add_subdirectory(quickimpl)

@@ -1,6 +1,7 @@
 import QtQml
 import QtQuick
 
+import SVSCraft
 import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
 

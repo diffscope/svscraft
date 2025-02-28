@@ -3,7 +3,7 @@
 
 #include <QQmlEngine>
 
-#include <SVSCraftQuick/private/svsqmlnamespace_p.h>
+#include <SVSCraftQml/private/svsqmlnamespace_p.h>
 
 namespace SVS {
 

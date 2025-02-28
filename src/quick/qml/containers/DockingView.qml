@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.impl
 
+import SVSCraft
 import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
 

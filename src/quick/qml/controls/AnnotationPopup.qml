@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Controls.impl
 import QtQuick.Effects
 
+import SVSCraft
 import SVSCraft.UIComponents
 
 Popup {
