@@ -3,19 +3,19 @@
 #include <QVariant>
 
 namespace SVS {
-    LongTimeForeign::LongTimeForeign(const QVariantList &time) {
-        v = LongTime(time.size() >= 1 ? time[0].toInt() : 0, time.size() >= 2 ? time[1].toInt() : 0, time.size() >= 3 ? time[2].toInt() : 0);
+    LongTimeForeign::LongTimeForeign(const QVariantMap &time) {
+        v = LongTime(time.value("minute").toInt(), time.value("second").toInt(), time.value("millisecond").toInt());
     }
 
-    MusicTimeForeign::MusicTimeForeign(const QVariantList &time) {
-        v = MusicTime(time.size() >= 1 ? time[0].toInt() : 0, time.size() >= 2 ? time[1].toInt() : 0, time.size() >= 3 ? time[2].toInt() : 0);
+    MusicTimeForeign::MusicTimeForeign(const QVariantMap &time) {
+        v = MusicTime(time.value("measure").toInt(), time.value("beat").toInt(), time.value("tick").toInt());
     }
-    MusicTimeSignatureForeign::MusicTimeSignatureForeign(const QVariantList &signature) {
-        v = MusicTimeSignature(signature.size() >= 1 ? signature[0].toInt() : 0, signature.size() >= 2 ? signature[1].toInt() : 0);
+    MusicTimeSignatureForeign::MusicTimeSignatureForeign(const QVariantMap &signature) {
+        v = MusicTimeSignature(signature.value("numerator").toInt(), signature.value("denominator").toInt());
     }
-    MusicPitchForeign::MusicPitchForeign(const QVariantList &pitch) {
-        auto key = pitch.size() >= 1 ? pitch[0].toInt() : 0;
-        auto octave = pitch.size() >= 2 ? pitch[1].toInt() : 0;
+    MusicPitchForeign::MusicPitchForeign(const QVariantMap &pitch) {
+        auto key = pitch.value("key").toInt();
+        auto octave = pitch.value("octave").toInt();
         auto prediction = key >= 0 && key < 12 && (octave == -1 || (octave >= 0 && key + octave * 12 >= 0 && key + octave * 12 < 128));
         if (!prediction) {
             v = {};

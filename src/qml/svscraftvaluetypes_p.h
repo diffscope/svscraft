@@ -31,7 +31,7 @@ namespace SVS {
         Q_INVOKABLE explicit LongTimeForeign(const QString &s) {
             v = LongTime::fromString(s);
         }
-        Q_INVOKABLE explicit LongTimeForeign(const QVariantList &time);
+        Q_INVOKABLE explicit LongTimeForeign(const QVariantMap &time);
 
         constexpr int minute() const {
             return v.minute();
@@ -49,8 +49,8 @@ namespace SVS {
             return v.totalMillisecond();
         }
 
-        Q_INVOKABLE QString toString() const {
-            return v.toString();
+        Q_INVOKABLE QString toString(int minuteWidth = 1, int secondWidth = 2, int msecWidth = 3) const {
+            return v.toString(minuteWidth, secondWidth, msecWidth);
         }
 
     };
@@ -69,7 +69,7 @@ namespace SVS {
         MusicTime v;
 
     public:
-        Q_INVOKABLE explicit MusicTimeForeign(const QVariantList &time);
+        Q_INVOKABLE explicit MusicTimeForeign(const QVariantMap &time);
         Q_INVOKABLE inline explicit MusicTimeForeign(const QString &s) {
             v = MusicTime::fromString(s);
         }
@@ -90,8 +90,8 @@ namespace SVS {
             return v.isValid();
         }
 
-        Q_INVOKABLE QString toString() const {
-            return v.toString();
+        Q_INVOKABLE QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const {
+            return v.toString(measureWidth, beatWidth, tickWidth);
         }
     };
 
@@ -113,7 +113,7 @@ namespace SVS {
 
         MusicTimeSignature v;
     public:
-        Q_INVOKABLE explicit MusicTimeSignatureForeign(const QVariantList &signature);
+        Q_INVOKABLE explicit MusicTimeSignatureForeign(const QVariantMap &signature);
 
         constexpr inline int numerator() const {
             return v.numerator();
@@ -156,7 +156,7 @@ namespace SVS {
         Q_INVOKABLE constexpr explicit MusicPitchForeign(int pitch) {
             v = MusicPitch(static_cast<qint8>(qBound(0, pitch, 127)));
         }
-        Q_INVOKABLE explicit MusicPitchForeign(const QVariantList &pitch);
+        Q_INVOKABLE explicit MusicPitchForeign(const QVariantMap &pitch);
         Q_INVOKABLE inline explicit MusicPitchForeign(const QString &s) {
             v = MusicPitch::fromString(s);
         }
