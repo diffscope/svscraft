@@ -21,6 +21,8 @@ namespace SVS {
         return {match.capturedView(1).isEmpty() ? 0 : (match.capturedView(1).toInt() - 1), match.capturedView(2).isEmpty() ? 0 : (match.capturedView(2).toInt() - 1), match.capturedView(3).toInt()};
     }
     QString MusicTime::toString(int measureWidth, int beatWidth, int tickWidth) const {
+        if (!isValid())
+            return {};
         QString str;
         QTextStream textStream(&str);
         textStream.setPadChar('0');
@@ -60,8 +62,10 @@ namespace SVS {
     void PersistentMusicTimeData::ensureMbtCached() {
         if (!cache.isMbtNull())
             return;
-        if (!timeline)
+        if (!isValid()) {
+            cache.measure = cache.beat = cache.tick = -1;
             return;
+        }
 
         auto ret = td->tickToTime(totalTick);
         cache.measure = ret.measure();
@@ -73,8 +77,11 @@ namespace SVS {
     void PersistentMusicTimeData::ensureMsecCached() {
         if (!cache.isMsecNull())
             return;
-        if (!timeline)
+        if (!isValid()) {
+            cache.msec = -1;
             return;
+        }
+
         cache.msec = td->tickToMsec(totalTick);
         td->msecCachedMusicTimes.insert(this);
     }
@@ -126,6 +133,9 @@ namespace SVS {
             return 0;
         return d->totalTick;
     }
+    bool PersistentMusicTime::isValid() const {
+        return d && d->isValid();
+    }
     PersistentMusicTime PersistentMusicTime::operator+(int t) const {
         if (!d)
             return {};
@@ -146,10 +156,6 @@ namespace SVS {
         return (*this = *this - t);
     }
 
-    QString PersistentMusicTime::toString(int measureWidth, int beatWidth, int tickWidth) const {
-        return toTime().toString(measureWidth, beatWidth, tickWidth);
-    }
-
     QDebug operator<<(QDebug debug, const PersistentMusicTime &mt) {
         QDebugStateSaver saver(debug);
         debug.nospace() << "MusicTime(";
@@ -164,3 +170,5 @@ namespace SVS {
     }
 
 }
+
+#include "moc_musictime.cpp"

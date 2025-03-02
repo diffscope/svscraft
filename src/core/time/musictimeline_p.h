@@ -20,7 +20,7 @@ namespace SVS {
 
         MusicTimeline *q_ptr;
 
-        static int resolution;
+        int resolution = 480;
 
         QMap<int, MusicTimeSignature> timeSignatureMap; // bar position -> time signature
         QMap<int, int> measureMap;                      // tick position -> bar position

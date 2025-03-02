@@ -10,7 +10,7 @@ namespace SVS {
     class MusicTimelinePrivate;
 
     struct MusicTimeCache {
-        MusicTimeCache() : measure(-1), beat(0), tick(0), msec(-1) {
+        MusicTimeCache() : measure(-1), beat(-1), tick(-1), msec(-1) {
         }
 
         inline bool isMbtNull() const {
@@ -48,6 +48,10 @@ namespace SVS {
 
         void ensureMbtCached();
         void ensureMsecCached();
+
+        inline bool isValid() const {
+            return timeline && totalTick >= 0;
+        }
     };
 
 }

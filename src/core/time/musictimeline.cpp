@@ -74,7 +74,7 @@ namespace SVS {
         }
         mbtCachedMusicTimes.clear();
 
-        emit q->timeSignatureChanged();
+        emit q->timeSignaturesChanged();
         emit q->changed();
     }
 
@@ -85,7 +85,7 @@ namespace SVS {
         }
         msecCachedMusicTimes.clear();
 
-        emit q->tempoChanged();
+        emit q->tempiChanged();
         emit q->changed();
     }
 
@@ -109,7 +109,12 @@ namespace SVS {
         return revMsecSumMap.lastKey();
     }
 
-    MusicTimeline::MusicTimeline(QObject *parent) : MusicTimeline(*new MusicTimelinePrivate(), parent) {
+    MusicTimeline::MusicTimeline(QObject *parent)
+        : MusicTimeline(*new MusicTimelinePrivate(), parent) {
+    }
+    MusicTimeline::MusicTimeline(int resolution, QObject *parent) : MusicTimeline(parent) {
+        Q_D(MusicTimeline);
+        d->resolution = resolution;
     }
 
     MusicTimeline::~MusicTimeline() {
@@ -163,18 +168,9 @@ namespace SVS {
         }
     }
 
-    QList<QPair<int, MusicTimeSignature>> MusicTimeline::timeSignatures() const {
+    QMap<int, MusicTimeSignature> MusicTimeline::timeSignatures() const {
         Q_D(const MusicTimeline);
-        QList<QPair<int, MusicTimeSignature>> list;
-        for (auto it = d->timeSignatureMap.begin(); it != d->timeSignatureMap.end(); ++it) {
-            list.append({it.key(), it.value()});
-        }
-        return list;
-    }
-
-    QList<int> MusicTimeline::barsWithTimeSignature() const {
-        Q_D(const MusicTimeline);
-        return d->timeSignatureMap.keys();
+        return d->timeSignatureMap;
     }
 
     MusicTimeSignature MusicTimeline::timeSignatureAt(int bar) const {
@@ -237,18 +233,9 @@ namespace SVS {
         }
     }
 
-    QList<QPair<int, double>> MusicTimeline::tempi() const {
+    QMap<int, double> MusicTimeline::tempi() const {
         Q_D(const MusicTimeline);
-        QList<QPair<int, double>> list;
-        for (auto it = d->tempoMap.begin(); it != d->tempoMap.end(); ++it) {
-            list.append({it.key(), it.value()});
-        }
-        return list;
-    }
-
-    QList<int> MusicTimeline::ticksWithTempo() const {
-        Q_D(const MusicTimeline);
-        return d->tempoMap.keys();
+        return d->tempoMap;
     }
 
     double MusicTimeline::tempoAt(int tick) const {
@@ -289,7 +276,7 @@ namespace SVS {
     int MusicTimelinePrivate::timeToTick(int measure, int beat, int tick) const {
         Q_Q(const MusicTimeline);
         if (measure < 0 || beat < 0 || tick < 0)
-            return 0;
+            return -1;
         if (measure == 0 && beat == 0) {
             return tick;
         }
@@ -303,14 +290,19 @@ namespace SVS {
     }
 
     int MusicTimelinePrivate::stringToTick(QStringView str, bool *ok) const {
+        bool ok1;
+        if (!ok)
+            ok = &ok1;
         auto t = MusicTime::fromString(str, ok);
+        if (!*ok)
+            return -1;
         return timeToTick(t.measure(), t.beat(), t.tick());
     }
 
     int MusicTimelinePrivate::msecToTick(double msec) const {
         Q_Q(const MusicTimeline);
         if (msec < 0)
-            return 0;
+            return -1;
         auto refMsec = findNearestMsecWithTempo(msec);
         auto refTick = revMsecSumMap[refMsec];
         auto tempo = tempoMap[refTick];
@@ -338,14 +330,20 @@ namespace SVS {
         auto container = new PersistentMusicTimeData(this, d, d->msecToTick(msec));
         return PersistentMusicTime(container);
     }
-    void MusicTimeline::setTicksPerQuarterNote(int ticks) {
-        MusicTimelinePrivate::resolution = ticks;
+    int MusicTimeline::ticksPerQuarterNote() const {
+        Q_D(const MusicTimeline);
+        return d->resolution;
     }
-    int MusicTimeline::ticksPerQuarterNote() {
-        return MusicTimelinePrivate::resolution;
+    void MusicTimeline::setTicksPerQuarterNote(int ticksPerQuarterNote) {
+        Q_D(MusicTimeline);
+        d->resolution = ticksPerQuarterNote;
+        d->updateMeasureMap(0);
+        d->updateMsecSumMap(0);
+        emit ticksPerQuarterNoteChanged(ticksPerQuarterNote);
+        emit timeSignaturesChanged();
+        emit tempiChanged();
+        emit changed();
     }
-
-    int MusicTimelinePrivate::resolution = 480;
 
     MusicTimelinePrivate::MusicTimelinePrivate() {
         timeSignatureMap = {
@@ -375,3 +373,5 @@ namespace SVS {
     }
 
 }
+
+#include "moc_musictimeline.cpp"

@@ -52,12 +52,14 @@ namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT PersistentMusicTime {
         Q_GADGET
+        Q_PROPERTY(MusicTimeline *timeline READ timeline CONSTANT)
         Q_PROPERTY(int measure READ measure)
         Q_PROPERTY(int beat READ beat)
         Q_PROPERTY(int tick READ tick)
         Q_PROPERTY(MusicTime musicTime READ toTime)
         Q_PROPERTY(double millisecond READ millisecond)
         Q_PROPERTY(int totalTick READ totalTick CONSTANT)
+        Q_PROPERTY(bool isValid READ isValid CONSTANT)
 
     public:
         PersistentMusicTime();
@@ -80,6 +82,8 @@ namespace SVS {
         double millisecond() const;
         int totalTick() const;
 
+        bool isValid() const;
+
         inline bool operator==(const PersistentMusicTime &other) const {
             return totalTick() == other.totalTick();
         }
@@ -92,7 +96,9 @@ namespace SVS {
         PersistentMusicTime &operator+=(int t);
         PersistentMusicTime &operator-=(int t);
 
-        Q_INVOKABLE QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const;
+        Q_INVOKABLE inline QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const {
+            return toTime().toString(measureWidth, beatWidth, tickWidth);
+        }
 
         friend SVSCRAFT_CORE_EXPORT QDebug operator<<(QDebug debug, const PersistentMusicTime &mt);
 

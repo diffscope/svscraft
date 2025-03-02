@@ -2,8 +2,6 @@
 #define MUSICTIMELINE_H
 
 #include <QObject>
-#include <QSharedPointer>
-#include <QVariant>
 
 #include <SVSCraftCore/svscraftcoreglobal.h>
 
@@ -20,17 +18,16 @@ namespace SVS {
         Q_DECLARE_PRIVATE(MusicTimeline)
     public:
         explicit MusicTimeline(QObject *parent = nullptr);
+        explicit MusicTimeline(int resolution, QObject *parent = nullptr);
         ~MusicTimeline() override;
 
-    public:
         void setTimeSignature(int bar, const MusicTimeSignature &timeSignature);
         inline void removeTimeSignature(int bar) {
             removeTimeSignatures({bar});
         }
         void setTimeSignatures(const QList<QPair<int, MusicTimeSignature>> &timeSignatureList);
         void removeTimeSignatures(const QList<int> &bars);
-        QList<QPair<int, MusicTimeSignature>> timeSignatures() const;
-        QList<int> barsWithTimeSignature() const;
+        QMap<int, MusicTimeSignature> timeSignatures() const;
         MusicTimeSignature timeSignatureAt(int bar) const;
         int nearestBarWithTimeSignatureTo(int bar) const;
 
@@ -42,22 +39,22 @@ namespace SVS {
         }
         void setTempi(const QList<QPair<int, double>> &tempos);
         void removeTempi(const QList<int> &ticks);
-        QList<QPair<int, double>> tempi() const;
-        QList<int> ticksWithTempo() const;
+        QMap<int, double> tempi() const;
         double tempoAt(int tick) const;
         int nearestTickWithTempoTo(int tick) const;
 
         PersistentMusicTime create(const MusicTime &time) const;
         PersistentMusicTime create(int measure, int beat, int tick) const;
         PersistentMusicTime create(QStringView str, bool *ok = nullptr) const;
-        PersistentMusicTime create(double msec) const;
+        PersistentMusicTime create(double millisecond) const;
 
-        static void setTicksPerQuarterNote(int ticks);
-        static int ticksPerQuarterNote();
+        int ticksPerQuarterNote() const;
+        void setTicksPerQuarterNote(int ticksPerQuarterNote);
 
     signals:
-        void timeSignatureChanged();
-        void tempoChanged();
+        void timeSignaturesChanged();
+        void tempiChanged();
+        void ticksPerQuarterNoteChanged(int ticksPerQuarterNote);
         void changed();
 
     protected:

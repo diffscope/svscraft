@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
         spinBox->setValue(LongTime(value.millisecond()));
     });
 
-    QObject::connect(&timeline, &MusicTimeline::tempoChanged, [=] {
+    QObject::connect(&timeline, &MusicTimeline::tempiChanged, [=] {
         QSpinBox blocker(spinBox);
         spinBox->setValue(LongTime(mSpinBox->value().millisecond()));
     });

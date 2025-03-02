@@ -44,7 +44,7 @@ namespace SVS {
 
         connect(this, QOverload<int>::of(&QSpinBox::valueChanged), d,
                 &MusicTimeSpinBoxPrivate::_q_valueChanged);
-        connect(timeline, &MusicTimeline::timeSignatureChanged, d,
+        connect(timeline, &MusicTimeline::timeSignaturesChanged, d,
                 &MusicTimeSpinBoxPrivate::_q_timeSignatureChanged);
     }
 
