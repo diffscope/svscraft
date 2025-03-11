@@ -6,7 +6,7 @@
 #include <QQmlEngine>
 #include <QQmlInfo>
 
-#include <SVSCraftQuick/private/statustext_p_p.h>
+#include <SVSCraftQuickImpl/private/statustext_p_p.h>
 
 namespace SVS {
 
@@ -46,25 +46,38 @@ namespace SVS {
             emit statusTextChanged();
         });
         d->statusText = qobject_cast<StatusText *>(qmlAttachedPropertiesObject<StatusTextAttachedType>(parent->window()));
-        if (d->statusText)
+        if (d->statusText) {
             connect(d->statusText, &StatusText::displayTextChanged, this, &DescriptiveText::statusTextChanged);
+            connect(d->statusText, &StatusText::defaultTextChanged, this, &DescriptiveText::defaultStatusTextChanged);
+        }
         connect(this, &DescriptiveText::activatedChanged, [=] {
             if (d->activated) {
                 if (d->statusText)
                     d->statusText->setText(d->statusTip);
+                    d->statusText->setContextObject(this);
             } else {
-                if (d->statusText)
+                if (d->statusText && d->statusText->contextObject() == this) {
                     d->statusText->setText({});
+                    d->statusText->setContextObject(nullptr);
+                }
             }
         });
         connect(this, &DescriptiveText::statusTipChanged, [=] {
             if (d->activated) {
-                if (d->statusText)
+                if (d->statusText) {
                     d->statusText->setText(d->statusTip);
+                    d->statusText->setContextObject(this);
+                }
             }
         });
     }
-    DescriptiveText::~DescriptiveText() = default;
+    DescriptiveText::~DescriptiveText() {
+        Q_D(DescriptiveText);
+        if (d->statusText && d->statusText->contextObject() == this) {
+            d->statusText->setText({});
+            d->statusText->setContextObject(nullptr);
+        }
+    }
 
 
     bool DescriptiveText::activated() const {
@@ -103,6 +116,14 @@ namespace SVS {
     }
     QString DescriptiveText::statusText() const {
         Q_D(const DescriptiveText);
-        return d->statusText ? d->statusText->displayText() : "";
+        return d->statusText ? d->statusText->displayText() : QString();
+    }
+    QString DescriptiveText::defaultStatusText() const {
+        Q_D(const DescriptiveText);
+        return d->statusText ? d->statusText->defaultText() : QString();
+    }
+    void DescriptiveText::setDefaultStatusText(const QString &defaultStatusText) {
+        Q_D(DescriptiveText);
+        d->statusText->setDefaultText(defaultStatusText);
     }
 }

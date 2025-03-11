@@ -15,15 +15,14 @@ namespace SVS {
         Q_DECLARE_PRIVATE(StatusText)
         QML_ANONYMOUS
 
-        Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
-        Q_PROPERTY(QString defaultText READ defaultText WRITE setDefaultText NOTIFY defaultTextChanged)
-        Q_PROPERTY(QString displayText READ displayText NOTIFY displayTextChanged)
-
     public:
         ~StatusText() override;
 
         QString text() const;
         void setText(const QString &text);
+
+        void setContextObject(QObject *object);
+        QObject *contextObject() const;
 
         QString defaultText() const;
         void setDefaultText(const QString &defaultText);

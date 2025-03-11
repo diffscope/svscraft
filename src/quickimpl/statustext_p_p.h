@@ -1,7 +1,9 @@
 #ifndef STATUSTEXT_P_P_H
 #define STATUSTEXT_P_P_H
 
-#include <SVSCraftQuick/private/statustext_p.h>
+#include <SVSCraftQuickImpl/private/statustext_p.h>
+
+#include <QPointer>
 
 namespace SVS {
 
@@ -19,6 +21,7 @@ namespace SVS {
         StatusText *q_ptr;
 
         QString text;
+        QPointer<QObject> contextObject;
         QString defaultText;
     };
 }

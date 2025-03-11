@@ -29,6 +29,14 @@ namespace SVS {
             emit displayTextChanged();
         }
     }
+    void StatusText::setContextObject(QObject *object) {
+        Q_D(StatusText);
+        d->contextObject = object;
+    }
+    QObject *StatusText::contextObject() const {
+        Q_D(const StatusText);
+        return d->contextObject;
+    }
     QString StatusText::defaultText() const {
         Q_D(const StatusText);
         return d->defaultText;

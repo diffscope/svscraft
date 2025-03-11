@@ -5,7 +5,7 @@
 
 #include <QPointer>
 
-#include <SVSCraftQuick/private/statustext_p.h>
+#include <SVSCraftQuickImpl/private/statustext_p.h>
 
 namespace SVS {
     class DescriptiveTextAttachedType : public QObject {

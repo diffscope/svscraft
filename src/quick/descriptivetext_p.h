@@ -21,6 +21,7 @@ namespace SVS {
         Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY toolTipChanged)
         Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY statusTipChanged)
         Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
+        Q_PROPERTY(QString defaultStatusText READ defaultStatusText WRITE setDefaultStatusText NOTIFY defaultStatusTextChanged)
 
     public:
         ~DescriptiveText() override;
@@ -36,11 +37,15 @@ namespace SVS {
 
         QString statusText() const;
 
+        QString defaultStatusText() const;
+        void setDefaultStatusText(const QString &defaultStatusText);
+
     signals:
         void activatedChanged();
         void toolTipChanged();
         void statusTipChanged();
         void statusTextChanged();
+        void defaultStatusTextChanged();
 
     private:
         friend class DescriptiveTextAttachedType;
