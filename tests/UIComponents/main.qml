@@ -330,6 +330,18 @@ ApplicationWindow {
                 }
 
                 GroupBox {
+                    title: "旋钮"
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        SpinBox {
+                            to: 2147483647
+                        }
+                        enabled: !disabledCheckBox.checked
+                    }
+                }
+
+                GroupBox {
                     title: "组合框"
                     RowLayout {
                         anchors.fill: parent
