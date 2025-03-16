@@ -73,8 +73,8 @@ T.TabButton {
             visible: control.ThemedItem.tabIndicator !== SVS.TI_Fill
             anchors.top: control.ThemedItem.tabIndicator === SVS.TI_Top ? parent.top : undefined
             anchors.bottom: control.ThemedItem.tabIndicator === SVS.TI_Bottom ? parent.bottom : undefined
-            anchors.left: control.ThemedItem.tabIndicator === SVS.TI_Left && !control.mirrored || control.ThemedItem.tabIndicator === SVS.TI_Right && control.mirrored ? parent.left : undefined
-            anchors.right: control.ThemedItem.tabIndicator === SVS.TI_Left && control.mirrored || control.ThemedItem.tabIndicator === SVS.TI_Right && !control.mirrored ? parent.right : undefined
+            anchors.left: control.ThemedItem.tabIndicator === SVS.TI_Left ? parent.left : undefined
+            anchors.right: control.ThemedItem.tabIndicator === SVS.TI_Right ? parent.right : undefined
             anchors.verticalCenter: control.ThemedItem.tabIndicator === SVS.TI_Left || control.ThemedItem.tabIndicator === SVS.TI_Right ? parent.verticalCenter : undefined
             anchors.horizontalCenter: control.ThemedItem.tabIndicator === SVS.TI_Top || control.ThemedItem.tabIndicator === SVS.TI_Bottom ? parent.horizontalCenter : undefined
             width: control.ThemedItem.tabIndicator === SVS.TI_Top || control.ThemedItem.tabIndicator === SVS.TI_Bottom ? parent.width * 0.75 : 2

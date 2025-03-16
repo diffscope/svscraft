@@ -11,6 +11,8 @@ ApplicationWindow {
     visible: true
     width: 1024
     height: 800
+    LayoutMirroring.enabled: mirroringCheckBox.checked
+    LayoutMirroring.childrenInherit: true
 
     menuBar: MenuBar {
         ThemedItem.dividerStroke: SVS.DS_Border
@@ -119,20 +121,27 @@ ApplicationWindow {
     }
 
     Pane {
+        id: pane
         anchors.fill: parent
         ScrollView {
             anchors.fill: parent
             ColumnLayout {
                 id: layout
-                anchors.left: parent.left
-                anchors.right: parent.right
+                width: pane.width - 8
                 anchors.top: parent.top
                 anchors.margins: 8
                 spacing: 8
 
-                CheckBox {
-                    id: disabledCheckBox
-                    text: "Disabled"
+                RowLayout {
+                    spacing: 8
+                    CheckBox {
+                        id: disabledCheckBox
+                        text: "Disabled"
+                    }
+                    CheckBox {
+                        id: mirroringCheckBox
+                        text: "Mirroring"
+                    }
                 }
 
                 GroupBox {
@@ -302,12 +311,14 @@ ApplicationWindow {
                         anchors.fill: parent
                         spacing: 8
                         Slider {
+                            from: -1
+                            to: 2
                             id: slider1
-                            ThemedItem.trackStart: 0.25
                             orientation: Qt.Horizontal
                         }
                         Slider {
-                            ThemedItem.trackStart: slider1.position
+                            from: -1
+                            to: 2
                             orientation: Qt.Vertical
                         }
                         enabled: !disabledCheckBox.checked
@@ -321,6 +332,9 @@ ApplicationWindow {
                         spacing: 8
                         TextField {
                             placeholderText: "placeholder"
+                        }
+                        TextField {
+                            placeholderText: "מציין מיקום"
                         }
                         TextArea {
                             placeholderText: "placeholder"

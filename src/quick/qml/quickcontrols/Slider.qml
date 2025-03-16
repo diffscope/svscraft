@@ -66,10 +66,12 @@ T.Slider {
         scale: control.horizontal && control.mirrored ? -1 : 1
 
         Rectangle {
-            x: control.horizontal ? Math.min(control.ThemedItem.trackStart, control.position) * parent.width : 0
-            y: control.horizontal ? 0 : Math.min(control.visualPosition, 1 - control.ThemedItem.trackStart) * parent.height
-            width: control.horizontal ? Math.abs(control.position - control.ThemedItem.trackStart) * parent.width : 4
-            height: control.horizontal ? 4 : Math.abs(control.position - control.ThemedItem.trackStart) * parent.height
+            property double trackStart: -control.from / (control.to - control.from)
+            property double visualTrackStart: control.vertical || control.mirrored ? 1 - trackStart : trackStart
+            x: control.horizontal ? Math.min(trackStart, control.position) * parent.width : 0
+            y: control.horizontal ? 0 : Math.min(control.visualPosition, visualTrackStart) * parent.height
+            width: control.horizontal ? Math.abs(control.visualPosition - visualTrackStart) * parent.width : 4
+            height: control.horizontal ? 4 : Math.abs(control.visualPosition - visualTrackStart) * parent.height
 
             radius: 2
             color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :

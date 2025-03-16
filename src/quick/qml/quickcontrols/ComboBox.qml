@@ -48,7 +48,7 @@ T.ComboBox {
         }
     }
 
-    contentItem: TextField {
+    contentItem: TextInput {
         leftPadding: !control.mirrored ? 8 : 0
         rightPadding: control.mirrored ? 8 : 0
 
@@ -58,8 +58,6 @@ T.ComboBox {
         selectionColor: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :
                         Theme.accentColor
         selectedTextColor: color
-        placeholderTextColor: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundSecondaryColor) :
-                              Theme.foregroundSecondaryColor
 
         enabled: control.editable
         autoScroll: control.editable
@@ -67,12 +65,7 @@ T.ComboBox {
         inputMethodHints: control.inputMethodHints
         validator: control.validator
         selectByMouse: control.selectTextByMouse
-
         verticalAlignment: Text.AlignVCenter
-
-        background: Rectangle {
-            color: "transparent"
-        }
     }
 
     background: Rectangle {
@@ -104,7 +97,6 @@ T.ComboBox {
         height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         topMargin: 6
         bottomMargin: 6
-        popupType: T.Popup.Window
 
         contentItem: ListView {
             clip: true

@@ -23,6 +23,7 @@ T.GroupBox {
         font.pointSize: 1.25 * control.font.pointSize
         color: Theme.foregroundPrimaryColor
         elide: Text.ElideRight
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
 
         Button {

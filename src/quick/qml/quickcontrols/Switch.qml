@@ -52,7 +52,7 @@ T.Switch {
                     easing.type: Easing.OutCubic
                 }
             }
-            x: control.checked ? parent.width - width - 2 : 2
+            x: control.checked !== control.mirrored ? parent.width - width - 2 : 2
             Behavior on x {
                 NumberAnimation {
                     duration: Theme.visualEffectAnimationDuration

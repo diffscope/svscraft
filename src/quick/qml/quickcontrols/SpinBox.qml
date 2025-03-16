@@ -9,7 +9,8 @@ T.SpinBox {
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
 
-    rightPadding: padding + Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0))
+    leftPadding: padding + control.mirrored ? Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0)) : 0
+    rightPadding: padding + control.mirrored ? 0 : Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0))
 
     editable: true
 
@@ -44,7 +45,7 @@ T.SpinBox {
             }
         }
 
-        verticalAlignment: Qt.AlignVCenter
+        verticalAlignment: Text.AlignVCenter
         readOnly: !control.editable
         validator: control.validator
         inputMethodHints: control.inputMethodHints

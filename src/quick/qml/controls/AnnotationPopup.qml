@@ -58,6 +58,7 @@ Popup {
             height: 8
             clip: true
             Rectangle {
+                anchors.left: parent.left
                 anchors.bottom: parent.bottom
                 width: parent.width * columnLayout._size
                 height: 4
@@ -133,6 +134,7 @@ Popup {
                     property Label labelItem: Label {
                         id: label
                         text: typeof(popup.title) === "string" ? popup.title : ""
+                        horizontalAlignment: Qt.AlignLeft
                         wrapMode: Text.Wrap
                     }
                     property Label realLabelItem: typeof(popup.title) === "string" ? labelItem : popup.title instanceof Label ? popup.title : null

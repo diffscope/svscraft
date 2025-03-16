@@ -21,7 +21,7 @@ T.TextField {
     selectedTextColor: color
     placeholderTextColor: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundSecondaryColor) :
                           Theme.foregroundSecondaryColor
-    verticalAlignment: TextInput.AlignVCenter
+    verticalAlignment: Text.AlignVCenter
 
     Behavior on color {
         ColorAnimation {

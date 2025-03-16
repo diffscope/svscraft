@@ -21,7 +21,7 @@ T.TextArea {
     selectedTextColor: color
     placeholderTextColor: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundSecondaryColor) :
                           Theme.foregroundSecondaryColor
-    verticalAlignment: TextInput.AlignTop
+    verticalAlignment: Text.AlignTop
 
     Behavior on color {
         ColorAnimation {

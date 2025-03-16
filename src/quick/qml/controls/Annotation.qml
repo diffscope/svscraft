@@ -61,6 +61,7 @@ Frame {
             property Label labelItem: Label {
                 id: label
                 text: typeof(annotation.label) === "string" ? annotation.label : ""
+                horizontalAlignment: Qt.AlignLeft
                 wrapMode: Text.Wrap
             }
             property Label realLabelItem: typeof(annotation.label) === "string" ? labelItem : annotation.label instanceof Label ? annotation.label : null
