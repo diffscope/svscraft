@@ -1,5 +1,5 @@
-#ifndef DOCKING_P_H
-#define DOCKING_P_H
+#ifndef SVSCRAFT_DOCKING_P_H
+#define SVSCRAFT_DOCKING_P_H
 
 #include <QObject>
 #include <qqmlintegration.h>

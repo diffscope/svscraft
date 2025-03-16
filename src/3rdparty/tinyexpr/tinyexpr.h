@@ -23,8 +23,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef TINYEXPR_H
-#define TINYEXPR_H
+#ifndef SVSCRAFT_TINYEXPR_H
+#define SVSCRAFT_TINYEXPR_H
 
 
 #ifdef __cplusplus

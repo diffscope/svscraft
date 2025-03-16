@@ -1,5 +1,5 @@
-#ifndef COMMANDPALETTEHELPER_P_H
-#define COMMANDPALETTEHELPER_P_H
+#ifndef SVSCRAFT_COMMANDPALETTEHELPER_P_H
+#define SVSCRAFT_COMMANDPALETTEHELPER_P_H
 
 #include <QObject>
 #include <qqmlintegration.h>

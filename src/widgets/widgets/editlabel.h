@@ -1,5 +1,5 @@
-#ifndef EDITLABEL_H
-#define EDITLABEL_H
+#ifndef SVSCRAFT_EDITLABEL_H
+#define SVSCRAFT_EDITLABEL_H
 
 #include <QStackedWidget>
 
@@ -82,4 +82,4 @@ namespace SVS {
 
 } // SVS
 
-#endif // EDITLABEL_H
+#endif // SVSCRAFT_EDITLABEL_H

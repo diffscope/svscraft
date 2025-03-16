@@ -1,5 +1,5 @@
-#ifndef MUSICTIME_P_H
-#define MUSICTIME_P_H
+#ifndef SVSCRAFT_MUSICTIME_P_H
+#define SVSCRAFT_MUSICTIME_P_H
 
 #include <QPointer>
 
@@ -56,4 +56,4 @@ namespace SVS {
 
 }
 
-#endif // MUSICTIME_P_H
+#endif // SVSCRAFT_MUSICTIME_P_H

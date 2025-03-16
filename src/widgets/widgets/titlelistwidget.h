@@ -1,5 +1,5 @@
-#ifndef TITLELISTWIDGET_H
-#define TITLELISTWIDGET_H
+#ifndef SVSCRAFT_TITLELISTWIDGET_H
+#define SVSCRAFT_TITLELISTWIDGET_H
 
 #include <QAction>
 #include <QContextMenuEvent>
@@ -41,4 +41,4 @@ namespace SVS {
 
 }
 
-#endif // TITLELISTWIDGET_H
+#endif // SVSCRAFT_TITLELISTWIDGET_H

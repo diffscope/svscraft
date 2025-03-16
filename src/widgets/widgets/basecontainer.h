@@ -1,5 +1,5 @@
-#ifndef BASECONTAINER_H
-#define BASECONTAINER_H
+#ifndef SVSCRAFT_BASECONTAINER_H
+#define SVSCRAFT_BASECONTAINER_H
 
 #include <QFrame>
 #include <QWidget>
@@ -24,4 +24,4 @@ namespace SVS {
 
 }
 
-#endif // BASECONTAINER_H
+#endif // SVSCRAFT_BASECONTAINER_H

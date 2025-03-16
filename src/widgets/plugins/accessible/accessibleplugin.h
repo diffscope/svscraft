@@ -1,5 +1,5 @@
-#ifndef ACCESSIBLEPLUGIN_H
-#define ACCESSIBLEPLUGIN_H
+#ifndef SVSCRAFT_ACCESSIBLEPLUGIN_H
+#define SVSCRAFT_ACCESSIBLEPLUGIN_H
 
 #define QT_STATICPLUGIN
 
@@ -12,4 +12,4 @@ public:
     QAccessibleInterface *create(const QString &key, QObject *object) override;
 };
 
-#endif // ACCESSIBLEPLUGIN_H
+#endif // SVSCRAFT_ACCESSIBLEPLUGIN_H

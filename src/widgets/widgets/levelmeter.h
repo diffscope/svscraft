@@ -1,5 +1,5 @@
-#ifndef LEVELMETER_H
-#define LEVELMETER_H
+#ifndef SVSCRAFT_LEVELMETER_H
+#define SVSCRAFT_LEVELMETER_H
 
 #include <QWidget>
 
@@ -60,4 +60,4 @@ namespace SVS {
 
 } // SVS
 
-#endif // LEVELMETER_H
+#endif // SVSCRAFT_LEVELMETER_H

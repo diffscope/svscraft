@@ -1,5 +1,5 @@
-#ifndef MUSICMODE_H
-#define MUSICMODE_H
+#ifndef SVSCRAFT_MUSICMODE_H
+#define SVSCRAFT_MUSICMODE_H
 
 #include <SVSCraftCore/musicpitch.h>
 
@@ -56,4 +56,4 @@ namespace SVS {
 
 Q_DECLARE_METATYPE(SVS::MusicMode)
 
-#endif // MUSICMODE_H
+#endif // SVSCRAFT_MUSICMODE_H

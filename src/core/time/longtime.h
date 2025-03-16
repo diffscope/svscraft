@@ -1,5 +1,5 @@
-#ifndef LONGTIME_H
-#define LONGTIME_H
+#ifndef SVSCRAFT_LONGTIME_H
+#define SVSCRAFT_LONGTIME_H
 
 #include <QMetaType>
 
@@ -54,4 +54,4 @@ namespace SVS {
 
 SVSCRAFT_CORE_EXPORT uint qHash(const SVS::LongTime &time, size_t seed);
 
-#endif // LONGTIME_H
+#endif // SVSCRAFT_LONGTIME_H

@@ -1,5 +1,5 @@
-#ifndef TOOLTIPBUTTON_H
-#define TOOLTIPBUTTON_H
+#ifndef SVSCRAFT_TOOLTIPBUTTON_H
+#define SVSCRAFT_TOOLTIPBUTTON_H
 
 #include <QMWidgets/ctoolbutton.h>
 #include <QMWidgets/qmwidgetsmacros.h>
@@ -29,4 +29,4 @@ namespace SVS {
 
 }
 
-#endif // TOOLTIPBUTTON_H
+#endif // SVSCRAFT_TOOLTIPBUTTON_H

@@ -1,5 +1,5 @@
-#ifndef SEEKBAR_H
-#define SEEKBAR_H
+#ifndef SVSCRAFT_SEEKBAR_H
+#define SVSCRAFT_SEEKBAR_H
 
 #include <functional>
 
@@ -102,4 +102,4 @@ namespace SVS {
 
 } // SVS
 
-#endif // SEEKBAR_H
+#endif // SVSCRAFT_SEEKBAR_H

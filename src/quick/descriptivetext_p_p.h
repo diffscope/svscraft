@@ -1,5 +1,5 @@
-#ifndef DESCRIPTIVETEXT_P_P_H
-#define DESCRIPTIVETEXT_P_P_H
+#ifndef SVSCRAFT_DESCRIPTIVETEXT_P_P_H
+#define SVSCRAFT_DESCRIPTIVETEXT_P_P_H
 
 #include <SVSCraftQuick/private/descriptivetext_p.h>
 

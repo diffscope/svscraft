@@ -1,5 +1,5 @@
-#ifndef MUSICTIME_H
-#define MUSICTIME_H
+#ifndef SVSCRAFT_MUSICTIME_H
+#define SVSCRAFT_MUSICTIME_H
 
 #include <QSharedPointer>
 
@@ -112,4 +112,4 @@ namespace SVS {
 
 }
 
-#endif // MUSICTIME_H
+#endif // SVSCRAFT_MUSICTIME_H

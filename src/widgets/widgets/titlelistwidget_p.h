@@ -1,5 +1,5 @@
-#ifndef TITLELISTWIDGET_P_H
-#define TITLELISTWIDGET_P_H
+#ifndef SVSCRAFT_TITLELISTWIDGET_P_H
+#define SVSCRAFT_TITLELISTWIDGET_P_H
 
 #include <SVSCraftWidgets/titlelistitemdelegate.h>
 #include <SVSCraftWidgets/titlelistwidget.h>
@@ -25,4 +25,4 @@ namespace SVS {
 
 }
 
-#endif // TITLELISTWIDGET_P_H
+#endif // SVSCRAFT_TITLELISTWIDGET_P_H

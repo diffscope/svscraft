@@ -1,5 +1,5 @@
-#ifndef THEMEDITEM_P_P_H
-#define THEMEDITEM_P_P_H
+#ifndef SVSCRAFT_THEMEDITEM_P_P_H
+#define SVSCRAFT_THEMEDITEM_P_P_H
 
 #include <SVSCraftQuick/private/themeditem_p.h>
 

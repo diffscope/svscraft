@@ -1,5 +1,5 @@
-#ifndef DOCKING_P_P_H
-#define DOCKING_P_P_H
+#ifndef SVSCRAFT_DOCKING_P_P_H
+#define SVSCRAFT_DOCKING_P_P_H
 
 #include <SVSCraftQuick/private/docking_p.h>
 

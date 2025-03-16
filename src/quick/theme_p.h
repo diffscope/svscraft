@@ -1,5 +1,5 @@
-#ifndef THEME_P_H
-#define THEME_P_H
+#ifndef SVSCRAFT_THEME_P_H
+#define SVSCRAFT_THEME_P_H
 
 #include <SVSCraftQuick/theme.h>
 
@@ -61,4 +61,4 @@ namespace SVS {
 }
 
 
-#endif // THEME_P_H
+#endif // SVSCRAFT_THEME_P_H

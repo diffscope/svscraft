@@ -1,5 +1,5 @@
-#ifndef STATUSTEXT_P_H
-#define STATUSTEXT_P_H
+#ifndef SVSCRAFT_STATUSTEXT_P_H
+#define SVSCRAFT_STATUSTEXT_P_H
 
 #include <QObject>
 #include <qqmlintegration.h>

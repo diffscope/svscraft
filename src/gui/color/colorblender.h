@@ -1,5 +1,5 @@
-#ifndef COLORBLENDER_H
-#define COLORBLENDER_H
+#ifndef SVSCRAFT_COLORBLENDER_H
+#define SVSCRAFT_COLORBLENDER_H
 
 #include <cmath>
 

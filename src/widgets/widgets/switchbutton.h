@@ -1,5 +1,5 @@
-#ifndef SWITCHBUTTON_H
-#define SWITCHBUTTON_H
+#ifndef SVSCRAFT_SWITCHBUTTON_H
+#define SVSCRAFT_SWITCHBUTTON_H
 
 #include <QAbstractButton>
 
@@ -46,4 +46,4 @@ namespace SVS {
 
 } // SVS
 
-#endif // SWITCHBUTTON_H
+#endif // SVSCRAFT_SWITCHBUTTON_H

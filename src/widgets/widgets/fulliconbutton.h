@@ -1,5 +1,5 @@
-#ifndef FULLICONBUTTON_H
-#define FULLICONBUTTON_H
+#ifndef SVSCRAFT_FULLICONBUTTON_H
+#define SVSCRAFT_FULLICONBUTTON_H
 
 #include <QMWidgets/cpushbutton.h>
 #include <QMWidgets/qmwidgetsmacros.h>
@@ -20,4 +20,4 @@ namespace SVS {
 
 }
 
-#endif // FULLICONBUTTON_H
+#endif // SVSCRAFT_FULLICONBUTTON_H

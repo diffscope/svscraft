@@ -1,5 +1,5 @@
-#ifndef LINEARSCROLLAREA_H
-#define LINEARSCROLLAREA_H
+#ifndef SVSCRAFT_LINEARSCROLLAREA_H
+#define SVSCRAFT_LINEARSCROLLAREA_H
 
 #include <QScrollArea>
 
@@ -24,4 +24,4 @@ namespace SVS {
 
 }
 
-#endif // LINEARSCROLLAREA_H
+#endif // SVSCRAFT_LINEARSCROLLAREA_H

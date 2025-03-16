@@ -1,5 +1,5 @@
-#ifndef MUSICTIMELINE_H
-#define MUSICTIMELINE_H
+#ifndef SVSCRAFT_MUSICTIMELINE_H
+#define SVSCRAFT_MUSICTIMELINE_H
 
 #include <QObject>
 
@@ -65,4 +65,4 @@ namespace SVS {
 
 }
 
-#endif // MUSICTIMELINE_H
+#endif // SVSCRAFT_MUSICTIMELINE_H

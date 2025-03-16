@@ -1,5 +1,5 @@
-#ifndef CWORKFLOWPAGE_H
-#define CWORKFLOWPAGE_H
+#ifndef SVSCRAFT_WORKFLOWPAGE_H
+#define SVSCRAFT_WORKFLOWPAGE_H
 
 #include <QFrame>
 #include <QSplitter>
@@ -76,4 +76,4 @@ namespace SVS {
 
 }
 
-#endif // CWORKFLOWPAGE_H
+#endif // SVSCRAFT_WORKFLOWPAGE_H

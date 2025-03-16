@@ -1,5 +1,5 @@
-#ifndef GLOBALHELPER_P_H
-#define GLOBALHELPER_P_H
+#ifndef SVSCRAFT_GLOBALHELPER_P_H
+#define SVSCRAFT_GLOBALHELPER_P_H
 
 #include <QObject>
 #include <qqmlintegration.h>

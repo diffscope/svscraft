@@ -1,5 +1,5 @@
-#ifndef MUSICPITCH_H
-#define MUSICPITCH_H
+#ifndef SVSCRAFT_MUSICPITCH_H
+#define SVSCRAFT_MUSICPITCH_H
 
 #include <QList>
 #include <QMetaType>
@@ -100,4 +100,4 @@ namespace SVS {
 
 }
 
-#endif // MUSICPITCH_H
+#endif // SVSCRAFT_MUSICPITCH_H

@@ -1,5 +1,5 @@
-#ifndef THEME_H
-#define THEME_H
+#ifndef SVSCRAFT_THEME_H
+#define SVSCRAFT_THEME_H
 
 #include <QSharedDataPointer>
 #include <QQuickAttachedPropertyPropagator>

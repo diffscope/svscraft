@@ -1,5 +1,5 @@
-#ifndef SYNTHVSPLITTER_H
-#define SYNTHVSPLITTER_H
+#ifndef SVSCRAFT_SYNTHVSPLITTER_H
+#define SVSCRAFT_SYNTHVSPLITTER_H
 
 #include <QAbstractScrollArea>
 #include <QFrame>
@@ -98,4 +98,4 @@ namespace SVS {
 
 } // namespace QsApi
 
-#endif // SYNTHVSPLITTER_H
+#endif // SVSCRAFT_SYNTHVSPLITTER_H

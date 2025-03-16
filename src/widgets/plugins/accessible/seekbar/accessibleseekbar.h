@@ -1,5 +1,5 @@
-#ifndef ACCESSIBLESEEKBAR_H
-#define ACCESSIBLESEEKBAR_H
+#ifndef SVSCRAFT_ACCESSIBLESEEKBAR_H
+#define SVSCRAFT_ACCESSIBLESEEKBAR_H
 
 #include <QAccessibleWidget>
 #include <SVSCraftWidgets/seekbar.h>
@@ -23,4 +23,4 @@ namespace SVS {
 
 } // SVS
 
-#endif // ACCESSIBLESEEKBAR_H
+#endif // SVSCRAFT_ACCESSIBLESEEKBAR_H

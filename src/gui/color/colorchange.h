@@ -1,5 +1,5 @@
-#ifndef COLORCHANGE_H
-#define COLORCHANGE_H
+#ifndef SVSCRAFT_COLORCHANGE_H
+#define SVSCRAFT_COLORCHANGE_H
 
 #include <QColor>
 #include <QMetaObject>

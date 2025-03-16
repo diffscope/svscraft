@@ -1,5 +1,5 @@
-#ifndef COMMANDPALETTE_P_H
-#define COMMANDPALETTE_P_H
+#ifndef SVSCRAFT_COMMANDPALETTE_P_H
+#define SVSCRAFT_COMMANDPALETTE_P_H
 
 #include <QLineEdit>
 #include <QVBoxLayout>
@@ -44,4 +44,4 @@ namespace SVS {
 
 }
 
-#endif // COMMANDPALETTE_P_H
+#endif // SVSCRAFT_COMMANDPALETTE_P_H

@@ -1,5 +1,5 @@
-#ifndef NONESCROLLAREA_H
-#define NONESCROLLAREA_H
+#ifndef SVSCRAFT_NONESCROLLAREA_H
+#define SVSCRAFT_NONESCROLLAREA_H
 
 #include <QFrame>
 
@@ -41,4 +41,4 @@ namespace SVS {
 
 }
 
-#endif // NONESCROLLAREA_H
+#endif // SVSCRAFT_NONESCROLLAREA_H

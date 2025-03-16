@@ -1,5 +1,5 @@
-#ifndef MUSICTIMELINEPRIVATE_H
-#define MUSICTIMELINEPRIVATE_H
+#ifndef SVSCRAFT_MUSICTIMELINE_P_H
+#define SVSCRAFT_MUSICTIMELINE_P_H
 
 #include <QMap>
 #include <QSet>
@@ -51,4 +51,4 @@ namespace SVS {
 
 }
 
-#endif // MUSICTIMELINEPRIVATE_H
+#endif // SVSCRAFT_MUSICTIMELINE_P_H

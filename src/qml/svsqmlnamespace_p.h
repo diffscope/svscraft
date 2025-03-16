@@ -1,5 +1,5 @@
-#ifndef SVSQMLNAMESPACE_P_H
-#define SVSQMLNAMESPACE_P_H
+#ifndef SVSCRAFT_SVSQMLNAMESPACE_P_H
+#define SVSCRAFT_SVSQMLNAMESPACE_P_H
 
 #include <QObject>
 #include <qqmlintegration.h>

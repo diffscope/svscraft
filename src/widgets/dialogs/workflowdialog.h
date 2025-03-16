@@ -1,5 +1,5 @@
-#ifndef CWORKFLOWDIALOG_H
-#define CWORKFLOWDIALOG_H
+#ifndef SVSCRAFT_WORKFLOWDIALOG_H
+#define SVSCRAFT_WORKFLOWDIALOG_H
 
 #include <QDialog>
 
@@ -41,4 +41,4 @@ namespace SVS {
 
 }
 
-#endif // CWORKFLOWDIALOG_H
+#endif // SVSCRAFT_WORKFLOWDIALOG_H

@@ -1,5 +1,5 @@
-#ifndef LONGTIMESPINBOX_H
-#define LONGTIMESPINBOX_H
+#ifndef SVSCRAFT_LONGTIMESPINBOX_H
+#define SVSCRAFT_LONGTIMESPINBOX_H
 
 #include <QSpinBox>
 
@@ -62,4 +62,4 @@ namespace SVS {
 
 }
 
-#endif // LONGTIMESPINBOX_H
+#endif // SVSCRAFT_LONGTIMESPINBOX_H

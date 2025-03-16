@@ -1,5 +1,5 @@
-#ifndef DOCKINGIMPL_H
-#define DOCKINGIMPL_H
+#ifndef SVSCRAFT_DOCKINGIMPL_P_H
+#define SVSCRAFT_DOCKINGIMPL_P_H
 
 #include <QObject>
 #include <QPointer>
@@ -48,4 +48,4 @@ namespace SVS {
     };
 }
 
-#endif //DOCKINGIMPL_H
+#endif //DOCKINGIMPL_P_H
