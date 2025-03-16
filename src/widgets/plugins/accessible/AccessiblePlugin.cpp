@@ -2,8 +2,8 @@
 
 #include <QStaticPlugin>
 
-#include "seekbar/accessibleseekbar.h"
-#include "seekbar/accessibleeditlabel.h"
+#include "seekbar/AccessibleSeekBar.h"
+#include "seekbar/AccessibleEditLabel.h"
 
 QAccessibleInterface *AccessiblePlugin::create(const QString &key, QObject *object)  {
     if (key == "SVS::SeekBar" && object && object->isWidgetType()) {
