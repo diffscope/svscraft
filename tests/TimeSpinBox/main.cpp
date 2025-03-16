@@ -4,10 +4,10 @@
 #include <QPushButton>
 #include <QLabel>
 
-#include <SVSCraftWidgets/longtimespinbox.h>
+#include <SVSCraftWidgets/LongTimeSpinBox.h>
 #include <QDebug>
-#include <SVSCraftCore/musictimeline.h>
-#include <SVSCraftWidgets/musictimespinbox.h>
+#include <SVSCraftCore/MusicTimeline.h>
+#include <SVSCraftWidgets/MusicTimeSpinBox.h>
 
 using namespace SVS;
 

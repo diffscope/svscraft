@@ -1,0 +1,88 @@
+#ifndef SVSCRAFT_THEMEDITEM_P_H
+#define SVSCRAFT_THEMEDITEM_P_H
+
+#include <QObject>
+
+#include <SVSCraftQuick/Theme.h>
+#include <SVSCraftQml/private/SVSQmlNamespace_p.h>
+
+namespace SVS {
+
+    class ThemedItemAttachedType;
+
+    class ThemedItemPrivate;
+
+    class ThemedItem : public QObject {
+        Q_OBJECT
+        Q_DECLARE_PRIVATE(ThemedItem)
+        QML_ANONYMOUS
+
+        Q_PROPERTY(SVS::SVSQmlNamespace::ControlType controlType READ controlType WRITE setControlType NOTIFY controlTypeChanged)
+        Q_PROPERTY(SVS::SVSQmlNamespace::BackgroundLevel backgroundLevel READ backgroundLevel WRITE setBackgroundLevel NOTIFY backgroundLevelChanged)
+        Q_PROPERTY(SVS::SVSQmlNamespace::ForegroundLevel foregroundLevel READ foregroundLevel WRITE setForegroundLevel NOTIFY foregroundLevelChanged)
+        Q_PROPERTY(bool foldable READ foldable WRITE setFoldable NOTIFY foldableChanged)
+        Q_PROPERTY(bool folded READ folded WRITE setFolded NOTIFY foldedChanged)
+        Q_PROPERTY(double trackStart READ trackStart WRITE setTrackStart NOTIFY trackStartChanged)
+        Q_PROPERTY(bool flat READ flat WRITE setFlat NOTIFY flatChanged)
+        Q_PROPERTY(SVS::SVSQmlNamespace::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
+        Q_PROPERTY(SVS::SVSQmlNamespace::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
+        Q_PROPERTY(bool splitHandleVisible READ splitHandleVisible WRITE setSplitHandleVisible NOTIFY splitHandleVisibleChanged)
+        Q_PROPERTY(bool splitHandleEnabled READ splitHandleEnabled WRITE setSplitHandleEnabled NOTIFY splitHandleEnabledChanged)
+    public:
+        ~ThemedItem() override;
+
+        SVSQmlNamespace::ControlType controlType() const;
+        void setControlType(SVSQmlNamespace::ControlType value);
+
+        SVS::SVSQmlNamespace::BackgroundLevel backgroundLevel() const;
+        void setBackgroundLevel(SVS::SVSQmlNamespace::BackgroundLevel value);
+
+        SVS::SVSQmlNamespace::ForegroundLevel foregroundLevel() const;
+        void setForegroundLevel(SVS::SVSQmlNamespace::ForegroundLevel value);
+
+        bool foldable() const;
+        void setFoldable(bool value);
+
+        bool folded() const;
+        void setFolded(bool value);
+
+        double trackStart() const;
+        void setTrackStart(double value);
+
+        bool flat() const;
+        void setFlat(bool value);
+
+        SVSQmlNamespace::TabIndicator tabIndicator() const;
+        void setTabIndicator(SVSQmlNamespace::TabIndicator value);
+
+        SVSQmlNamespace::DividerStroke dividerStroke() const;
+        void setDividerStroke(SVSQmlNamespace::DividerStroke value);
+
+        bool splitHandleVisible() const;
+        void setSplitHandleVisible(bool value);
+
+        bool splitHandleEnabled() const;
+        void setSplitHandleEnabled(bool value);
+
+    signals:
+        void controlTypeChanged();
+        void backgroundLevelChanged();
+        void foregroundLevelChanged();
+        void foldableChanged();
+        void foldedChanged();
+        void trackStartChanged();
+        void flatChanged();
+        void tabIndicatorChanged();
+        void dividerStrokeChanged();
+        void splitHandleVisibleChanged();
+        void splitHandleEnabledChanged();
+
+    private:
+        friend class ThemedItemAttachedType;
+        explicit ThemedItem(QObject *parent = nullptr);
+        QScopedPointer<ThemedItemPrivate> d_ptr;
+    };
+
+}
+
+#endif // SVSCRAFT_THEMEDITEM_P_H

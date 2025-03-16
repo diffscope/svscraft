@@ -2,7 +2,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <SVSCraftWidgets/seekbar.h>
+#include <SVSCraftWidgets/SeekBar.h>
 #include <QAccessibleWidget>
 
 #include <cmath>

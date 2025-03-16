@@ -6,8 +6,8 @@
 #include <QMetaProperty>
 #include <QComboBox>
 
-#include <SVSCraftGui/musicpitchvalidator.h>
-#include <SVSCraftGui/longtimevalidator.h>
+#include <SVSCraftGui/MusicPitchValidator.h>
+#include <SVSCraftGui/LongTimeValidator.h>
 
 using namespace SVS;
 

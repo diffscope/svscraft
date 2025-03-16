@@ -4,7 +4,7 @@
 #include <QLabel>
 #include <QDateTime>
 #include <QTimer>
-#include <SVSCraftWidgets/levelmeter.h>
+#include <SVSCraftWidgets/LevelMeter.h>
 
 using namespace SVS;
 

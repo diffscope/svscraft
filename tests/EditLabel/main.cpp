@@ -4,8 +4,8 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QSpinBox>
-#include <SVSCraftWidgets/editlabel.h>
-#include <SVSCraftWidgets/expressiondoublespinbox.h>
+#include <SVSCraftWidgets/EditLabel.h>
+#include <SVSCraftWidgets/ExpressionDoubleSpinBox.h>
 
 using namespace SVS;
 

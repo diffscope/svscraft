@@ -4,8 +4,8 @@
 #include <QSurfaceFormat>
 #include <QQuickStyle>
 
-#include <SVSCraftQuick/theme.h>
-#include <SVSCraftGui/colorchange.h>
+#include <SVSCraftQuick/Theme.h>
+#include <SVSCraftGui/ColorChange.h>
 
 using namespace SVS;
 

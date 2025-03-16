@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QDateTime>
-#include <SVSCraftWidgets/switchbutton.h>
+#include <SVSCraftWidgets/SwitchButton.h>
 
 using namespace SVS;
 

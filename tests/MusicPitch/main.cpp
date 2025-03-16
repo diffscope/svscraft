@@ -1,6 +1,6 @@
 #include <QtTest/QtTest>
 
-#include <SVSCraftCore/musicpitch.h>
+#include <SVSCraftCore/MusicPitch.h>
 
 using namespace SVS;
 
