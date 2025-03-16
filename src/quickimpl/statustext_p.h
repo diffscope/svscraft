@@ -4,13 +4,15 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+#include <SVSCraftQuickImpl/svscraftquickimplglobal.h>
+
 namespace SVS {
 
     class StatusTextAttachedType;
 
     class StatusTextPrivate;
 
-    class StatusText : public QObject {
+    class SVSCRAFT_QUICK_IMPL_EXPORT StatusText : public QObject {
         Q_OBJECT
         Q_DECLARE_PRIVATE(StatusText)
         QML_ANONYMOUS
