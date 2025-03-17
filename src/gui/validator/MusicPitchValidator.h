@@ -4,7 +4,7 @@
 #include <QIntValidator>
 
 #include <SVSCraftCore/MusicPitch.h>
-#include <SVSCraftGui/svscraftguiglobal.h>
+#include <SVSCraftGui/SVSCraftGuiGlobal.h>
 
 namespace SVS {
 

@@ -5,7 +5,7 @@
 
 #include <QColor>
 
-#include <SVSCraftGui/svscraftguiglobal.h>
+#include <SVSCraftGui/SVSCraftGuiGlobal.h>
 
 namespace SVS {
 

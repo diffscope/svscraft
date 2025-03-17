@@ -4,7 +4,7 @@
 #include <QColor>
 #include <QMetaObject>
 
-#include <SVSCraftGui/svscraftguiglobal.h>
+#include <SVSCraftGui/SVSCraftGuiGlobal.h>
 
 namespace SVS {
 
