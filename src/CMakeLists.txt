@@ -1,9 +1,5 @@
 qm_import(Preprocess)
 
-if(NOT TARGET qtmediate::Core)
-    find_package(qtmediate REQUIRED)
-endif()
-
 set(SVSCRAFT_PROJECT_DESCRIPTION "SVS Application Foundation")
 set(SVSCRAFT_PROJECT_COPYRIGHT "Copyright 2023 Team OpenVPI")
 set(SVSCRAFT_GENERATED_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/../include)
@@ -130,8 +126,6 @@ add_subdirectory(core)
 
 add_subdirectory(gui)
 
-add_subdirectory(widgets)
-
 add_subdirectory(qml)
 
 add_subdirectory(quick)
@@ -165,7 +159,7 @@ if(SVSCRAFT_BUILD_DOCUMENTATIONS)
         DESCRIPTION "${SVSCRAFT_PROJECT_DESCRIPTION}"
         MDFILE ../README.md
         OUTPUT_DIR ${CMAKE_BUILD_SHARE_DIR}/doc/${SVSCRAFT_INSTALL_NAME}
-        INPUT core widgets
+        INPUT core
         TARGETS ${_doc_targets}
         DEPENDS ${_doc_targets}
         NO_EXPAND_MACROS Q_OBJECT Q_GADGET Q_DECLARE_TR_FUNCTIONS

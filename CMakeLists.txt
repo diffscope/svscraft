@@ -7,7 +7,6 @@ project(svscraft VERSION 0.0.1.1 LANGUAGES CXX)
 # ----------------------------------
 option(SVSCRAFT_BUILD_STATIC "Build static libraries" OFF)
 option(SVSCRAFT_BUILD_TESTS "Build test cases" OFF)
-option(SVSCRAFT_BUILD_WIDGETS "Build widgets module" ON)
 option(SVSCRAFT_BUILD_TRANSLATIONS "Build translations" ON)
 option(SVSCRAFT_BUILD_DOCUMENTATIONS "Build documentations" OFF)
 option(SVSCRAFT_INSTALL "Install library" ON)
