@@ -445,6 +445,15 @@ namespace SVS {
             emit toolTipTimeoutChanged(d->toolTipTimeout);
         }
     }
+    bool Theme::doubleClickResetEnabled() const {
+        return d->doubleClickResetEnabled;
+    }
+    void Theme::setDoubleClickResetEnabled(bool doubleClickResetEnabled) {
+        if (d->doubleClickResetEnabled != doubleClickResetEnabled) {
+            d->doubleClickResetEnabled = doubleClickResetEnabled;
+            emit doubleClickResetEnabledChanged(d->doubleClickResetEnabled);
+        }
+    }
 }
 
 #include "moc_Theme.cpp"

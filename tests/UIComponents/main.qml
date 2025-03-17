@@ -340,6 +340,10 @@ ApplicationWindow {
                             to: 2
                             orientation: Qt.Vertical
                         }
+                        Dial {
+                            from: -1
+                            to: 2
+                        }
                         enabled: !disabledCheckBox.checked
                     }
                 }

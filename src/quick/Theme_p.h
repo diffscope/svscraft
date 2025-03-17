@@ -75,6 +75,7 @@ namespace SVS {
         int visualEffectAnimationDuration{};
         int toolTipDelay{};
         int toolTipTimeout = -1;
+        bool doubleClickResetEnabled = true;
 
     };
 }

@@ -79,6 +79,8 @@ namespace SVS {
         Q_PROPERTY(int toolTipDelay READ toolTipDelay WRITE setToolTipDelay NOTIFY toolTipDelayChanged)
         Q_PROPERTY(int toolTipTimeout READ toolTipTimeout WRITE setToolTipTimeout NOTIFY toolTipTimeoutChanged)
 
+        Q_PROPERTY(bool doubleClickResetEnabled READ doubleClickResetEnabled WRITE setDoubleClickResetEnabled NOTIFY doubleClickResetEnabledChanged)
+
     public:
         ~Theme() override;
 
@@ -178,6 +180,9 @@ namespace SVS {
         int toolTipTimeout() const;
         void setToolTipTimeout(int toolTipTimeout);
 
+        bool doubleClickResetEnabled() const;
+        void setDoubleClickResetEnabled(bool doubleClickResetEnabled);
+
         Q_INVOKABLE QColor controlColor(int controlType) const;
         Q_INVOKABLE QColor backgroundColor(int backgroundLevel) const;
         Q_INVOKABLE QColor foregroundColor(int foregroundLevel) const;
@@ -216,6 +221,7 @@ namespace SVS {
         void visualEffectAnimationDurationChanged(int visualEffectAnimationDuration);
         void toolTipDelayChanged(int toolTipDelay);
         void toolTipTimeoutChanged(int toolTipTimeout);
+        void doubleClickResetEnabledChanged(bool doubleClickResetEnabled);
 
     protected:
         void attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) override;

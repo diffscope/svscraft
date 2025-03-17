@@ -17,11 +17,13 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
+import QtQml
 import QtQuick
 import QtQuick.Templates as T
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.Slider {
     id: control
@@ -41,8 +43,28 @@ T.Slider {
     }
 
     handle: Rectangle {
-        x: control.leftPadding + (control.horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
-        y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
+        property double _animatedVisualPosition: control.visualPosition
+        property bool _doubleClicked: false
+        Connections {
+            target: control
+            function onVisualPositionChanged() {
+                control.handle._doubleClicked = false
+            }
+        }
+        Behavior on _animatedVisualPosition {
+            enabled: control.handle._doubleClicked
+            NumberAnimation {
+                duration: control.Theme.visualEffectAnimationDuration
+                easing.type: Easing.OutCubic
+                onRunningChanged: () => {
+                    if (!running) {
+                        control.handle._doubleClicked = false
+                    }
+                }
+            }
+        }
+        x: control.leftPadding + (control.horizontal ? _animatedVisualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
+        y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : _animatedVisualPosition * (control.availableHeight - height))
         implicitWidth: 12
         implicitHeight: 12
         radius: width / 2
@@ -66,6 +88,27 @@ T.Slider {
         }
     }
 
+    Theme.onDoubleClickResetEnabledChanged: () => {
+        if (Theme.doubleClickResetEnabled) {
+            AttachedHelper.installDoubleClickEventFilter()
+        } else {
+            AttachedHelper.removeDoubleClickEventFilter()
+        }
+    }
+
+    Component.onCompleted: () => {
+        if (Theme.doubleClickResetEnabled) {
+            AttachedHelper.installDoubleClickEventFilter()
+        }
+    }
+
+    AttachedHelper.onDoubleClicked: () => {
+        if (from > 0 && to > 0 || from < 0 && to < 0)
+            return
+        control.handle._doubleClicked = true
+        AttachedHelper.setProperty("value", 0)
+    }
+
     background: Rectangle {
         x: control.leftPadding + (control.horizontal ? 0 : (control.availableWidth - width) / 2)
         y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : 0)
@@ -85,12 +128,12 @@ T.Slider {
         scale: control.horizontal && control.mirrored ? -1 : 1
 
         Rectangle {
-            property double trackStart: -control.from / (control.to - control.from)
+            property double trackStart: -Math.min(control.from, control.to) / Math.abs(control.to - control.from)
             property double visualTrackStart: control.vertical || control.mirrored ? 1 - trackStart : trackStart
-            x: control.horizontal ? Math.min(trackStart, control.position) * parent.width : 0
-            y: control.horizontal ? 0 : Math.min(control.visualPosition, visualTrackStart) * parent.height
-            width: control.horizontal ? Math.abs(control.visualPosition - visualTrackStart) * parent.width : 4
-            height: control.horizontal ? 4 : Math.abs(control.visualPosition - visualTrackStart) * parent.height
+            x: control.horizontal ? Math.min(trackStart, control.mirrored ? 1 - control.handle._animatedVisualPosition : control.handle._animatedVisualPosition) * parent.width : 0
+            y: control.horizontal ? 0 : Math.min(control.handle._animatedVisualPosition, visualTrackStart) * parent.height
+            width: control.horizontal ? Math.abs(control.handle._animatedVisualPosition - visualTrackStart) * parent.width : 4
+            height: control.horizontal ? 4 : Math.abs(control.handle._animatedVisualPosition - visualTrackStart) * parent.height
 
             radius: 2
             color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :
