@@ -130,24 +130,15 @@ T.Dial {
         cursorShape: control.inputMode === T.Dial.Horizontal ? Qt.SizeHorCursor : control.inputMode === T.Dial.Vertical ? Qt.SizeVerCursor : undefined
     }
 
-    Theme.onDoubleClickResetEnabledChanged: () => {
-        if (Theme.doubleClickResetEnabled) {
-            AttachedHelper.installDoubleClickEventFilter()
-        } else {
-            AttachedHelper.removeDoubleClickEventFilter()
+    TapHandler {
+        onDoubleTapped: () => {
+            if (!Theme.doubleClickResetEnabled)
+                return
+            if (from > 0 && to > 0 || from < 0 && to < 0)
+                return
+            GlobalHelper.ungrabMouse(control)
+            control.background._doubleClicked = true
+            GlobalHelper.setProperty(control, "value", 0)
         }
-    }
-
-    Component.onCompleted: () => {
-        if (Theme.doubleClickResetEnabled) {
-            AttachedHelper.installDoubleClickEventFilter()
-        }
-    }
-
-    AttachedHelper.onDoubleClicked: () => {
-        if (from > 0 && to > 0 || from < 0 && to < 0)
-            return
-        control.background._doubleClicked = true
-        AttachedHelper.setProperty("value", 0)
     }
 }

@@ -23,6 +23,8 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+class QQuickItem;
+
 namespace SVS {
 
     class GlobalHelper : public QObject {
@@ -34,6 +36,8 @@ namespace SVS {
         ~GlobalHelper() override;
 
         Q_INVOKABLE static QPoint cursorPos();
+        Q_INVOKABLE static void setProperty(QObject *object, const QString &key, const QVariant &value);
+        Q_INVOKABLE static void ungrabMouse(QQuickItem *item);
     };
 }
 

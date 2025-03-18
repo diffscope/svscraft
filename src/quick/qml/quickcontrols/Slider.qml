@@ -42,108 +42,31 @@ T.Slider {
         radius: 4
     }
 
-    handle: Rectangle {
-        property double _animatedVisualPosition: control.visualPosition
-        property bool _doubleClicked: false
-        Connections {
-            target: control
-            function onVisualPositionChanged() {
-                control.handle._doubleClicked = false
-            }
-        }
-        Behavior on _animatedVisualPosition {
-            enabled: control.handle._doubleClicked
-            NumberAnimation {
-                duration: control.Theme.visualEffectAnimationDuration
-                easing.type: Easing.OutCubic
-                onRunningChanged: () => {
-                    if (!running) {
-                        control.handle._doubleClicked = false
-                    }
-                }
-            }
-        }
-        x: control.leftPadding + (control.horizontal ? _animatedVisualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
-        y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : _animatedVisualPosition * (control.availableHeight - height))
-        implicitWidth: 12
-        implicitHeight: 12
-        radius: width / 2
-        width: implicitWidth * (!control.enabled ? 1.1 : control.pressed ? 1 : control.hovered ? 1.25 : 1.1)
-        height: width
-        color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-               control.pressed ? Theme.controlPressedColorChange.apply(Theme.foregroundPrimaryColor) :
-               control.hovered ? Theme.controlHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
-               Theme.foregroundPrimaryColor
-        Behavior on width {
-            NumberAnimation {
-                duration: Theme.visualEffectAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
+    handle: SliderHandle {
+        controlItem: control
+        visualPosition: control.visualPosition
+        pressed: control.pressed
+        hovered: control.hovered
+    }
+
+    background: SliderBackground {
+        controlItem: control
+        property double trackStart: -Math.min(control.from, control.to) / Math.abs(control.to - control.from)
+        start: control.vertical || control.mirrored ? 1 - trackStart : trackStart
+        end: control.handle._animatedVisualPosition
+    }
+
+    TapHandler {
+        onDoubleTapped: () => {
+            if (!Theme.doubleClickResetEnabled)
+                return
+            if (from > 0 && to > 0 || from < 0 && to < 0)
+                return
+            GlobalHelper.ungrabMouse(control)
+            control.handle._doubleClicked = control.handle._doubleClickTriggered = true
+            GlobalHelper.setProperty(control, "value", 0)
+            control.handle._doubleClickTriggered = false
         }
     }
 
-    Theme.onDoubleClickResetEnabledChanged: () => {
-        if (Theme.doubleClickResetEnabled) {
-            AttachedHelper.installDoubleClickEventFilter()
-        } else {
-            AttachedHelper.removeDoubleClickEventFilter()
-        }
-    }
-
-    Component.onCompleted: () => {
-        if (Theme.doubleClickResetEnabled) {
-            AttachedHelper.installDoubleClickEventFilter()
-        }
-    }
-
-    AttachedHelper.onDoubleClicked: () => {
-        if (from > 0 && to > 0 || from < 0 && to < 0)
-            return
-        control.handle._doubleClicked = true
-        AttachedHelper.setProperty("value", 0)
-    }
-
-    background: Rectangle {
-        x: control.leftPadding + (control.horizontal ? 0 : (control.availableWidth - width) / 2)
-        y: control.topPadding + (control.horizontal ? (control.availableHeight - height) / 2 : 0)
-        implicitWidth: control.horizontal ? 200 : 4
-        implicitHeight: control.horizontal ? 4 : 200
-        width: control.horizontal ? control.availableWidth : implicitWidth
-        height: control.horizontal ? implicitHeight : control.availableHeight
-        radius: 2
-        color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.buttonColor) :
-               Theme.buttonColor
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
-        scale: control.horizontal && control.mirrored ? -1 : 1
-
-        Rectangle {
-            property double trackStart: -Math.min(control.from, control.to) / Math.abs(control.to - control.from)
-            property double visualTrackStart: control.vertical || control.mirrored ? 1 - trackStart : trackStart
-            x: control.horizontal ? Math.min(trackStart, control.mirrored ? 1 - control.handle._animatedVisualPosition : control.handle._animatedVisualPosition) * parent.width : 0
-            y: control.horizontal ? 0 : Math.min(control.handle._animatedVisualPosition, visualTrackStart) * parent.height
-            width: control.horizontal ? Math.abs(control.handle._animatedVisualPosition - visualTrackStart) * parent.width : 4
-            height: control.horizontal ? 4 : Math.abs(control.handle._animatedVisualPosition - visualTrackStart) * parent.height
-
-            radius: 2
-            color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :
-                   Theme.accentColor
-            Behavior on color {
-                ColorAnimation {
-                    duration: Theme.colorAnimationDuration
-                    easing.type: Easing.OutCubic
-                }
-            }
-        }
-    }
 }

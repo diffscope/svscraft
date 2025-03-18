@@ -20,6 +20,7 @@
 #include "GlobalHelper_p.h"
 
 #include <QCursor>
+#include <QQuickItem>
 
 namespace SVS {
     GlobalHelper::GlobalHelper(QObject *parent) : QObject(parent) {
@@ -27,6 +28,16 @@ namespace SVS {
     GlobalHelper::~GlobalHelper() = default;
     QPoint GlobalHelper::cursorPos() {
         return QCursor::pos();
+    }
+    void GlobalHelper::setProperty(QObject *object, const QString &key, const QVariant &value) {
+        if (!object)
+            return;
+        object->setProperty(key.toUtf8(), value);
+    }
+    void GlobalHelper::ungrabMouse(QQuickItem *item) {
+        if (!item)
+            return;
+        item->ungrabMouse();
     }
 }
 
