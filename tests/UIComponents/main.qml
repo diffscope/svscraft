@@ -344,6 +344,12 @@ ApplicationWindow {
                             from: -1
                             to: 2
                         }
+                        RangeSlider {
+                            orientation: Qt.Horizontal
+                        }
+                        RangeSlider {
+                            orientation: Qt.Vertical
+                        }
                         enabled: !disabledCheckBox.checked
                     }
                 }
