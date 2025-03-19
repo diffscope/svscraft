@@ -294,10 +294,22 @@ namespace SVS {
 
     int MusicTimelinePrivate::timeToTick(int measure, int beat, int tick) const {
         Q_Q(const MusicTimeline);
-        if (measure < 0 || beat < 0 || tick < 0)
+        if (measure < 0)
             return -1;
         if (measure == 0 && beat == 0) {
             return tick;
+        }
+        if (tick < 0) {
+            beat += resolution * (tick / resolution);
+        }
+        while (beat < 0) {
+            if (measure < 1)
+                return -1;
+            auto timeSig = q->timeSignatureAt(measure - 1);
+            auto refMeasure = q->nearestBarWithTimeSignatureTo(measure - 1);
+            int k = qMax(static_cast<int>(std::floor(1.0 * beat / timeSig.numerator())), refMeasure - measure);
+            beat -= timeSig.numerator() * k;
+            measure += k;
         }
 
         auto timeSig = q->timeSignatureAt(measure);
