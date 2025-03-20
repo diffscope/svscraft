@@ -39,8 +39,8 @@ Item {
 
     default property list<QtObject> contentData: []
     property int edge: Qt.LeftEdge
-    property int barSize: 40
-    property int panelSize: 400
+    property double barSize: 40
+    property double panelSize: 400
 
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
