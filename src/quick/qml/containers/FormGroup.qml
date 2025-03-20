@@ -69,6 +69,8 @@ Item {
                 visible: !(group.label instanceof Item)
                 Layout.alignment: Qt.AlignHCenter
                 ThemedItem.foregroundLevel: group.ThemedItem.foregroundLevel
+                topPadding: 2
+                bottomPadding: 2
             }
             readonly property Item realLabelItem: group.label instanceof Item ? group.label : labelItem
             readonly property Item stretch: Item { Layout.fillWidth: true }
