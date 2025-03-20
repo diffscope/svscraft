@@ -136,6 +136,10 @@ namespace SVS {
             emit object->foregroundPressedColorChangeChanged(p1->foregroundPressedColorChange);
         if (p->controlCheckedColorChange != p1->controlCheckedColorChange)
             emit object->controlCheckedColorChangeChanged(p1->controlCheckedColorChange);
+        if (p->annotationPopupTitleColorChange != p1->annotationPopupTitleColorChange)
+            emit object->annotationPopupTitleColorChangeChanged(p1->annotationPopupTitleColorChange);
+        if (p->annotationPopupContentColorChange != p1->annotationPopupContentColorChange)
+            emit object->annotationPopupContentColorChangeChanged(p1->annotationPopupContentColorChange);
         if (p->colorAnimationDuration != p1->colorAnimationDuration)
             emit object->colorAnimationDurationChanged(p1->colorAnimationDuration);
         if (p->visualEffectAnimationDuration != p1->visualEffectAnimationDuration)
@@ -144,6 +148,8 @@ namespace SVS {
             emit object->toolTipDelayChanged(p1->toolTipDelay);
         if (p->toolTipTimeout != p1->toolTipTimeout)
             emit object->toolTipTimeoutChanged(p1->toolTipTimeout);
+        if (p->doubleClickResetEnabled != p1->doubleClickResetEnabled)
+            emit object->doubleClickResetEnabledChanged(p1->doubleClickResetEnabled);
 
         for (auto child : object->attachedChildren()) {
             inherit(qobject_cast<Theme *>(child), object);
