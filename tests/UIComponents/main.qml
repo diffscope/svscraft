@@ -761,6 +761,22 @@ ApplicationWindow {
                     }
                 }
 
+                GroupBox {
+                    id: colorPicker
+                    title: "颜色选取器"
+                    property int axis: SVS.CA_Hue
+                    property double hue: 1
+                    property double saturation: 1
+                    property double value: 1
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        ColorPicker {
+
+                        }
+                    }
+                }
+
                 Item { height: 64 }
 
             }

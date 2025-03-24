@@ -38,6 +38,8 @@ namespace SVS {
         Q_INVOKABLE static QPoint cursorPos();
         Q_INVOKABLE static void setProperty(QObject *object, const QString &key, const QVariant &value);
         Q_INVOKABLE static void ungrabMouse(QQuickItem *item);
+        Q_INVOKABLE static double getCmyk(const QColor &color, int i);
+        Q_INVOKABLE static QColor setCmyk(float c, float m, float y, float k, float a);
     };
 }
 

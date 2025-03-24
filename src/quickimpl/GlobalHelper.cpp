@@ -39,6 +39,18 @@ namespace SVS {
             return;
         item->ungrabMouse();
     }
+    double GlobalHelper::getCmyk(const QColor &color, int i) {
+        if (i == 0)
+            return color.cyanF();
+        if (i == 1)
+            return color.magentaF();
+        if (i == 2)
+            return color.yellowF();
+        return color.blackF();
+    }
+    QColor GlobalHelper::setCmyk(float c, float m, float y, float k, float a) {
+        return QColor::fromCmykF(c, m, y, k, a);
+    }
 }
 
 #include "moc_GlobalHelper_p.cpp"
