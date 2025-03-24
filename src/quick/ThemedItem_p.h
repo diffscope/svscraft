@@ -36,28 +36,28 @@ namespace SVS {
         Q_DECLARE_PRIVATE(ThemedItem)
         QML_ANONYMOUS
 
-        Q_PROPERTY(SVS::SVSQmlNamespace::ControlType controlType READ controlType WRITE setControlType NOTIFY controlTypeChanged)
-        Q_PROPERTY(SVS::SVSQmlNamespace::BackgroundLevel backgroundLevel READ backgroundLevel WRITE setBackgroundLevel NOTIFY backgroundLevelChanged)
-        Q_PROPERTY(SVS::SVSQmlNamespace::ForegroundLevel foregroundLevel READ foregroundLevel WRITE setForegroundLevel NOTIFY foregroundLevelChanged)
+        Q_PROPERTY(SVS::SVSCraft::ControlType controlType READ controlType WRITE setControlType NOTIFY controlTypeChanged)
+        Q_PROPERTY(SVS::SVSCraft::BackgroundLevel backgroundLevel READ backgroundLevel WRITE setBackgroundLevel NOTIFY backgroundLevelChanged)
+        Q_PROPERTY(SVS::SVSCraft::ForegroundLevel foregroundLevel READ foregroundLevel WRITE setForegroundLevel NOTIFY foregroundLevelChanged)
         Q_PROPERTY(bool foldable READ foldable WRITE setFoldable NOTIFY foldableChanged)
         Q_PROPERTY(bool folded READ folded WRITE setFolded NOTIFY foldedChanged)
         Q_PROPERTY(double trackStart READ trackStart WRITE setTrackStart NOTIFY trackStartChanged)
         Q_PROPERTY(bool flat READ flat WRITE setFlat NOTIFY flatChanged)
-        Q_PROPERTY(SVS::SVSQmlNamespace::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
-        Q_PROPERTY(SVS::SVSQmlNamespace::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
+        Q_PROPERTY(SVS::SVSCraft::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
+        Q_PROPERTY(SVS::SVSCraft::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
         Q_PROPERTY(bool splitHandleVisible READ splitHandleVisible WRITE setSplitHandleVisible NOTIFY splitHandleVisibleChanged)
         Q_PROPERTY(bool splitHandleEnabled READ splitHandleEnabled WRITE setSplitHandleEnabled NOTIFY splitHandleEnabledChanged)
     public:
         ~ThemedItem() override;
 
-        SVSQmlNamespace::ControlType controlType() const;
-        void setControlType(SVSQmlNamespace::ControlType value);
+        SVSCraft::ControlType controlType() const;
+        void setControlType(SVSCraft::ControlType value);
 
-        SVS::SVSQmlNamespace::BackgroundLevel backgroundLevel() const;
-        void setBackgroundLevel(SVS::SVSQmlNamespace::BackgroundLevel value);
+        SVS::SVSCraft::BackgroundLevel backgroundLevel() const;
+        void setBackgroundLevel(SVS::SVSCraft::BackgroundLevel value);
 
-        SVS::SVSQmlNamespace::ForegroundLevel foregroundLevel() const;
-        void setForegroundLevel(SVS::SVSQmlNamespace::ForegroundLevel value);
+        SVS::SVSCraft::ForegroundLevel foregroundLevel() const;
+        void setForegroundLevel(SVS::SVSCraft::ForegroundLevel value);
 
         bool foldable() const;
         void setFoldable(bool value);
@@ -71,11 +71,11 @@ namespace SVS {
         bool flat() const;
         void setFlat(bool value);
 
-        SVSQmlNamespace::TabIndicator tabIndicator() const;
-        void setTabIndicator(SVSQmlNamespace::TabIndicator value);
+        SVSCraft::TabIndicator tabIndicator() const;
+        void setTabIndicator(SVSCraft::TabIndicator value);
 
-        SVSQmlNamespace::DividerStroke dividerStroke() const;
-        void setDividerStroke(SVSQmlNamespace::DividerStroke value);
+        SVSCraft::DividerStroke dividerStroke() const;
+        void setDividerStroke(SVSCraft::DividerStroke value);
 
         bool splitHandleVisible() const;
         void setSplitHandleVisible(bool value);

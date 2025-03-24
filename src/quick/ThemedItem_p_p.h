@@ -36,11 +36,11 @@ namespace SVS {
         Q_DECLARE_PUBLIC(ThemedItem)
     public:
         ThemedItem *q_ptr;
-        SVSQmlNamespace::ControlType controlType = SVSQmlNamespace::CT_Normal;
-        SVSQmlNamespace::BackgroundLevel backgroundLevel = SVSQmlNamespace::BL_Primary;
-        SVSQmlNamespace::ForegroundLevel foregroundLevel = SVSQmlNamespace::FL_Primary;
-        SVSQmlNamespace::TabIndicator tabIndicator = SVSQmlNamespace::TI_Fill;
-        SVSQmlNamespace::DividerStroke dividerStroke = SVSQmlNamespace::DS_Auto;
+        SVSCraft::ControlType controlType = SVSCraft::CT_Normal;
+        SVSCraft::BackgroundLevel backgroundLevel = SVSCraft::BL_Primary;
+        SVSCraft::ForegroundLevel foregroundLevel = SVSCraft::FL_Primary;
+        SVSCraft::TabIndicator tabIndicator = SVSCraft::TI_Fill;
+        SVSCraft::DividerStroke dividerStroke = SVSCraft::DS_Auto;
         double trackStart = 0.0;
         bool foldable = false;
         bool folded = false;

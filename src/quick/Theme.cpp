@@ -31,35 +31,35 @@ namespace SVS {
     }
     QColor Theme::controlColor(int controlType) const {
         switch (controlType) {
-            case SVSQmlNamespace::CT_Normal:
+            case SVSCraft::CT_Normal:
                 return buttonColor();
-            case SVSQmlNamespace::CT_Accent:
+            case SVSCraft::CT_Accent:
                 return accentColor();
-            case SVSQmlNamespace::CT_Warning:
+            case SVSCraft::CT_Warning:
                 return warningColor();
-            case SVSQmlNamespace::CT_Error:
+            case SVSCraft::CT_Error:
                 return errorColor();
         }
         return {};
     }
     QColor Theme::backgroundColor(int backgroundLevel) const {
         switch (backgroundLevel) {
-            case SVSQmlNamespace::BL_Primary:
+            case SVSCraft::BL_Primary:
                 return backgroundPrimaryColor();
-            case SVSQmlNamespace::BL_Secondary:
+            case SVSCraft::BL_Secondary:
                 return backgroundSecondaryColor();
-            case SVSQmlNamespace::BL_Tertiary:
+            case SVSCraft::BL_Tertiary:
                 return backgroundTertiaryColor();
-            case SVSQmlNamespace::BL_Quaternary:
+            case SVSCraft::BL_Quaternary:
                 return backgroundQuaternaryColor();
         }
         return {};
     }
     QColor Theme::foregroundColor(int foregroundLevel) const {
         switch (foregroundLevel) {
-            case SVSQmlNamespace::FL_Primary:
+            case SVSCraft::FL_Primary:
                 return foregroundPrimaryColor();
-            case SVSQmlNamespace::FL_Secondary:
+            case SVSCraft::FL_Secondary:
                 return foregroundSecondaryColor();
         }
         return {};
@@ -69,13 +69,13 @@ namespace SVS {
     }
     QColor Theme::dividerStrokeColor(int dividerStroke, const QColor &autoColor) const {
         switch (dividerStroke) {
-            case SVSQmlNamespace::DS_Auto:
+            case SVSCraft::DS_Auto:
                 return autoColor;
-            case SVSQmlNamespace::DS_None:
+            case SVSCraft::DS_None:
                 return Qt::transparent;
-            case SVSQmlNamespace::DS_Border:
+            case SVSCraft::DS_Border:
                 return borderColor();
-            case SVSQmlNamespace::DS_Splitter:
+            case SVSCraft::DS_Splitter:
                 return splitterColor();
         }
         return {};

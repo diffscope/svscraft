@@ -23,37 +23,15 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+#include <SVSCraftCore/SVSCraftNamespace.h>
+
 namespace SVS {
 
     class SVSQmlNamespace : public QObject {
         Q_OBJECT
         QML_NAMED_ELEMENT(SVS)
+        QML_FOREIGN_NAMESPACE(SVS::SVSCraft)
         QML_SINGLETON
-    public:
-        enum ControlType {
-            CT_Normal, CT_Accent, CT_Warning, CT_Error,
-        };
-        Q_ENUM(ControlType)
-
-        enum BackgroundLevel {
-            BL_Primary, BL_Secondary, BL_Tertiary, BL_Quaternary,
-        };
-        Q_ENUM(BackgroundLevel)
-
-        enum ForegroundLevel {
-            FL_Primary, FL_Secondary,
-        };
-        Q_ENUM(ForegroundLevel)
-
-        enum TabIndicator {
-            TI_Fill, TI_Top, TI_Bottom, TI_Left, TI_Right,
-        };
-        Q_ENUM(TabIndicator)
-
-        enum DividerStroke {
-            DS_Auto, DS_None, DS_Border, DS_Splitter,
-        };
-        Q_ENUM(DividerStroke)
     };
 
 }
