@@ -80,11 +80,5 @@ T.ToolTip {
             border.color: Theme.borderColor
             radius: 2
         }
-        MultiEffect {
-            source: backgroundArea
-            anchors.fill: parent
-            shadowEnabled: true
-            shadowColor: Theme.shadowColor
-        }
     }
 }
