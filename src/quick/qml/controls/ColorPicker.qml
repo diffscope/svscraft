@@ -37,7 +37,10 @@ Pane {
         onAccepted: GlobalHelper.setProperty(colorPicker, "color", selectedColor)
     }
     component ColorPickerColorPalette: ColorPalette {
-        hue: colorPicker.color.hsvHue
+        readonly property double editedHue: Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue)
+        property double previousHue: 0
+        onEditedHueChanged: previousHue = editedHue >= 0 ? editedHue : previousHue
+        hue: previousHue
         saturation: colorPicker.color.hsvSaturation
         value: colorPicker.color.hsvValue
         alpha: colorPicker.color.a
@@ -93,6 +96,7 @@ Pane {
                     height: 24
                     component ColorPreview: Item {
                         property color color: "white"
+                        readonly property bool hovered: hoverHandler.hovered
                         Image {
                             anchors.fill: parent
                             fillMode: Image.Tile
@@ -104,17 +108,27 @@ Pane {
                             anchors.fill: parent
                             color: parent.color
                         }
+                        HoverHandler {
+                            id: hoverHandler
+                        }
                     }
                     ColorPreview {
                         width: parent.width / 2
                         height: parent.height
                         color: colorPicker.color
+                        DescriptiveText.activated: hovered
+                        DescriptiveText.toolTip: qsTr("New color")
                     }
                     ColorPreview {
                         x: parent.width / 2
                         width: parent.width / 2
                         height: parent.height
                         color: colorPicker.currentColor
+                        DescriptiveText.activated: hovered
+                        DescriptiveText.toolTip: qsTr("Current color (click to set)")
+                        TapHandler {
+                            onSingleTapped: GlobalHelper.setProperty(colorPicker, "color", colorPicker.currentColor)
+                        }
                     }
                 }
             }
@@ -165,7 +179,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 255
-                            value: colorPicker.color.r * 255
+                            value: Math.round(colorPicker.color.r * 255)
                             onValueModified: frame.updateRgb()
                         }
                         Label {
@@ -176,7 +190,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 255
-                            value: colorPicker.color.g * 255
+                            value: Math.round(colorPicker.color.g * 255)
                             onValueModified: frame.updateRgb()
                         }
                         Label {
@@ -187,7 +201,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 255
-                            value: colorPicker.color.b * 255
+                            value: Math.round(colorPicker.color.b * 255)
                             onValueModified: frame.updateRgb()
                         }
                         Label {
@@ -198,7 +212,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.a * 100
+                            value: Math.round(colorPicker.color.a * 100)
                             onValueModified: frame.updateRgb()
                         }
                     }
@@ -214,7 +228,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 360
-                            value: colorPicker.color.hsvHue * 360
+                            value: Math.round(Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue) * 360)
                             onValueModified: frame.updateHsv()
                         }
                         Label {
@@ -225,7 +239,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.hsvSaturation * 100
+                            value: Math.round(colorPicker.color.hsvSaturation * 100)
                             onValueModified: frame.updateHsv()
                         }
                         Label {
@@ -236,7 +250,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.hsvValue * 100
+                            value: Math.round(colorPicker.color.hsvValue * 100)
                             onValueModified: frame.updateHsv()
                         }
                         Label {
@@ -247,7 +261,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.a * 100
+                            value: Math.round(colorPicker.color.a * 100)
                             onValueModified: frame.updateHsv()
                         }
                     }
@@ -263,7 +277,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 360
-                            value: colorPicker.color.hslHue * 360
+                            value: Math.round(Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue) * 360)
                             onValueModified: frame.updateHsl()
                         }
                         Label {
@@ -274,7 +288,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.hslSaturation * 100
+                            value: Math.round(colorPicker.color.hslSaturation * 100)
                             onValueModified: frame.updateHsl()
                         }
                         Label {
@@ -285,7 +299,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.hslLightness * 100
+                            value: Math.round(colorPicker.color.hslLightness * 100)
                             onValueModified: frame.updateHsl()
                         }
                         Label {
@@ -296,7 +310,7 @@ Pane {
                             Layout.fillWidth: true
                             from: 0
                             to: 100
-                            value: colorPicker.color.a * 100
+                            value: Math.round(colorPicker.color.a * 100)
                             onValueModified: frame.updateHsl()
                         }
                     }
@@ -313,7 +327,7 @@ Pane {
                             Layout.columnSpan: 3
                             from: 0
                             to: 100
-                            value: GlobalHelper.getCmyk(colorPicker.color, 0) * 100
+                            value: Math.round(GlobalHelper.getCmyk(colorPicker.color, 0) * 100)
                             onValueModified: frame.updateCmyk()
                         }
                         Label {
@@ -325,7 +339,7 @@ Pane {
                             Layout.columnSpan: 3
                             from: 0
                             to: 100
-                            value: GlobalHelper.getCmyk(colorPicker.color, 1) * 100
+                            value: Math.round(GlobalHelper.getCmyk(colorPicker.color, 1) * 100)
                             onValueModified: frame.updateCmyk()
                         }
                         Label {
@@ -337,7 +351,7 @@ Pane {
                             Layout.columnSpan: 3
                             from: 0
                             to: 100
-                            value: GlobalHelper.getCmyk(colorPicker.color, 2) * 100
+                            value: Math.round(GlobalHelper.getCmyk(colorPicker.color, 2) * 100)
                             onValueModified: frame.updateCmyk()
                         }
                         Label {
@@ -349,7 +363,7 @@ Pane {
                             Layout.horizontalStretchFactor: 1
                             from: 0
                             to: 100
-                            value: GlobalHelper.getCmyk(colorPicker.color, 3) * 100
+                            value: Math.round(GlobalHelper.getCmyk(colorPicker.color, 3) * 100)
                             onValueModified: frame.updateCmyk()
                         }
                         Label {
@@ -361,7 +375,7 @@ Pane {
                             Layout.horizontalStretchFactor: 1
                             from: 0
                             to: 100
-                            value: colorPicker.color.a * 100
+                            value: Math.round(colorPicker.color.a * 100)
                             onValueModified: frame.updateCmyk()
                         }
                     }
@@ -373,6 +387,7 @@ Pane {
                     text: "Hex"
                 }
                 TextField {
+                    id: hexEditor
                     Layout.fillWidth: true
                     Text {
                         id: hashtag
@@ -382,6 +397,26 @@ Pane {
                         color: parent.color
                     }
                     leftPadding: hashtag.width + 8
+                    Connections {
+                        target: colorPicker
+                        enabled: !hexEditor.activeFocus
+                        function onColorChanged() {
+                            hexEditor.text = colorPicker.color.toString().slice(1)
+                        }
+                    }
+                    text: { text = colorPicker.color.toString().slice(1) }
+                    font.capitalization: Font.AllUppercase
+                    validator: RegularExpressionValidator {
+                        regularExpression: /^[0-9A-Za-z]{0,8}$/
+                    }
+                    onTextEdited: () => {
+                        if (/^[0-9A-Za-z]{3}|[0-9A-Za-z]{6}|[0-9A-Za-z]{8}$/.test(text)) {
+                            GlobalHelper.setProperty(colorPicker, "color", `#${text}`)
+                        }
+                    }
+                    onEditingFinished: () => {
+                        hexEditor.text = colorPicker.color.toString().slice(1)
+                    }
                 }
             }
 

@@ -31,6 +31,9 @@ Control {
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
     padding: 4
+    focus: true
+    focusPolicy: Qt.TabFocus
+    activeFocusOnTab: true
 
     property double hue: 1
     property double saturation: 1
@@ -40,6 +43,12 @@ Control {
     property int dimensions: Qt.Horizontal | Qt.Vertical
 
     signal modified()
+
+    background: Rectangle {
+        color: "transparent"
+        border.width: colorPalette.activeFocus ? 2 : 0
+        border.color: Theme.navigationColor
+    }
 
     contentItem: Item {
 
