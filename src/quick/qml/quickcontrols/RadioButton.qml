@@ -33,6 +33,13 @@ T.RadioButton {
     padding: 6
     spacing: 6
 
+    background: Rectangle {
+        color: "transparent"
+        border.width: control.visualFocus ? 2 : 0
+        border.color: Theme.navigationColor
+        radius: 2
+    }
+
     indicator: Rectangle {
         implicitWidth: 16
         implicitHeight: 16
@@ -45,8 +52,8 @@ T.RadioButton {
                control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
                control.hovered ? Theme.controlHoveredColorChange.apply(_baseColor) :
                _baseColor
-        border.width: control.visualFocus ? 2 : 1
-        border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
+        border.width: 1
+        border.color: Theme.borderColor
         radius: height / 2
 
         Behavior on color {

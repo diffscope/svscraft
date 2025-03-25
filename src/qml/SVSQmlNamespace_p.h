@@ -30,7 +30,7 @@ namespace SVS {
     class SVSQmlNamespace : public QObject {
         Q_OBJECT
         QML_NAMED_ELEMENT(SVS)
-        QML_FOREIGN_NAMESPACE(SVS::SVSCraft)
+        QML_EXTENDED_NAMESPACE(SVS::SVSCraft)
         QML_SINGLETON
     };
 

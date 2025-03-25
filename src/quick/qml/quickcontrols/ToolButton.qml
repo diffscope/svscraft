@@ -92,12 +92,5 @@ T.ToolButton {
                 easing.type: Easing.OutCubic
             }
         }
-
-        Behavior on border.color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
     }
 }
