@@ -21,6 +21,16 @@
 
 #include <QCursor>
 #include <QQuickItem>
+#include <QtGui/private/qguiapplication_p.h>
+#include <qpa/qplatformtheme.h>
+#include <qpa/qplatformdialoghelper.h>
+#include <qpa/qplatformintegration.h>
+#include <qpa/qplatformservices.h>
+#include <QEventLoop>
+
+#ifdef Q_OS_WIN
+#    include <qt_windows.h>
+#endif
 
 namespace SVS {
     GlobalHelper::GlobalHelper(QObject *parent) : QObject(parent) {
@@ -50,6 +60,63 @@ namespace SVS {
     }
     QColor GlobalHelper::setCmyk(float c, float m, float y, float k, float a) {
         return QColor::fromCmykF(c, m, y, k, a);
+    }
+    bool GlobalHelper::hasNativeColorChooser() {
+#ifdef Q_OS_WIN
+        return true;
+#else
+        return QGuiApplicationPrivate::platformTheme()->usePlatformNativeDialog(QPlatformTheme::ColorDialog);
+#endif
+    }
+    QColor GlobalHelper::nativeChooseColor(const QColor &color, QWindow *window, bool hasAlpha) {
+#ifdef Q_OS_WIN
+        CHOOSECOLOR cc;
+        static COLORREF acrCustClr[16];
+        DWORD rgbCurrent = RGB(color.red(), color.green(), color.blue());
+
+        ZeroMemory(&cc, sizeof(cc));
+        cc.lStructSize = sizeof(cc);
+        cc.hwndOwner = reinterpret_cast<HWND>(window->winId());
+        cc.lpCustColors = acrCustClr;
+        cc.rgbResult = rgbCurrent;
+        cc.Flags = CC_FULLOPEN | CC_RGBINIT;
+
+        if (ChooseColor(&cc)) {
+            rgbCurrent = cc.rgbResult;
+            return QColor::fromRgb(GetRValue(rgbCurrent), GetGValue(rgbCurrent), GetBValue(rgbCurrent));
+        }
+
+        return {};
+#else
+        QScopedPointer<QPlatformColorDialogHelper> dlg(qobject_cast<QPlatformColorDialogHelper *>(QGuiApplicationPrivate::platformTheme()->createPlatformDialogHelper(QPlatformTheme::ColorDialog)));
+        if (!dlg)
+            return color;
+        auto options = QColorDialogOptions::create();
+        options->setOption(QColorDialogOptions::ShowAlphaChannel, hasAlpha);
+        dlg->setOptions(options);
+        dlg->setCurrentColor(color);
+        QEventLoop eventLoop;
+        connect(dlg.get(), &QPlatformDialogHelper::accept, &eventLoop, [&] { eventLoop.exit(QPlatformDialogHelper::Accepted); });
+        connect(dlg.get(), &QPlatformDialogHelper::reject, &eventLoop, [&] { eventLoop.exit(QPlatformDialogHelper::Rejected); });
+        dlg->show(Qt::Dialog, Qt::ApplicationModal, window);
+        if (eventLoop.exec() == QPlatformDialogHelper::Accepted)
+            return dlg->currentColor();
+        return {};
+#endif
+    }
+    QColor GlobalHelper::pickColor(QWindow *window) {
+        if (auto colorPicker = QGuiApplicationPrivate::platformIntegration()->services()->colorPicker(window)) {
+            QColor color;
+            QEventLoop eventLoop;
+            connect(colorPicker, &QPlatformServiceColorPicker::colorPicked, colorPicker, [&](const QColor &c) {
+                color = c;
+                eventLoop.exit();
+            });
+            colorPicker->pickColor();
+            eventLoop.exec();
+            return color;
+        }
+        return {};
     }
 }
 

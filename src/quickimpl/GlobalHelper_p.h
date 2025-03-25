@@ -23,6 +23,8 @@
 #include <QObject>
 #include <qqmlintegration.h>
 
+#include <QWindow>
+
 class QQuickItem;
 
 namespace SVS {
@@ -40,6 +42,9 @@ namespace SVS {
         Q_INVOKABLE static void ungrabMouse(QQuickItem *item);
         Q_INVOKABLE static double getCmyk(const QColor &color, int i);
         Q_INVOKABLE static QColor setCmyk(float c, float m, float y, float k, float a);
+        Q_INVOKABLE static bool hasNativeColorChooser();
+        Q_INVOKABLE static QColor nativeChooseColor(const QColor &color, QWindow *window, bool hasAlpha);
+        Q_INVOKABLE static QColor pickColor(QWindow *window);
     };
 }
 

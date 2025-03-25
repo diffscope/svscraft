@@ -21,7 +21,6 @@ import QtQml
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Dialogs
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -32,22 +31,18 @@ Pane {
     property color color: Theme.accentColor
     property color currentColor: "white"
     property int axis: SVS.CA_Hue
-    readonly property ColorDialog colorDialog: ColorDialog {
-        selectedColor: colorPicker.color
-        onAccepted: GlobalHelper.setProperty(colorPicker, "color", selectedColor)
-    }
+    property int flags: 16383
     component ColorPickerColorPalette: ColorPalette {
-        readonly property double editedHue: Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue)
-        property double previousHue: 0
-        onEditedHueChanged: previousHue = editedHue >= 0 ? editedHue : previousHue
-        hue: previousHue
+        hue: Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue, 0)
         saturation: colorPicker.color.hsvSaturation
         value: colorPicker.color.hsvValue
         alpha: colorPicker.color.a
         onModified: GlobalHelper.setProperty(colorPicker, "color", Qt.hsva(hue, saturation, value, alpha))
     }
-    RowLayout {
-        spacing: 8
+    GridLayout {
+        rowSpacing: 8
+        columnSpacing: 8
+        columns: colorSpecTabBar.model.length > 0 ? 2 : 1
         ColumnLayout {
             spacing: 4
             RowLayout {
@@ -64,15 +59,16 @@ Pane {
             ColorPickerColorPalette {
                 dimensions: Qt.Horizontal
                 axis: SVS.CA_Alpha
+                visible: colorPicker.flags & SVS.CM_Alpha
             }
         }
         ColumnLayout {
-            Layout.preferredWidth: 160
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 4
                 ToolButton {
                     text: colorPicker.axis === SVS.CA_Hue ? "H" : colorPicker.axis === SVS.CA_Saturation ? "S" : colorPicker.axis === SVS.CA_Value ? "V" : undefined
+                    visible: colorPicker.flags & SVS.CM_AxisChangeable
                     DescriptiveText.activated: hovered
                     DescriptiveText.toolTip: qsTr("Switch palette")
                     onClicked: () => {
@@ -81,14 +77,27 @@ Pane {
                 }
                 ToolButton {
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Color16Filled.svg"
+                    visible: (colorPicker.flags & SVS.CM_NativeColorDialog) && GlobalHelper.hasNativeColorChooser()
                     DescriptiveText.activated: hovered
                     DescriptiveText.toolTip: qsTr("Show native color dialog")
-                    onClicked: colorPicker.colorDialog.open()
+                    onClicked: () => {
+                        let c = GlobalHelper.nativeChooseColor(colorPicker.color, Window.window, colorPicker.flags & SVS.CM_Alpha)
+                        if (!c.valid)
+                            return
+                        GlobalHelper.setProperty(colorPicker, "color", c)
+                    }
                 }
                 ToolButton {
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Eyedropper20Filled.svg"
+                    visible: colorPicker.flags & SVS.CM_Eyedropper
                     DescriptiveText.activated: hovered
                     DescriptiveText.toolTip: qsTr("Pick a color on the screen")
+                    onClicked: () => {
+                        let c = GlobalHelper.pickColor(Window.window)
+                        if (!c.valid)
+                            return
+                        GlobalHelper.setProperty(colorPicker, "color", c)
+                    }
                 }
                 Item {
                     id: colorPreviewArea
@@ -113,38 +122,51 @@ Pane {
                         }
                     }
                     ColorPreview {
-                        width: parent.width / 2
+                        width: parent.width / ((colorPicker.flags & SVS.CM_ShowCurrentColor) ? 2 : 1)
                         height: parent.height
                         color: colorPicker.color
                         DescriptiveText.activated: hovered
                         DescriptiveText.toolTip: qsTr("New color")
                     }
-                    ColorPreview {
+                    Button {
+                        visible: colorPicker.flags & SVS.CM_ShowCurrentColor
                         x: parent.width / 2
                         width: parent.width / 2
                         height: parent.height
-                        color: colorPicker.currentColor
+                        contentItem: null
+                        background: ColorPreview {
+                            color: colorPicker.currentColor
+                        }
                         DescriptiveText.activated: hovered
                         DescriptiveText.toolTip: qsTr("Current color (click to set)")
-                        TapHandler {
-                            onSingleTapped: GlobalHelper.setProperty(colorPicker, "color", colorPicker.currentColor)
-                        }
+                        onClicked: GlobalHelper.setProperty(colorPicker, "color", colorPicker.currentColor)
                     }
+
                 }
             }
             TabBar {
                 id: colorSpecTabBar
-                TabButton {
-                    text: "RGB"
-                }
-                TabButton {
-                    text: "HSV"
-                }
-                TabButton {
-                    text: "HSL"
-                }
-                TabButton {
-                    text: "CMYK"
+                Layout.fillWidth: true
+                readonly property list<int> model: ((flags) => {
+                    let a = []
+                    if (flags & SVS.CM_ColorSpecRgb)
+                        a.push(SVS.CM_ColorSpecRgb)
+                    if (flags & SVS.CM_ColorSpecHsv)
+                        a.push(SVS.CM_ColorSpecHsv)
+                    if (flags & SVS.CM_ColorSpecHsl)
+                        a.push(SVS.CM_ColorSpecHsl)
+                    if (flags & SVS.CM_ColorSpecCmyk)
+                        a.push(SVS.CM_ColorSpecCmyk)
+                    return a
+                })(colorPicker.flags)
+                readonly property int currentFlag: model[currentIndex] ?? 0
+                visible: model.length > 1
+                Repeater {
+                    model: colorSpecTabBar.model
+                    TabButton {
+                        required property int modelData
+                        text: modelData === SVS.CM_ColorSpecRgb ? "RGB" : modelData === SVS.CM_ColorSpecHsv ? "HSV" : modelData === SVS.CM_ColorSpecHsl ? "HSL" : "CMYK"
+                    }
                 }
             }
             Frame {
@@ -164,9 +186,9 @@ Pane {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 padding: 8
+                visible: colorSpecTabBar.model.length > 0
                 StackLayout {
-                    anchors.fill: parent
-                    currentIndex: colorSpecTabBar.currentIndex
+                    currentIndex: colorSpecTabBar.currentFlag === SVS.CM_ColorSpecRgb ? 0 : colorSpecTabBar.currentFlag === SVS.CM_ColorSpecHsv ? 1 : colorSpecTabBar.currentFlag === SVS.CM_ColorSpecHsl ? 2 : 3
                     GridLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -177,6 +199,7 @@ Pane {
                         SpinBox {
                             id: rSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "R"
                             from: 0
                             to: 255
                             value: Math.round(colorPicker.color.r * 255)
@@ -188,6 +211,7 @@ Pane {
                         SpinBox {
                             id: gSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "G"
                             from: 0
                             to: 255
                             value: Math.round(colorPicker.color.g * 255)
@@ -199,6 +223,7 @@ Pane {
                         SpinBox {
                             id: bSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "B"
                             from: 0
                             to: 255
                             value: Math.round(colorPicker.color.b * 255)
@@ -206,10 +231,13 @@ Pane {
                         }
                         Label {
                             text: "A"
+                            visible: colorPicker.flags & SVS.CM_Alpha
                         }
                         SpinBox {
                             id: aSpinBoxRgb
+                            visible: colorPicker.flags & SVS.CM_Alpha
                             Layout.fillWidth: true
+                            Accessible.name: "A"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.a * 100)
@@ -226,9 +254,10 @@ Pane {
                         SpinBox {
                             id: hSpinBoxHsv
                             Layout.fillWidth: true
+                            Accessible.name: "H"
                             from: 0
                             to: 360
-                            value: Math.round(Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue) * 360)
+                            value: Math.round(Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue, 0) * 360)
                             onValueModified: frame.updateHsv()
                         }
                         Label {
@@ -237,6 +266,7 @@ Pane {
                         SpinBox {
                             id: sSpinBoxHsv
                             Layout.fillWidth: true
+                            Accessible.name: "S"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.hsvSaturation * 100)
@@ -248,6 +278,7 @@ Pane {
                         SpinBox {
                             id: vSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "V"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.hsvValue * 100)
@@ -255,10 +286,13 @@ Pane {
                         }
                         Label {
                             text: "A"
+                            visible: colorPicker.flags & SVS.CM_Alpha
                         }
                         SpinBox {
                             id: aSpinBoxHsv
+                            visible: colorPicker.flags & SVS.CM_Alpha
                             Layout.fillWidth: true
+                            Accessible.name: "A"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.a * 100)
@@ -275,9 +309,10 @@ Pane {
                         SpinBox {
                             id: hSpinBoxHsl
                             Layout.fillWidth: true
+                            Accessible.name: "H"
                             from: 0
                             to: 360
-                            value: Math.round(Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue) * 360)
+                            value: Math.round(Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue, 0) * 360)
                             onValueModified: frame.updateHsl()
                         }
                         Label {
@@ -286,6 +321,7 @@ Pane {
                         SpinBox {
                             id: sSpinBoxHsl
                             Layout.fillWidth: true
+                            Accessible.name: "S"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.hslSaturation * 100)
@@ -297,6 +333,7 @@ Pane {
                         SpinBox {
                             id: lSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "L"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.hslLightness * 100)
@@ -304,10 +341,13 @@ Pane {
                         }
                         Label {
                             text: "A"
+                            visible: colorPicker.flags & SVS.CM_Alpha
                         }
                         SpinBox {
                             id: aSpinBoxHsl
+                            visible: colorPicker.flags & SVS.CM_Alpha
                             Layout.fillWidth: true
+                            Accessible.name: "A"
                             from: 0
                             to: 100
                             value: Math.round(colorPicker.color.a * 100)
@@ -324,6 +364,7 @@ Pane {
                         SpinBox {
                             id: cSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "C"
                             Layout.columnSpan: 3
                             from: 0
                             to: 100
@@ -336,6 +377,7 @@ Pane {
                         SpinBox {
                             id: mSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "M"
                             Layout.columnSpan: 3
                             from: 0
                             to: 100
@@ -348,6 +390,7 @@ Pane {
                         SpinBox {
                             id: ySpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "Y"
                             Layout.columnSpan: 3
                             from: 0
                             to: 100
@@ -360,7 +403,9 @@ Pane {
                         SpinBox {
                             id: kSpinBox
                             Layout.fillWidth: true
+                            Accessible.name: "K"
                             Layout.horizontalStretchFactor: 1
+                            Layout.columnSpan: (colorPicker.flags & SVS.CM_Alpha) ? 1 : 3
                             from: 0
                             to: 100
                             value: Math.round(GlobalHelper.getCmyk(colorPicker.color, 3) * 100)
@@ -368,9 +413,12 @@ Pane {
                         }
                         Label {
                             text: "A"
+                            visible: colorPicker.flags & SVS.CM_Alpha
                         }
                         SpinBox {
                             id: aSpinBoxCmyk
+                            visible: colorPicker.flags & SVS.CM_Alpha
+                            Accessible.name: "A"
                             Layout.fillWidth: true
                             Layout.horizontalStretchFactor: 1
                             from: 0
@@ -382,13 +430,15 @@ Pane {
                 }
             }
             RowLayout {
+                visible: colorPicker.flags & SVS.CM_Hex
                 spacing: 4
                 Label {
-                    text: "Hex"
+                    text: qsTr("Hex")
                 }
                 TextField {
                     id: hexEditor
                     Layout.fillWidth: true
+                    Accessible.name: qsTr("Hex")
                     Text {
                         id: hashtag
                         x: 8
@@ -407,10 +457,10 @@ Pane {
                     text: { text = colorPicker.color.toString().slice(1) }
                     font.capitalization: Font.AllUppercase
                     validator: RegularExpressionValidator {
-                        regularExpression: /^[0-9A-Za-z]{0,8}$/
+                        regularExpression: (colorPicker.flags & SVS.CM_Alpha) ? /^[0-9A-Za-z]{0,8}$/ : /^[0-9A-Za-z]{0,6}$/
                     }
                     onTextEdited: () => {
-                        if (/^[0-9A-Za-z]{3}|[0-9A-Za-z]{6}|[0-9A-Za-z]{8}$/.test(text)) {
+                        if (/^[0-9A-Za-z]{3}|[0-9A-Za-z]{6}$/.test(text) || (colorPicker.flags & SVS.CM_Alpha) && /^[0-9A-Za-z]{8}$/.test(text) ) {
                             GlobalHelper.setProperty(colorPicker, "color", `#${text}`)
                         }
                     }

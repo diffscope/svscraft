@@ -34,6 +34,7 @@ Control {
     focus: true
     focusPolicy: Qt.TabFocus
     activeFocusOnTab: true
+    Accessible.name: qsTr("Color Palette")
 
     property double hue: 1
     property double saturation: 1
@@ -46,7 +47,7 @@ Control {
 
     background: Rectangle {
         color: "transparent"
-        border.width: colorPalette.activeFocus ? 2 : 0
+        border.width: colorPalette.visualFocus ? 2 : 0
         border.color: Theme.navigationColor
     }
 
@@ -203,7 +204,7 @@ Control {
                 width: 8
                 height: 8
                 radius: 4
-                color: Qt.hsva(colorPalette.hue, colorPalette.axis === SVS.CA_Hue && !is2d ? 1 : colorPalette.saturation, colorPalette.axis === SVS.CA_Hue && !is2d ? 1 : colorPalette.value, colorPalette.axis === SVS.CA_Alpha ? 0 : 1)
+                color: Qt.hsva(colorPalette.hue, colorPalette.axis === SVS.CA_Hue && !is2d || colorPalette.axis === SVS.CA_HueValue && is2d ? 1 : colorPalette.saturation, colorPalette.axis === SVS.CA_Hue && !is2d || colorPalette.axis === SVS.CA_HueSaturation && is2d ? 1 : colorPalette.value, colorPalette.axis === SVS.CA_Alpha ? 0 : 1)
                 readonly property color _c: Qt.hsva(color.hsvHue, color.hsvSaturation * (colorPalette.axis === SVS.CA_Alpha ? colorPalette.alpha : 1), color.hsvValue, 1)
                 border.color: Qt.rgba(1 - _c.r, 1 - _c.g, 1 - _c.b, 1)
             }

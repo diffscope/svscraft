@@ -762,17 +762,42 @@ ApplicationWindow {
                 }
 
                 GroupBox {
-                    id: colorPicker
                     title: "颜色选取器"
                     property int axis: SVS.CA_Hue
                     property double hue: 1
                     property double saturation: 1
                     property double value: 1
-                    ColumnLayout {
+                    RowLayout {
                         anchors.fill: parent
                         spacing: 8
                         ColorPicker {
-
+                            id: colorPicker
+                        }
+                        ColumnLayout {
+                            spacing: 4
+                            component ColorPickerFlagCheckBox: CheckBox {
+                                required property string flagName
+                                readonly property int flagValue: SVS[flagName]
+                                text: flagName
+                                checked: colorPicker.flags & flagValue
+                                onCheckedChanged: () => {
+                                    if (checked) {
+                                        colorPicker.flags |= flagValue
+                                    } else {
+                                        colorPicker.flags &= ~flagValue
+                                    }
+                                }
+                            }
+                            ColorPickerFlagCheckBox{ flagName: "CM_ColorSpecRgb" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_ColorSpecHsv" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_ColorSpecHsl" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_ColorSpecCmyk" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_Hex" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_Alpha" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_AxisChangeable" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_Eyedropper" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_NativeColorDialog" }
+                            ColorPickerFlagCheckBox{ flagName: "CM_ShowCurrentColor" }
                         }
                     }
                 }
