@@ -93,7 +93,7 @@ Pane {
                     DescriptiveText.activated: hovered
                     DescriptiveText.toolTip: qsTr("Pick a color on the screen")
                     onClicked: () => {
-                        let c = GlobalHelper.pickColor(Window.window)
+                        let c = Eyedropper.pickColor(Window.window)
                         if (!c.valid)
                             return
                         GlobalHelper.setProperty(colorPicker, "color", c)

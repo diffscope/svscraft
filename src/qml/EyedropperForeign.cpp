@@ -17,30 +17,15 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#include <QQmlApplicationEngine>
-#include <QGuiApplication>
-#include <QColor>
-#include <QSurfaceFormat>
-#include <QQuickStyle>
+#include "EyedropperForeign_p.h"
 
-#include <SVSCraftQuick/Theme.h>
 #include <SVSCraftGui/Eyedropper.h>
 
-
-using namespace SVS;
-
-int main(int argc, char *argv[]) {
-    QGuiApplication a(argc, argv);
-
-    auto sf = QSurfaceFormat::defaultFormat();
-    sf.setSamples(8);
-    QSurfaceFormat::setDefaultFormat(sf);
-
-    QQuickStyle::setStyle("SVSCraft.UIComponents");
-    QQuickStyle::setFallbackStyle("Basic");
-
-    QQmlApplicationEngine engine;
-    engine.load(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
-
-    return a.exec();
+namespace SVS {
+    EyedropperForeign::EyedropperForeign(QObject *parent) : QObject(parent) {
+    }
+    EyedropperForeign::~EyedropperForeign() = default;
+    QColor EyedropperForeign::pickColor(QWindow *window, bool useNativeColorPickerIfAvailable) {
+        return Eyedropper::pickColorSync(window, useNativeColorPickerIfAvailable);
+    }
 }

@@ -17,30 +17,37 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#include <QQmlApplicationEngine>
-#include <QGuiApplication>
-#include <QColor>
-#include <QSurfaceFormat>
-#include <QQuickStyle>
+#ifndef SVSCRAFT_EYEDROPPER_H
+#define SVSCRAFT_EYEDROPPER_H
 
-#include <SVSCraftQuick/Theme.h>
-#include <SVSCraftGui/Eyedropper.h>
+#include <QObject>
+#include <SVSCraftGui/SVSCraftGuiGlobal.h>
 
+class QWindow;
 
-using namespace SVS;
+namespace SVS {
 
-int main(int argc, char *argv[]) {
-    QGuiApplication a(argc, argv);
+    class EyedropperPrivate;
 
-    auto sf = QSurfaceFormat::defaultFormat();
-    sf.setSamples(8);
-    QSurfaceFormat::setDefaultFormat(sf);
+    class SVSCRAFT_GUI_EXPORT Eyedropper : public QObject {
+        Q_OBJECT
+        Q_DECLARE_PRIVATE(Eyedropper)
+    public:
+        explicit Eyedropper(QObject *parent = nullptr);
+        ~Eyedropper() override;
 
-    QQuickStyle::setStyle("SVSCraft.UIComponents");
-    QQuickStyle::setFallbackStyle("Basic");
+        void pickColor(QWindow *window = nullptr, bool useNativeColorPickerIfAvailable = true);
+        static QColor pickColorSync(QWindow *window = nullptr, bool useNativeColorPickerIfAvailable = true);
 
-    QQmlApplicationEngine engine;
-    engine.load(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
+        bool eventFilter(QObject *watched, QEvent *event) override;
 
-    return a.exec();
+    signals:
+        void colorPicked(const QColor &color);
+
+    private:
+        QScopedPointer<EyedropperPrivate> d_ptr;
+    };
+
 }
+
+#endif //SVSCRAFT_EYEDROPPER_H

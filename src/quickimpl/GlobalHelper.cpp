@@ -104,20 +104,6 @@ namespace SVS {
         return {};
 #endif
     }
-    QColor GlobalHelper::pickColor(QWindow *window) {
-        if (auto colorPicker = QGuiApplicationPrivate::platformIntegration()->services()->colorPicker(window)) {
-            QColor color;
-            QEventLoop eventLoop;
-            connect(colorPicker, &QPlatformServiceColorPicker::colorPicked, colorPicker, [&](const QColor &c) {
-                color = c;
-                eventLoop.exit();
-            });
-            colorPicker->pickColor();
-            eventLoop.exec();
-            return color;
-        }
-        return {};
-    }
 }
 
 #include "moc_GlobalHelper_p.cpp"

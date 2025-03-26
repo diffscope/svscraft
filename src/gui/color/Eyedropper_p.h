@@ -17,30 +17,27 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#include <QQmlApplicationEngine>
-#include <QGuiApplication>
-#include <QColor>
-#include <QSurfaceFormat>
-#include <QQuickStyle>
+#ifndef SVSCRAFT_EYEDROPPER_P_H
+#define SVSCRAFT_EYEDROPPER_P_H
 
-#include <SVSCraftQuick/Theme.h>
 #include <SVSCraftGui/Eyedropper.h>
+#include <QColor>
+#include <qpa/qplatformservices.h>
 
+namespace SVS {
 
-using namespace SVS;
+    class ScreenMirrorWindow;
 
-int main(int argc, char *argv[]) {
-    QGuiApplication a(argc, argv);
+    class EyedropperPrivate {
+        Q_DECLARE_PUBLIC(Eyedropper)
+    public:
+        Eyedropper *q_ptr;
+        QColor color;
+        QList<ScreenMirrorWindow *> windows;
 
-    auto sf = QSurfaceFormat::defaultFormat();
-    sf.setSamples(8);
-    QSurfaceFormat::setDefaultFormat(sf);
-
-    QQuickStyle::setStyle("SVSCraft.UIComponents");
-    QQuickStyle::setFallbackStyle("Basic");
-
-    QQmlApplicationEngine engine;
-    engine.load(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
-
-    return a.exec();
+        void createWindows();
+        void destroyWindows();
+    };
 }
+
+#endif //SVSCRAFT_EYEDROPPER_P_H
