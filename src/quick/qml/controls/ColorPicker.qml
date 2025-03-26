@@ -192,6 +192,7 @@ Pane {
                 padding: 8
                 visible: colorSpecTabBar.model.length > 0
                 StackLayout {
+                    anchors.fill: parent
                     currentIndex: colorSpecTabBar.currentFlag === SVS.CM_ColorSpecRgb ? 0 : colorSpecTabBar.currentFlag === SVS.CM_ColorSpecHsv ? 1 : colorSpecTabBar.currentFlag === SVS.CM_ColorSpecHsl ? 2 : 3
                     GridLayout {
                         Layout.fillWidth: true
