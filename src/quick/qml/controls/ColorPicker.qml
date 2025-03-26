@@ -32,6 +32,8 @@ Pane {
     property color currentColor: "white"
     property int axis: SVS.CA_Hue
     property int flags: 16383
+    signal eyedropperAboutToShow()
+    signal eyedropperClosed()
     component ColorPickerColorPalette: ColorPalette {
         hue: Math.max(colorPicker.color.hsvHue, colorPicker.color.hslHue, 0)
         saturation: colorPicker.color.hsvSaturation
@@ -93,7 +95,9 @@ Pane {
                     DescriptiveText.activated: hovered
                     DescriptiveText.toolTip: qsTr("Pick a color on the screen")
                     onClicked: () => {
+                        colorPicker.eyedropperAboutToShow()
                         let c = Eyedropper.pickColor(Window.window)
+                        colorPicker.eyedropperClosed()
                         if (!c.valid)
                             return
                         GlobalHelper.setProperty(colorPicker, "color", c)
