@@ -34,6 +34,7 @@ namespace SVS {
         Eyedropper *q_ptr;
         QColor color;
         QList<ScreenMirrorWindow *> windows;
+        bool picking = false;
 
         void createWindows();
         void destroyWindows();

@@ -106,12 +106,24 @@ namespace SVS {
     };
 
     void EyedropperPrivate::createWindows() {
+        Q_Q(Eyedropper);
         for (auto screen : QGuiApplication::screens()) {
             auto window = new ScreenMirrorWindow(screen, this);
+            QObject::connect(window, &QWindow::visibleChanged, q, [=](bool visible) {
+                if (!visible && picking) {
+                    destroyWindows();
+
+                }
+            });
             windows.append(window);
         }
+        qGuiApp->installEventFilter(q);
+        picking = true;
     }
     void EyedropperPrivate::destroyWindows() {
+        Q_Q(Eyedropper);
+        picking = false;
+        qGuiApp->removeEventFilter(q);
         for (auto window : windows) {
             window->hide();
             window->deleteLater();
@@ -136,7 +148,6 @@ namespace SVS {
             connect(colorPicker, &QPlatformServiceColorPicker::colorPicked, this, &Eyedropper::colorPicked);
             colorPicker->pickColor();
         } else {
-            qGuiApp->installEventFilter(this);
             d->createWindows();
         }
     }
@@ -169,6 +180,7 @@ namespace SVS {
                 emit colorPicked(d->color);
             }
         } else if (event->type() == QEvent::MouseButtonPress) {
+            d->destroyWindows();
             emit colorPicked(d->color);
         }
         return QObject::eventFilter(watched, event);
