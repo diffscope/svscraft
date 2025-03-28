@@ -67,10 +67,11 @@ namespace SVS {
         void load(const double *data, qsizetype offset, qsizetype length, qsizetype destination);
 
         QPair<int, int> peak(qsizetype offset, qsizetype length) const;
+        double rms(qsizetype offset, qsizetype length) const;
         int value(qsizetype offset, int interpolationIndex) const;
 
-        friend QDataStream &operator<<(QDataStream &stream, const WaveformMipmap &waveformMipmap);
-        friend QDataStream &operator>>(QDataStream &stream, WaveformMipmap &waveformMipmap);
+        SVSCRAFT_CORE_EXPORT friend QDataStream &operator<<(QDataStream &stream, const WaveformMipmap &waveformMipmap);
+        SVSCRAFT_CORE_EXPORT friend QDataStream &operator>>(QDataStream &stream, WaveformMipmap &waveformMipmap);
 
     private:
         QSharedDataPointer<WaveformMipmapData> d;

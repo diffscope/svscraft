@@ -122,7 +122,7 @@ namespace SVS {
                 double rms = std::sqrt(std::accumulate(rmsOriginal + blockOffset, rmsOriginal + blockOffset + blockLength, 0.0, [](double s, auto v) {
                     return s + normalizeSample(v) * normalizeSample(v);
                 }) / blockLength);
-                rms16[mipmapIndex] = convertSample<T, S>(rms);
+                rms16[mipmapIndex] = convertSample<double, S>(rms);
             }
         }
     }
@@ -135,7 +135,7 @@ namespace SVS {
         auto offset16 = destination / 16 * 16;
         auto length16 = (destination + length + 15) / 16 - offset16;
         auto offset256 = offset16 / 16 * 16;
-        auto length256 = (offset16 + length + 15) / 16 - offset256;
+        auto length256 = (offset16 + length16 + 15) / 16 - offset256;
         auto offset4096 = offset256 / 16 * 16;
         if (d->level >= WaveformMipmap::Original) {
             if (d->sampleType == WaveformMipmap::Int8) {
@@ -218,7 +218,7 @@ namespace SVS {
         auto endIndex = offset + length;
         if (d->level == Downscale) {
             initialIndex = initialIndex / 16 * 16;
-            endIndex = qMin(d->max16.size(), (endIndex + 15) / 16 * 16);
+            endIndex = qMin(d->max16.size() * 16, (endIndex + 15) / 16 * 16);
         }
         for (auto i = initialIndex; i < endIndex; i++) {
             if (i % 4096 && endIndex - i > 4096) {
@@ -230,15 +230,61 @@ namespace SVS {
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max256.data(), i / 256));
                 i += 256;
             } else if (i % 16 && endIndex - i > 16) {
-                ret.first = qMin(ret.first, getSampleFrom(d, d->min16.data(), i));
-                ret.second = qMax(ret.second, getSampleFrom(d, d->max16.data(), i));
+                ret.first = qMin(ret.first, getSampleFrom(d, d->min16.data(), i / 16));
+                ret.second = qMax(ret.second, getSampleFrom(d, d->max16.data(), i / 16));
                 i += 16;
             } else if (d->level >= Original) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->originalData.data(), i));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->originalData.data(), i));
+                i += 1;
             }
         }
+        if (ret.first > ret.second)
+            ret = {0, 0};
         return ret;
+    }
+    static inline double getSampleNormalized(const WaveformMipmapData *d, const qint8 *data, qsizetype offset) {
+        if (d->sampleType == WaveformMipmap::Int8) {
+            return qMax(-1.0, 1.0 * data[offset] / 127.0);
+        } else {
+            return qMax(-1.0, 1.0 * reinterpret_cast<const qint16 *>(data)[offset] / 32767.0);
+        }
+    }
+    double WaveformMipmap::rms(qsizetype offset, qsizetype length) const {
+        if (!useRms())
+            return 0;
+        if (offset >= d->size)
+            return 0;
+        if (offset + length > d->size)
+            length = d->size - offset;
+        double ret = 0;
+        auto initialIndex = offset;
+        auto endIndex = offset + length;
+        if (d->level == Downscale) {
+            initialIndex = initialIndex / 16 * 16;
+            endIndex = qMin(d->max16.size() * 16, (endIndex + 15) / 16 * 16);
+        }
+        for (auto i = initialIndex; i < endIndex; i++) {
+            if (i % 4096 && endIndex - i > 4096) {
+                auto x = getSampleNormalized(d, d->rms4096.data(), i / 4096);
+                ret += x * x * 4096;
+                i += 4096;
+            } else if (i % 256 && endIndex - i > 256) {
+                auto x = getSampleNormalized(d, d->rms256.data(), i / 256);
+                ret += x * x * 256;
+                i += 256;
+            } else if (i % 16 && endIndex - i > 16) {
+                auto x = getSampleNormalized(d, d->rms16.data(), i / 16);
+                ret += x * x * 16;
+                i += 16;
+            } else if (d->level >= Original) {
+                auto x = getSampleNormalized(d, d->originalData.data(), i);
+                ret += x * x;
+                i += 1;
+            }
+        }
+        ret /= (endIndex - initialIndex);
+        return std::sqrt(ret);
     }
     int WaveformMipmap::value(qsizetype offset, int interpolationIndex) const {
         if (interpolationIndex == 0) {
