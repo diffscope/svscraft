@@ -41,6 +41,22 @@ public:
         m_waveformMipmap.load(reinterpret_cast<const float *>(b.constData()), 0, fileSize, 0);
         emit waveformMipmapChanged();
     }
+    Q_INVOKABLE void loadMipmap(const QUrl &url) {
+        QFile f(url.toLocalFile());
+        f.open(QIODevice::ReadOnly);
+        QDataStream stream(&f);
+        stream >> m_waveformMipmap;
+        if (!m_waveformMipmap.isValid()) {
+            qDebug() << "Failed to load mipmap";
+        }
+        emit waveformMipmapChanged();
+    }
+    Q_INVOKABLE void saveMipmap(const QUrl &url) const {
+        QFile f(url.toLocalFile());
+        f.open(QIODevice::WriteOnly);
+        QDataStream stream(&f);
+        stream << m_waveformMipmap;
+    }
 
     WaveformMipmap waveformMipmap() const {
         return m_waveformMipmap;

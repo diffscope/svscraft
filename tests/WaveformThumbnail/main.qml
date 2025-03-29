@@ -29,7 +29,7 @@ import SVSCraft.UIComponents
 ApplicationWindow {
     id: main
     width: 800
-    height: 400
+    height: 500
     visible: true
 
     required property QtObject helper
@@ -39,52 +39,105 @@ ApplicationWindow {
         fileMode: FileDialog.OpenFile
         onAccepted: main.helper.load(selectedFile, levelComboBox.currentIndex, sampleTypeComboBox.currentIndex, useRmsCheckBox.checked)
     }
+    FileDialog {
+        id: loadMipmapFileDialog
+        fileMode: FileDialog.OpenFile
+        onAccepted: main.helper.loadMipmap(selectedFile)
+    }
+    FileDialog {
+        id: saveMipmapFileDialog
+        fileMode: FileDialog.SaveFile
+        onAccepted: main.helper.saveMipmap(selectedFile)
+    }
 
     Pane {
         anchors.fill: parent
         padding: 8
         ColumnLayout {
             anchors.fill: parent
-            Button {
+            GroupBox {
                 Layout.fillWidth: true
-                text: "Load 32-bit IEEE 754 Float Mono Channel Raw Data"
-                onClicked: fileDialog.open()
-            }
-            ComboBox {
-                id: levelComboBox
-                Layout.fillWidth: true
-                model: ["Downscale", "Original", "Upscale"]
-            }
-            ComboBox {
-                id: sampleTypeComboBox
-                Layout.fillWidth: true
-                model: ["Int8", "Int16"]
-            }
-            CheckBox {
-                id: useRmsCheckBox
-                text: "RMS"
-            }
-            RangeSlider {
-                id: rangeSlider
-                Layout.fillWidth: true
-                from: 0
-                to: main.helper.size
-                Connections {
-                    target: main.helper
-                    function onWaveformMipmapChanged() {
-                        rangeSlider.first.value = 0
-                        rangeSlider.second.value = main.helper.size
+                title: "Audio Data"
+                ColumnLayout {
+                    RowLayout {
+                        ComboBox {
+                            id: levelComboBox
+                            model: ["Downscale", "Original"]
+                        }
+                        ComboBox {
+                            id: sampleTypeComboBox
+                            model: ["Int8", "Int16"]
+                        }
+                        CheckBox {
+                            id: useRmsCheckBox
+                            text: "RMS"
+                        }
+                    }
+                    Button {
+                        text: "Load 32-bit IEEE 754 Float Mono Channel Raw Data"
+                        onClicked: fileDialog.open()
                     }
                 }
             }
-            WaveformThumbnail {
+            GroupBox {
+                Layout.fillWidth: true
+                title: "Mipmap"
+                RowLayout {
+                    Button {
+                        text: "Load Mipmap"
+                        onClicked: loadMipmapFileDialog.open()
+                    }
+                    Button {
+                        text: "Save Mipmap"
+                        onClicked: saveMipmapFileDialog.open()
+                        enabled: main.helper.waveformMipmap.valid
+                    }
+                }
+            }
+            GroupBox {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                waveformMipmap: main.helper.waveformMipmap
-                waveformOffset: rangeSlider.first.value
-                waveformLength: rangeSlider.second.value - rangeSlider.first.value
-                color: Theme.accentColor
-                rmsColor: Qt.rgba(1, 1, 1, 0.5)
+                title: "Waveform View"
+                ColumnLayout {
+                    anchors.fill: parent
+                    RowLayout {
+                        Layout.fillWidth: true
+                        SpinBox {
+                            from: rangeSlider.from
+                            to: rangeSlider.second.value
+                            value: rangeSlider.first.value
+                            onValueModified: rangeSlider.first.value = value
+                        }
+                        RangeSlider {
+                            id: rangeSlider
+                            Layout.fillWidth: true
+                            from: 0
+                            to: main.helper.size
+                            Connections {
+                                target: main.helper
+                                function onWaveformMipmapChanged() {
+                                    rangeSlider.first.value = 0
+                                    rangeSlider.second.value = main.helper.size
+                                }
+                            }
+                        }
+                        SpinBox {
+                            from: rangeSlider.first.value
+                            to: rangeSlider.to
+                            value: rangeSlider.second.value
+                            onValueModified: rangeSlider.second.value = value
+                        }
+                    }
+                    WaveformThumbnail {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        waveformMipmap: main.helper.waveformMipmap
+                        waveformOffset: rangeSlider.first.value
+                        waveformLength: rangeSlider.second.value - rangeSlider.first.value
+                        color: Theme.accentColor
+                        rmsColor: Qt.rgba(1, 1, 1, 0.5)
+                    }
+                }
             }
         }
     }

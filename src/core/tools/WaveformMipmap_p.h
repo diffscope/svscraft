@@ -52,9 +52,6 @@ namespace SVS {
         QVector<qint8> min16;
         QVector<qint8> rms16;
         QVector<qint8> originalData;
-        QVector<qint8> interpolatedData1;
-        QVector<qint8> interpolatedData2;
-        QVector<qint8> interpolatedData3;
 
     };
 }

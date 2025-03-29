@@ -36,7 +36,6 @@ namespace SVS {
         enum Level {
             Downscale,
             Original,
-            Upscale,
         };
         enum SampleType {
             Int8,
@@ -68,7 +67,9 @@ namespace SVS {
 
         QPair<int, int> peak(qsizetype offset, qsizetype length) const;
         double rms(qsizetype offset, qsizetype length) const;
-        int value(qsizetype offset, int interpolationIndex) const;
+        int value(qsizetype offset) const;
+        const qint8 *originalDataAsInt8() const;
+        const qint16 *originalDataAsInt16() const;
 
         SVSCRAFT_CORE_EXPORT friend QDataStream &operator<<(QDataStream &stream, const WaveformMipmap &waveformMipmap);
         SVSCRAFT_CORE_EXPORT friend QDataStream &operator>>(QDataStream &stream, WaveformMipmap &waveformMipmap);

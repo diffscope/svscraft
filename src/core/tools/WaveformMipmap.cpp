@@ -66,13 +66,8 @@ namespace SVS {
         if (useRms()) {
             d->rms16.resize((size + 15) / 16 * factor);
         }
-        if (level() >= Original) {
+        if (level() == Original) {
             d->originalData.resize(size * factor);
-        }
-        if (level() >= Upscale) {
-            d->interpolatedData1.resize(qMax(size - 1, 0) * factor);
-            d->interpolatedData2.resize(qMax(size - 1, 0) * factor);
-            d->interpolatedData3.resize(qMax(size - 1, 0) * factor);
         }
     }
     WaveformMipmap::Level WaveformMipmap::level() const {
@@ -137,7 +132,7 @@ namespace SVS {
         auto offset256 = offset16 / 16 * 16;
         auto length256 = (offset16 + length16 + 15) / 16 - offset256;
         auto offset4096 = offset256 / 16 * 16;
-        if (d->level >= WaveformMipmap::Original) {
+        if (d->level == WaveformMipmap::Original) {
             if (d->sampleType == WaveformMipmap::Int8) {
                 std::transform(data + offset, data + offset + length, d->originalData.data() + destination, [](T value) {
                     return convertSample<T, qint8>(value);
@@ -220,7 +215,7 @@ namespace SVS {
             initialIndex = initialIndex / 16 * 16;
             endIndex = qMin(d->max16.size() * 16, (endIndex + 15) / 16 * 16);
         }
-        for (auto i = initialIndex; i < endIndex; i++) {
+        for (auto i = initialIndex; i < endIndex;) {
             if (i % 4096 && endIndex - i > 4096) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->min4096.data(), i / 4096));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max4096.data(), i / 4096));
@@ -229,11 +224,11 @@ namespace SVS {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->min256.data(), i / 256));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max256.data(), i / 256));
                 i += 256;
-            } else if (i % 16 && endIndex - i > 16) {
+            } else if (d->level == Downscale || i % 16 && endIndex - i > 16) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->min16.data(), i / 16));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max16.data(), i / 16));
                 i += 16;
-            } else if (d->level >= Original) {
+            } else if (d->level == Original) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->originalData.data(), i));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->originalData.data(), i));
                 i += 1;
@@ -245,9 +240,9 @@ namespace SVS {
     }
     static inline double getSampleNormalized(const WaveformMipmapData *d, const qint8 *data, qsizetype offset) {
         if (d->sampleType == WaveformMipmap::Int8) {
-            return qMax(-1.0, 1.0 * data[offset] / 127.0);
+            return normalizeSample(data[offset]);
         } else {
-            return qMax(-1.0, 1.0 * reinterpret_cast<const qint16 *>(data)[offset] / 32767.0);
+            return normalizeSample(reinterpret_cast<const qint16 *>(data)[offset]);
         }
     }
     double WaveformMipmap::rms(qsizetype offset, qsizetype length) const {
@@ -258,48 +253,51 @@ namespace SVS {
         if (offset + length > d->size)
             length = d->size - offset;
         double ret = 0;
+        int n = 0;
         auto initialIndex = offset;
         auto endIndex = offset + length;
         if (d->level == Downscale) {
             initialIndex = initialIndex / 16 * 16;
             endIndex = qMin(d->max16.size() * 16, (endIndex + 15) / 16 * 16);
         }
-        for (auto i = initialIndex; i < endIndex; i++) {
+        for (auto i = initialIndex; i < endIndex;) {
             if (i % 4096 && endIndex - i > 4096) {
                 auto x = getSampleNormalized(d, d->rms4096.data(), i / 4096);
                 ret += x * x * 4096;
                 i += 4096;
+                n += 4096;
             } else if (i % 256 && endIndex - i > 256) {
                 auto x = getSampleNormalized(d, d->rms256.data(), i / 256);
                 ret += x * x * 256;
                 i += 256;
-            } else if (i % 16 && endIndex - i > 16) {
+                n += 256;
+            } else if (d->level == Downscale || i % 16 && endIndex - i > 16) {
                 auto x = getSampleNormalized(d, d->rms16.data(), i / 16);
                 ret += x * x * 16;
                 i += 16;
-            } else if (d->level >= Original) {
+                n += 16;
+            } else if (d->level == Original) {
                 auto x = getSampleNormalized(d, d->originalData.data(), i);
                 ret += x * x;
                 i += 1;
+                n += 1;
             }
         }
-        ret /= (endIndex - initialIndex);
+        ret /= n;
         return std::sqrt(ret);
     }
-    int WaveformMipmap::value(qsizetype offset, int interpolationIndex) const {
-        if (interpolationIndex == 0) {
-            return getSampleFrom(d, d->originalData.data(), offset);
-        }
-        if (interpolationIndex == 1) {
-            return getSampleFrom(d, d->interpolatedData1.data(), offset);
-        }
-        if (interpolationIndex == 2) {
-            return getSampleFrom(d, d->interpolatedData2.data(), offset);
-        }
-        if (interpolationIndex == 3) {
-            return getSampleFrom(d, d->interpolatedData3.data(), offset);
-        }
-        Q_UNREACHABLE();
+    int WaveformMipmap::value(qsizetype offset) const {
+        return getSampleFrom(d, d->originalData.data(), offset);
+    }
+    const qint8 *WaveformMipmap::originalDataAsInt8() const {
+        if (d->sampleType != Int8 || d->level == Downscale)
+            return nullptr;
+        return d->originalData.constData();
+    }
+    const qint16 *WaveformMipmap::originalDataAsInt16() const {
+        if (d->sampleType != Int16 || d->level == Downscale)
+            return nullptr;
+        return reinterpret_cast<const qint16 *>(d->originalData.constData());
     }
 
 
@@ -342,12 +340,14 @@ namespace SVS {
         waveformMipmap = {}; \
         return stream; \
     }
+
+#define MAGIC {'S', 'V', 'S', ':', ':', 'W', 'a', 'v', 'e', 'f', 'o', 'r', 'm', 'M', 'i', 'p', 'm', 'a', 'p', 'C', 'R', 'S'}
     QDataStream &operator<<(QDataStream &stream, const WaveformMipmap &waveformMipmap) {
         if (!waveformMipmap.isValid())
             return stream;
         stream.startTransaction();
         WaveformMipmapData::HeaderBlock headerBlock = {
-            "\xbf\xbfSVS::WaveformMipmap",
+            MAGIC,
             1,
             waveformMipmap.useRms(),
             qToLittleEndian(static_cast<qint64>(waveformMipmap.size())),
@@ -373,13 +373,8 @@ namespace SVS {
         if (waveformMipmap.useRms()) {
             WRITE_DATA(stream, waveformMipmap.d->rms16, waveformMipmap.sampleType());
         }
-        if (waveformMipmap.level() >= WaveformMipmap::Original) {
+        if (waveformMipmap.level() == WaveformMipmap::Original) {
             WRITE_DATA(stream, waveformMipmap.d->originalData, waveformMipmap.sampleType());
-        }
-        if (waveformMipmap.level() >= WaveformMipmap::Upscale) {
-            WRITE_DATA(stream, waveformMipmap.d->interpolatedData1, waveformMipmap.sampleType());
-            WRITE_DATA(stream, waveformMipmap.d->interpolatedData2, waveformMipmap.sampleType());
-            WRITE_DATA(stream, waveformMipmap.d->interpolatedData3, waveformMipmap.sampleType());
         }
         stream.commitTransaction();
         return stream;
@@ -392,7 +387,8 @@ namespace SVS {
             waveformMipmap = {};
             return stream;
         }
-        if (!std::strcmp(headerBlock.magic, "\xbf\xbfSVS::WaveformMipmap")) {
+        static constexpr char MAGIC_[] = MAGIC;
+        if (std::memcmp(headerBlock.magic, MAGIC_, 22) != 0) {
             stream.abortTransaction();
             waveformMipmap = {};
             return stream;
@@ -423,13 +419,8 @@ namespace SVS {
         if (o.useRms()) {
             READ_DATA(stream, o.d->rms16, o.sampleType());
         }
-        if (o.level() >= WaveformMipmap::Original) {
+        if (o.level() == WaveformMipmap::Original) {
             READ_DATA(stream, o.d->originalData, o.sampleType());
-        }
-        if (o.level() >= WaveformMipmap::Upscale) {
-            READ_DATA(stream, o.d->interpolatedData1, o.sampleType());
-            READ_DATA(stream, o.d->interpolatedData2, o.sampleType());
-            READ_DATA(stream, o.d->interpolatedData3, o.sampleType());
         }
         stream.commitTransaction();
         waveformMipmap = o;
