@@ -37,49 +37,50 @@ namespace SVS {
     class SVSCRAFT_QUICK_EXPORT Theme : public QQuickAttachedPropertyPropagator {
         Q_OBJECT
         QML_ANONYMOUS
+        Q_DECLARE_PRIVATE(Theme)
 
-        Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor NOTIFY accentColorChanged)
-        Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor NOTIFY warningColorChanged)
-        Q_PROPERTY(QColor errorColor READ errorColor WRITE setErrorColor NOTIFY errorColorChanged)
+        Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor RESET resetAccentColor NOTIFY accentColorChanged)
+        Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor RESET resetWarningColor NOTIFY warningColorChanged)
+        Q_PROPERTY(QColor errorColor READ errorColor WRITE setErrorColor RESET resetErrorColor NOTIFY errorColorChanged)
 
-        Q_PROPERTY(QColor buttonColor READ buttonColor WRITE setButtonColor NOTIFY buttonColorChanged)
-        Q_PROPERTY(QColor textFieldColor READ textFieldColor WRITE setTextFieldColor NOTIFY textFieldColorChanged)
-        Q_PROPERTY(QColor scrollBarColor READ scrollBarColor WRITE setScrollBarColor NOTIFY scrollBarColorChanged)
-        Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor NOTIFY borderColorChanged)
+        Q_PROPERTY(QColor buttonColor READ buttonColor WRITE setButtonColor RESET resetButtonColor NOTIFY buttonColorChanged)
+        Q_PROPERTY(QColor textFieldColor READ textFieldColor WRITE setTextFieldColor RESET resetTextFieldColor NOTIFY textFieldColorChanged)
+        Q_PROPERTY(QColor scrollBarColor READ scrollBarColor WRITE setScrollBarColor RESET resetScrollBarColor NOTIFY scrollBarColorChanged)
+        Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor RESET resetBorderColor NOTIFY borderColorChanged)
 
-        Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor WRITE setBackgroundPrimaryColor NOTIFY backgroundPrimaryColorChanged)
-        Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor WRITE setBackgroundSecondaryColor NOTIFY backgroundSecondaryColorChanged)
-        Q_PROPERTY(QColor backgroundTertiaryColor READ backgroundTertiaryColor WRITE setBackgroundTertiaryColor NOTIFY backgroundTertiaryColorChanged)
-        Q_PROPERTY(QColor backgroundQuaternaryColor READ backgroundQuaternaryColor WRITE setBackgroundQuaternaryColor NOTIFY backgroundQuaternaryColorChanged)
-        Q_PROPERTY(QColor splitterColor READ splitterColor WRITE setSplitterColor NOTIFY splitterColorChanged)
+        Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor WRITE setBackgroundPrimaryColor RESET resetBackgroundPrimaryColor NOTIFY backgroundPrimaryColorChanged)
+        Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor WRITE setBackgroundSecondaryColor RESET resetBackgroundSecondaryColor NOTIFY backgroundSecondaryColorChanged)
+        Q_PROPERTY(QColor backgroundTertiaryColor READ backgroundTertiaryColor WRITE setBackgroundTertiaryColor RESET resetBackgroundTertiaryColor NOTIFY backgroundTertiaryColorChanged)
+        Q_PROPERTY(QColor backgroundQuaternaryColor READ backgroundQuaternaryColor WRITE setBackgroundQuaternaryColor RESET resetBackgroundQuaternaryColor NOTIFY backgroundQuaternaryColorChanged)
+        Q_PROPERTY(QColor splitterColor READ splitterColor WRITE setSplitterColor RESET resetSplitterColor NOTIFY splitterColorChanged)
 
-        Q_PROPERTY(QColor foregroundPrimaryColor READ foregroundPrimaryColor WRITE setForegroundPrimaryColor NOTIFY foregroundPrimaryColorChanged)
-        Q_PROPERTY(QColor foregroundSecondaryColor READ foregroundSecondaryColor WRITE setForegroundSecondaryColor NOTIFY foregroundSecondaryColorChanged)
-        Q_PROPERTY(QColor linkColor READ linkColor WRITE setLinkColor NOTIFY linkColorChanged)
+        Q_PROPERTY(QColor foregroundPrimaryColor READ foregroundPrimaryColor WRITE setForegroundPrimaryColor RESET resetForegroundPrimaryColor NOTIFY foregroundPrimaryColorChanged)
+        Q_PROPERTY(QColor foregroundSecondaryColor READ foregroundSecondaryColor WRITE setForegroundSecondaryColor RESET resetForegroundSecondaryColor NOTIFY foregroundSecondaryColorChanged)
+        Q_PROPERTY(QColor linkColor READ linkColor WRITE setLinkColor RESET resetLinkColor NOTIFY linkColorChanged)
 
-        Q_PROPERTY(QColor navigationColor READ navigationColor WRITE setNavigationColor NOTIFY navigationColorChanged)
-        Q_PROPERTY(QColor shadowColor READ shadowColor WRITE setShadowColor NOTIFY shadowColorChanged)
-        Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor NOTIFY highlightColorChanged)
+        Q_PROPERTY(QColor navigationColor READ navigationColor WRITE setNavigationColor RESET resetNavigationColor NOTIFY navigationColorChanged)
+        Q_PROPERTY(QColor shadowColor READ shadowColor WRITE setShadowColor RESET resetShadowColor NOTIFY shadowColorChanged)
+        Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor RESET resetHighlightColor NOTIFY highlightColorChanged)
 
-        Q_PROPERTY(ColorChange controlDisabledColorChange READ controlDisabledColorChange WRITE setControlDisabledColorChange NOTIFY controlDisabledColorChangeChanged)
-        Q_PROPERTY(ColorChange foregroundDisabledColorChange READ foregroundDisabledColorChange WRITE setForegroundDisabledColorChange NOTIFY foregroundDisabledColorChangeChanged)
-        Q_PROPERTY(ColorChange controlHoveredColorChange READ controlHoveredColorChange WRITE setControlHoveredColorChange NOTIFY controlHoveredColorChangeChanged)
-        Q_PROPERTY(ColorChange foregroundHoveredColorChange READ foregroundHoveredColorChange WRITE setForegroundHoveredColorChange NOTIFY foregroundHoveredColorChangeChanged)
-        Q_PROPERTY(ColorChange controlPressedColorChange READ controlPressedColorChange WRITE setControlPressedColorChange NOTIFY controlPressedColorChangeChanged)
-        Q_PROPERTY(ColorChange foregroundPressedColorChange READ foregroundPressedColorChange WRITE setForegroundPressedColorChange NOTIFY foregroundPressedColorChangeChanged)
-        Q_PROPERTY(ColorChange controlCheckedColorChange READ controlCheckedColorChange WRITE setControlCheckedColorChange NOTIFY controlCheckedColorChangeChanged)
+        Q_PROPERTY(ColorChange controlDisabledColorChange READ controlDisabledColorChange WRITE setControlDisabledColorChange RESET resetControlDisabledColorChange NOTIFY controlDisabledColorChangeChanged)
+        Q_PROPERTY(ColorChange foregroundDisabledColorChange READ foregroundDisabledColorChange WRITE setForegroundDisabledColorChange RESET resetForegroundDisabledColorChange NOTIFY foregroundDisabledColorChangeChanged)
+        Q_PROPERTY(ColorChange controlHoveredColorChange READ controlHoveredColorChange WRITE setControlHoveredColorChange RESET resetControlHoveredColorChange NOTIFY controlHoveredColorChangeChanged)
+        Q_PROPERTY(ColorChange foregroundHoveredColorChange READ foregroundHoveredColorChange WRITE setForegroundHoveredColorChange RESET resetForegroundHoveredColorChange NOTIFY foregroundHoveredColorChangeChanged)
+        Q_PROPERTY(ColorChange controlPressedColorChange READ controlPressedColorChange WRITE setControlPressedColorChange RESET resetControlPressedColorChange NOTIFY controlPressedColorChangeChanged)
+        Q_PROPERTY(ColorChange foregroundPressedColorChange READ foregroundPressedColorChange WRITE setForegroundPressedColorChange RESET resetForegroundPressedColorChange NOTIFY foregroundPressedColorChangeChanged)
+        Q_PROPERTY(ColorChange controlCheckedColorChange READ controlCheckedColorChange WRITE setControlCheckedColorChange RESET resetControlCheckedColorChange NOTIFY controlCheckedColorChangeChanged)
 
-        Q_PROPERTY(ColorChange annotationPopupTitleColorChange READ annotationPopupTitleColorChange WRITE setAnnotationPopupTitleColorChange NOTIFY annotationPopupTitleColorChangeChanged)
-        Q_PROPERTY(ColorChange annotationPopupContentColorChange READ annotationPopupContentColorChange WRITE setAnnotationPopupContentColorChange NOTIFY annotationPopupContentColorChangeChanged)
+        Q_PROPERTY(ColorChange annotationPopupTitleColorChange READ annotationPopupTitleColorChange WRITE setAnnotationPopupTitleColorChange RESET resetAnnotationPopupTitleColorChange NOTIFY annotationPopupTitleColorChangeChanged)
+        Q_PROPERTY(ColorChange annotationPopupContentColorChange READ annotationPopupContentColorChange WRITE setAnnotationPopupContentColorChange RESET resetAnnotationPopupContentColorChange NOTIFY annotationPopupContentColorChangeChanged)
 
 
-        Q_PROPERTY(int colorAnimationDuration READ colorAnimationDuration WRITE setColorAnimationDuration NOTIFY colorAnimationDurationChanged)
-        Q_PROPERTY(int visualEffectAnimationDuration READ visualEffectAnimationDuration WRITE setVisualEffectAnimationDuration NOTIFY visualEffectAnimationDurationChanged)
+        Q_PROPERTY(int colorAnimationDuration READ colorAnimationDuration WRITE setColorAnimationDuration RESET resetColorAnimationDuration NOTIFY colorAnimationDurationChanged)
+        Q_PROPERTY(int visualEffectAnimationDuration READ visualEffectAnimationDuration WRITE setVisualEffectAnimationDuration RESET resetVisualEffectAnimationDuration NOTIFY visualEffectAnimationDurationChanged)
 
-        Q_PROPERTY(int toolTipDelay READ toolTipDelay WRITE setToolTipDelay NOTIFY toolTipDelayChanged)
-        Q_PROPERTY(int toolTipTimeout READ toolTipTimeout WRITE setToolTipTimeout NOTIFY toolTipTimeoutChanged)
+        Q_PROPERTY(int toolTipDelay READ toolTipDelay WRITE setToolTipDelay RESET resetToolTipDelay NOTIFY toolTipDelayChanged)
+        Q_PROPERTY(int toolTipTimeout READ toolTipTimeout WRITE setToolTipTimeout RESET resetToolTipTimeout NOTIFY toolTipTimeoutChanged)
 
-        Q_PROPERTY(bool doubleClickResetEnabled READ doubleClickResetEnabled WRITE setDoubleClickResetEnabled NOTIFY doubleClickResetEnabledChanged)
+        Q_PROPERTY(bool doubleClickResetEnabled READ doubleClickResetEnabled WRITE setDoubleClickResetEnabled RESET resetDoubleClickResetEnabled NOTIFY doubleClickResetEnabledChanged)
 
     public:
         ~Theme() override;
@@ -89,99 +90,131 @@ namespace SVS {
 
         QColor accentColor() const;
         void setAccentColor(const QColor &accentColor);
+        void resetAccentColor();
 
         QColor warningColor() const;
         void setWarningColor(const QColor &warningColor);
+        void resetWarningColor();
 
         QColor errorColor() const;
         void setErrorColor(const QColor &errorColor);
+        void resetErrorColor();
 
         QColor buttonColor() const;
         void setButtonColor(const QColor &buttonColor);
+        void resetButtonColor();
 
         QColor scrollBarColor() const;
         void setScrollBarColor(const QColor &scrollBarColor);
+        void resetScrollBarColor();
 
         QColor textFieldColor() const;
         void setTextFieldColor(const QColor &textFieldColor);
+        void resetTextFieldColor();
 
         QColor borderColor() const;
         void setBorderColor(const QColor &borderColor);
+        void resetBorderColor();
 
         QColor backgroundPrimaryColor() const;
         void setBackgroundPrimaryColor(const QColor &backgroundPrimaryColor);
+        void resetBackgroundPrimaryColor();
 
         QColor backgroundSecondaryColor() const;
         void setBackgroundSecondaryColor(const QColor &backgroundSecondaryColor);
+        void resetBackgroundSecondaryColor();
 
         QColor backgroundTertiaryColor() const;
         void setBackgroundTertiaryColor(const QColor &backgroundTertiaryColor);
+        void resetBackgroundTertiaryColor();
 
         QColor backgroundQuaternaryColor() const;
         void setBackgroundQuaternaryColor(const QColor &backgroundQuaternaryColor);
+        void resetBackgroundQuaternaryColor();
 
         QColor splitterColor() const;
         void setSplitterColor(const QColor &splitterColor);
+        void resetSplitterColor();
 
         QColor foregroundPrimaryColor() const;
         void setForegroundPrimaryColor(const QColor &foregroundPrimaryColor);
+        void resetForegroundPrimaryColor();
 
         QColor foregroundSecondaryColor() const;
         void setForegroundSecondaryColor(const QColor &foregroundSecondaryColor);
+        void resetForegroundSecondaryColor();
 
         QColor linkColor() const;
         void setLinkColor(const QColor &linkColor);
+        void resetLinkColor();
 
         QColor navigationColor() const;
         void setNavigationColor(const QColor &navigationColor);
+        void resetNavigationColor();
 
         QColor shadowColor() const;
         void setShadowColor(const QColor &shadowColor);
+        void resetShadowColor();
 
         QColor highlightColor() const;
         void setHighlightColor(const QColor &highlightColor);
+        void resetHighlightColor();
 
         ColorChange controlDisabledColorChange() const;
         void setControlDisabledColorChange(const ColorChange &controlDisabledColorChange);
+        void resetControlDisabledColorChange();
 
         ColorChange foregroundDisabledColorChange() const;
         void setForegroundDisabledColorChange(const ColorChange &foregroundDisabledColorChange);
+        void resetForegroundDisabledColorChange();
 
         ColorChange controlHoveredColorChange() const;
         void setControlHoveredColorChange(const ColorChange &controlHoveredColorChange);
+        void resetControlHoveredColorChange();
 
         ColorChange foregroundHoveredColorChange() const;
         void setForegroundHoveredColorChange(const ColorChange &foregroundHoveredColorChange);
+        void resetForegroundHoveredColorChange();
 
         ColorChange controlPressedColorChange() const;
         void setControlPressedColorChange(const ColorChange &controlPressedColorChange);
+        void resetControlPressedColorChange();
 
         ColorChange foregroundPressedColorChange() const;
         void setForegroundPressedColorChange(const ColorChange &foregroundPressedColorChange);
+        void resetForegroundPressedColorChange();
 
         ColorChange controlCheckedColorChange() const;
         void setControlCheckedColorChange(const ColorChange &controlCheckedColorChange);
+        void resetControlCheckedColorChange();
 
         ColorChange annotationPopupTitleColorChange() const;
         void setAnnotationPopupTitleColorChange(const ColorChange &annotationPopupTitleColorChange);
+        void resetAnnotationPopupTitleColorChange();
 
         ColorChange annotationPopupContentColorChange() const;
         void setAnnotationPopupContentColorChange(const ColorChange &annotationPopupContentColorChange);
+        void resetAnnotationPopupContentColorChange();
 
         int colorAnimationDuration() const;
         void setColorAnimationDuration(int colorAnimationDuration);
+        void resetColorAnimationDuration();
 
         int visualEffectAnimationDuration() const;
         void setVisualEffectAnimationDuration(int visualEffectAnimationDuration);
+        void resetVisualEffectAnimationDuration();
 
         int toolTipDelay() const;
         void setToolTipDelay(int toolTipDelay);
+        void resetToolTipDelay();
 
         int toolTipTimeout() const;
         void setToolTipTimeout(int toolTipTimeout);
+        void resetToolTipTimeout();
 
         bool doubleClickResetEnabled() const;
         void setDoubleClickResetEnabled(bool doubleClickResetEnabled);
+        void resetDoubleClickResetEnabled();
 
         Q_INVOKABLE QColor controlColor(int controlType) const;
         Q_INVOKABLE QColor backgroundColor(int backgroundLevel) const;
@@ -190,38 +223,38 @@ namespace SVS {
         Q_INVOKABLE QColor dividerStrokeColor(int dividerStroke, const QColor &autoColor) const;
 
     signals:
-        void accentColorChanged(const QColor &accentColor);
-        void warningColorChanged(const QColor &warningColor);
-        void errorColorChanged(const QColor &errorColor);
-        void buttonColorChanged(const QColor &buttonColor);
-        void textFieldColorChanged(const QColor &textFieldColor);
-        void scrollBarColorChanged(const QColor &scrollBarColor);
-        void borderColorChanged(const QColor &borderColor);
-        void backgroundPrimaryColorChanged(const QColor &backgroundPrimaryColor);
-        void backgroundSecondaryColorChanged(const QColor &backgroundSecondaryColor);
-        void backgroundTertiaryColorChanged(const QColor &backgroundTertiaryColor);
-        void backgroundQuaternaryColorChanged(const QColor &backgroundQuaternaryColor);
-        void splitterColorChanged(const QColor &splitterColor);
-        void foregroundPrimaryColorChanged(const QColor &foregroundPrimaryColor);
-        void foregroundSecondaryColorChanged(const QColor &foregroundSecondaryColor);
-        void linkColorChanged(const QColor &linkColor);
-        void navigationColorChanged(const QColor &navigationColor);
-        void shadowColorChanged(const QColor &shadowColor);
-        void highlightColorChanged(const QColor &highlightColor);
-        void controlDisabledColorChangeChanged(const SVS::ColorChange &controlDisabledColorChange);
-        void foregroundDisabledColorChangeChanged(const SVS::ColorChange &foregroundDisabledColorChange);
-        void controlHoveredColorChangeChanged(const SVS::ColorChange &controlHoveredColorChange);
-        void foregroundHoveredColorChangeChanged(const SVS::ColorChange &foregroundHoveredColorChange);
-        void controlPressedColorChangeChanged(const SVS::ColorChange &controlPressedColorChange);
-        void foregroundPressedColorChangeChanged(const SVS::ColorChange &foregroundPressedColorChange);
-        void controlCheckedColorChangeChanged(const SVS::ColorChange &controlCheckedColorChange);
-        void annotationPopupTitleColorChangeChanged(const SVS::ColorChange &annotationPopupTitleColorChange);
-        void annotationPopupContentColorChangeChanged(const SVS::ColorChange &annotationPopupContentColorChange);
-        void colorAnimationDurationChanged(int colorAnimationDuration);
-        void visualEffectAnimationDurationChanged(int visualEffectAnimationDuration);
-        void toolTipDelayChanged(int toolTipDelay);
-        void toolTipTimeoutChanged(int toolTipTimeout);
-        void doubleClickResetEnabledChanged(bool doubleClickResetEnabled);
+        void accentColorChanged();
+        void warningColorChanged();
+        void errorColorChanged();
+        void buttonColorChanged();
+        void textFieldColorChanged();
+        void scrollBarColorChanged();
+        void borderColorChanged();
+        void backgroundPrimaryColorChanged();
+        void backgroundSecondaryColorChanged();
+        void backgroundTertiaryColorChanged();
+        void backgroundQuaternaryColorChanged();
+        void splitterColorChanged();
+        void foregroundPrimaryColorChanged();
+        void foregroundSecondaryColorChanged();
+        void linkColorChanged();
+        void navigationColorChanged();
+        void shadowColorChanged();
+        void highlightColorChanged();
+        void controlDisabledColorChangeChanged();
+        void foregroundDisabledColorChangeChanged();
+        void controlHoveredColorChangeChanged();
+        void foregroundHoveredColorChangeChanged();
+        void controlPressedColorChangeChanged();
+        void foregroundPressedColorChangeChanged();
+        void controlCheckedColorChangeChanged();
+        void annotationPopupTitleColorChangeChanged();
+        void annotationPopupContentColorChangeChanged();
+        void colorAnimationDurationChanged();
+        void visualEffectAnimationDurationChanged();
+        void toolTipDelayChanged();
+        void toolTipTimeoutChanged();
+        void doubleClickResetEnabledChanged();
 
     protected:
         void attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) override;
@@ -231,7 +264,7 @@ namespace SVS {
         friend class ThemePrivate;
         explicit Theme(QObject *parent = nullptr);
         explicit Theme(ThemePrivate *d);
-        QSharedDataPointer<ThemePrivate> d;
+        QScopedPointer<ThemePrivate> d_ptr;
 
     };
 

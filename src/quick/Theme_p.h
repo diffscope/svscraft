@@ -23,7 +23,7 @@
 #include <SVSCraftQuick/Theme.h>
 
 #include <QColor>
-#include <QSharedData>
+#include <QVariant>
 
 #include <SVSCraftGui/ColorChange.h>
 
@@ -39,43 +39,69 @@ namespace SVS {
     public:
         static Theme *qmlAttachedProperties(QObject *object);
     };
-    class ThemePrivate : public QSharedData {
+    class ThemePrivate {
+        Q_DECLARE_PUBLIC(Theme);
     public:
-        static void inherit(Theme *object, Theme *parent);
         static Theme defaultTheme;
 
-        QColor accentColor = 0x5566ff;
-        QColor warningColor = 0xeeaa66;
-        QColor errorColor = 0xcc4455;
-        QColor buttonColor = 0x333437;
-        QColor textFieldColor = 0x27282b;
-        QColor scrollBarColor = QColor::fromRgba(0x7f7f7f7f);
-        QColor borderColor = 0x4a4b4c;
-        QColor backgroundPrimaryColor = 0x212124;
-        QColor backgroundSecondaryColor = 0x232427;
-        QColor backgroundTertiaryColor = 0x252629;
-        QColor backgroundQuaternaryColor = 0x313235;
-        QColor splitterColor = 0x121315;
-        QColor foregroundPrimaryColor = 0xdadada;
-        QColor foregroundSecondaryColor = QColor::fromRgba(0xa0dadada);
-        QColor linkColor = 0x5566ff;
-        QColor navigationColor = 0xffffff;
-        QColor shadowColor = 0x101113;
-        QColor highlightColor = 0xb28300;
-        ColorChange controlDisabledColorChange{QColor::fromRgba(0x33000000)};
-        ColorChange foregroundDisabledColorChange{{}, 0.5};
-        ColorChange controlHoveredColorChange{QColor::fromRgba(0x1affffff)};
-        ColorChange foregroundHoveredColorChange{};
-        ColorChange controlPressedColorChange{};
-        ColorChange foregroundPressedColorChange{{}, 0.8};
-        ColorChange controlCheckedColorChange{QColor::fromRgba(0x1affffff)};
-        ColorChange annotationPopupTitleColorChange{{}, 0.72, 0x212124};
-        ColorChange annotationPopupContentColorChange{{}, 0.16, 0x212124};
-        int colorAnimationDuration{250};
-        int visualEffectAnimationDuration{250};
-        int toolTipDelay{1000};
-        int toolTipTimeout = -1;
-        bool doubleClickResetEnabled = true;
+        Theme *q_ptr;
+
+        QVariantMap m = {
+            {"accentColor", QVariant::fromValue(QColor(0x5566ff))},
+            {"warningColor", QVariant::fromValue(QColor(0xeeaa66))},
+            {"errorColor", QVariant::fromValue(QColor(0xcc4455))},
+            {"buttonColor", QVariant::fromValue(QColor(0x333437))},
+            {"textFieldColor", QVariant::fromValue(QColor(0x27282b))},
+            {"scrollBarColor", QVariant::fromValue(QColor::fromRgba(0x7f7f7f7f))},
+            {"borderColor", QVariant::fromValue(QColor(0x4a4b4c))},
+            {"backgroundPrimaryColor", QVariant::fromValue(QColor(0x212124))},
+            {"backgroundSecondaryColor", QVariant::fromValue(QColor(0x232427))},
+            {"backgroundTertiaryColor", QVariant::fromValue(QColor(0x252629))},
+            {"backgroundQuaternaryColor", QVariant::fromValue(QColor(0x313235))},
+            {"splitterColor", QVariant::fromValue(QColor(0x121315))},
+            {"foregroundPrimaryColor", QVariant::fromValue(QColor(0xdadada))},
+            {"foregroundSecondaryColor", QVariant::fromValue(QColor::fromRgba(0xa0dadada))},
+            {"linkColor", QVariant::fromValue(QColor(0x5566ff))},
+            {"navigationColor", QVariant::fromValue(QColor(0xffffff))},
+            {"shadowColor", QVariant::fromValue(QColor(0x101113))},
+            {"highlightColor", QVariant::fromValue(QColor(0xb28300))},
+            {"controlDisabledColorChange", QVariant::fromValue(ColorChange(QColor::fromRgba(0x33000000)))},
+            {"foregroundDisabledColorChange", QVariant::fromValue(ColorChange({}, 0.5))},
+            {"controlHoveredColorChange", QVariant::fromValue(ColorChange(QColor::fromRgba(0x1affffff)))},
+            {"foregroundHoveredColorChange", QVariant::fromValue(ColorChange())},
+            {"controlPressedColorChange", QVariant::fromValue(ColorChange())},
+            {"foregroundPressedColorChange", QVariant::fromValue(ColorChange({}, 0.8))},
+            {"controlCheckedColorChange", QVariant::fromValue(ColorChange(QColor::fromRgba(0x1affffff)))},
+            {"annotationPopupTitleColorChange", QVariant::fromValue(ColorChange({}, 0.72, 0x212124))},
+            {"annotationPopupContentColorChange", QVariant::fromValue(ColorChange({}, 0.16, 0x212124))},
+            {"colorAnimationDuration", 250},
+            {"visualEffectAnimationDuration", 250},
+            {"toolTipDelay", 1000},
+            {"toolTipTimeout", -1},
+            {"doubleClickResetEnabled", true},
+        };
+        QSet<QString> explicitSetProperties;
+
+        QVariant getValue(const QString &property) const {
+            return m.value(property);
+        }
+        void setValue(const QString &property, const QVariant &value) {
+            explicitSetProperties.insert(property);
+            if (QVariant::compare(value, m.value(property)) == QPartialOrdering::Equivalent)
+                return;
+            m.insert(property, QVariant::fromValue(value));
+            propagateAndNotify(property);
+        }
+        void resetValue(const QString &property) {
+            if (explicitSetProperties.contains(property)) {
+                explicitSetProperties.remove(property);
+                inherit(property);
+            }
+        }
+
+        void propagateAndNotify(const QString &property);
+        void inherit(const QString &property);
+        void inheritAll();
 
     };
 }

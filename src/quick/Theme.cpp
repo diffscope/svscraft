@@ -20,14 +20,97 @@
 #include "Theme.h"
 #include "Theme_p.h"
 
+#include <type_traits>
+
 #include <QQmlEngine>
 
 #include <SVSCraftQml/private/SVSQmlNamespace_p.h>
+
+
+template <typename>
+struct ReturnTypeHelper;
+template <typename ClassType, typename ReturnType>
+struct ReturnTypeHelper<ReturnType (ClassType::*)() const> {
+    using type = ReturnType;
+};
+#define GETTER(property, func) \
+    ReturnTypeHelper<decltype(&Theme::func)>::type Theme::func() const { \
+        using type = ReturnTypeHelper<decltype(&Theme::func)>::type; \
+        Q_D(const Theme); \
+        return d->getValue(#property).value<type>(); \
+    }
+
+template <typename>
+struct ParameterTypeHelper;
+template <typename ClassType, typename ReturnType, typename Arg>
+struct ParameterTypeHelper<ReturnType (ClassType::*)(Arg)> {
+    using type = Arg;
+};
+
+#define SETTER(property, func) \
+    void Theme::func(ParameterTypeHelper<decltype(&Theme::func)>::type a) { \
+        Q_D(Theme); \
+        d->setValue(#property, QVariant::fromValue(a)); \
+    }
+
+#define RESETTER(property, func) \
+    void Theme::func() { \
+        Q_D(Theme); \
+        d->resetValue(#property); \
+    }
+
+#define IMPLEMENTATION(property, getFunc, setFunc, resetFunc) GETTER(property, getFunc)SETTER(property, setFunc)RESETTER(property, resetFunc)
 
 namespace SVS {
 
     Theme *ThemeAttachedType::qmlAttachedProperties(QObject *object) {
         return new Theme(object);
+    }
+    void ThemePrivate::propagateAndNotify(const QString &property) {
+        Q_Q(Theme);
+        for (auto child : q->attachedChildren()) {
+            auto theme = static_cast<Theme *>(child);
+            theme->d_func()->inherit(property);
+        }
+        auto i = q->metaObject()->indexOfProperty(property.toUtf8());
+        q->metaObject()->property(i).notifySignal().invoke(q);
+    }
+    void ThemePrivate::inherit(const QString &property) {
+        Q_Q(Theme);
+        if (explicitSetProperties.contains(property))
+            return;
+        auto parent = q->attachedParent() ? static_cast<Theme *>(q->attachedParent())->d_func() : defaultTheme.d_func();
+        auto v = parent->getValue(property);
+        if (QVariant::compare(v, m.value(property)) == QPartialOrdering::equivalent)
+            return;
+        setValue(property, v);
+        propagateAndNotify(property);
+    }
+    void ThemePrivate::inheritAll() {
+        Q_Q(Theme);
+        QStringList propertiesChanged;
+        auto parent = q->attachedParent() ? static_cast<Theme *>(q->attachedParent())->d_func() : defaultTheme.d_func();
+        if (explicitSetProperties.isEmpty()) {
+            for (auto p = m.keyValueBegin(); p != m.keyValueEnd(); p++) {
+                auto [property, value] = *p;
+                if (QVariant::compare(value, parent->getValue(property)) != QPartialOrdering::equivalent)
+                    propertiesChanged.append(property);
+            }
+            m = parent->m;
+        } else {
+            for (auto p = m.keyValueBegin(); p != m.keyValueEnd(); p++) {
+                auto [property, value] = *p;
+                if (explicitSetProperties.contains(property))
+                    continue;
+                if (QVariant::compare(value, parent->getValue(property)) != QPartialOrdering::equivalent) {
+                    propertiesChanged.append(property);
+                    value = parent->getValue(property);
+                }
+            }
+        }
+        for (const auto &property : propertiesChanged) {
+            propagateAndNotify(property);
+        }
     }
     QColor Theme::controlColor(int controlType) const {
         switch (controlType) {
@@ -80,88 +163,20 @@ namespace SVS {
         }
         return {};
     }
-    void ThemePrivate::inherit(Theme *object, Theme *parent) {
-        if (!parent)
-            return;
-        const QSharedDataPointer<ThemePrivate> p = object->d;
-        object->d = parent->d;
-        const QSharedDataPointer<ThemePrivate> p1 = object->d;
-        if (p->accentColor != p1->accentColor)
-            emit object->accentColorChanged(p1->accentColor);
-        if (p->warningColor != p1->warningColor)
-            emit object->warningColorChanged(p1->warningColor);
-        if (p->errorColor != p1->errorColor)
-            emit object->errorColorChanged(p1->errorColor);
-        if (p->buttonColor != p1->buttonColor)
-            emit object->buttonColorChanged(p1->buttonColor);
-        if (p->textFieldColor != p1->textFieldColor)
-            emit object->textFieldColorChanged(p1->textFieldColor);
-        if (p->scrollBarColor != p1->scrollBarColor)
-            emit object->scrollBarColorChanged(p1->scrollBarColor);
-        if (p->borderColor != p1->borderColor)
-            emit object->borderColorChanged(p1->borderColor);
-        if (p->backgroundPrimaryColor != p1->backgroundPrimaryColor)
-            emit object->backgroundPrimaryColorChanged(p1->backgroundPrimaryColor);
-        if (p->backgroundSecondaryColor != p1->backgroundSecondaryColor)
-            emit object->backgroundSecondaryColorChanged(p1->backgroundSecondaryColor);
-        if (p->backgroundTertiaryColor != p1->backgroundTertiaryColor)
-            emit object->backgroundTertiaryColorChanged(p1->backgroundTertiaryColor);
-        if (p->backgroundQuaternaryColor != p1->backgroundQuaternaryColor)
-            emit object->backgroundQuaternaryColorChanged(p1->backgroundQuaternaryColor);
-        if (p->splitterColor != p1->splitterColor)
-            emit object->splitterColorChanged(p1->splitterColor);
-        if (p->foregroundPrimaryColor != p1->foregroundPrimaryColor)
-            emit object->foregroundPrimaryColorChanged(p1->foregroundPrimaryColor);
-        if (p->foregroundSecondaryColor != p1->foregroundSecondaryColor)
-            emit object->foregroundSecondaryColorChanged(p1->foregroundSecondaryColor);
-        if (p->linkColor != p1->linkColor)
-            emit object->linkColorChanged(p1->linkColor);
-        if (p->navigationColor != p1->navigationColor)
-            emit object->navigationColorChanged(p1->navigationColor);
-        if (p->shadowColor != p1->shadowColor)
-            emit object->shadowColorChanged(p1->shadowColor);
-        if (p->highlightColor != p1->highlightColor)
-            emit object->highlightColorChanged(p1->highlightColor);
-        if (p->controlDisabledColorChange != p1->controlDisabledColorChange)
-            emit object->controlDisabledColorChangeChanged(p1->controlDisabledColorChange);
-        if (p->foregroundDisabledColorChange != p1->foregroundDisabledColorChange)
-            emit object->foregroundDisabledColorChangeChanged(p1->foregroundDisabledColorChange);
-        if (p->controlHoveredColorChange != p1->controlHoveredColorChange)
-            emit object->controlHoveredColorChangeChanged(p1->controlHoveredColorChange);
-        if (p->foregroundHoveredColorChange != p1->foregroundHoveredColorChange)
-            emit object->foregroundHoveredColorChangeChanged(p1->foregroundHoveredColorChange);
-        if (p->controlPressedColorChange != p1->controlPressedColorChange)
-            emit object->controlPressedColorChangeChanged(p1->controlPressedColorChange);
-        if (p->foregroundPressedColorChange != p1->foregroundPressedColorChange)
-            emit object->foregroundPressedColorChangeChanged(p1->foregroundPressedColorChange);
-        if (p->controlCheckedColorChange != p1->controlCheckedColorChange)
-            emit object->controlCheckedColorChangeChanged(p1->controlCheckedColorChange);
-        if (p->annotationPopupTitleColorChange != p1->annotationPopupTitleColorChange)
-            emit object->annotationPopupTitleColorChangeChanged(p1->annotationPopupTitleColorChange);
-        if (p->annotationPopupContentColorChange != p1->annotationPopupContentColorChange)
-            emit object->annotationPopupContentColorChangeChanged(p1->annotationPopupContentColorChange);
-        if (p->colorAnimationDuration != p1->colorAnimationDuration)
-            emit object->colorAnimationDurationChanged(p1->colorAnimationDuration);
-        if (p->visualEffectAnimationDuration != p1->visualEffectAnimationDuration)
-            emit object->visualEffectAnimationDurationChanged(p1->visualEffectAnimationDuration);
-        if (p->toolTipDelay != p1->toolTipDelay)
-            emit object->toolTipDelayChanged(p1->toolTipDelay);
-        if (p->toolTipTimeout != p1->toolTipTimeout)
-            emit object->toolTipTimeoutChanged(p1->toolTipTimeout);
-        if (p->doubleClickResetEnabled != p1->doubleClickResetEnabled)
-            emit object->doubleClickResetEnabledChanged(p1->doubleClickResetEnabled);
-
-        for (auto child : object->attachedChildren()) {
-            inherit(qobject_cast<Theme *>(child), object);
-        }
-    }
 
     void Theme::attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) {
-        ThemePrivate::inherit(this, qobject_cast<Theme *>(newParent));
+        Q_D(Theme);
+        d->inheritAll();
     }
-    Theme::Theme(QObject *parent) : QQuickAttachedPropertyPropagator(parent), d(ThemePrivate::defaultTheme.d) {
+    Theme::Theme(QObject *parent) : QQuickAttachedPropertyPropagator(parent), d_ptr(new ThemePrivate) {
+        Q_D(Theme);
+        d->q_ptr = this;
+        d->inheritAll();
+        initialize();
     }
-    Theme::Theme(ThemePrivate *d) : d(d) {
+    Theme::Theme(ThemePrivate *d) : d_ptr(d) {
+        d->q_ptr = this;
+        initialize();
     }
     Theme::~Theme() = default;
     Theme *Theme::get(QObject *item) {
@@ -172,294 +187,49 @@ namespace SVS {
         return &ThemePrivate::defaultTheme;
     }
 
-    QColor Theme::accentColor() const {
-        return d->accentColor;
-    }
-    void Theme::setAccentColor(const QColor &accentColor) {
-        if (d->accentColor != accentColor) {
-            d->accentColor = accentColor;
-            emit accentColorChanged(d->accentColor);
-        }
-    }
-    QColor Theme::warningColor() const {
-        return d->warningColor;
-    }
-    void Theme::setWarningColor(const QColor &warningColor) {
-        if (d->warningColor != warningColor) {
-            d->warningColor = warningColor;
-            emit warningColorChanged(d->warningColor);
-        }
-    }
-    QColor Theme::errorColor() const {
-        return d->errorColor;
-    }
-    void Theme::setErrorColor(const QColor &errorColor) {
-        if (d->errorColor != errorColor) {
-            d->errorColor = errorColor;
-            emit errorColorChanged(d->errorColor);
-        }
-    }
-    QColor Theme::buttonColor() const {
-        return d->buttonColor;
-    }
-    void Theme::setButtonColor(const QColor &buttonColor) {
-        if (d->buttonColor != buttonColor) {
-            d->buttonColor = buttonColor;
-            emit buttonColorChanged(d->buttonColor);
-        }
-    }
-    QColor Theme::scrollBarColor() const {
-        return d->scrollBarColor;
-    }
-    void Theme::setScrollBarColor(const QColor &scrollBarColor) {
-        if (d->scrollBarColor != scrollBarColor) {
-            d->scrollBarColor = scrollBarColor;
-            emit scrollBarColorChanged(d->scrollBarColor);
-        }
-    }
-    QColor Theme::textFieldColor() const {
-        return d->textFieldColor;
-    }
-    void Theme::setTextFieldColor(const QColor &textFieldColor) {
-        if (d->textFieldColor != textFieldColor) {
-            d->textFieldColor = textFieldColor;
-            emit textFieldColorChanged(d->textFieldColor);
-        }
-    }
-    QColor Theme::borderColor() const {
-        return d->borderColor;
-    }
-    void Theme::setBorderColor(const QColor &borderColor) {
-        if (d->borderColor != borderColor) {
-            d->borderColor = borderColor;
-            emit borderColorChanged(d->borderColor);
-        }
-    }
-    QColor Theme::backgroundPrimaryColor() const {
-        return d->backgroundPrimaryColor;
-    }
-    void Theme::setBackgroundPrimaryColor(const QColor &backgroundPrimaryColor) {
-        if (d->backgroundPrimaryColor != backgroundPrimaryColor) {
-            d->backgroundPrimaryColor = backgroundPrimaryColor;
-            emit backgroundPrimaryColorChanged(d->backgroundPrimaryColor);
-        }
-    }
-    QColor Theme::backgroundSecondaryColor() const {
-        return d->backgroundSecondaryColor;
-    }
-    void Theme::setBackgroundSecondaryColor(const QColor &backgroundSecondaryColor) {
-        if (d->backgroundSecondaryColor != backgroundSecondaryColor) {
-            d->backgroundSecondaryColor = backgroundSecondaryColor;
-            emit backgroundSecondaryColorChanged(d->backgroundSecondaryColor);
-        }
-    }
-    QColor Theme::backgroundTertiaryColor() const {
-        return d->backgroundTertiaryColor;
-    }
-    void Theme::setBackgroundTertiaryColor(const QColor &backgroundTertiaryColor) {
-        if (d->backgroundTertiaryColor != backgroundTertiaryColor) {
-            d->backgroundTertiaryColor = backgroundTertiaryColor;
-            emit backgroundTertiaryColorChanged(d->backgroundTertiaryColor);
-        }
-    }
-    QColor Theme::backgroundQuaternaryColor() const {
-        return d->backgroundQuaternaryColor;
-    }
-    void Theme::setBackgroundQuaternaryColor(const QColor &backgroundQuaternaryColor) {
-        if (d->backgroundQuaternaryColor != backgroundQuaternaryColor) {
-            d->backgroundQuaternaryColor = backgroundQuaternaryColor;
-            emit backgroundQuaternaryColorChanged(d->backgroundQuaternaryColor);
-        }
-    }
-    QColor Theme::splitterColor() const {
-        return d->splitterColor;
-    }
-    void Theme::setSplitterColor(const QColor &splitterColor) {
-        if (d->splitterColor != splitterColor) {
-            d->splitterColor = splitterColor;
-            emit splitterColorChanged(d->splitterColor);
-        }
-    }
-    QColor Theme::foregroundPrimaryColor() const {
-        return d->foregroundPrimaryColor;
-    }
-    void Theme::setForegroundPrimaryColor(const QColor &foregroundPrimaryColor) {
-        if (d->foregroundPrimaryColor != foregroundPrimaryColor) {
-            d->foregroundPrimaryColor = foregroundPrimaryColor;
-            emit foregroundPrimaryColorChanged(d->foregroundPrimaryColor);
-        }
-    }
-    QColor Theme::foregroundSecondaryColor() const {
-        return d->foregroundSecondaryColor;
-    }
-    void Theme::setForegroundSecondaryColor(const QColor &foregroundSecondaryColor) {
-        if (d->foregroundSecondaryColor != foregroundSecondaryColor) {
-            d->foregroundSecondaryColor = foregroundSecondaryColor;
-            emit foregroundSecondaryColorChanged(d->foregroundSecondaryColor);
-        }
-    }
-    QColor Theme::linkColor() const {
-        return d->linkColor;
-    }
-    void Theme::setLinkColor(const QColor &linkColor) {
-        if (d->linkColor != linkColor) {
-            d->linkColor = linkColor;
-            emit linkColorChanged(d->linkColor);
-        }
-    }
-    QColor Theme::navigationColor() const {
-        return d->navigationColor;
-    }
-    void Theme::setNavigationColor(const QColor &navigationColor) {
-        if (d->navigationColor != navigationColor) {
-            d->navigationColor = navigationColor;
-            emit navigationColorChanged(d->navigationColor);
-        }
-    }
-    QColor Theme::shadowColor() const {
-        return d->shadowColor;
-    }
-    void Theme::setShadowColor(const QColor &shadowColor) {
-        if (d->shadowColor != shadowColor) {
-            d->shadowColor = shadowColor;
-            emit shadowColorChanged(d->shadowColor);
-        }
-    }
-    QColor Theme::highlightColor() const {
-        return d->highlightColor;
-    }
-    void Theme::setHighlightColor(const QColor &highlightColor) {
-        if (d->highlightColor != highlightColor) {
-            d->highlightColor = highlightColor;
-            emit highlightColorChanged(d->highlightColor);
-        }
-    }
-    ColorChange Theme::controlDisabledColorChange() const {
-        return d->controlDisabledColorChange;
-    }
-    void Theme::setControlDisabledColorChange(const ColorChange &controlDisabledColorChange) {
-        if (d->controlDisabledColorChange != controlDisabledColorChange) {
-            d->controlDisabledColorChange = controlDisabledColorChange;
-            emit controlDisabledColorChangeChanged(d->controlDisabledColorChange);
-        }
-    }
-    ColorChange Theme::foregroundDisabledColorChange() const {
-        return d->foregroundDisabledColorChange;
-    }
-    void Theme::setForegroundDisabledColorChange(const ColorChange &foregroundDisabledColorChange) {
-        if (d->foregroundDisabledColorChange != foregroundDisabledColorChange) {
-            d->foregroundDisabledColorChange = foregroundDisabledColorChange;
-            emit foregroundDisabledColorChangeChanged(d->foregroundDisabledColorChange);
-        }
-    }
-    ColorChange Theme::controlHoveredColorChange() const {
-        return d->controlHoveredColorChange;
-    }
-    void Theme::setControlHoveredColorChange(const ColorChange &controlHoveredColorChange) {
-        if (d->controlHoveredColorChange != controlHoveredColorChange) {
-            d->controlHoveredColorChange = controlHoveredColorChange;
-            emit controlHoveredColorChangeChanged(d->controlHoveredColorChange);
-        }
-    }
-    ColorChange Theme::foregroundHoveredColorChange() const {
-        return d->foregroundHoveredColorChange;
-    }
-    void Theme::setForegroundHoveredColorChange(const ColorChange &foregroundHoveredColorChange) {
-        if (d->foregroundHoveredColorChange != foregroundHoveredColorChange) {
-            d->foregroundHoveredColorChange = foregroundHoveredColorChange;
-            emit foregroundHoveredColorChangeChanged(d->foregroundHoveredColorChange);
-        }
-    }
-    ColorChange Theme::controlPressedColorChange() const {
-        return d->controlPressedColorChange;
-    }
-    void Theme::setControlPressedColorChange(const ColorChange &controlPressedColorChange) {
-        if (d->controlPressedColorChange != controlPressedColorChange) {
-            d->controlPressedColorChange = controlPressedColorChange;
-            emit controlPressedColorChangeChanged(d->controlPressedColorChange);
-        }
-    }
-    ColorChange Theme::foregroundPressedColorChange() const {
-        return d->foregroundPressedColorChange;
-    }
-    void Theme::setForegroundPressedColorChange(const ColorChange &foregroundPressedColorChange) {
-        if (d->foregroundPressedColorChange != foregroundPressedColorChange) {
-            d->foregroundPressedColorChange = foregroundPressedColorChange;
-            emit foregroundPressedColorChangeChanged(d->foregroundPressedColorChange);
-        }
-    }
-    ColorChange Theme::controlCheckedColorChange() const {
-        return d->controlCheckedColorChange;
-    }
-    void Theme::setControlCheckedColorChange(const ColorChange &controlCheckedColorChange) {
-        if (d->controlCheckedColorChange != controlCheckedColorChange) {
-            d->controlCheckedColorChange = controlCheckedColorChange;
-            emit controlCheckedColorChangeChanged(d->controlCheckedColorChange);
-        }
-    }
-    ColorChange Theme::annotationPopupTitleColorChange() const {
-        return d->annotationPopupTitleColorChange;
-    }
-    void Theme::setAnnotationPopupTitleColorChange(const ColorChange &annotationPopupTitleColorChange) {
-        if (d->annotationPopupTitleColorChange != annotationPopupTitleColorChange) {
-            d->annotationPopupTitleColorChange = annotationPopupTitleColorChange;
-            emit annotationPopupTitleColorChangeChanged(d->annotationPopupTitleColorChange);
-        }
-    }
-    ColorChange Theme::annotationPopupContentColorChange() const {
-        return d->annotationPopupContentColorChange;
-    }
-    void Theme::setAnnotationPopupContentColorChange(const ColorChange &annotationPopupContentColorChange) {
-        if (d->annotationPopupContentColorChange != annotationPopupContentColorChange) {
-            d->annotationPopupContentColorChange = annotationPopupContentColorChange;
-            emit annotationPopupContentColorChangeChanged(d->annotationPopupContentColorChange);
-        }
-    }
-    int Theme::colorAnimationDuration() const {
-        return d->colorAnimationDuration;
-    }
-    void Theme::setColorAnimationDuration(int colorAnimationDuration) {
-        if (d->colorAnimationDuration != colorAnimationDuration) {
-            d->colorAnimationDuration = colorAnimationDuration;
-            emit colorAnimationDurationChanged(d->colorAnimationDuration);
-        }
-    }
-    int Theme::visualEffectAnimationDuration() const {
-        return d->visualEffectAnimationDuration;
-    }
-    void Theme::setVisualEffectAnimationDuration(int visualEffectAnimationDuration) {
-        if (d->visualEffectAnimationDuration != visualEffectAnimationDuration) {
-            d->visualEffectAnimationDuration = visualEffectAnimationDuration;
-            emit visualEffectAnimationDurationChanged(d->visualEffectAnimationDuration);
-        }
-    }
-    int Theme::toolTipDelay() const {
-        return d->toolTipDelay;
-    }
-    void Theme::setToolTipDelay(int toolTipDelay) {
-        if (d->toolTipDelay != toolTipDelay) {
-            d->toolTipDelay = toolTipDelay;
-            emit toolTipDelayChanged(d->toolTipDelay);
-        }
-    }
-    int Theme::toolTipTimeout() const {
-        return d->toolTipTimeout;
-    }
-    void Theme::setToolTipTimeout(int toolTipTimeout) {
-        if (d->toolTipTimeout != toolTipTimeout) {
-            d->toolTipTimeout = toolTipTimeout;
-            emit toolTipTimeoutChanged(d->toolTipTimeout);
-        }
-    }
-    bool Theme::doubleClickResetEnabled() const {
-        return d->doubleClickResetEnabled;
-    }
-    void Theme::setDoubleClickResetEnabled(bool doubleClickResetEnabled) {
-        if (d->doubleClickResetEnabled != doubleClickResetEnabled) {
-            d->doubleClickResetEnabled = doubleClickResetEnabled;
-            emit doubleClickResetEnabledChanged(d->doubleClickResetEnabled);
-        }
-    }
+    IMPLEMENTATION(accentColor, accentColor, setAccentColor, resetAccentColor)
+    IMPLEMENTATION(warningColor, warningColor, setWarningColor, resetWarningColor)
+    IMPLEMENTATION(errorColor, errorColor, setErrorColor, resetErrorColor)
+
+    IMPLEMENTATION(buttonColor, buttonColor, setButtonColor, resetButtonColor)
+    IMPLEMENTATION(textFieldColor, textFieldColor, setTextFieldColor, resetTextFieldColor)
+    IMPLEMENTATION(scrollBarColor, scrollBarColor, setScrollBarColor, resetScrollBarColor)
+    IMPLEMENTATION(borderColor, borderColor, setBorderColor, resetBorderColor)
+
+    IMPLEMENTATION(backgroundPrimaryColor, backgroundPrimaryColor, setBackgroundPrimaryColor, resetBackgroundPrimaryColor)
+    IMPLEMENTATION(backgroundSecondaryColor, backgroundSecondaryColor, setBackgroundSecondaryColor, resetBackgroundSecondaryColor)
+    IMPLEMENTATION(backgroundTertiaryColor, backgroundTertiaryColor, setBackgroundTertiaryColor, resetBackgroundTertiaryColor)
+    IMPLEMENTATION(backgroundQuaternaryColor, backgroundQuaternaryColor, setBackgroundQuaternaryColor, resetBackgroundQuaternaryColor)
+    IMPLEMENTATION(splitterColor, splitterColor, setSplitterColor, resetSplitterColor)
+
+    IMPLEMENTATION(foregroundPrimaryColor, foregroundPrimaryColor, setForegroundPrimaryColor, resetForegroundPrimaryColor)
+    IMPLEMENTATION(foregroundSecondaryColor, foregroundSecondaryColor, setForegroundSecondaryColor, resetForegroundSecondaryColor)
+    IMPLEMENTATION(linkColor, linkColor, setLinkColor, resetLinkColor)
+
+    IMPLEMENTATION(navigationColor, navigationColor, setNavigationColor, resetNavigationColor)
+    IMPLEMENTATION(shadowColor, shadowColor, setShadowColor, resetShadowColor)
+    IMPLEMENTATION(highlightColor, highlightColor, setHighlightColor, resetHighlightColor)
+
+    IMPLEMENTATION(controlDisabledColorChange, controlDisabledColorChange, setControlDisabledColorChange, resetControlDisabledColorChange)
+    IMPLEMENTATION(foregroundDisabledColorChange, foregroundDisabledColorChange, setForegroundDisabledColorChange, resetForegroundDisabledColorChange)
+    IMPLEMENTATION(controlHoveredColorChange, controlHoveredColorChange, setControlHoveredColorChange, resetControlHoveredColorChange)
+    IMPLEMENTATION(foregroundHoveredColorChange, foregroundHoveredColorChange, setForegroundHoveredColorChange, resetForegroundHoveredColorChange)
+    IMPLEMENTATION(controlPressedColorChange, controlPressedColorChange, setControlPressedColorChange, resetControlPressedColorChange)
+    IMPLEMENTATION(foregroundPressedColorChange, foregroundPressedColorChange, setForegroundPressedColorChange, resetForegroundPressedColorChange)
+    IMPLEMENTATION(controlCheckedColorChange, controlCheckedColorChange, setControlCheckedColorChange, resetControlCheckedColorChange)
+
+    IMPLEMENTATION(annotationPopupTitleColorChange, annotationPopupTitleColorChange, setAnnotationPopupTitleColorChange, resetAnnotationPopupTitleColorChange)
+    IMPLEMENTATION(annotationPopupContentColorChange, annotationPopupContentColorChange, setAnnotationPopupContentColorChange, resetAnnotationPopupContentColorChange)
+
+
+    IMPLEMENTATION(colorAnimationDuration, colorAnimationDuration, setColorAnimationDuration, resetColorAnimationDuration)
+    IMPLEMENTATION(visualEffectAnimationDuration, visualEffectAnimationDuration, setVisualEffectAnimationDuration, resetVisualEffectAnimationDuration)
+
+    IMPLEMENTATION(toolTipDelay, toolTipDelay, setToolTipDelay, resetToolTipDelay)
+    IMPLEMENTATION(toolTipTimeout, toolTipTimeout, setToolTipTimeout, resetToolTipTimeout)
+
+    IMPLEMENTATION(doubleClickResetEnabled, doubleClickResetEnabled, setDoubleClickResetEnabled, resetDoubleClickResetEnabled)
+
 }
 
 #include "moc_Theme.cpp"
