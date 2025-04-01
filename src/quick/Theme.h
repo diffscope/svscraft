@@ -28,13 +28,13 @@ namespace SVS {
 
     class ColorChange;
 
-    class ThemeAttachedType;
-
     class ThemePrivate;
 
     class SVSCRAFT_QUICK_EXPORT Theme : public AttachedPropertyPropagator {
         Q_OBJECT
-        QML_ANONYMOUS
+        QML_ELEMENT
+        QML_ATTACHED(Theme)
+        QML_UNCREATABLE("")
 
         Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor RESET resetAccentColor NOTIFY accentColorChanged)
         Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor RESET resetWarningColor NOTIFY warningColorChanged)
@@ -82,6 +82,7 @@ namespace SVS {
     public:
         ~Theme() override;
 
+        static Theme *qmlAttachedProperties(QObject *object);
         static Theme *get(QObject *item);
         static Theme *defaultTheme();
 
@@ -257,7 +258,6 @@ namespace SVS {
         AttachedPropertyPropagatorProperties *properties() const override;
 
     private:
-        friend class ThemeAttachedType;
         friend class ThemePrivate;
         explicit Theme(QObject *parent = nullptr);
         explicit Theme(QPrivateSignal);

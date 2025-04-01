@@ -30,7 +30,7 @@
 
 namespace SVS {
 
-    Theme *ThemeAttachedType::qmlAttachedProperties(QObject *object) {
+    Theme *Theme::qmlAttachedProperties(QObject *object) {
         return new Theme(object);
     }
     QColor Theme::controlColor(int controlType) const {
@@ -89,15 +89,15 @@ namespace SVS {
         return d.data();
     }
     Theme::Theme(QObject *parent) : AttachedPropertyPropagator(parent), d(new ThemePrivate(this)) {
-        Theme::properties()->inheritAll();
         initialize();
+        Theme::properties()->inheritAll();
     }
     Theme::Theme(QPrivateSignal) : d(new ThemePrivate(this)) {
         initialize();
     }
     Theme::~Theme() = default;
     Theme *Theme::get(QObject *item) {
-        return qobject_cast<Theme *>(qmlAttachedPropertiesObject<ThemeAttachedType>(item));
+        return qobject_cast<Theme *>(qmlAttachedPropertiesObject<Theme>(item));
     }
     Theme ThemePrivate::defaultTheme = Theme(Theme::QPrivateSignal{});
     Theme *Theme::defaultTheme() {

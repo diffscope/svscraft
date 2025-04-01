@@ -33,13 +33,6 @@ class QJSEngine;
 
 namespace SVS {
 
-    class ThemeAttachedType : public QObject {
-        Q_OBJECT
-        QML_NAMED_ELEMENT(Theme)
-        QML_ATTACHED(Theme)
-    public:
-        static Theme *qmlAttachedProperties(QObject *object);
-    };
     class ThemePrivate : public AttachedPropertyPropagatorProperties {
     public:
         static Theme defaultTheme;
