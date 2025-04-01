@@ -26,6 +26,7 @@
 #include <QVariant>
 
 #include <SVSCraftGui/ColorChange.h>
+#include <SVSCraftQuick/AttachedPropertyPropagatorProperties.h>
 
 class QQmlEngine;
 class QJSEngine;
@@ -39,14 +40,11 @@ namespace SVS {
     public:
         static Theme *qmlAttachedProperties(QObject *object);
     };
-    class ThemePrivate {
-        Q_DECLARE_PUBLIC(Theme);
+    class ThemePrivate : public AttachedPropertyPropagatorProperties {
     public:
         static Theme defaultTheme;
 
-        Theme *q_ptr;
-
-        QVariantMap m = {
+        inline explicit ThemePrivate(Theme *theme) : AttachedPropertyPropagatorProperties(theme, defaultTheme.properties(), {
             {"accentColor", QVariant::fromValue(QColor(0x5566ff))},
             {"warningColor", QVariant::fromValue(QColor(0xeeaa66))},
             {"errorColor", QVariant::fromValue(QColor(0xcc4455))},
@@ -79,29 +77,8 @@ namespace SVS {
             {"toolTipDelay", 1000},
             {"toolTipTimeout", -1},
             {"doubleClickResetEnabled", true},
-        };
-        QSet<QString> explicitSetProperties;
-
-        QVariant getValue(const QString &property) const {
-            return m.value(property);
+        }) {
         }
-        void setValue(const QString &property, const QVariant &value) {
-            explicitSetProperties.insert(property);
-            if (QVariant::compare(value, m.value(property)) == QPartialOrdering::Equivalent)
-                return;
-            m.insert(property, QVariant::fromValue(value));
-            propagateAndNotify(property);
-        }
-        void resetValue(const QString &property) {
-            if (explicitSetProperties.contains(property)) {
-                explicitSetProperties.remove(property);
-                inherit(property);
-            }
-        }
-
-        void propagateAndNotify(const QString &property);
-        void inherit(const QString &property);
-        void inheritAll();
 
     };
 }

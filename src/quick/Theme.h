@@ -20,11 +20,9 @@
 #ifndef SVSCRAFT_THEME_H
 #define SVSCRAFT_THEME_H
 
-#include <QSharedDataPointer>
-#include <QQuickAttachedPropertyPropagator>
 #include <qqmlintegration.h>
 
-#include <SVSCraftQuick/SVSCraftQuickGlobal.h>
+#include <SVSCraftQuick/AttachedPropertyPropagator.h>
 
 namespace SVS {
 
@@ -34,10 +32,9 @@ namespace SVS {
 
     class ThemePrivate;
 
-    class SVSCRAFT_QUICK_EXPORT Theme : public QQuickAttachedPropertyPropagator {
+    class SVSCRAFT_QUICK_EXPORT Theme : public AttachedPropertyPropagator {
         Q_OBJECT
         QML_ANONYMOUS
-        Q_DECLARE_PRIVATE(Theme)
 
         Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor RESET resetAccentColor NOTIFY accentColorChanged)
         Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor RESET resetWarningColor NOTIFY warningColorChanged)
@@ -257,14 +254,14 @@ namespace SVS {
         void doubleClickResetEnabledChanged();
 
     protected:
-        void attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) override;
+        AttachedPropertyPropagatorProperties *properties() const override;
 
     private:
         friend class ThemeAttachedType;
         friend class ThemePrivate;
         explicit Theme(QObject *parent = nullptr);
-        explicit Theme(ThemePrivate *d);
-        QScopedPointer<ThemePrivate> d_ptr;
+        explicit Theme(QPrivateSignal);
+        QScopedPointer<ThemePrivate> d;
 
     };
 
