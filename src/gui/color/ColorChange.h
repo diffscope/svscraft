@@ -27,35 +27,64 @@
 
 namespace SVS {
 
-    class SVSCRAFT_GUI_EXPORT ColorChange {
-        Q_GADGET
-        Q_PROPERTY(QColor topBlend READ topBlend CONSTANT)
-        Q_PROPERTY(float alphaFactor READ alphaFactor CONSTANT)
-        Q_PROPERTY(QColor bottomBlend READ bottomBlend CONSTANT)
+    struct SVSCRAFT_GUI_EXPORT AbstractColorFilter {
+        AbstractColorFilter() = default;
+        using Filter = QColor (*)(const QColor &, qintptr);
+        using Cleaner = void (*)(qintptr);
+        QColor apply(const QColor &color) const {
+            return f ? f(color, d) : color;
+        }
+
+        bool operator==(const AbstractColorFilter &) const = default;
+
+    protected:
+        explicit AbstractColorFilter(qintptr d, Filter f) : d(d), f(f) {}
+    private:
+        qintptr d{};
+        Filter f{};
+    };
+
+    class SVSCRAFT_GUI_EXPORT AlphaColorFilter : public AbstractColorFilter {
     public:
-        constexpr ColorChange(const QColor &topBlend = {}, float alphaFactor = 1.0f, const QColor &bottomBlend = {}) : m_topBlend(topBlend), m_bottomBlend(bottomBlend), m_alphaFactor(alphaFactor) {
-        }
+        AlphaColorFilter(double alphaFactor);
+    };
 
-        constexpr QColor topBlend() const {
-            return m_topBlend;
-        }
+    struct SVSCRAFT_GUI_EXPORT SaturationColorFilter : AbstractColorFilter {
+        SaturationColorFilter(double saturationFactor);
+    };
 
-        constexpr float alphaFactor() const {
-            return m_alphaFactor;
-        }
+    struct SVSCRAFT_GUI_EXPORT ValueColorFilter : AbstractColorFilter {
+        ValueColorFilter(double valueFactor);
+    };
 
-        constexpr QColor bottomBlend() const {
-            return m_bottomBlend;
-        }
+    struct SVSCRAFT_GUI_EXPORT HslSaturationColorFilter : AbstractColorFilter {
+        HslSaturationColorFilter(double saturationFactor);
+    };
 
-        bool operator==(const ColorChange &) const = default;
+    struct SVSCRAFT_GUI_EXPORT LightnessColorFilter : AbstractColorFilter {
+        LightnessColorFilter(double lightnessFactor);
+    };
+
+    struct SVSCRAFT_GUI_EXPORT LighterColorChange : AbstractColorFilter {
+        LighterColorChange(int factor);
+    };
+
+    struct SVSCRAFT_GUI_EXPORT TopBlendColorFilter : AbstractColorFilter {
+        TopBlendColorFilter(const QColor &blendColor);
+    };
+
+    struct SVSCRAFT_GUI_EXPORT BottomBlendColorFilter : AbstractColorFilter {
+        BottomBlendColorFilter(const QColor &blendColor);
+    };
+
+    class SVSCRAFT_GUI_EXPORT ColorChange : public QList<AbstractColorFilter> {
+        Q_GADGET
+
+    public:
+        ColorChange() = default;
+        ColorChange(std::initializer_list<AbstractColorFilter> args) : QList(args) {}
 
         Q_INVOKABLE QColor apply(const QColor &color) const;
-
-    private:
-        QColor m_topBlend;
-        QColor m_bottomBlend;
-        float m_alphaFactor;
     };
 
 }
