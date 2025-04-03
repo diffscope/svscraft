@@ -23,6 +23,7 @@
 #include <SVSCraftQuickImpl/private/StatusText_p.h>
 
 #include <QPointer>
+#include <QTimer>
 
 namespace SVS {
 
@@ -39,9 +40,11 @@ namespace SVS {
     public:
         StatusText *q_ptr;
 
-        QString text;
-        QPointer<QObject> contextObject;
-        QString defaultText;
+        QList<QPair<QObject *, QString>> statusTextStack;
+        QPair<QObject *, QString> contextHelpTextStack;
+
+        QTimer pushTimer;
+        QTimer popTimer;
     };
 }
 

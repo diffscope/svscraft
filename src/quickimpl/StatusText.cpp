@@ -22,6 +22,7 @@
 
 #include <QQuickWindow>
 #include <QQmlInfo>
+#include <QTimer>
 
 namespace SVS {
     StatusText *StatusTextAttachedType::qmlAttachedProperties(QObject *object) {
@@ -34,43 +35,62 @@ namespace SVS {
     StatusText::StatusText(QObject *parent) : QObject(parent), d_ptr(new StatusTextPrivate) {
         Q_D(StatusText);
         d->q_ptr = this;
+        d->pushTimer.setSingleShot(true);
+        d->popTimer.setSingleShot(true);
     }
     StatusText::~StatusText() = default;
-    QString StatusText::text() const {
-        Q_D(const StatusText);
-        return d->text;
-    }
-    void StatusText::setText(const QString &text) {
+
+    void StatusText::pushStatusText(QObject *contextObject, const QString &text) {
         Q_D(StatusText);
-        if (d->text != text) {
-            d->text = text;
-            emit textChanged();
-            emit displayTextChanged();
+        d->statusTextStack.removeIf([=](const auto &p) { return p.first == contextObject; });
+        d->statusTextStack.append({contextObject, text});
+        emit statusTextChanged();
+    }
+    void StatusText::popStatusText(QObject *contextObject) {
+        Q_D(StatusText);
+        bool notify = !d->statusTextStack.isEmpty() && d->statusTextStack.back().first == contextObject;
+        d->statusTextStack.removeIf([=](const auto &p) { return p.first == contextObject; });
+        if (notify)
+            emit statusTextChanged();
+    }
+    void StatusText::pushContextHelpText(QObject *contextObject, const QString &text, int delay) {
+        Q_D(StatusText);
+        if (delay == 0) {
+            d->contextHelpTextStack = {contextObject, text};
+            emit contextHelpTextChanged();
+        } else {
+            d->pushTimer.setInterval(delay);
+            d->pushTimer.setProperty("contextObject", QVariant::fromValue(contextObject));
+            d->pushTimer.callOnTimeout([=] {
+                d->popTimer.stop();
+                d->contextHelpTextStack = {contextObject, text};
+                emit contextHelpTextChanged();
+            });
+            d->pushTimer.start();
         }
     }
-    void StatusText::setContextObject(QObject *object) {
+    void StatusText::popContextHelpText(QObject *contextObject, int delay) {
         Q_D(StatusText);
-        d->contextObject = object;
-    }
-    QObject *StatusText::contextObject() const {
-        Q_D(const StatusText);
-        return d->contextObject;
-    }
-    QString StatusText::defaultText() const {
-        Q_D(const StatusText);
-        return d->defaultText;
-    }
-    void StatusText::setDefaultText(const QString &defaultText) {
-        Q_D(StatusText);
-        if (d->defaultText != defaultText) {
-            d->defaultText = defaultText;
-            emit defaultTextChanged();
-            if (d->text.isEmpty())
-                emit displayTextChanged();
+        if (d->pushTimer.property("contextObject").value<QObject *>() == contextObject) {
+            d->pushTimer.stop();
+        }
+        if (d->contextHelpTextStack.first != contextObject)
+            return;
+        if (delay == 0) {
+            d->contextHelpTextStack = {};
+            emit contextHelpTextChanged();
+        } else {
+            d->popTimer.setInterval(delay);
+            d->popTimer.start();
         }
     }
-    QString StatusText::displayText() const {
+    QString StatusText::statusText() const {
         Q_D(const StatusText);
-        return d->text.isEmpty() ? d->defaultText : d->text;
+        return d->statusTextStack.isEmpty() ? QString() : d->statusTextStack.back().second;
     }
+    QString StatusText::contextHelpText() const {
+        Q_D(const StatusText);
+        return d->contextHelpTextStack.second;
+    }
+
 }

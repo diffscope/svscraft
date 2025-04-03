@@ -55,49 +55,59 @@ namespace SVS {
         d->item = parent;
         connect(parent, &QQuickItem::windowChanged, this, [=] {
             if (d->statusText) {
+                d->statusText->popStatusText(this);
+                d->statusText->popContextHelpText(this, d->contextHelpDelay);
                 disconnect(d->statusText, nullptr, this, nullptr);
             }
             d->statusText = nullptr;
-            if (parent->window()) {
+            auto *window = parent->window();
+            if (window && qobject_cast<QQuickWindow *>(window->transientParent()))
+                window =  qobject_cast<QQuickWindow *>(window->transientParent());
+            if (window) {
                 d->statusText = qobject_cast<StatusText *>(qmlAttachedPropertiesObject<StatusTextAttachedType>(parent->window()));
-                connect(d->statusText, &StatusText::displayTextChanged, this, &DescriptiveText::statusTextChanged);
+                connect(d->statusText, &StatusText::statusTextChanged, this, &DescriptiveText::statusTextChanged);
+                connect(d->statusText, &StatusText::contextHelpTextChanged, this, &DescriptiveText::contextHelpTextChanged);
             }
             emit statusTextChanged();
         });
         d->statusText = qobject_cast<StatusText *>(qmlAttachedPropertiesObject<StatusTextAttachedType>(parent->window()));
         if (d->statusText) {
-            connect(d->statusText, &StatusText::displayTextChanged, this, &DescriptiveText::statusTextChanged);
-            connect(d->statusText, &StatusText::defaultTextChanged, this, &DescriptiveText::defaultStatusTextChanged);
+            connect(d->statusText, &StatusText::statusTextChanged, this, &DescriptiveText::statusTextChanged);
+            connect(d->statusText, &StatusText::contextHelpTextChanged, this, &DescriptiveText::contextHelpTextChanged);
         }
         connect(this, &DescriptiveText::activatedChanged, [=] {
+            if (!d->statusText)
+                return;
             if (d->activated) {
-                if (d->statusText)
-                    d->statusText->setText(d->statusTip);
-                    d->statusText->setContextObject(this);
+                d->statusText->pushStatusText(this, d->statusTip);
+                d->statusText->pushContextHelpText(this, d->contextHelpTip, d->contextHelpDelay);
             } else {
-                if (d->statusText && d->statusText->contextObject() == this) {
-                    d->statusText->setText({});
-                    d->statusText->setContextObject(nullptr);
-                }
+                d->statusText->popStatusText(this);
+                d->statusText->popContextHelpText(this, d->contextHelpDelay);
             }
         });
         connect(this, &DescriptiveText::statusTipChanged, [=] {
+            if (!d->statusText)
+                return;
             if (d->activated) {
-                if (d->statusText) {
-                    d->statusText->setText(d->statusTip);
-                    d->statusText->setContextObject(this);
-                }
+                d->statusText->pushStatusText(this, d->statusTip);
+            }
+        });
+        connect(this, &DescriptiveText::contextHelpTipChanged, [=] {
+            if (!d->statusText)
+                return;
+            if (d->activated) {
+                d->statusText->pushContextHelpText(this, d->contextHelpTip, d->contextHelpDelay);
             }
         });
     }
     DescriptiveText::~DescriptiveText() {
         Q_D(DescriptiveText);
-        if (d->statusText && d->statusText->contextObject() == this) {
-            d->statusText->setText({});
-            d->statusText->setContextObject(nullptr);
+        if (d->statusText) {
+            d->statusText->popStatusText(this);
+            d->statusText->popContextHelpText(this, d->contextHelpDelay);
         }
     }
-
 
     bool DescriptiveText::activated() const {
         Q_D(const DescriptiveText);
@@ -133,16 +143,35 @@ namespace SVS {
             emit statusTipChanged();
         }
     }
+    QString DescriptiveText::contextHelpTip() const {
+        Q_D(const DescriptiveText);
+        return d->contextHelpTip;
+    }
+    void DescriptiveText::setContextHelpTip(const QString &contextHelpTip) {
+        Q_D(DescriptiveText);
+        if (d->contextHelpTip != contextHelpTip) {
+            d->contextHelpTip = contextHelpTip;
+            emit contextHelpTipChanged();
+        }
+    }
+    int DescriptiveText::contextHelpDelay() const {
+        Q_D(const DescriptiveText);
+        return d->contextHelpDelay;
+    }
+    void DescriptiveText::setContextHelpDelay(int contextHelpDelay) {
+        Q_D(DescriptiveText);
+        if (d->contextHelpDelay != contextHelpDelay) {
+            d->contextHelpDelay = contextHelpDelay;
+            emit contextHelpDelayChanged();
+        }
+    }
     QString DescriptiveText::statusText() const {
         Q_D(const DescriptiveText);
-        return d->statusText ? d->statusText->displayText() : QString();
+        return d->statusText ? d->statusText->statusText() : QString();
     }
-    QString DescriptiveText::defaultStatusText() const {
+    QString DescriptiveText::contextHelpText() const {
         Q_D(const DescriptiveText);
-        return d->statusText ? d->statusText->defaultText() : QString();
+        return d->statusText ? d->statusText->contextHelpText() : QString();
     }
-    void DescriptiveText::setDefaultStatusText(const QString &defaultStatusText) {
-        Q_D(DescriptiveText);
-        d->statusText->setDefaultText(defaultStatusText);
-    }
+
 }

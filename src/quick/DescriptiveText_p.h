@@ -39,8 +39,11 @@ namespace SVS {
         Q_PROPERTY(bool activated READ activated WRITE setActivated NOTIFY activatedChanged)
         Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip NOTIFY toolTipChanged)
         Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY statusTipChanged)
+        Q_PROPERTY(QString contextHelpTip READ contextHelpTip WRITE setContextHelpTip NOTIFY contextHelpTipChanged)
+        Q_PROPERTY(int contextHelpDelay READ contextHelpDelay WRITE setContextHelpDelay NOTIFY contextHelpDelayChanged)
+
         Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
-        Q_PROPERTY(QString defaultStatusText READ defaultStatusText WRITE setDefaultStatusText NOTIFY defaultStatusTextChanged)
+        Q_PROPERTY(QString contextHelpText READ contextHelpText NOTIFY contextHelpTextChanged)
 
     public:
         ~DescriptiveText() override;
@@ -54,17 +57,24 @@ namespace SVS {
         QString statusTip() const;
         void setStatusTip(const QString &statusTip);
 
+        QString contextHelpTip() const;
+        void setContextHelpTip(const QString &contextHelpTip);
+
+        int contextHelpDelay() const;
+        void setContextHelpDelay(int contextHelpDelay);
+
         QString statusText() const;
 
-        QString defaultStatusText() const;
-        void setDefaultStatusText(const QString &defaultStatusText);
+        QString contextHelpText() const;
 
     signals:
         void activatedChanged();
         void toolTipChanged();
         void statusTipChanged();
+        void contextHelpTipChanged();
+        void contextHelpDelayChanged();
         void statusTextChanged();
-        void defaultStatusTextChanged();
+        void contextHelpTextChanged();
 
     private:
         friend class DescriptiveTextAttachedType;

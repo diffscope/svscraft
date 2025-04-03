@@ -39,21 +39,18 @@ namespace SVS {
     public:
         ~StatusText() override;
 
-        QString text() const;
-        void setText(const QString &text);
+        void pushStatusText(QObject *contextObject, const QString &text);
+        void popStatusText(QObject *contextObject);
 
-        void setContextObject(QObject *object);
-        QObject *contextObject() const;
+        void pushContextHelpText(QObject *contextObject, const QString &text, int delay);
+        void popContextHelpText(QObject *contextObject, int delay);
 
-        QString defaultText() const;
-        void setDefaultText(const QString &defaultText);
-
-        QString displayText() const;
+        QString statusText() const;
+        QString contextHelpText() const;
 
     signals:
-        void textChanged();
-        void defaultTextChanged();
-        void displayTextChanged();
+        void statusTextChanged();
+        void contextHelpTextChanged();
 
     private:
         friend class StatusTextAttachedType;

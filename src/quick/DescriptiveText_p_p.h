@@ -41,8 +41,10 @@ namespace SVS {
         DescriptiveText *q_ptr;
         QQuickItem *item;
         bool activated = false;
+        int contextHelpDelay = 0;
         QString toolTip;
         QString statusTip;
+        QString contextHelpTip;
 
         QPointer<StatusText> statusText;
     };
