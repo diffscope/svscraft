@@ -126,6 +126,7 @@ Pane {
                         }
                     }
                     ColorPreview {
+                        anchors.left: parent.left
                         width: parent.width / ((colorPicker.flags & SVS.CM_ShowCurrentColor) ? 2 : 1)
                         height: parent.height
                         color: colorPicker.color
@@ -133,8 +134,8 @@ Pane {
                         DescriptiveText.toolTip: qsTr("New color")
                     }
                     Button {
+                        anchors.right: parent.right
                         visible: colorPicker.flags & SVS.CM_ShowCurrentColor
-                        x: parent.width / 2
                         width: parent.width / 2
                         height: parent.height
                         contentItem: null
