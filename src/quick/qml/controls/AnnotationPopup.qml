@@ -108,7 +108,7 @@ Popup {
         spacing: 2 * popup.spacing
         width: parent.width
         property double _size: 1
-        property color _color: popup.ThemedItem.controlType === SVS.CT_Normal ? Theme.foregroundSecondaryColor : Theme.controlColor(popup.ThemedItem.controlType)
+        readonly property color _color: popup.ThemedItem.controlType === SVS.CT_Normal ? Theme.foregroundSecondaryColor : Theme.controlColor(popup.ThemedItem.controlType)
         NumberAnimation on _size {
             id: progressBarAnimation
             from: 1
@@ -128,7 +128,7 @@ Popup {
         Rectangle {
             Layout.fillWidth: true
             implicitHeight: Math.max(32, rowLayout.height + 2 * popup.spacing)
-            color: Theme.annotationPopupTitleColorChange.apply(columnLayout._color)
+            color: popup.Theme.annotationPopupTitleColorChange.apply(columnLayout._color)
             radius: 2
             RowLayout {
                 id: rowLayout
