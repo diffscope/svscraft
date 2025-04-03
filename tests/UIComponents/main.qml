@@ -500,11 +500,21 @@ ApplicationWindow {
 
                 GroupBox {
                     title: "工具提示 & 状态提示"
-                    Button {
-                        text: "Hover me"
-                        DescriptiveText.activated: hovered
-                        DescriptiveText.toolTip: "Tool tip"
-                        DescriptiveText.statusTip: "Status tip"
+                    RowLayout {
+                        spacing: 8
+                        Button {
+                            text: "Hover me"
+                            DescriptiveText.activated: hovered
+                            DescriptiveText.toolTip: "Tool tip"
+                            DescriptiveText.statusTip: "Status tip"
+                        }
+                        Button {
+                            text: "Tool Tip Follows Cursor"
+                            DescriptiveText.activated: hovered
+                            DescriptiveText.toolTip: "Tool tip"
+                            Theme.toolTipDelay: 0
+                            ThemedItem.toolTipFollowsCursor: true
+                        }
                     }
                 }
 

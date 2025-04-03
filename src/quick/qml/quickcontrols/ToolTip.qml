@@ -17,6 +17,7 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
+import QtQml
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Effects
@@ -39,6 +40,23 @@ T.ToolTip {
 
     closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent | T.Popup.CloseOnReleaseOutsideParent
 
+    QtObject {
+        id: cursorListenerHelper
+        readonly property QtObject listener: GlobalHelper.createGlobalCursorListener(this)
+        readonly property bool enabled: (control.ThemedItem.toolTipFollowsCursor || control.parent && control.parent.ThemedItem.toolTipFollowsCursor) && control.visible
+        onEnabledChanged: listener.enabled = enabled
+        readonly property Connections connections: Connections {
+            target: cursorListenerHelper.listener
+            enabled: cursorListenerHelper.enabled
+            function onPositionChanged() {
+                let p = control.parent.mapFromGlobal(GlobalHelper.cursorPos())
+                control.x = p.x
+                control.y = p.y + 24
+            }
+        }
+    }
+
+
     enter: Transition {
         NumberAnimation {
             property: "opacity"
@@ -55,6 +73,14 @@ T.ToolTip {
             to: 0.0
             duration: Theme.visualEffectAnimationDuration
         }
+    }
+
+    onParentChanged: () => {
+        if (!parent)
+            return
+        let p = parent.mapFromGlobal(GlobalHelper.cursorPos())
+        x = p.x
+        y = p.y + 24
     }
 
     onAboutToShow: () => {
@@ -76,7 +102,7 @@ T.ToolTip {
         Rectangle {
             id: backgroundArea
             anchors.fill: parent
-            color: Theme.backgroundPrimaryColor
+            color: Theme.backgroundQuaternaryColor
             border.color: Theme.borderColor
             radius: 2
         }

@@ -83,12 +83,15 @@ namespace SVS {
 
         if (ChooseColor(&cc)) {
             rgbCurrent = cc.rgbResult;
-            return QColor::fromRgb(GetRValue(rgbCurrent), GetGValue(rgbCurrent), GetBValue(rgbCurrent));
+            return QColor::fromRgb(GetRValue(rgbCurrent), GetGValue(rgbCurrent),
+                                   GetBValue(rgbCurrent));
         }
 
         return {};
 #else
-        QScopedPointer<QPlatformColorDialogHelper> dlg(qobject_cast<QPlatformColorDialogHelper *>(QGuiApplicationPrivate::platformTheme()->createPlatformDialogHelper(QPlatformTheme::ColorDialog)));
+        QScopedPointer<QPlatformColorDialogHelper> dlg(qobject_cast<QPlatformColorDialogHelper *>(
+            QGuiApplicationPrivate::platformTheme()->createPlatformDialogHelper(
+                QPlatformTheme::ColorDialog)));
         if (!dlg)
             return color;
         auto options = QColorDialogOptions::create();
@@ -96,14 +99,55 @@ namespace SVS {
         dlg->setOptions(options);
         dlg->setCurrentColor(color);
         QEventLoop eventLoop;
-        connect(dlg.get(), &QPlatformDialogHelper::accept, &eventLoop, [&] { eventLoop.exit(QPlatformDialogHelper::Accepted); });
-        connect(dlg.get(), &QPlatformDialogHelper::reject, &eventLoop, [&] { eventLoop.exit(QPlatformDialogHelper::Rejected); });
+        connect(dlg.get(), &QPlatformDialogHelper::accept, &eventLoop,
+                [&] { eventLoop.exit(QPlatformDialogHelper::Accepted); });
+        connect(dlg.get(), &QPlatformDialogHelper::reject, &eventLoop,
+                [&] { eventLoop.exit(QPlatformDialogHelper::Rejected); });
         dlg->show(Qt::Dialog, Qt::ApplicationModal, window);
         if (eventLoop.exec() == QPlatformDialogHelper::Accepted)
             return dlg->currentColor();
         return {};
 #endif
     }
+
+    class MouseMoveListener : public QObject {
+        Q_OBJECT
+        Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
+    public:
+        bool m_enabled = false;
+        explicit MouseMoveListener(QObject *parent = nullptr) : QObject(parent) {
+            qGuiApp->installEventFilter(this);
+        }
+        bool enabled() const {
+            return m_enabled;
+        }
+        void setEnabled(bool enabled) {
+            if (enabled == m_enabled)
+                return;
+            if (enabled) {
+                qGuiApp->installEventFilter(this);
+            } else {
+                qGuiApp->removeEventFilter(this);
+            }
+            m_enabled = enabled;
+        }
+        bool eventFilter(QObject *watched, QEvent *event) override {
+            if (event->type() == QEvent::MouseMove) {
+                emit positionChanged();
+            }
+            return QObject::eventFilter(watched, event);
+        }
+
+    signals:
+        void positionChanged();
+        void enabledChanged();
+    };
+
+    QObject *GlobalHelper::createGlobalCursorListener(QObject *parent) {
+        auto o = new MouseMoveListener(parent);
+        return o;
+    }
 }
 
+#include "GlobalHelper.moc"
 #include "moc_GlobalHelper_p.cpp"

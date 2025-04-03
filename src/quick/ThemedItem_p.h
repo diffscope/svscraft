@@ -47,6 +47,7 @@ namespace SVS {
         Q_PROPERTY(SVS::SVSCraft::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
         Q_PROPERTY(bool splitHandleVisible READ splitHandleVisible WRITE setSplitHandleVisible NOTIFY splitHandleVisibleChanged)
         Q_PROPERTY(bool splitHandleEnabled READ splitHandleEnabled WRITE setSplitHandleEnabled NOTIFY splitHandleEnabledChanged)
+        Q_PROPERTY(bool toolTipFollowsCursor READ toolTipFollowsCursor WRITE setToolTipFollowsCursor NOTIFY toolTipFollowsCursorChanged)
     public:
         ~ThemedItem() override;
 
@@ -83,6 +84,9 @@ namespace SVS {
         bool splitHandleEnabled() const;
         void setSplitHandleEnabled(bool value);
 
+        bool toolTipFollowsCursor() const;
+        void setToolTipFollowsCursor(bool value);
+
     signals:
         void controlTypeChanged();
         void backgroundLevelChanged();
@@ -95,6 +99,7 @@ namespace SVS {
         void dividerStrokeChanged();
         void splitHandleVisibleChanged();
         void splitHandleEnabledChanged();
+        void toolTipFollowsCursorChanged();
 
     private:
         friend class ThemedItemAttachedType;

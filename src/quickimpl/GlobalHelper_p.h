@@ -44,6 +44,7 @@ namespace SVS {
         Q_INVOKABLE static QColor setCmyk(float c, float m, float y, float k, float a);
         Q_INVOKABLE static bool hasNativeColorChooser();
         Q_INVOKABLE static QColor nativeChooseColor(const QColor &color, QWindow *window, bool hasAlpha);
+        Q_INVOKABLE static QObject *createGlobalCursorListener(QObject *parent = nullptr);
     };
 }
 

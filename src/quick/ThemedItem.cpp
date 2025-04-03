@@ -152,5 +152,16 @@ namespace SVS {
             emit splitHandleEnabledChanged();
         }
     }
+    bool ThemedItem::toolTipFollowsCursor() const {
+        Q_D(const ThemedItem);
+        return d->toolTipFollowsCursor;
+    }
+    void ThemedItem::setToolTipFollowsCursor(bool value) {
+        Q_D(ThemedItem);
+        if (d->toolTipFollowsCursor != value) {
+            d->toolTipFollowsCursor = value;
+            emit toolTipFollowsCursorChanged();
+        }
+    }
 
 }
