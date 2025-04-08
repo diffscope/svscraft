@@ -17,12 +17,13 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_MUSICTIMELINEFOREIGN_P_H
-#define SVSCRAFT_MUSICTIMELINEFOREIGN_P_H
+#ifndef SVSCRAFT_SVSCRAFTFOREIGN_P_H
+#define SVSCRAFT_SVSCRAFTFOREIGN_P_H
 
 #include <qqmlintegration.h>
 #include <QJSValue>
 #include <QVariant>
+#include <QWindow>
 
 #include <SVSCraftCore/MusicTimeline.h>
 #include <SVSCraftCore/MusicTime.h>
@@ -88,6 +89,16 @@ namespace SVS {
         QML_EXTENDED(SVS::MusicTimelineExtended)
     };
 
+    class EyedropperForeign : public QObject {
+        Q_OBJECT
+        QML_NAMED_ELEMENT(Eyedropper)
+        QML_SINGLETON
+    public:
+        explicit EyedropperForeign(QObject *parent = nullptr);
+        ~EyedropperForeign() override;
+        Q_INVOKABLE static QColor pickColor(QWindow *window = nullptr, bool useNativeColorPickerIfAvailable = true);
+    };
+
 }
 
-#endif // SVSCRAFT_MUSICTIMELINEFOREIGN_P_H
+#endif //SVSCRAFT_SVSCRAFTFOREIGN_P_H

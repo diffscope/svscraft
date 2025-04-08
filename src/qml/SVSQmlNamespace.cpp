@@ -19,5 +19,15 @@
 
 #include "SVSQmlNamespace_p.h"
 
+#include <SVSCraftCore/DecibelLinearizer.h>
+
 namespace SVS {
+
+    double SVSQmlNamespace::decibelToLinearValue(double decibel, double factor) {
+        return DecibelLinearizer::decibelToLinearValue(decibel, factor);
+    }
+    double SVSQmlNamespace::linearValueToDecibel(double linearValue, double factor) {
+        return DecibelLinearizer::linearValueToDecibel(linearValue, factor);
+    }
+    
 }

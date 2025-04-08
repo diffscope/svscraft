@@ -32,6 +32,10 @@ namespace SVS {
         QML_NAMED_ELEMENT(SVS)
         QML_EXTENDED_NAMESPACE(SVS::SVSCraft)
         QML_SINGLETON
+    public:
+
+        Q_INVOKABLE static double decibelToLinearValue(double decibel, double factor = -15);
+        Q_INVOKABLE static double linearValueToDecibel(double linearValue, double factor = -15);
     };
 
 }

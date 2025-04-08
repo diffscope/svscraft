@@ -17,12 +17,14 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#include "MusicTimelineForeign_p.h"
+#include "SVSCraftForeign_p.h"
 
 #include <algorithm>
 #include <ranges>
 
 #include <QQmlEngine>
+
+#include <SVSCraftGui/Eyedropper.h>
 
 namespace SVS {
     void MusicTimelineExtended::setTimeSignature(int bar, const QJSValue &signature) {
@@ -155,5 +157,14 @@ namespace SVS {
             return {};
         }
         return timeline->nearestTickWithTempoTo(tick);
+    }
+
+
+
+    EyedropperForeign::EyedropperForeign(QObject *parent) : QObject(parent) {
+    }
+    EyedropperForeign::~EyedropperForeign() = default;
+    QColor EyedropperForeign::pickColor(QWindow *window, bool useNativeColorPickerIfAvailable) {
+        return Eyedropper::pickColorSync(window, useNativeColorPickerIfAvailable);
     }
 }
