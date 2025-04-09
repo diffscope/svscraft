@@ -70,6 +70,7 @@ namespace SVS {
             {"toolTipDelay", 1000},
             {"toolTipTimeout", -1},
             {"doubleClickResetEnabled", true},
+            {"splitterHandleSize", 1}
         }) {
         }
 

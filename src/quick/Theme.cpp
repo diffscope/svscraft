@@ -147,6 +147,9 @@ namespace SVS {
 
     IMPLEMENTATION(doubleClickResetEnabled, doubleClickResetEnabled, setDoubleClickResetEnabled, resetDoubleClickResetEnabled)
 
+    IMPLEMENTATION(splitterHandleSize, splitterHandleSize, setSplitterHandleSize, resetSplitterHandleSize)
+
+
 }
 
 #include "moc_Theme.cpp"

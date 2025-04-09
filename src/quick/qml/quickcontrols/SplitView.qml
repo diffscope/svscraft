@@ -30,12 +30,12 @@ T.SplitView {
 
     handle: Rectangle {
         id: handleDelegate
-        implicitWidth: 1
-        implicitHeight: 1
-        color: control.enabled && T.SplitHandle.pressed ? Theme.accentColor : Theme.splitterColor
+        implicitWidth: Theme.splitterHandleSize
+        implicitHeight: Theme.splitterHandleSize
+        color: control.enabled && T.SplitHandle.pressed ? Theme.accentColor : Theme.dividerStrokeColor(control.ThemedItem.dividerStroke, Theme.splitterColor)
         containmentMask: Item {
             x: (handleDelegate.width - width) / 2
-            property double _size: control.ThemedItem.splitHandleEnabled ? 5 : 0
+            property double _size: control.ThemedItem.splitHandleEnabled ? Math.max(5, Theme.splitterHandleSize) : 0
             implicitWidth: control.orientation === Qt.Horizontal ? _size : control.width
             implicitHeight: control.orientation === Qt.Horizontal ? control.height : _size
         }

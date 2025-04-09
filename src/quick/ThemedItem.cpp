@@ -86,17 +86,6 @@ namespace SVS {
             emit foldedChanged();
         }
     }
-    double ThemedItem::trackStart() const {
-        Q_D(const ThemedItem);
-        return d->trackStart;
-    }
-    void ThemedItem::setTrackStart(double value) {
-        Q_D(ThemedItem);
-        if (d->trackStart != value) {
-            d->trackStart = value;
-            emit trackStartChanged();
-        }
-    }
     bool ThemedItem::flat() const {
         Q_D(const ThemedItem);
         return d->flat;

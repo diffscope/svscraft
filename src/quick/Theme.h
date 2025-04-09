@@ -79,6 +79,8 @@ namespace SVS {
 
         Q_PROPERTY(bool doubleClickResetEnabled READ doubleClickResetEnabled WRITE setDoubleClickResetEnabled RESET resetDoubleClickResetEnabled NOTIFY doubleClickResetEnabledChanged)
 
+        Q_PROPERTY(double splitterHandleSize READ splitterHandleSize WRITE setSplitterHandleSize RESET resetSplitterHandleSize NOTIFY splitterHandleSizeChanged)
+
     public:
         ~Theme() override;
 
@@ -214,6 +216,10 @@ namespace SVS {
         void setDoubleClickResetEnabled(bool doubleClickResetEnabled);
         void resetDoubleClickResetEnabled();
 
+        double splitterHandleSize() const;
+        void setSplitterHandleSize(double splitterHandleSize);
+        void resetSplitterHandleSize();
+
         Q_INVOKABLE QColor controlColor(int controlType) const;
         Q_INVOKABLE QColor backgroundColor(int backgroundLevel) const;
         Q_INVOKABLE QColor foregroundColor(int foregroundLevel) const;
@@ -253,6 +259,7 @@ namespace SVS {
         void toolTipDelayChanged();
         void toolTipTimeoutChanged();
         void doubleClickResetEnabledChanged();
+        void splitterHandleSizeChanged();
 
     protected:
         AttachedPropertyPropagatorProperties *properties() const override;

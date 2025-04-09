@@ -41,7 +41,6 @@ namespace SVS {
         Q_PROPERTY(SVS::SVSCraft::ForegroundLevel foregroundLevel READ foregroundLevel WRITE setForegroundLevel NOTIFY foregroundLevelChanged)
         Q_PROPERTY(bool foldable READ foldable WRITE setFoldable NOTIFY foldableChanged)
         Q_PROPERTY(bool folded READ folded WRITE setFolded NOTIFY foldedChanged)
-        Q_PROPERTY(double trackStart READ trackStart WRITE setTrackStart NOTIFY trackStartChanged)
         Q_PROPERTY(bool flat READ flat WRITE setFlat NOTIFY flatChanged)
         Q_PROPERTY(SVS::SVSCraft::TabIndicator tabIndicator READ tabIndicator WRITE setTabIndicator NOTIFY tabIndicatorChanged)
         Q_PROPERTY(SVS::SVSCraft::DividerStroke dividerStroke READ dividerStroke WRITE setDividerStroke NOTIFY dividerStrokeChanged)
@@ -65,9 +64,6 @@ namespace SVS {
 
         bool folded() const;
         void setFolded(bool value);
-
-        double trackStart() const;
-        void setTrackStart(double value);
 
         bool flat() const;
         void setFlat(bool value);

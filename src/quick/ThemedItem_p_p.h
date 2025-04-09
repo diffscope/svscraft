@@ -41,7 +41,6 @@ namespace SVS {
         SVSCraft::ForegroundLevel foregroundLevel = SVSCraft::FL_Primary;
         SVSCraft::TabIndicator tabIndicator = SVSCraft::TI_Fill;
         SVSCraft::DividerStroke dividerStroke = SVSCraft::DS_Auto;
-        double trackStart = 0.0;
         bool foldable = false;
         bool folded = false;
         bool flat = false;
