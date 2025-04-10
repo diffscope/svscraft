@@ -202,6 +202,8 @@ Item {
             id: window
             required property DockingPane currentItem
             transientParent: view.Window.window
+            LayoutMirroring.enabled: view.LayoutMirroring.enabled
+            LayoutMirroring.childrenInherit: true
             DockingPanel {
                 id: panel
                 anchors.fill: parent
@@ -219,8 +221,11 @@ Item {
         implicitHeight: view.barSize
         width: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? parent.width : undefined
         height: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? parent.height: undefined
+        anchors.top: view.edge === Qt.TopEdge ? parent.top : undefined
+        anchors.left: view.edge === Qt.LeftEdge ? parent.left : undefined
         anchors.right: view.edge === Qt.RightEdge ? parent.right : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? parent.bottom : undefined
+        LayoutMirroring.enabled: false
         property int firstIndex: -1
         property int lastIndex: -1
         function indexOfStretch(model) {
@@ -247,6 +252,7 @@ Item {
             anchors.margins: 6
             columns: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? 1 : -1
             rows: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? 1 : -1
+            LayoutMirroring.enabled: false
             Repeater {
                 model: view.contentData
                 Item {
@@ -431,11 +437,13 @@ Item {
         anchors.right: view.edge === Qt.RightEdge ? tabBar.left : undefined
         anchors.top: view.edge === Qt.TopEdge ? tabBar.bottom : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? tabBar.top : undefined
+        LayoutMirroring.enabled: false
         Rectangle {
             anchors.left: view.edge !== Qt.RightEdge ? parent.left : undefined
             anchors.right: view.edge !== Qt.LeftEdge ? parent.right : undefined
             anchors.top: view.edge !== Qt.BottomEdge ? parent.top : undefined
             anchors.bottom: view.edge !== Qt.TopEdge ? parent.bottom : undefined
+            LayoutMirroring.enabled: false
             implicitHeight: 1
             implicitWidth: 1
             color: Theme.splitterColor
