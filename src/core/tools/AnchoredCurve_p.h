@@ -53,13 +53,13 @@ namespace SVS {
                 slope = 0;
             } else if (prev.has_value() && prev->second.interpolationMode == AnchoredCurve::Anchor::Zero) {
                 slope = 0;
-            } else if (prev.has_value() && next.has_value() && (next->second.y - target->second.y) * (target->second.y - prev->second.y) < 0) {
-                slope = 0;
-            } else if (!prev.has_value() && next.has_value()) {
+            } else if ((!prev.has_value() || prev->second.interpolationMode == AnchoredCurve::Anchor::Break) && next.has_value()) {
                 slope = (next->second.y - target->second.y) / (next->first - target->first);
-            } else if (!next.has_value() && prev.has_value()) {
+            } else if ((!next.has_value() || target->second.interpolationMode == AnchoredCurve::Anchor::Break) && prev.has_value()) {
                 slope = (prev->second.y - target->second.y) / (prev->first - target->first);
-            } else {
+            } else if ((next->second.y - target->second.y) * (target->second.y - prev->second.y) < 0) {
+                slope = 0;
+            }  else {
                 slope = ((next->first - prev->first) * (next->second.y - target->second.y) * (target->second.y - prev->second.y)) / ((next->second.y - prev->second.y) * (next->first - target->first) * (target->first - prev->first));
             }
             anchors.erase(target->first);

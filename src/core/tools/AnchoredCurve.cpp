@@ -90,12 +90,14 @@ namespace SVS {
     double AnchoredCurve::value(double x, bool *ok) const {
         auto prevKey = d->getPrevInclusive(x);
         auto nextKey = d->getNext(x);
+        if (ok)
+            *ok = true;
         if (!prevKey.has_value() && !nextKey.has_value()) {
             if (ok)
                 *ok = false;
             return 0.0;
         }
-        if (!prevKey.has_value()) {
+        if (!prevKey.has_value() || prevKey->second.interpolationMode == Anchor::Break && nextKey.has_value()) {
             if (ok)
                 *ok = false;
             return nextKey->second.y;

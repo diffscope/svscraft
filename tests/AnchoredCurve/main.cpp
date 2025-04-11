@@ -39,7 +39,12 @@ private:
             QPainterPath curvePath;
             bool firstPoint = true;
             for (int i = startTick; i <= endTick; i++) {
-                auto value = curve.value(i);
+                bool ok;
+                auto value = curve.value(i, &ok);
+                if (!ok) {
+                    firstPoint = true;
+                    continue;
+                }
                 if (firstPoint) {
                     curvePath.moveTo(i, value);
                     firstPoint = false;
@@ -54,7 +59,7 @@ private:
         pen.setWidthF(2);
         painter.setPen(pen);
         for (const auto &knot : curve.anchors()) {
-            painter.setBrush(knot.interpolationMode == AnchoredCurve::Anchor::Linear ? Qt::red : knot.interpolationMode == AnchoredCurve::Anchor::Zero ? Qt::green : Qt::blue);
+            painter.setBrush(knot.interpolationMode == AnchoredCurve::Anchor::Linear ? Qt::red : knot.interpolationMode == AnchoredCurve::Anchor::Zero ? Qt::green : knot.interpolationMode == AnchoredCurve::Anchor::Pchip ? Qt::blue : Qt::gray);
             auto pos = QPointF(knot.x, knot.y);
             painter.drawEllipse(pos, 6, 6);
         }
@@ -66,6 +71,8 @@ private:
             interpolationMode = AnchoredCurve::Anchor::Linear;
         } else if (event->modifiers() & Qt::AltModifier) {
             interpolationMode = AnchoredCurve::Anchor::Zero;
+        } else if (event->modifiers() & Qt::ShiftModifier) {
+            interpolationMode = AnchoredCurve::Anchor::Break;
         }
         if (event->button() == Qt::LeftButton) {
             if (const auto node = findNode(pos); !node.isNull()) {

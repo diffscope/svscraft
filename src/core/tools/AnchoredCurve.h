@@ -15,7 +15,7 @@ namespace SVS {
             double x;
             double y;
             enum InterpolationMode {
-                Null, Linear, Zero, Pchip,
+                Null, Break, Linear, Zero, Pchip,
             } interpolationMode;
 
             constexpr Anchor() : x(0), y(0), interpolationMode(Null) {
