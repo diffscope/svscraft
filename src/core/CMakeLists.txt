@@ -7,7 +7,7 @@ file(GLOB_RECURSE _src *.h *.cpp)
 
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
-    LINKS
+    LINKS_PRIVATE SVSCraft3rdParty_boost_math
     QT_LINKS Core
     QT_INCLUDE_PRIVATE Core
     INCLUDE_PRIVATE *

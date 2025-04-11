@@ -7,3 +7,5 @@ add_subdirectory(DockingView)
 add_subdirectory(Validators)
 
 add_subdirectory(WaveformThumbnail)
+
+add_subdirectory(AnchoredCurve)
