@@ -44,7 +44,7 @@ namespace SVS {
         QList<Anchor> anchors() const;
         size_t count() const;
 
-        double value(double x, bool *ok = nullptr) const;
+        double value(double x, bool *ok = nullptr, double *prevX = nullptr, double *nextX = nullptr) const;
 
     private:
         QSharedDataPointer<AnchoredCurveData> d;

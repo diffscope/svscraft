@@ -87,17 +87,21 @@ namespace SVS {
         using Array = std::array<double, 2>;
         return boost::math::interpolators::cubic_hermite(Array{x0, x1}, Array{y0, y1}, Array{d0, d1})(x);
     }
-    double AnchoredCurve::value(double x, bool *ok) const {
+    double AnchoredCurve::value(double x, bool *ok, double *prevX, double *nextX) const {
         auto prevKey = d->getPrevInclusive(x);
         auto nextKey = d->getNext(x);
         if (ok)
             *ok = true;
+        if (prevKey.has_value() && prevX)
+            *prevX = prevKey->first;
+        if (nextKey.has_value() && nextX)
+            *nextX = nextKey->first;
         if (!prevKey.has_value() && !nextKey.has_value()) {
             if (ok)
                 *ok = false;
             return 0.0;
         }
-        if (!prevKey.has_value() || prevKey->second.interpolationMode == Anchor::Break && nextKey.has_value()) {
+        if (!prevKey.has_value()) {
             if (ok)
                 *ok = false;
             return nextKey->second.y;
@@ -109,6 +113,11 @@ namespace SVS {
         }
         if (prevKey->second.interpolationMode == Anchor::Linear) {
             return linearInterpolation(prevKey->first, prevKey->second.y, nextKey->first, nextKey->second.y, x);
+        }
+        if (prevKey->second.interpolationMode == Anchor::Break) {
+            if (ok)
+                *ok = false;
+            return prevKey->second.y;
         }
         if (prevKey->second.interpolationMode == Anchor::Zero) {
             return prevKey->second.y;
