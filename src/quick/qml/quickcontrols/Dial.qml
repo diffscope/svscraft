@@ -133,6 +133,7 @@ T.Dial {
             GlobalHelper.ungrabMouse(control)
             control.background._doubleClicked = true
             GlobalHelper.setProperty(control, "value", 0)
+            control.moved()
         }
     }
 }
