@@ -812,6 +812,17 @@ ApplicationWindow {
                     }
                 }
 
+                GroupBox {
+                    title: "颜色组合框"
+                    RowLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        ColorComboBox {
+
+                        }
+                    }
+                }
+
                 Item { height: 64 }
 
             }
