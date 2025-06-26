@@ -170,6 +170,7 @@ Popup {
                     action: popup.action
                     display: AbstractButton.IconOnly
                     ThemedItem.foregroundLevel: SVS.FL_Secondary
+                    ThemedItem.controlType: popup.ThemedItem.controlType
                     DescriptiveText.toolTip: popup.action?.text ?? ""
                     DescriptiveText.activated: hovered
                     Layout.alignment: Qt.AlignVCenter
@@ -180,6 +181,7 @@ Popup {
                     icon.width: 12
                     icon.height: 12
                     ThemedItem.foregroundLevel: SVS.FL_Secondary
+                    ThemedItem.controlType: popup.ThemedItem.controlType
                     DescriptiveText.toolTip: qsTr("Close")
                     DescriptiveText.activated: hovered
                     Layout.alignment: Qt.AlignVCenter

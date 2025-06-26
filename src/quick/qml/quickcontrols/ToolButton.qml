@@ -74,14 +74,16 @@ T.ToolButton {
     background: Rectangle {
         implicitWidth: 24
         implicitHeight: 24
+        function transparentIf(condition, color) {
+            return condition ? Qt.rgba(color.r, color.g, color.b, 0) : color
+        }
         property color _checkedColor: control.flat ? control.ThemedItem.controlType === SVS.CT_Normal ? Theme.controlCheckedColorChange.apply(Theme.buttonColor) : Theme.controlColor(control.ThemedItem.controlType) : control.ThemedItem.controlType === SVS.CT_Normal ? Theme.accentColor : Theme.controlColor(control.ThemedItem.controlType)
         property color _baseColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : Theme.buttonColor : Theme.controlColor(control.ThemedItem.controlType)
-        property color _unactiveColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : control.flat ? "transparent" : Theme.buttonColor : control.flat ? "transparent" : Theme.controlColor(control.ThemedItem.controlType)
+        property color _unactiveColor: control.checkable || control.highlighted ? control.checked || control.highlighted ? _checkedColor : transparentIf(control.flat, Theme.buttonColor) : transparentIf(control.flat, Theme.controlColor(control.ThemedItem.controlType))
         property color _statusColor: control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
-                                     control.hovered? Theme.controlHoveredColorChange.apply(_baseColor) :
+                                     control.hovered ? Theme.controlHoveredColorChange.apply(_baseColor) :
                                      _unactiveColor
-        color: !control.enabled ? _unactiveColor.a ? Theme.controlDisabledColorChange.apply(_unactiveColor) : "transparent" :
-               _statusColor
+        color: !control.enabled ? transparentIf(control.flat, Theme.controlDisabledColorChange.apply(_unactiveColor)) : _statusColor
         border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
         border.width: control.visualFocus ? 2 : control.flat || !control.checkable && control.ThemedItem.controlType !== SVS.CT_Normal || control.checkable && control.checked ? 0 : 1
         radius: 4

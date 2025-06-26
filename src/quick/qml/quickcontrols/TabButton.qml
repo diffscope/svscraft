@@ -72,10 +72,10 @@ T.TabButton {
     background: Rectangle {
         implicitWidth: 64
         implicitHeight: 20
-        property color _baseColor: control.checked && control.ThemedItem.tabIndicator === SVS.TI_Fill ? Theme.accentColor : "transparent"
-        color: !control.enabled && _baseColor.a ? Theme.controlDisabledColorChange.apply(_baseColor) :
-               control.down && control.enabled ? Theme.controlPressedColorChange.apply(_baseColor) :
-               control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(_baseColor) :
+        property color _baseColor: control.checked && control.ThemedItem.tabIndicator === SVS.TI_Fill ? Theme.accentColor : Qt.rgba(Theme.buttonColor.r, Theme.buttonColor.g, Theme.buttonColor.b, 0)
+        color: !control.enabled ? _baseColor.a ? Theme.controlDisabledColorChange.apply(_baseColor) : _baseColor :
+               control.down ? _baseColor.a ? Theme.controlPressedColorChange.apply(_baseColor) : Theme.controlPressedColorChange.apply(Theme.buttonColor) :
+               control.hovered? _baseColor.a ? Theme.controlHoveredColorChange.apply(_baseColor) : Theme.controlHoveredColorChange.apply(Theme.buttonColor) :
                _baseColor
         border.color: Theme.navigationColor
         border.width: control.visualFocus ? 2 : 0
