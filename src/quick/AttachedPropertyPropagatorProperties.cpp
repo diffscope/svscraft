@@ -35,13 +35,20 @@ namespace SVS {
         auto i = q->metaObject()->indexOfProperty(property.toUtf8());
         q->metaObject()->property(i).notifySignal().invoke(q);
     }
+    static bool variantEquals(const QVariant &a, const QVariant &b) {
+        auto t = a.metaType();
+        if (t != b.metaType()) {
+            return false;
+        }
+        return t.equals(a.data(), b.data());
+    }
     void AttachedPropertyPropagatorProperties::inherit(const QString &property) {
         auto q = m_propagator;
         if (m_explicitSetProperties.contains(property))
             return;
         auto parent = q->attachedParent() ? q->attachedParent()->properties() : m_defaultProperties;
         auto v = parent->getValue(property);
-        if (QVariant::compare(v, m_m.value(property)) == QPartialOrdering::equivalent)
+        if (variantEquals(v, m_m.value(property)))
             return;
         setValue(property, v);
         propagateAndNotify(property);
@@ -53,7 +60,7 @@ namespace SVS {
         if (m_explicitSetProperties.isEmpty()) {
             for (auto p = m_m.keyValueBegin(); p != m_m.keyValueEnd(); p++) {
                 auto [property, value] = *p;
-                if (QVariant::compare(value, parent->getValue(property)) != QPartialOrdering::equivalent)
+                if (!variantEquals(value, parent->getValue(property)))
                     propertiesChanged.append(property);
             }
             m_m = parent->m_m;
@@ -62,7 +69,7 @@ namespace SVS {
                 auto [property, value] = *p;
                 if (m_explicitSetProperties.contains(property))
                     continue;
-                if (QVariant::compare(value, parent->getValue(property)) != QPartialOrdering::equivalent) {
+                if (!variantEquals(value, parent->getValue(property))) {
                     propertiesChanged.append(property);
                     value = parent->getValue(property);
                 }

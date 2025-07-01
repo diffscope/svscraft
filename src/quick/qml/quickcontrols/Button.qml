@@ -32,7 +32,7 @@ T.Button {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
 
     padding: 6
-    horizontalPadding: control.text ? 8 : 6
+    horizontalPadding: control.text && control.display !== T.AbstractButton.IconOnly ? 8 : 6
     spacing: 4
     icon.width: 16
     icon.height: 16
