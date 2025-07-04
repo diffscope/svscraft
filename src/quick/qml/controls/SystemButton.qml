@@ -32,9 +32,9 @@ T.Button {
                     case SystemButton.Close:
                         return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Dismiss16Regular.svg"
                     case SystemButton.MaximizeRestore:
-                        return Window.visibility === Window.Windowed ? "qrc:/qt/qml/SVSCraft/UIComponents/assets/Square16Regular.svg" : "qrc:/qt/qml/SVSCraft/UIComponents/assets/SquareMultiple16Regular.svg"
+                        return Window.visibility === Window.Windowed ? "qrc:/qt/qml/SVSCraft/UIComponents/assets/Maximize16Regular.svg" : "qrc:/qt/qml/SVSCraft/UIComponents/assets/SquareMultiple16Regular.svg"
                     case SystemButton.Maximize:
-                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Square16Regular.svg"
+                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Maximize16Regular.svg"
                     case SystemButton.Restore:
                         return "qrc:/qt/qml/SVSCraft/UIComponents/assets/SquareMultiple16Regular.svg"
                     case SystemButton.Minimize:
@@ -47,8 +47,8 @@ T.Button {
     }
 
     background: Rectangle {
-        readonly property color hoveredColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.25)
-        readonly property color pressedColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.15)
+        readonly property color hoveredColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.2)
+        readonly property color pressedColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.1)
         readonly property color closeHoveredColor: "#E81123"
         readonly property color closePressedColor: "#9E1E2A"
         color: {
