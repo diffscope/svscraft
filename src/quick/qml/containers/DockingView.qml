@@ -39,7 +39,7 @@ Item {
 
     default property list<QtObject> contentData: []
     property int edge: Qt.LeftEdge
-    property double barSize: 40
+    property double barSize: 32
     property double panelSize: 400
 
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
@@ -246,10 +246,10 @@ Item {
         }
         property int stretchIndex: indexOfStretch(view.contentData)
         GridLayout {
-            rowSpacing: 6
-            columnSpacing: 6
+            rowSpacing: 4
+            columnSpacing: 4
             anchors.fill: parent
-            anchors.margins: 6
+            anchors.margins: 4
             columns: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? 1 : -1
             rows: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? 1 : -1
             LayoutMirroring.enabled: false
@@ -263,8 +263,8 @@ Item {
                     Layout.fillWidth: (view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge) && _isStretch
                     Layout.fillHeight: (view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge) && _isStretch
                     Component.onCompleted: modelData.DockingImpl.dockingView = view
-                    width: 28
-                    height: 28
+                    width: 24
+                    height: 24
                     function undockPanelOnDrag() {
                         if (!(modelData instanceof DockingPane))
                             return

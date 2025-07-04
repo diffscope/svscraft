@@ -42,7 +42,7 @@ Pane {
         id: header
         anchors.top: parent.top
         width: parent.width
-        height: 40
+        height: 32
         RowLayout {
             spacing: 4
             anchors.fill: parent
@@ -63,8 +63,8 @@ Pane {
             Rectangle {
                 width: 1
                 Layout.fillHeight: true
-                Layout.topMargin: 6
-                Layout.bottomMargin: 6
+                Layout.topMargin: 4
+                Layout.bottomMargin: 4
                 color: Theme.borderColor
             }
             Item {
@@ -100,8 +100,8 @@ Pane {
             Rectangle {
                 width: 1
                 Layout.fillHeight: true
-                Layout.topMargin: 6
-                Layout.bottomMargin: 6
+                Layout.topMargin: 4
+                Layout.bottomMargin: 4
                 color: Theme.borderColor
                 visible: !container.pane?.locked || (container.pane?.menu ?? false)
             }
