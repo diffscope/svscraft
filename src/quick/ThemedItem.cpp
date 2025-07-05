@@ -152,5 +152,17 @@ namespace SVS {
             emit toolTipFollowsCursorChanged();
         }
     }
+    QQuickIcon ThemedItem::icon() const {
+        Q_D(const ThemedItem);
+        return d->icon;
+    }
+    void ThemedItem::setIcon(const QQuickIcon &icon) {
+        Q_D(ThemedItem);
+        if (d->icon != icon) {
+            d->icon = icon;
+            emit iconChanged();
+        }
+    }
+
 
 }

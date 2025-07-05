@@ -21,6 +21,7 @@
 #define SVSCRAFT_THEMEDITEM_P_H
 
 #include <QObject>
+#include <QtQuickTemplates2/private/qquickicon_p.h>
 
 #include <SVSCraftQuick/Theme.h>
 #include <SVSCraftQml/private/SVSQmlNamespace_p.h>
@@ -47,6 +48,7 @@ namespace SVS {
         Q_PROPERTY(bool splitHandleVisible READ splitHandleVisible WRITE setSplitHandleVisible NOTIFY splitHandleVisibleChanged)
         Q_PROPERTY(bool splitHandleEnabled READ splitHandleEnabled WRITE setSplitHandleEnabled NOTIFY splitHandleEnabledChanged)
         Q_PROPERTY(bool toolTipFollowsCursor READ toolTipFollowsCursor WRITE setToolTipFollowsCursor NOTIFY toolTipFollowsCursorChanged)
+        Q_PROPERTY(QQuickIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
     public:
         ~ThemedItem() override;
 
@@ -83,6 +85,9 @@ namespace SVS {
         bool toolTipFollowsCursor() const;
         void setToolTipFollowsCursor(bool value);
 
+        QQuickIcon icon() const;
+        void setIcon(const QQuickIcon &icon);
+
     signals:
         void controlTypeChanged();
         void backgroundLevelChanged();
@@ -96,6 +101,7 @@ namespace SVS {
         void splitHandleVisibleChanged();
         void splitHandleEnabledChanged();
         void toolTipFollowsCursorChanged();
+        void iconChanged();
 
     private:
         friend class ThemedItemAttachedType;

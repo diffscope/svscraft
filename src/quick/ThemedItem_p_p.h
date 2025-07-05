@@ -47,6 +47,7 @@ namespace SVS {
         bool splitHandleVisible = true;
         bool splitHandleEnabled = true;
         bool toolTipFollowsCursor = false;
+        QQuickIcon icon;
 
     };
 }

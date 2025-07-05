@@ -19,6 +19,7 @@
 
 import QtQuick
 import QtQuick.Templates as T
+import QtQuick.Controls.impl
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -30,8 +31,12 @@ T.TextField {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding, placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
-    leftPadding: 8
+    leftPadding: ThemedItem.icon.source ? 32 : 8
     rightPadding: 8
+
+    ThemedItem.icon.width: 16
+    ThemedItem.icon.height: 16
+    ThemedItem.icon.color: color
 
     color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
            Theme.foregroundPrimaryColor
@@ -97,5 +102,15 @@ T.TextField {
                 easing.type: Easing.OutCubic
             }
         }
+    }
+
+    ColorImage {
+        width: control.ThemedItem.icon.width
+        height: control.ThemedItem.icon.height
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 8
+        source: control.ThemedItem.icon.source
+        color: control.ThemedItem.icon.color
     }
 }
