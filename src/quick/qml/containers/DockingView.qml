@@ -41,6 +41,7 @@ Item {
     property int edge: Qt.LeftEdge
     property double barSize: 32
     property double panelSize: 400
+    property int barBackgroundLevel: SVS.BL_Primary
 
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
@@ -226,6 +227,7 @@ Item {
         anchors.right: view.edge === Qt.RightEdge ? parent.right : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? parent.bottom : undefined
         LayoutMirroring.enabled: false
+        ThemedItem.backgroundLevel: view.barBackgroundLevel
         property int firstIndex: -1
         property int lastIndex: -1
         function indexOfStretch(model) {
