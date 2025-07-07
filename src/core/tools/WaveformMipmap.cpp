@@ -208,7 +208,7 @@ namespace SVS {
             return {0, 0};
         if (offset + length > d->size)
             length = d->size - offset;
-        QPair ret(std::numeric_limits<int>::max(), std::numeric_limits<int>::min());
+        QPair<int, int> ret(std::numeric_limits<int>::max(), std::numeric_limits<int>::min());
         auto initialIndex = offset;
         auto endIndex = offset + length;
         if (d->level == Downscale) {
