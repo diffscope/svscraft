@@ -218,6 +218,7 @@ Popup {
     }
 
     onOpened: () => {
+        contentItem.forceActiveFocus()
         if (timeout >= 0) {
             progressBarAnimation.start()
         }

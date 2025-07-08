@@ -49,7 +49,7 @@ Frame {
 
     spacing: 4
     padding: 4
-    implicitWidth: 200
+    implicitWidth: Math.max(200, implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(32, label.height + annotation.topPadding + annotation.bottomPadding)
 
     background: Rectangle {
