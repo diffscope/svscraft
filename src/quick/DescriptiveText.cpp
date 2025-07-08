@@ -165,6 +165,17 @@ namespace SVS {
             emit contextHelpDelayChanged();
         }
     }
+    bool DescriptiveText::bindAccessibleDescription() const {
+        Q_D(const DescriptiveText);
+        return d->bindAccessibleDescription;
+    }
+    void DescriptiveText::setBindAccessibleDescription(bool bindAccessibleDescription) {
+        Q_D(DescriptiveText);
+        if (d->bindAccessibleDescription != bindAccessibleDescription) {
+            d->bindAccessibleDescription = bindAccessibleDescription;
+            emit bindAccessibleDescriptionChanged();
+        }
+    }
     QString DescriptiveText::statusText() const {
         Q_D(const DescriptiveText);
         return d->statusText ? d->statusText->statusText() : QString();

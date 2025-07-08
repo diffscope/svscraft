@@ -41,6 +41,7 @@ namespace SVS {
         Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY statusTipChanged)
         Q_PROPERTY(QString contextHelpTip READ contextHelpTip WRITE setContextHelpTip NOTIFY contextHelpTipChanged)
         Q_PROPERTY(int contextHelpDelay READ contextHelpDelay WRITE setContextHelpDelay NOTIFY contextHelpDelayChanged)
+        Q_PROPERTY(bool bindAccessibleDescription READ bindAccessibleDescription WRITE setBindAccessibleDescription NOTIFY bindAccessibleDescriptionChanged)
 
         Q_PROPERTY(QString statusText READ statusText NOTIFY statusTextChanged)
         Q_PROPERTY(QString contextHelpText READ contextHelpText NOTIFY contextHelpTextChanged)
@@ -63,6 +64,9 @@ namespace SVS {
         int contextHelpDelay() const;
         void setContextHelpDelay(int contextHelpDelay);
 
+        bool bindAccessibleDescription() const;
+        void setBindAccessibleDescription(bool bindAccessibleDescription);
+
         QString statusText() const;
 
         QString contextHelpText() const;
@@ -75,6 +79,7 @@ namespace SVS {
         void contextHelpDelayChanged();
         void statusTextChanged();
         void contextHelpTextChanged();
+        void bindAccessibleDescriptionChanged();
 
     private:
         friend class DescriptiveTextAttachedType;

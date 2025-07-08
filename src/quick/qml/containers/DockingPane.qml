@@ -30,4 +30,7 @@ Pane {
     property bool locked: false
     property bool dock: true
     property Menu menu: null
+
+    Accessible.name: title
+    Accessible.description: description
 }

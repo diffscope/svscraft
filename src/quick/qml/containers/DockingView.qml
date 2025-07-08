@@ -30,6 +30,9 @@ import SVSCraft.UIComponents.impl
 Item {
     id: view
 
+    Accessible.role: Accessible.Pane
+    Accessible.name: qsTr("Docking View")
+
     readonly property int firstIndex: tabBar.firstIndex
     readonly property int lastIndex: tabBar.lastIndex
     readonly property DockingPane firstItem: firstIndex < 0 ? null : contentData[firstIndex]
@@ -218,6 +221,8 @@ Item {
     }
     Pane {
         id: tabBar
+        Accessible.name: qsTr("Docking View")
+        Accessible.role: Accessible.PageTabList
         implicitWidth: view.barSize
         implicitHeight: view.barSize
         width: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? parent.width : undefined
@@ -308,8 +313,14 @@ Item {
                         highlighted: modelData instanceof DockingPane && (modelData.dock && (view.firstIndex === index || view.lastIndex === index) || !modelData.dock && modelData.Docking.window && modelData.Docking.window.visible)
                         action: modelData instanceof Action ? modelData : null
                         DescriptiveText.activated: hovered && !_isStretch
+                        text: (modelData instanceof Action ? modelData.text : modelData.title) ?? ""
                         DescriptiveText.toolTip: mouseArea.drag.active ? "" : (modelData instanceof Action ? modelData.text : modelData.title) ?? ""
                         DescriptiveText.statusTip: modelData.description ?? ""
+                        DescriptiveText.bindAccessibleDescription: false
+                        Accessible.role: modelData instanceof Action ? checkable ? Accessible.CheckBox : Accessible.Button : Accessible.PageTab
+                        Accessible.checkable: modelData instanceof Action ? modelData.checkable : true
+                        Accessible.checked: modelData instanceof Action ? modelData.checked: highlighted
+                        Accessible.description: modelData instanceof Action ? "" : (modelData.description ?? "") + "\n" + qsTr("Show or hide the docking pane")
                         onClicked: () => {
                             if (modelData instanceof Action) {
                                 return
@@ -453,6 +464,7 @@ Item {
         }
         SplitView {
             id: splitView
+            Accessible.role: Accessible.Grouping
             anchors.fill: parent
             orientation: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? Qt.Horizontal : Qt.Vertical
             DockingPanel {

@@ -32,6 +32,10 @@ Item {
         wrapper.attachee.ToolTip.text: wrapper.descriptiveText.toolTip
         wrapper.attachee.ToolTip.delay: wrapper.attachee.Theme.toolTipDelay
         wrapper.attachee.ToolTip.timeout: wrapper.attachee.Theme.toolTipTimeout
+    }
+
+    Binding {
+        when: wrapper.descriptiveText.bindAccessibleDescription
         wrapper.attachee.Accessible.description: wrapper.descriptiveText.toolTip && wrapper.descriptiveText.statusTip ? wrapper.descriptiveText.toolTip + "\n" + wrapper.descriptiveText.statusTip : (wrapper.descriptiveText.toolTip || wrapper.descriptiveText.statusTip)
     }
 }

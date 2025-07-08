@@ -27,6 +27,7 @@ import SVSCraft.UIComponents
 
 Pane {
     id: container
+    Accessible.name: container.pane ? qsTr("Docking View Panel of %1").replace("%1", container.pane.title) : ""
     implicitWidth: 400
     implicitHeight: 400
     function set() {
@@ -40,6 +41,7 @@ Pane {
     onPaneChanged: set()
     Item {
         id: header
+        Accessible.role: Accessible.ToolBar
         anchors.top: parent.top
         width: parent.width
         height: 32
@@ -55,7 +57,8 @@ Pane {
                 icon.height: 16
                 Layout.alignment: Qt.AlignVCenter
             }
-            Label {
+            Text {
+                color: Theme.foregroundPrimaryColor
                 rightPadding: 4
                 text: container.pane?.title ?? ""
                 Layout.alignment: Qt.AlignVCenter
@@ -113,7 +116,9 @@ Pane {
                         "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelLeft16Filled.svg"
                 visible: container.undockToolButtonVisible && !container.pane?.locked
                 DescriptiveText.activated: hovered
-                DescriptiveText.toolTip: container.dockingWindow ? qsTr("Drag to Dock") : container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
+                display: AbstractButton.IconOnly
+                text: container.dockingWindow ? qsTr("Drag to Dock") : container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
+                DescriptiveText.toolTip: text
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: () => {
                     if (!container.pane || container.dockingWindow)
@@ -155,6 +160,9 @@ Pane {
             }
             ToolButton {
                 icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/MoreHorizontal16Filled.svg"
+                display: AbstractButton.IconOnly
+                text: qsTr("Menu")
+                DescriptiveText.toolTip: text
                 Layout.alignment: Qt.AlignVCenter
                 visible: container.pane?.menu ?? false
                 onClicked: container.pane.menu.popup()

@@ -41,6 +41,7 @@ namespace SVS {
         DescriptiveText *q_ptr;
         QQuickItem *item;
         bool activated = false;
+        bool bindAccessibleDescription = true;
         int contextHelpDelay = 0;
         QString toolTip;
         QString statusTip;

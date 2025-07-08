@@ -21,6 +21,23 @@ T.Button {
     implicitWidth: 47
     implicitHeight: 28
 
+    Accessible.name: {
+        switch (button.type) {
+            case SystemButton.Close:
+                return qsTr("Close")
+            case SystemButton.MaximizeRestore:
+                return Window.visibility === Window.Windowed ? qsTr("Maximize") : qsTr("Restore")
+            case SystemButton.Maximize:
+                return qsTr("Maximize")
+            case SystemButton.Restore:
+                return qsTr("Restore")
+            case SystemButton.Minimize:
+                return qsTr("Minimize")
+            case SystemButton.Help:
+                return qsTr("Help")
+        }
+    }
+
     contentItem: Item {
         ColorImage {
             id: image
