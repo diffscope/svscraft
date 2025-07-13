@@ -33,7 +33,7 @@ namespace SVS {
         QML_ATTACHED(DescriptiveText)
     public:
         static DescriptiveText *qmlAttachedProperties(QObject *object);
-    };;
+    };
 
     class DescriptiveTextPrivate {
         Q_DECLARE_PUBLIC(DescriptiveText)

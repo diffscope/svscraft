@@ -31,7 +31,7 @@ T.TextField {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding, placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
-    leftPadding: ThemedItem.icon.source ? 32 : 8
+    leftPadding: ThemedItem.icon.source.toString().length ? 32 : 8
     rightPadding: 8
 
     ThemedItem.icon.width: 16

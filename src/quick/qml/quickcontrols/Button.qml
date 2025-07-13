@@ -70,7 +70,7 @@ T.Button {
     }
 
     background: Rectangle {
-        implicitWidth: control.text ? 64 : 28
+        implicitWidth: control.text && control.display !== T.AbstractButton.IconOnly ? 64 : 28
         implicitHeight: 28
         function transparentIf(condition, color) {
             return condition ? Qt.rgba(color.r, color.g, color.b, 0) : color
