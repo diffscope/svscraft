@@ -9,3 +9,5 @@ add_subdirectory(Validators)
 add_subdirectory(WaveformThumbnail)
 
 add_subdirectory(AnchoredCurve)
+
+add_subdirectory(MessageBoxDialog)

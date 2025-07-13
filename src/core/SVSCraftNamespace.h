@@ -68,6 +68,7 @@ namespace SVS {
         };
         Q_ENUM_NS(ColorPickerModeFlag)
         Q_DECLARE_FLAGS(ColorPickerMode, ColorPickerModeFlag)
+        Q_DECLARE_OPERATORS_FOR_FLAGS(ColorPickerMode)
 
 
         enum ColorAxis {
@@ -82,6 +83,41 @@ namespace SVS {
             CA_Alpha,
         };
         Q_ENUM_NS(ColorAxis)
+
+        enum StandardButton {
+            Ok = 0x400,
+            Open = 0x2000,
+            Save = 0x800,
+            Cancel = 0x400000,
+            Close = 0x200000,
+            Discard = 0x800000,
+            Apply = 0x2000000,
+            Reset = 0x4000000,
+            RestoreDefaults = 0x8000000,
+            Help = 	0x1000000,
+            SaveAll = 0x1000,
+            Yes = 0x4000,
+            YesToAll = 0x8000,
+            No = 0x10000,
+            NoToAll = 0x20000,
+            Abort = 0x40000,
+            Retry = 0x80000,
+            Ignore = 0x100000,
+            NoButton = 0,
+        };
+        Q_ENUM_NS(StandardButton)
+        Q_DECLARE_FLAGS(StandardButtons, StandardButton)
+        Q_DECLARE_OPERATORS_FOR_FLAGS(StandardButtons)
+
+        enum MessageBoxIcon {
+            NoIcon,
+            Information,
+            Warning,
+            Critical,
+            Question,
+            Success,
+        };
+        Q_ENUM_NS(MessageBoxIcon)
     }
 
 }
