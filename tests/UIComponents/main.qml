@@ -823,6 +823,46 @@ ApplicationWindow {
                     }
                 }
 
+                GroupBox {
+                    title: "进度条"
+                    Layout.fillWidth: true
+                    ColumnLayout {
+                        anchors.fill: parent
+                        spacing: 8
+                        ProgressBar {
+                            Layout.fillWidth: true
+                            indeterminate: true
+                        }
+                        ProgressBar {
+                            Layout.fillWidth: true
+                            from: 0
+                            to: 1
+                            value: 0.25
+                        }
+                        ProgressBar {
+                            Layout.fillWidth: true
+                            ThemedItem.controlType: SVS.CT_Accent
+                            from: 0
+                            to: 1
+                            value: 0.5
+                        }
+                        ProgressBar {
+                            Layout.fillWidth: true
+                            ThemedItem.controlType: SVS.CT_Warning
+                            from: 0
+                            to: 1
+                            value: 0.75
+                        }
+                        ProgressBar {
+                            Layout.fillWidth: true
+                            ThemedItem.controlType: SVS.CT_Error
+                            from: 0
+                            to: 1
+                            value: 1
+                        }
+                    }
+                }
+
                 Item { height: 64 }
 
             }
