@@ -116,6 +116,7 @@ namespace SVS {
             Critical,
             Question,
             Success,
+            Tip,
         };
         Q_ENUM_NS(MessageBoxIcon)
     }

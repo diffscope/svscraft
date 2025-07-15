@@ -55,6 +55,10 @@ ApplicationWindow {
                     onCheckedChanged: if (checked) dialog.icon = SVS.Success
                 }
                 RadioButton {
+                    text: "Tip"
+                    onCheckedChanged: if (checked) dialog.icon = SVS.Tip
+                }
+                RadioButton {
                     text: "(Custom)"
                     onCheckedChanged: if (checked) dialog.icon = { source: "qrc:/qt/qml/SVSCraft/Test/MessageBoxDialog/crs.png"}
                 }

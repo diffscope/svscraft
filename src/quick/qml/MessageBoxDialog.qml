@@ -83,12 +83,12 @@ Window {
                 anchors.fill: parent
                 anchors.margins: 12
                 ColorImage {
-                    visible: dialog.icon === SVS.Information || dialog.icon === SVS.Warning || dialog.icon === SVS.Critical || dialog.icon === SVS.Question || dialog.icon === SVS.Success
+                    visible: dialog.icon === SVS.Information || dialog.icon === SVS.Warning || dialog.icon === SVS.Critical || dialog.icon === SVS.Question || dialog.icon === SVS.Success || dialog.icon === SVS.Tip
                     Layout.alignment: Qt.AlignTop
                     Layout.preferredWidth: 48
                     Layout.preferredHeight: 48
-                    color: dialog.icon === SVS.Warning ? Theme.warningColor : dialog.icon === SVS.Critical ? Theme.errorColor : dialog.icon === SVS.Success ? Theme.accentColor : Theme.foregroundPrimaryColor
-                    source: `qrc:/qt/qml/SVSCraft/UIComponents/assets/${dialog.icon === SVS.Information ? "Info48Regular.svg" : dialog.icon === SVS.Warning ? "Warning48Regular.svg" : dialog.icon === SVS.Critical ? "DismissCircle48Regular.svg" : dialog.icon === SVS.Question ? "QuestionCircle48Regular.svg" : "CheckmarkCircle48Regular.svg"}`
+                    color: dialog.icon === SVS.Warning ? Theme.warningColor : dialog.icon === SVS.Critical ? Theme.errorColor : dialog.icon === SVS.Success || dialog.icon === SVS.Tip ? Theme.accentColor : Theme.foregroundPrimaryColor
+                    source: `qrc:/qt/qml/SVSCraft/UIComponents/assets/${dialog.icon === SVS.Information ? "Info48Regular.svg" : dialog.icon === SVS.Warning ? "Warning48Regular.svg" : dialog.icon === SVS.Critical ? "DismissCircle48Regular.svg" : dialog.icon === SVS.Question ? "QuestionCircle48Regular.svg" : dialog.icon === SVS.Success ? "CheckmarkCircle48Regular.svg" : "InfoSparkle48Regular.svg"}`
                 }
                 ColorImage {
                     visible: typeof(dialog.icon) !== "number"
