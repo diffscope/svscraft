@@ -48,10 +48,12 @@ Window {
     property string detailedText: ""
     property string informativeText: ""
     property bool detailsVisible: false
+    property int textFormat: Text.AutoText
     default property Item content: null
 
     signal done(var id)
     signal contextHelpClicked()
+    signal linkActivated(string link)
 
     onClosing: () => {
         if (buttonLayout.doneByButton) {
@@ -111,12 +113,17 @@ Window {
                         text: dialog.text
                         font.pixelSize: informativeTextLabel.font.pixelSize * 1.5
                         wrapMode: Text.Wrap
+                        textFormat: dialog.textFormat
+                        onLinkActivated: (link) => dialog.linkActivated(link)
+
                     }
                     Label {
                         id: informativeTextLabel
                         Layout.fillWidth: true
                         text: dialog.informativeText
                         wrapMode: Text.Wrap
+                        textFormat: dialog.textFormat
+                        onLinkActivated: (link) => dialog.linkActivated(link)
                     }
                     Item {
                         Layout.fillWidth: true
@@ -321,6 +328,8 @@ Window {
                     width: parent.width
                     text: dialog.detailedText
                     wrapMode: Text.Wrap
+                    textFormat: dialog.textFormat
+                    onLinkActivated: (link) => dialog.linkActivated(link)
                 }
             }
         }
