@@ -6,6 +6,9 @@
 #include <QQuickItem>
 #include <QQuickWindow>
 #include <QEventLoop>
+#include <QAccessible>
+
+#include <SVSCraftQuickImpl/private/GlobalHelper_p.h>
 
 namespace SVS {
 
@@ -99,10 +102,21 @@ namespace SVS {
         return showMessageBox(engine, parent, title, text, buttons, defaultButton, SVSCraft::Question);
     }
     SVSCraft::StandardButton MessageBox::success(QQmlEngine *engine, QWindow *parent,
-                                                 const QString &title,
-                                                 const QString &text,
+                                                 const QString &title, const QString &text,
                                                  SVSCraft::StandardButtons buttons,
                                                  SVSCraft::StandardButton defaultButton) {
-        return showMessageBox(engine, parent, title, text, buttons, defaultButton, SVSCraft::Success);
+        return showMessageBox(engine, parent, title, text, buttons, defaultButton,
+                              SVSCraft::Success);
+    }
+
+    MessageBox::AlertHandler MessageBox::alertHandler() {
+        return GlobalHelper::alertHandler();
+    }
+    void MessageBox::setAlertHandler(const AlertHandler &handler) {
+        GlobalHelper::setAlertHandler(handler);
+    }
+
+    void MessageBox::defaultAlertHandler(QObject *messageBox) {
+        GlobalHelper::defaultAlertHandler(messageBox);
     }
 }

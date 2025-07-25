@@ -19,6 +19,8 @@
 
 #include "GlobalHelper_p.h"
 
+#include <cstring>
+
 #include <QCursor>
 #include <QQuickItem>
 #include <QtGui/private/qguiapplication_p.h>
@@ -36,6 +38,36 @@ namespace SVS {
     GlobalHelper::GlobalHelper(QObject *parent) : QObject(parent) {
     }
     GlobalHelper::~GlobalHelper() = default;
+
+    GlobalHelper::AlertHandler m_alertHandler = GlobalHelper::defaultAlertHandler;
+
+    GlobalHelper::AlertHandler GlobalHelper::alertHandler() {
+        return m_alertHandler;
+    }
+    void GlobalHelper::setAlertHandler(const AlertHandler &handler) {
+        m_alertHandler = handler;
+    }
+
+    class GlobalHandlerPseudoQMessageBox : public QObject {
+        void *qt_metacast(const char *s) override {
+            if (std::strcmp(s, "QMessageBox") == 0)
+                return this;
+            return nullptr;
+        }
+    };
+
+    void GlobalHelper::defaultAlertHandler(QObject *messageBox) {
+        bool ok;
+        auto icon = messageBox->property("icon").toInt(&ok);
+        if (!ok) {
+            return;
+        }
+        auto o = new GlobalHandlerPseudoQMessageBox;
+        o->setProperty("icon", icon);
+        QAccessibleEvent event(o, QAccessible::Alert);
+        QAccessible::updateAccessibility(&event);
+    }
+
     QPoint GlobalHelper::cursorPos() {
         return QCursor::pos();
     }
@@ -146,6 +178,9 @@ namespace SVS {
     QObject *GlobalHelper::createGlobalCursorListener(QObject *parent) {
         auto o = new MouseMoveListener(parent);
         return o;
+    }
+    void GlobalHelper::invokeAlertHandler(QObject *o) {
+        m_alertHandler(o);
     }
 }
 

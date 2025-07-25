@@ -20,22 +20,31 @@
 #ifndef SVSCRAFT_GLOBALHELPER_P_H
 #define SVSCRAFT_GLOBALHELPER_P_H
 
+#include <functional>
+
 #include <QObject>
 #include <qqmlintegration.h>
 
 #include <QWindow>
 
+#include <SVSCraftQuickImpl/SVSCraftQuickImplGlobal.h>
+
 class QQuickItem;
 
 namespace SVS {
 
-    class GlobalHelper : public QObject {
+    class SVSCRAFT_QUICK_IMPL_EXPORT GlobalHelper : public QObject {
         Q_OBJECT
         QML_ELEMENT
         QML_SINGLETON
     public:
         explicit GlobalHelper(QObject *parent = nullptr);
         ~GlobalHelper() override;
+
+        using AlertHandler = std::function<void(QObject *)>;
+        static AlertHandler alertHandler();
+        static void setAlertHandler(const AlertHandler &handler);
+        static void defaultAlertHandler(QObject *messageBox);
 
         Q_INVOKABLE static QPoint cursorPos();
         Q_INVOKABLE static void setProperty(QObject *object, const QString &key, const QVariant &value);
@@ -45,6 +54,7 @@ namespace SVS {
         Q_INVOKABLE static bool hasNativeColorChooser();
         Q_INVOKABLE static QColor nativeChooseColor(const QColor &color, QWindow *window, bool hasAlpha);
         Q_INVOKABLE static QObject *createGlobalCursorListener(QObject *parent = nullptr);
+        Q_INVOKABLE static void invokeAlertHandler(QObject *o);
     };
 }
 

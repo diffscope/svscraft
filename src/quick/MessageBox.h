@@ -1,6 +1,8 @@
 #ifndef SVSCRAFT_MESSAGEBOX_H
 #define SVSCRAFT_MESSAGEBOX_H
 
+#include <functional>
+
 #include <QObject>
 #include <qqmlintegration.h>
 
@@ -89,6 +91,11 @@ namespace SVS {
             const QString &text,
             SVSCraft::StandardButtons buttons = SVSCraft::Ok,
             SVSCraft::StandardButton defaultButton = SVSCraft::Ok);
+
+        using AlertHandler = std::function<void(QObject *)>;
+        static AlertHandler alertHandler();
+        static void setAlertHandler(const AlertHandler &handler);
+        static void defaultAlertHandler(QObject *messageBox);
 
     private:
         friend class MessageBoxAttachedType;

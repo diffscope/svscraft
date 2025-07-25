@@ -6,6 +6,7 @@ import QtQuick.Controls.impl
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 Window {
     id: dialog
@@ -62,6 +63,12 @@ Window {
         }
         if (escapeButton !== 0 && buttonRepeater.model.some(v => v.id === escapeButton)) {
             done(escapeButton)
+        }
+    }
+
+    onVisibleChanged: () => {
+        if (visible) {
+            GlobalHelper.invokeAlertHandler(this)
         }
     }
 
