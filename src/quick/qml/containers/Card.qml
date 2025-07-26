@@ -25,7 +25,7 @@ import QtQuick.Controls
 import SVSCraft
 import SVSCraft.UIComponents
 
-Frame {
+Item {
     id: card
 
     property bool atTop: true
@@ -33,14 +33,17 @@ Frame {
     property var image: ""
     property var title: ""
     property var subtitle: ""
+    property double spacing: 4
     property Item toolBar: null
 
     implicitHeight: 60
     implicitWidth: 300
-    padding: 6
-    spacing: 6
 
-    background: Rectangle {
+    readonly property Rectangle background: backgroundItem
+
+    Rectangle {
+        id: backgroundItem
+        anchors.fill: parent
         color: Theme.backgroundColor(card.ThemedItem.backgroundLevel)
         border.width: 1
         border.color: Theme.borderColor
@@ -61,6 +64,7 @@ Frame {
         id: row
         spacing: card.spacing
         anchors.fill: parent
+        anchors.margins: 6
         property Image imageItem: Image {
             source: card.image instanceof Item ? "" : card.image
         }
@@ -68,6 +72,7 @@ Frame {
         property Item imageContainer: Item {
             implicitHeight: row.height
             implicitWidth: implicitHeight
+            visible: card.image instanceof Item || row.imageItem.status !== Image.Null
             children: [row.realImageItem]
         }
         onRealImageItemChanged: realImageItem.anchors.fill = imageContainer
