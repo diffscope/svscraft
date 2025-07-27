@@ -55,6 +55,9 @@ namespace SVS {
         Q_INVOKABLE static QColor nativeChooseColor(const QColor &color, QWindow *window, bool hasAlpha);
         Q_INVOKABLE static QObject *createGlobalCursorListener(QObject *parent = nullptr);
         Q_INVOKABLE static void invokeAlertHandler(QObject *o);
+        Q_INVOKABLE static inline QString toHtmlEscaped(const QString &text) {
+            return text.toHtmlEscaped();
+        }
     };
 }
 
