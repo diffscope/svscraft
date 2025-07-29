@@ -102,8 +102,8 @@ Window {
                 ColorImage {
                     visible: typeof(dialog.icon) !== "number"
                     Layout.alignment: Qt.AlignTop
-                    Layout.preferredWidth: 48
-                    Layout.preferredHeight: 48
+                    Layout.preferredWidth: visible && dialog.icon.width !== 0 ? dialog.icon.width : implicitWidth
+                    Layout.preferredHeight: visible && dialog.icon.height !== 0 ? dialog.icon.height : implicitHeight
                     color: dialog.icon.color ?? "transparent"
                     source: dialog.icon.source ?? ""
                     cache: dialog.icon.cache ?? false
