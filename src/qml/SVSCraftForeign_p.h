@@ -99,6 +99,16 @@ namespace SVS {
         Q_INVOKABLE static QColor pickColor(QWindow *window = nullptr, bool useNativeColorPickerIfAvailable = true);
     };
 
+    class DesktopServicesForeign : public QObject {
+        Q_OBJECT
+        QML_NAMED_ELEMENT(DesktopServices)
+        QML_SINGLETON
+    public:
+        explicit DesktopServicesForeign(QObject *parent = nullptr);
+        ~DesktopServicesForeign() override;
+        Q_INVOKABLE static bool reveal(const QString &filename);
+    };
+
 }
 
 #endif //SVSCRAFT_SVSCRAFTFOREIGN_P_H

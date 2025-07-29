@@ -25,6 +25,7 @@
 #include <QQmlEngine>
 
 #include <SVSCraftGui/Eyedropper.h>
+#include <SVSCraftGui/DesktopServices.h>
 
 namespace SVS {
     void MusicTimelineExtended::setTimeSignature(int bar, const QJSValue &signature) {
@@ -166,5 +167,14 @@ namespace SVS {
     EyedropperForeign::~EyedropperForeign() = default;
     QColor EyedropperForeign::pickColor(QWindow *window, bool useNativeColorPickerIfAvailable) {
         return Eyedropper::pickColorSync(window, useNativeColorPickerIfAvailable);
+    }
+
+
+
+    DesktopServicesForeign::DesktopServicesForeign(QObject *parent) : QObject(parent) {
+    }
+    DesktopServicesForeign::~DesktopServicesForeign() = default;
+    bool DesktopServicesForeign::reveal(const QString &filename) {
+        return DesktopServices::reveal(filename);
     }
 }
