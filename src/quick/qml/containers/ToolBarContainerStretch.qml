@@ -19,27 +19,9 @@
 
 import QtQml
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Layouts
 
-import SVSCraft
-import SVSCraft.UIComponents
-
-Action {
-    id: action
-    enum MenuDisplay {
-        Top,
-        Bottom
-    }
-    property Menu menu: null
-    property Item parentItem: null
-    property int menuDisplay: MenuAction.Bottom
-    readonly property Action dummyAction: Action {}
-    icon: menu?.icon ?? dummyAction.icon
-    text: menu?.title ?? ""
-    onTriggered: (object) => {
-        if (menu) {
-            let target = parentItem ? parentItem : object instanceof Item ? object : null
-            menu.popup(target, 0, !target ? 0 : menuDisplay === MenuAction.Bottom ? target.height : -menu.height)
-        }
-    }
+Item {
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 }
