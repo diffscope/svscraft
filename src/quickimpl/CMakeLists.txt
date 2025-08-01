@@ -20,8 +20,8 @@ endforeach()
 svs_add_library(${PROJECT_NAME} AUTOGEN STATIC
     SOURCES ${_src}
     LINKS SVSCraftCore SVSCraftGui
-    QT_LINKS Core Gui Qml Quick
-    QT_INCLUDE_PRIVATE Core Gui Qml Quick
+    QT_LINKS Core Gui Qml Quick QuickTemplates2
+    QT_INCLUDE_PRIVATE Core Gui Qml Quick QuickTemplates2
     INCLUDE_PRIVATE *
     PREFIX SVSCRAFT_QUICK_IMPL
 )

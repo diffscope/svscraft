@@ -308,7 +308,7 @@ Item {
                         visible: !tabItem._isStretch
                         background.opacity: _isStretch ? 0 : 1
                         down: mouseArea.pressed
-                        icon.source: !_isStretch ? modelData.iconSource : ""
+                        icon.source: !_isStretch ? modelData.icon.source : ""
                         display: AbstractButton.IconOnly
                         highlighted: modelData instanceof DockingPane && (modelData.dock && (view.firstIndex === index || view.lastIndex === index) || !modelData.dock && modelData.Docking.window && modelData.Docking.window.visible)
                         action: modelData instanceof Action ? modelData : null

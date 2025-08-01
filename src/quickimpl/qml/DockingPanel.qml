@@ -51,7 +51,7 @@ Pane {
             anchors.margins: 4
             IconLabel {
                 leftPadding: 4
-                icon.source: container.pane?.iconSource ?? ""
+                icon.source: container.pane?.icon.source ?? ""
                 icon.color: Theme.foregroundPrimaryColor
                 icon.width: 16
                 icon.height: 16

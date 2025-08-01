@@ -29,6 +29,7 @@
 #include <qpa/qplatformintegration.h>
 #include <qpa/qplatformservices.h>
 #include <QEventLoop>
+#include <QtQuickTemplates2/private/qquickicon_p.h>
 
 #ifdef Q_OS_WIN
 #    include <qt_windows.h>
@@ -181,6 +182,9 @@ namespace SVS {
     }
     void GlobalHelper::invokeAlertHandler(QObject *o) {
         m_alertHandler(o);
+    }
+    QQuickIcon GlobalHelper::defaultIcon() {
+        return {};
     }
 }
 

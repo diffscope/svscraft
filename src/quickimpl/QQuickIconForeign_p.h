@@ -17,22 +17,22 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-import QtQml
-import QtQuick
-import QtQuick.Controls
+#ifndef SVSCRAFT_QQUICKICONFOREIGN_P_H
+#define SVSCRAFR_QQUICKICONFOREIGN_P_H
 
-import SVSCraft.UIComponents.impl
+#include <QtQuickTemplates2/private/qquickicon_p.h>
+#include <QMetaType>
+#include <qqmlintegration.h>
 
-Pane {
-    id: pane
-    property Item header: null
-    property string title: ""
-    property string description: ""
-    property qQuickIcon icon: GlobalHelper.defaultIcon()
-    property bool locked: false
-    property bool dock: true
-    property Menu menu: null
+namespace SVS {
 
-    Accessible.name: title
-    Accessible.description: description
+    struct QQuickIconForeign {
+        Q_GADGET
+        QML_NAMED_ELEMENT(qQuickIcon)
+        QML_FOREIGN(QQuickIcon)
+        QML_CONSTRUCTIBLE_VALUE
+    };
+
 }
+
+#endif //SVSCRAFT_QQUICKICONFOREIGN_P_H

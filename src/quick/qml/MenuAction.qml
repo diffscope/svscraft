@@ -36,10 +36,14 @@ Action {
     readonly property Action dummyAction: Action {}
     icon: menu?.icon ?? dummyAction.icon
     text: menu?.title ?? ""
+    property Binding binding: Binding {
+        when: action.menu.visible
+        action.menu.y: action.menuDisplay === MenuAction.Bottom ? (menu.parent?.height ?? 0) : -menu.height
+    }
     onTriggered: (object) => {
         if (menu) {
             let target = parentItem ? parentItem : object instanceof Item ? object : null
-            menu.popup(target, 0, !target ? 0 : menuDisplay === MenuAction.Bottom ? target.height : -menu.height)
+            menu.popup(target, 0, 0)
         }
     }
 }

@@ -30,6 +30,7 @@
 #include <SVSCraftQuickImpl/SVSCraftQuickImplGlobal.h>
 
 class QQuickItem;
+class QQuickIcon;
 
 namespace SVS {
 
@@ -58,6 +59,7 @@ namespace SVS {
         Q_INVOKABLE static inline QString toHtmlEscaped(const QString &text) {
             return text.toHtmlEscaped();
         }
+        Q_INVOKABLE static QQuickIcon defaultIcon();
     };
 }
 
