@@ -39,12 +39,14 @@ T.Button {
     }
 
     contentItem: Item {
-        ColorImage {
+        IconLabel {
             id: image
             anchors.centerIn: parent
-            color: !button.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-                   Theme.foregroundPrimaryColor
-            source: {
+            icon.color: !button.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
+                        button.hovered ? Theme.foregroundPrimaryColor :
+                        !Window.active ? Theme.foregroundSecondaryColor :
+                        Theme.foregroundPrimaryColor
+            icon.source: {
                 switch (button.type) {
                     case SystemButton.Close:
                         return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Dismiss16Regular.svg"
