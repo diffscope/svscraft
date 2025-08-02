@@ -27,7 +27,14 @@ import SVSCraft.UIComponents
 T.Menu {
     id: control
 
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
+    implicitWidth: {
+        let w = implicitBackgroundWidth + leftInset + rightInset
+        for (let i = 0; i < count; i++) {
+            let item = itemAt(i)
+            w = Math.max(w, item.implicitWidth + leftPadding + rightPadding + 8)
+        }
+        return w
+    }
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
 
     margins: 0
