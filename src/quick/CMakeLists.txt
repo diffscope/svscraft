@@ -21,7 +21,7 @@ svs_add_library(${PROJECT_NAME} AUTOGEN STATIC
     SOURCES ${_src}
     LINKS SVSCraftCore SVSCraftGui SVSCraftQml SVSCraftQuickImpl SVSCraftQuickImplplugin
     QT_LINKS Core Gui Qml Quick QuickControls2
-    QT_LINKS_PRIVATE QuickTemplates2
+    QT_LINKS_PRIVATE Quick QuickTemplates2
     QT_INCLUDE_PRIVATE Core Gui Qml Quick QuickControls2 QuickTemplates2
     INCLUDE_PRIVATE *
     PREFIX SVSCRAFT_QUICK
