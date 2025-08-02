@@ -60,6 +60,8 @@ namespace SVS {
             return text.toHtmlEscaped();
         }
         Q_INVOKABLE static QQuickIcon defaultIcon();
+        Q_INVOKABLE static QColor dockingPanelHeaderColor(const QColor &accentColor, const QColor &backgroundColor, bool active);
+        Q_INVOKABLE static QWindow *focusWindow();
     };
 }
 

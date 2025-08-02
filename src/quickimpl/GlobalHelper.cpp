@@ -35,6 +35,8 @@
 #    include <qt_windows.h>
 #endif
 
+#include <SVSCraftGui/ColorBlender.h>
+
 namespace SVS {
     GlobalHelper::GlobalHelper(QObject *parent) : QObject(parent) {
     }
@@ -185,6 +187,18 @@ namespace SVS {
     }
     QQuickIcon GlobalHelper::defaultIcon() {
         return {};
+    }
+    QColor GlobalHelper::dockingPanelHeaderColor(const QColor &accentColor,
+                                                 const QColor &backgroundColor, bool active) {
+        if (!active)
+            return backgroundColor;
+        QColor accentColorTransparent = accentColor;
+        accentColorTransparent.setAlphaF(0.15);
+        return ColorBlender::blend<ColorBlender::Normal>(accentColorTransparent.rgba(),
+                                                         backgroundColor.rgba());
+    }
+    QWindow *GlobalHelper::focusWindow() {
+        return QGuiApplication::focusWindow();
     }
 }
 

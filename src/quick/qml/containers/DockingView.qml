@@ -39,12 +39,31 @@ Item {
     readonly property DockingPane lastItem: lastIndex < 0 ? null : contentData[lastIndex]
     readonly property int stretchIndex: tabBar.stretchIndex
     readonly property bool panelOpened: panel.visible
+    readonly property list<int> undockedIndices: {
+        let a = []
+        for (let i = 0; i < contentData.length; i++) {
+            let o = contentData[i]
+            if (o instanceof DockingPane && !o.dock) {
+                a.push(i)
+            }
+        }
+        return a
+    }
+    readonly property list<DockingPane> undockedItems: undockedIndices.map(i => contentData[i])
 
     default property list<QtObject> contentData: []
     property int edge: Qt.LeftEdge
     property double barSize: 32
     property double panelSize: 400
     property int barBackgroundLevel: SVS.BL_Primary
+    property bool firstActive: false
+    property bool lastActive: false
+    property DockingPane activeUndockedPane: null
+
+    signal firstActivated()
+    signal lastActivated()
+    signal undockedActivated(QtObject dockingPane)
+    signal undockedDeactivated(QtObject dockingPane)
 
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
@@ -205,6 +224,7 @@ Item {
         Window {
             id: window
             required property DockingPane currentItem
+            title: currentItem.title + " - " + view.Window.window.title
             transientParent: view.Window.window
             LayoutMirroring.enabled: view.LayoutMirroring.enabled
             LayoutMirroring.childrenInherit: true
@@ -212,10 +232,20 @@ Item {
                 id: panel
                 anchors.fill: parent
                 pane: window.currentItem
+                active: view.activeUndockedPane === window.currentItem
             }
             onVisibleChanged: () => {
                 if (visible)
                     panel.set()
+            }
+            onActiveChanged: () => {
+                GlobalHelper.setProperty(null, "", "")
+                if (active && GlobalHelper.focusWindow() === window) {
+                    view.undockedActivated(currentItem)
+                } else if (GlobalHelper.focusWindow() !== window) {
+                    view.undockedDeactivated(currentItem)
+                }
+
             }
         }
     }
@@ -308,7 +338,7 @@ Item {
                         visible: !tabItem._isStretch
                         background.opacity: _isStretch ? 0 : 1
                         down: mouseArea.pressed
-                        icon.source: !_isStretch ? modelData.icon.source : ""
+                        icon: !_isStretch ? modelData.icon : GlobalHelper.defaultIcon()
                         display: AbstractButton.IconOnly
                         highlighted: modelData instanceof DockingPane && (modelData.dock && (view.firstIndex === index || view.lastIndex === index) || !modelData.dock && modelData.Docking.window && modelData.Docking.window.visible)
                         action: modelData instanceof Action ? modelData : null
@@ -472,12 +502,16 @@ Item {
                 visible: view.firstItem !== null
                 SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) / 2 : undefined
                 SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) / 2 : undefined
+                onActivated: view.firstActivated()
+                active: view.firstActive
             }
             DockingPanel {
                 pane: view.lastItem
                 visible: view.lastItem !== null
                 SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) / 2 : undefined
                 SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) / 2 : undefined
+                onActivated: view.lastActivated()
+                active: view.lastActive
             }
         }
     }
