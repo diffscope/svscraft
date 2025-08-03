@@ -59,6 +59,7 @@ Item {
     property bool firstActive: false
     property bool lastActive: false
     property DockingPane activeUndockedPane: null
+    property double splitterRatio: 0.5
 
     signal firstActivated()
     signal lastActivated()
@@ -68,6 +69,15 @@ Item {
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
 
+    function clearContents() {
+        tabBar.firstIndex = -1
+        tabBar.lastIndex = -1
+        for (let item of contentData) {
+            item.DockingImpl.dockingView = null
+            item.DockingImpl.window?.destroy()
+        }
+        contentData = []
+    }
     function removeContent(index, keepWindow) {
         if (typeof(index) !== "number") {
             for (let i = 0; i < view.contentData.length; i++) {
@@ -152,60 +162,58 @@ Item {
         if (current)
             showPane(targetIndex)
     }
-    function showPane(content) {
+    function getItemWithIndex(content) {
         let index = -1
-        let pane = null
+        let item = null
         if (typeof(content) === "number") {
             index = content
-            pane = view.contentData[index]
+            item = view.contentData[index]
         } else {
             for (let i = 0; i < view.contentData.length; i++) {
                 if (view.contentData[i] === content) {
                     index = i
-                    pane = content
+                    item = content
                     break
                 }
             }
         }
-        if (index === -1)
+        return {index, item}
+
+    }
+    function showPane(content) {
+        let {index, item} = getItemWithIndex(content)
+        if (!(item instanceof DockingPane))
             return
-        if (!(pane instanceof DockingPane))
-            return
-        if (pane.dock) {
+        if (item.dock) {
             if (index < stretchIndex)
                 tabBar.firstIndex = index
             else
                 tabBar.lastIndex = index
         } else {
-            createWindow(pane)
+            createWindow(item)
         }
     }
     function hidePane(content) {
-        let index = -1
-        let pane = null
-        if (typeof(content) === "number") {
-            index = content
-            pane = view.contentData[index]
-        } else {
-            for (let i = 0; i < view.contentData.length; i++) {
-                if (view.contentData[i] === content) {
-                    index = i
-                    pane = content
-                    break
-                }
-            }
-        }
-        if (index === -1)
+        let {index, item} = getItemWithIndex(content)
+        if (!(item instanceof DockingPane))
             return
-        if (!(pane instanceof DockingPane))
-            return
-        if (pane.dock) {
+        if (item.dock) {
             if (firstIndex === index)
                 tabBar.firstIndex = -1
             else if (lastIndex === index)
                 tabBar.lastIndex = -1
         } else {
-            pane.Docking.window?.close()
+            item.Docking.window?.close()
+        }
+    }
+    function togglePane(content) {
+        let {index, item} = getItemWithIndex(content)
+        if (!(item instanceof DockingPane))
+            return
+        if (item instanceof DockingPane && (item.dock && (view.firstIndex === index || view.lastIndex === index) || !item.dock && item.Docking.window?.visible)) {
+            hidePane(index)
+        } else {
+            showPane(index)
         }
     }
     function createWindow(content) {
@@ -215,6 +223,12 @@ Item {
                 height: content.implicitHeight >= 200 ? content.implicitHeight : (view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? view.height: 400),
                 currentItem: content,
             })
+            if (content.Docking.windowGeometryHint.width !== 0) {
+                content.Docking.window.x = content.Docking.windowGeometryHint.x
+                content.Docking.window.y = content.Docking.windowGeometryHint.y
+                content.Docking.window.width = content.Docking.windowGeometryHint.width
+                content.Docking.window.height = content.Docking.windowGeometryHint.height
+            }
         }
         content.Docking.window.show()
     }
@@ -276,7 +290,7 @@ Item {
                     }
                 }
             }
-            if (index === -1) {
+            if (index === -1 && model.length !== 0) {
                 throw new Error("No DockingStretch in DockingView")
             }
             return index
@@ -500,16 +514,26 @@ Item {
             DockingPanel {
                 pane: view.firstItem
                 visible: view.firstItem !== null
-                SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) / 2 : undefined
-                SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) / 2 : undefined
+                SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) * view.splitterRatio : undefined
+                SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) * view.splitterRatio : undefined
+                onWidthChanged: () => {
+                    if (splitView.orientation !== Qt.Horizontal)
+                        return
+                    if (splitView.resizing)
+                        view.splitterRatio = width / (splitView.width - 1)
+                }
+                onHeightChanged: () => {
+                    if (splitView.orientation !== Qt.Vertical)
+                        return
+                    if (splitView.resizing)
+                        view.splitterRatio = height / (splitView.height - 1)
+                }
                 onActivated: view.firstActivated()
                 active: view.firstActive
             }
             DockingPanel {
                 pane: view.lastItem
                 visible: view.lastItem !== null
-                SplitView.preferredWidth: splitView.orientation === Qt.Horizontal ? (splitView.width - 1) / 2 : undefined
-                SplitView.preferredHeight: splitView.orientation === Qt.Vertical ? (splitView.height - 1) / 2 : undefined
                 onActivated: view.lastActivated()
                 active: view.lastActive
             }

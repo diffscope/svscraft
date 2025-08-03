@@ -22,6 +22,8 @@
 
 #include <SVSCraftQuick/private/Docking_p.h>
 
+#include <QRect>
+
 namespace SVS {
 
     class DockingImpl;
@@ -39,6 +41,7 @@ namespace SVS {
     public:
         Docking *q_ptr;
         DockingImpl *dockingImpl;
+        QRect windowGeometryHint;
     };
 }
 

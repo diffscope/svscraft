@@ -49,6 +49,15 @@ namespace SVS {
         Q_D(const Docking);
         return d->dockingImpl->window();
     }
+    QRect Docking::windowGeometryHint() const {
+        Q_D(const Docking);
+        return d->windowGeometryHint;
+    }
+    void Docking::setWindowGeometryHint(const QRect &geometryHint) {
+        Q_D(Docking);
+        d->windowGeometryHint = geometryHint;
+        emit windowGeometryHintChanged();
+    }
 }
 
 #include "moc_Docking_p.cpp"

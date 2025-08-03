@@ -38,15 +38,20 @@ namespace SVS {
 
         Q_PROPERTY(QObject *dockingView READ dockingView NOTIFY dockingViewChanged)
         Q_PROPERTY(QQuickWindow *window READ window NOTIFY windowChanged)
+        Q_PROPERTY(QRect windowGeometryHint READ windowGeometryHint WRITE setWindowGeometryHint NOTIFY windowGeometryHintChanged)
     public:
         ~Docking() override;
 
         QObject *dockingView() const;
         QQuickWindow *window() const;
 
+        QRect windowGeometryHint() const;
+        void setWindowGeometryHint(const QRect &geometryHint);
+
     signals:
         void dockingViewChanged();
         void windowChanged();
+        void windowGeometryHintChanged();
 
     private:
         friend class DockingAttachedType;
