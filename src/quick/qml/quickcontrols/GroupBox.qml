@@ -18,6 +18,7 @@
  ******************************************************************************/
 
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Templates as T
 
 import SVSCraft
@@ -30,29 +31,30 @@ T.GroupBox {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
 
     spacing: 6
-    padding: 6
     topPadding: padding + (implicitLabelWidth > 0 ? implicitLabelHeight + spacing : 0)
 
-    label: Text {
-        x: control.leftPadding
+    label: RowLayout {
+        spacing: 4
         width: control.availableWidth
-        text: control.title
-        font.family: control.font.family
-        font.weight: Font.DemiBold
-        font.pointSize: 1.25 * control.font.pointSize
-        color: Theme.foregroundPrimaryColor
-        elide: Text.ElideRight
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-
+        Text {
+            Layout.leftMargin: control.leftPadding
+            text: control.title
+            color: Theme.foregroundPrimaryColor
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+        }
+        Rectangle {
+            implicitHeight: 1
+            color: Theme.borderColor
+            Layout.fillWidth: true
+        }
         Button {
             id: foldButton
             property bool _folded: control.ThemedItem.folded
             property double _rotation: control.ThemedItem.folded ? 0 : 180
+            Layout.rightMargin: control.leftPadding
             visible: control.ThemedItem.foldable
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.rightMargin: control.rightPadding
             width: 20
             height: 20
             padding: 2
