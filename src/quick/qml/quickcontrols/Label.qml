@@ -26,7 +26,7 @@ import SVSCraft.UIComponents
 T.Label {
     id: control
 
-    color: Theme.foregroundColor(control.ThemedItem.foregroundLevel)
+    color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) : Theme.foregroundColor(control.ThemedItem.foregroundLevel)
     linkColor: Theme.linkColor
 
     HoverHandler {
