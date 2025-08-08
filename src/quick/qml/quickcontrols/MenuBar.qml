@@ -44,7 +44,7 @@ T.MenuBar {
     }
 
     background: Rectangle {
-        implicitHeight: 32
+        implicitHeight: 24
         color: Theme.backgroundColor(control.ThemedItem.backgroundLevel)
         Rectangle {
             width: parent.width
