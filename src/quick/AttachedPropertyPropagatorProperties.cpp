@@ -25,11 +25,21 @@
 
 namespace SVS {
     AttachedPropertyPropagatorProperties::AttachedPropertyPropagatorProperties(AttachedPropertyPropagator *propagator, AttachedPropertyPropagatorProperties *defaultProperties, const QVariantMap &initialProperties) : m_propagator(propagator), m_defaultProperties(defaultProperties), m_m(initialProperties) {
+        if (!propagator->attachedParent() && defaultProperties) {
+            defaultProperties->m_rootPropagators.insert(propagator);
+        }
     }
-    AttachedPropertyPropagatorProperties::~AttachedPropertyPropagatorProperties() = default;
+    AttachedPropertyPropagatorProperties::~AttachedPropertyPropagatorProperties() {
+        if (m_defaultProperties) {
+            m_defaultProperties->m_rootPropagators.remove(m_propagator);
+        }
+    }
     void AttachedPropertyPropagatorProperties::propagateAndNotify(const QString &property) const {
         auto q = m_propagator;
         for (auto child : q->attachedChildren()) {
+            child->properties()->inherit(property);
+        }
+        for (auto child : m_rootPropagators) {
             child->properties()->inherit(property);
         }
         auto i = q->metaObject()->indexOfProperty(property.toUtf8());
@@ -50,7 +60,7 @@ namespace SVS {
         auto v = parent->getValue(property);
         if (variantEquals(v, m_m.value(property)))
             return;
-        setValue(property, v);
+        m_m.insert(property, v);
         propagateAndNotify(property);
     }
     void AttachedPropertyPropagatorProperties::inheritAll() {

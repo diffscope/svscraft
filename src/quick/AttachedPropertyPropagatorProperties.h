@@ -96,10 +96,12 @@ namespace SVS {
         void inheritAll();
 
     private:
+        friend class AttachedPropertyPropagator;
         AttachedPropertyPropagator *m_propagator;
         AttachedPropertyPropagatorProperties *m_defaultProperties;
         QVariantMap m_m;
         QSet<QString> m_explicitSetProperties;
+        QSet<AttachedPropertyPropagator *> m_rootPropagators;
     };
 
 }

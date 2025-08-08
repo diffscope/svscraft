@@ -23,6 +23,13 @@
 
 namespace SVS {
     void AttachedPropertyPropagator::attachedParentChange(QQuickAttachedPropertyPropagator *newParent, QQuickAttachedPropertyPropagator *oldParent) {
+        if (properties()->m_defaultProperties) {
+            if (newParent) {
+                properties()->m_defaultProperties->m_rootPropagators.remove(this);
+            } else {
+                properties()->m_defaultProperties->m_rootPropagators.insert(this);
+            }
+        }
         properties()->inheritAll();
     }
 }
