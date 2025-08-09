@@ -393,6 +393,7 @@ Item {
                             IconLabel {
                                 anchors.fill: parent
                                 icon: tabButton.icon
+                                font: Theme.font
                                 display: AbstractButton.IconOnly
                             }
                         }

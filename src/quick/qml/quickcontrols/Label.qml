@@ -28,6 +28,7 @@ T.Label {
 
     color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) : Theme.foregroundColor(control.ThemedItem.foregroundLevel)
     linkColor: Theme.linkColor
+    font: Theme.font
 
     HoverHandler {
         enabled: parent.hoveredLink

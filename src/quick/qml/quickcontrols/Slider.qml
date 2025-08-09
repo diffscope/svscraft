@@ -33,6 +33,8 @@ T.Slider {
 
     padding: 6
 
+    font: Theme.font
+
     Rectangle {
         width: control.width
         height: control.height

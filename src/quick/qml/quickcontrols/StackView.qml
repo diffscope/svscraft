@@ -27,6 +27,8 @@ import SVSCraft.UIComponents
 T.StackView {
     id: control
 
+    font: Theme.font
+
     popEnter: Transition {
         XAnimator {
             from: (control.mirrored ? -1 : 1) * -control.width * 0.2

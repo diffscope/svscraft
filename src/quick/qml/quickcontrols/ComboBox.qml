@@ -38,6 +38,8 @@ T.ComboBox {
     spacing: 4
     hoverEnabled: true
 
+    font: Theme.font
+
     delegate: ItemDelegate {
         required property var model
         required property int index
@@ -72,6 +74,7 @@ T.ComboBox {
         rightPadding: control.mirrored ? 8 : 0
 
         text: control.editable ? control.editText : control.displayText
+        font: control.font
         color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
                Theme.foregroundPrimaryColor
         selectionColor: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :

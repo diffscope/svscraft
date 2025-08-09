@@ -23,6 +23,7 @@
 #include <type_traits>
 
 #include <QQmlEngine>
+#include <QFont>
 
 #include <SVSCraftQml/private/SVSQmlNamespace_p.h>
 
@@ -103,6 +104,8 @@ namespace SVS {
     Theme *Theme::defaultTheme() {
         return &ThemePrivate::defaultTheme;
     }
+
+    IMPLEMENTATION(font, font, setFont, resetFont)
 
     IMPLEMENTATION(accentColor, accentColor, setAccentColor, resetAccentColor)
     IMPLEMENTATION(warningColor, warningColor, setWarningColor, resetWarningColor)

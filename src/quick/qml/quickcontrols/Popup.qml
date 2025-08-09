@@ -33,6 +33,8 @@ T.Popup {
 
     padding: 8
 
+    font: Theme.font
+
     background: Item {
         Rectangle {
             id: backgroundArea

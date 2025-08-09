@@ -31,6 +31,8 @@ T.ToolBar {
 
     padding: 4
 
+    font: Theme.font
+
     background: Rectangle {
         implicitHeight: 32
         color: Theme.backgroundColor(control.ThemedItem.backgroundLevel)

@@ -451,6 +451,7 @@ Pane {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "#"
                         color: parent.color
+                        font: hexEditor.font
                     }
                     leftPadding: hashtag.width + 8
                     Connections {

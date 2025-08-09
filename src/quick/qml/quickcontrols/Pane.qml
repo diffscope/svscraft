@@ -29,6 +29,8 @@ T.Pane {
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
 
+    font: Theme.font
+
     background: Rectangle {
         color: Theme.backgroundColor(control.ThemedItem.backgroundLevel)
     }

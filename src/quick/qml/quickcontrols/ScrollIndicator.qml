@@ -31,6 +31,8 @@ T.ScrollIndicator {
 
     padding: 2
 
+    font: Theme.font
+
     contentItem: Rectangle {
         implicitWidth: 2
         implicitHeight: 2

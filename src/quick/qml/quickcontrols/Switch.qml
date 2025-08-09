@@ -33,6 +33,8 @@ T.Switch {
     padding: 6
     spacing: 6
 
+    font: Theme.font
+
     background: Rectangle {
         color: "transparent"
         border.width: control.visualFocus ? 2 : 0

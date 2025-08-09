@@ -32,6 +32,8 @@ T.MenuBar {
     padding: 4
     spacing: 4
 
+    font: Theme.font
+
     delegate: MenuBarItem {
 
     }

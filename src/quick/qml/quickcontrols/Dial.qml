@@ -34,6 +34,8 @@ T.Dial {
     hoverEnabled: true
     inputMode: T.Dial.Horizontal
 
+    font: Theme.font
+
     background: Item {
         implicitWidth: 24
         implicitHeight: 24

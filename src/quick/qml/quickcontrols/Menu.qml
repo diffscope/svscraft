@@ -40,6 +40,8 @@ T.Menu {
     margins: 0
     padding: 3
 
+    font: Theme.font
+
     delegate: MenuItem {
 
     }

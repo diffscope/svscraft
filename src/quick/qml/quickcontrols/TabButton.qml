@@ -31,6 +31,8 @@ T.TabButton {
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
 
+    font: Theme.font
+
     padding: 6
     horizontalPadding: 8
     spacing: 4

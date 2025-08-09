@@ -71,11 +71,13 @@ Pane {
                     icon.color: Theme.foregroundPrimaryColor
                     icon.width: 16
                     icon.height: 16
+                    font: container.font
                     Layout.alignment: Qt.AlignVCenter
                 }
                 Text {
                     color: Theme.foregroundPrimaryColor
                     rightPadding: 4
+                    font: container.font
                     text: container.pane?.title ?? ""
                     Layout.alignment: Qt.AlignVCenter
                 }

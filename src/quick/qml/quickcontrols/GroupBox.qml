@@ -33,12 +33,15 @@ T.GroupBox {
     spacing: 6
     topPadding: padding + (implicitLabelWidth > 0 ? implicitLabelHeight + spacing : 0)
 
+    font: Theme.font
+
     label: RowLayout {
         spacing: 4
         width: control.availableWidth
         Text {
             Layout.leftMargin: control.leftPadding
             text: control.title
+            font: control.font
             color: Theme.foregroundPrimaryColor
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignLeft

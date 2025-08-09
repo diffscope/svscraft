@@ -36,6 +36,8 @@ namespace SVS {
         QML_ATTACHED(Theme)
         QML_UNCREATABLE("")
 
+        Q_PROPERTY(QFont font READ font WRITE setFont RESET resetFont NOTIFY fontChanged)
+
         Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor RESET resetAccentColor NOTIFY accentColorChanged)
         Q_PROPERTY(QColor warningColor READ warningColor WRITE setWarningColor RESET resetWarningColor NOTIFY warningColorChanged)
         Q_PROPERTY(QColor errorColor READ errorColor WRITE setErrorColor RESET resetErrorColor NOTIFY errorColorChanged)
@@ -87,6 +89,10 @@ namespace SVS {
         static Theme *qmlAttachedProperties(QObject *object);
         static Theme *get(QObject *item);
         static Theme *defaultTheme();
+
+        QFont font() const;
+        void setFont(const QFont &font);
+        void resetFont();
 
         QColor accentColor() const;
         void setAccentColor(const QColor &accentColor);
@@ -227,6 +233,7 @@ namespace SVS {
         Q_INVOKABLE QColor dividerStrokeColor(int dividerStroke, const QColor &autoColor) const;
 
     signals:
+        void fontChanged();
         void accentColorChanged();
         void warningColorChanged();
         void errorColorChanged();

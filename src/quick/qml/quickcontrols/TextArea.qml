@@ -33,6 +33,8 @@ T.TextArea {
     leftPadding: 8
     rightPadding: 8
 
+    font: Theme.font
+
     color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
            Theme.foregroundPrimaryColor
     selectionColor: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :

@@ -33,6 +33,9 @@ T.MenuBarItem {
 
     padding: 4
     spacing: 4
+
+    font: Theme.font
+
     icon.width: 16
     icon.height: 16
     icon.color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :

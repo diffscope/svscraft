@@ -38,6 +38,7 @@ namespace SVS {
         static Theme defaultTheme;
 
         inline explicit ThemePrivate(Theme *theme) : AttachedPropertyPropagatorProperties(theme, defaultTheme.properties(), {
+            {"font", {}},
             {"accentColor", QVariant::fromValue(QColor(0x5566ff))},
             {"warningColor", QVariant::fromValue(QColor(0xCB8743))},
             {"errorColor", QVariant::fromValue(QColor(0xcc4455))},

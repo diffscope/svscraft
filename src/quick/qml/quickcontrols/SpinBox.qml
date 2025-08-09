@@ -31,6 +31,8 @@ T.SpinBox {
     leftPadding: padding + control.mirrored ? Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0)) : 0
     rightPadding: padding + control.mirrored ? 0 : Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0))
 
+    font: Theme.font
+
     editable: true
 
     validator: IntValidator {

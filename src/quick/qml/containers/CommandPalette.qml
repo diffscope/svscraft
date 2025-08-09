@@ -137,6 +137,7 @@ Popup {
                         spacing: 4
                         Text {
                             Layout.fillWidth: true
+                            font: popup.font
                             text: CommandPaletteHelper.highlightString(itemDelegate.model[popup.titleRole], popup.filterText, Theme.highlightColor)
                             color: itemDelegate._titleColor
                             textFormat: Qt.RichText
@@ -151,17 +152,20 @@ Popup {
                             Text {
                                 id: shortcutText
                                 anchors.centerIn: parent
+                                font: popup.font
                                 text: itemDelegate.model[popup.keySequenceRole] ?? ""
                                 color: itemDelegate._titleColor
                             }
                         }
                         Text {
                             visible: itemDelegate.model[popup.recentlyUsedRole] ?? false
+                            font: popup.font
                             text: popup.recentlyUsedText
                             color: itemDelegate._titleColor
                         }
                     }
                     Text {
+                        font: popup.font
                         text: CommandPaletteHelper.highlightString(itemDelegate.model[popup.subtitleRole], popup.filterText, Theme.highlightColor)
                         color: itemDelegate._subtitleColor
                         textFormat: Qt.RichText

@@ -34,6 +34,8 @@ T.ToolButton {
     padding: 4
     spacing: 4
 
+    font: Theme.font
+
     flat: true
 
     icon.width: 16

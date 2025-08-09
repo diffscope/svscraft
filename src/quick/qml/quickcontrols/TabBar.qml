@@ -29,6 +29,8 @@ T.TabBar {
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
 
+    font: Theme.font
+
     contentItem: ListView {
         model: control.contentModel
         currentIndex: control.currentIndex

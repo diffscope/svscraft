@@ -38,6 +38,8 @@ T.TextField {
     ThemedItem.icon.height: 16
     ThemedItem.icon.color: color
 
+    font: Theme.font
+
     color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
            Theme.foregroundPrimaryColor
     selectionColor: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :

@@ -34,6 +34,9 @@ T.Button {
     padding: 6
     horizontalPadding: control.text && control.display !== T.AbstractButton.IconOnly ? 8 : 6
     spacing: 4
+
+    font: Theme.font
+
     icon.width: 16
     icon.height: 16
     icon.color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundColor(control.ThemedItem.foregroundLevel)) :
