@@ -24,6 +24,7 @@ import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.Button {
     id: control
@@ -95,5 +96,13 @@ T.Button {
                 easing.type: Easing.OutCubic
             }
         }
+    }
+
+    ActionToolTipHelper {
+        text: control.text
+        shortcut: control.action?.shortcut ?? ""
+        delay: Theme.toolTipDelay
+        timeout: Theme.toolTipTimeout
+        visible: control.text !== "" && control.display === T.AbstractButton.IconOnly && control.hovered
     }
 }

@@ -98,8 +98,6 @@ Frame {
             action: annotation.action
             display: AbstractButton.IconOnly
             ThemedItem.foregroundLevel: SVS.FL_Secondary
-            DescriptiveText.toolTip: annotation.action?.text ?? ""
-            DescriptiveText.activated: hovered
             Layout.alignment: Qt.AlignVCenter
         }
         ToolButton {
@@ -108,8 +106,8 @@ Frame {
             icon.width: 12
             icon.height: 12
             ThemedItem.foregroundLevel: SVS.FL_Secondary
-            DescriptiveText.toolTip: qsTr("Close")
-            DescriptiveText.activated: hovered
+            display: AbstractButton.IconOnly
+            text: qsTr("Close")
             Layout.alignment: Qt.AlignVCenter
             onClicked: annotation.visible = false
         }

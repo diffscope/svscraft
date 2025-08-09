@@ -17,38 +17,33 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_DESCRIPTIVETEXT_P_P_H
-#define SVSCRAFT_DESCRIPTIVETEXT_P_P_H
+import QtQml
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls.impl
 
-#include <SVSCraftQuick/private/DescriptiveText_p.h>
+import SVSCraft
+import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
-#include <QPointer>
+ToolTip {
+    id: control
 
-#include <SVSCraftQuickImpl/private/StatusText_p.h>
+    property string shortcut: ""
 
-namespace SVS {
-    class DescriptiveTextAttachedType : public QObject {
-        Q_OBJECT
-        QML_NAMED_ELEMENT(DescriptiveText)
-        QML_ATTACHED(DescriptiveText)
-    public:
-        static DescriptiveText *qmlAttachedProperties(QObject *object);
-    };
-
-    class DescriptiveTextPrivate {
-        Q_DECLARE_PUBLIC(DescriptiveText)
-    public:
-        DescriptiveText *q_ptr;
-        QQuickItem *item;
-        bool activated = false;
-        bool bindAccessibleDescription = false;
-        int contextHelpDelay = 0;
-        QString toolTip;
-        QString statusTip;
-        QString contextHelpTip;
-
-        QPointer<StatusText> statusText;
-    };
+    contentItem: RowLayout {
+        spacing: 8
+        MnemonicLabel {
+            text: control.text
+            font: control.font
+            wrapMode: Text.Wrap
+            color: Theme.foregroundPrimaryColor
+        }
+        Text {
+            visible: control.shortcut.length !== 0
+            text: control.shortcut
+            font: control.font
+            color: Theme.foregroundSecondaryColor
+        }
+    }
 }
-
-#endif // SVSCRAFT_DESCRIPTIVETEXT_P_P_H

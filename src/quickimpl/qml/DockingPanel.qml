@@ -133,10 +133,8 @@ Pane {
                         "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelSeparateWindow20Filled.svg" :
                         "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelLeft16Filled.svg"
                     visible: container.undockToolButtonVisible && !container.pane?.locked
-                    DescriptiveText.activated: hovered
                     display: AbstractButton.IconOnly
                     text: container.dockingWindow ? qsTr("Drag to Dock") : container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
-                    DescriptiveText.toolTip: text
                     Layout.alignment: Qt.AlignVCenter
                     onClicked: () => {
                         if (!container.pane || container.dockingWindow)
@@ -180,7 +178,6 @@ Pane {
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/MoreHorizontal16Filled.svg"
                     display: AbstractButton.IconOnly
                     text: qsTr("Menu")
-                    DescriptiveText.toolTip: text
                     Layout.alignment: Qt.AlignVCenter
                     visible: container.pane?.menu ?? false
                     onClicked: container.pane.menu.popup()

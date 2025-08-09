@@ -162,8 +162,6 @@ Window {
                     flat: true
                     display: AbstractButton.IconOnly
                     text: checked ? qsTr("Hide Details...") : qsTr("Show Details...")
-                    DescriptiveText.toolTip: text
-                    DescriptiveText.activated: hovered
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/MoreCircle24Filled.svg"
                     icon.width: 24
                     icon.height: 24
@@ -179,8 +177,6 @@ Window {
                     flat: true
                     display: AbstractButton.IconOnly
                     text: "Help"
-                    DescriptiveText.toolTip: text
-                    DescriptiveText.activated: hovered
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/QuestionCircle24Filled.svg"
                     icon.width: 24
                     icon.height: 24

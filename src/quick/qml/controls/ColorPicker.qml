@@ -71,8 +71,10 @@ Pane {
                 ToolButton {
                     text: colorPicker.axis === SVS.CA_Hue ? "H" : colorPicker.axis === SVS.CA_Saturation ? "S" : colorPicker.axis === SVS.CA_Value ? "V" : undefined
                     visible: colorPicker.flags & SVS.CM_AxisChangeable
-                    DescriptiveText.activated: hovered
+                    display: AbstractButton.IconOnly
                     DescriptiveText.toolTip: qsTr("Switch palette")
+                    Accessible.description: DescriptiveText.toolTip
+                    DescriptiveText.activated: hovered
                     onClicked: () => {
                         GlobalHelper.setProperty(colorPicker, "axis", colorPicker.axis === SVS.CA_Hue ? SVS.CA_Saturation : colorPicker.axis === SVS.CA_Saturation ? SVS.CA_Value : colorPicker.axis === SVS.CA_Value ? SVS.CA_Hue : colorPicker.axis)
                     }
@@ -80,8 +82,8 @@ Pane {
                 ToolButton {
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Color16Filled.svg"
                     visible: (colorPicker.flags & SVS.CM_NativeColorDialog) && GlobalHelper.hasNativeColorChooser()
-                    DescriptiveText.activated: hovered
-                    DescriptiveText.toolTip: qsTr("Show native color dialog")
+                    display: AbstractButton.IconOnly
+                    text: qsTr("Show native color dialog")
                     onClicked: () => {
                         let c = GlobalHelper.nativeChooseColor(colorPicker.color, Window.window, colorPicker.flags & SVS.CM_Alpha)
                         if (!c.valid)
@@ -92,8 +94,8 @@ Pane {
                 ToolButton {
                     icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Eyedropper20Filled.svg"
                     visible: colorPicker.flags & SVS.CM_Eyedropper
-                    DescriptiveText.activated: hovered
-                    DescriptiveText.toolTip: qsTr("Pick a color on the screen")
+                    display: AbstractButton.IconOnly
+                    text: qsTr("Pick a color on the screen")
                     onClicked: () => {
                         colorPicker.eyedropperAboutToShow()
                         let c = Eyedropper.pickColor(Window.window)

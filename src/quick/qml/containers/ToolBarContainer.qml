@@ -24,6 +24,7 @@ import QtQuick.Controls.Basic as T
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.Container {
     id: container
@@ -32,8 +33,6 @@ T.Container {
     property bool vertical: false
     property Component toolButtonComponent: ToolButton {
         display: icon.source.toString().length !== 0 ? T.AbstractButton.IconOnly : T.AbstractButton.TextBesideIcon
-        DescriptiveText.toolTip: text
-        DescriptiveText.activated: hovered
     }
 
     function addAction(action) {

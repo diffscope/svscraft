@@ -61,8 +61,6 @@ namespace SVS {
             }
             d->statusText = nullptr;
             auto *window = parent->window();
-            if (window && qobject_cast<QQuickWindow *>(window->transientParent()))
-                window =  qobject_cast<QQuickWindow *>(window->transientParent());
             if (window) {
                 d->statusText = qobject_cast<StatusText *>(qmlAttachedPropertiesObject<StatusTextAttachedType>(parent->window()));
                 connect(d->statusText, &StatusText::statusTextChanged, this, &DescriptiveText::statusTextChanged);
