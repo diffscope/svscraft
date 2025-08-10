@@ -39,8 +39,8 @@ namespace SVS {
 
         QQuickToolTip *tip = engine->property(name).value<QQuickToolTip *>();
         if (!tip && create) {
-            QQmlComponent component(engine);
-            component.setData("import SVSCraft.UIComponents; ActionToolTip { }", QUrl());
+            // FIXME: "There are still \"1\" items in the process of being created at engine destruction."
+            QQmlComponent component(engine, "SVSCraft.UIComponents", "ActionToolTip");
 
             QObject *object = component.create();
             if (object)
