@@ -316,16 +316,25 @@ Item {
                     Component.onCompleted: modelData.DockingImpl.dockingView = view
                     width: 24
                     height: 24
-                    function undockPanelOnDrag() {
+                    function undockPanelOnDrag(followCursor = true) {
                         if (!(modelData instanceof DockingPane))
                             return
                         if (modelData.locked)
                             return
                         modelData.dock = false
                         view.createWindow(modelData)
-                        let p = GlobalHelper.cursorPos()
-                        modelData.Docking.window.x = p.x
-                        modelData.Docking.window.y = p.y
+                        if (followCursor) {
+                            let p = GlobalHelper.cursorPos()
+                            modelData.Docking.window.x = p.x
+                            modelData.Docking.window.y = p.y
+                        }
+                    }
+                    function showMenu() {
+                        if (modelData instanceof DockingPane) {
+                            dockingPaneMenu.popup()
+                        } else {
+                            actionMenu.popup()
+                        }
                     }
                     Connections {
                         target: tabItem.modelData instanceof DockingPane ? tabItem.modelData : null
@@ -343,6 +352,36 @@ Item {
                                     view.createWindow(tabItem.modelData)
                                 }
                             }
+                        }
+                    }
+                    Menu {
+                        id: dockingPaneMenu
+                        Action {
+                            text: tabButton.highlighted ? qsTr("&Hide") : qsTr("&Show")
+                            onTriggered: view.togglePane(tabItem.modelData)
+                        }
+                        Action {
+                            text: tabItem.modelData.dock ? qsTr("&Undock") : qsTr("&Dock")
+                            enabled: !tabItem.modelData.locked
+                            onTriggered: () => {
+                                if (tabItem.modelData.dock)
+                                    tabItem.undockPanelOnDrag(false)
+                                else
+                                    tabItem.modelData.dock = true
+                            }
+                        }
+                        Action {
+                            text: qsTr("&Remove from Sidebar")
+                            onTriggered: view.removeContent(tabItem.index, false)
+
+                        }
+                    }
+                    Menu {
+                        id: actionMenu
+                        Action {
+                            text: qsTr("&Remove from Sidebar")
+                            onTriggered: view.removeContent(tabItem.index, false)
+
                         }
                     }
                     ToolButton {
@@ -367,12 +406,13 @@ Item {
                             if (modelData instanceof Action) {
                                 return
                             }
-                            if (highlighted) {
-                                hidePane(tabItem.modelData)
-                            } else {
-                                showPane(tabItem.modelData)
-                            }
+                            togglePane(tabItem.modelData)
                         }
+                        TapHandler {
+                            acceptedButtons: Qt.RightButton
+                            onSingleTapped: tabItem.showMenu()
+                        }
+                        Keys.onMenuPressed: tabItem.showMenu()
 
                     }
                     Item {
