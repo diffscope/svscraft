@@ -26,57 +26,97 @@
 
 namespace SVS {
 
+    enum FilterType {
+        Alpha,
+        Saturation,
+        Value,
+        HslSaturation,
+        Lightness,
+        Lighter,
+        TopBlend,
+        BottomBlend,
+    };
+
     static QColor filterAlpha(const QColor &color, qintptr d) {
         auto alphaFactor = std::bit_cast<double>(d);
         auto c = color;
         c.setAlphaF(color.alphaF() * alphaFactor);
         return c;
     }
-    AlphaColorFilter::AlphaColorFilter(double alphaFactor) : AbstractColorFilter(std::bit_cast<qintptr>(alphaFactor), &filterAlpha) {}
 
     static QColor filterSaturation(const QColor &color, qintptr d) {
         auto saturationFactor = std::bit_cast<double>(d);
         return QColor::fromHsvF(color.hueF(), color.saturationF() * saturationFactor, color.valueF(), color.alphaF());
     }
-    SaturationColorFilter::SaturationColorFilter(double saturationFactor) : AbstractColorFilter(std::bit_cast<qintptr>(saturationFactor), &filterSaturation) {}
 
     static QColor filterValue(const QColor &color, qintptr d) {
         auto valueFactor = std::bit_cast<double>(d);
         return QColor::fromHsvF(color.hueF(), color.saturationF(), color.valueF() * valueFactor, color.alphaF());
     }
-    ValueColorFilter::ValueColorFilter(double valueFactor) : AbstractColorFilter(std::bit_cast<qintptr>(valueFactor), &filterValue) {}
 
     static QColor filterHslSaturation(const QColor &color, qintptr d) {
         auto saturationFactor = std::bit_cast<double>(d);
         return QColor::fromHslF(color.hslHueF(), color.hslSaturationF() * saturationFactor, color.lightnessF(), color.alphaF());
     }
-    HslSaturationColorFilter::HslSaturationColorFilter(double saturationFactor) : AbstractColorFilter(std::bit_cast<qintptr>(saturationFactor), &filterHslSaturation) {}
 
     static QColor filterLightness(const QColor &color, qintptr d) {
         auto lightnessFactor = std::bit_cast<double>(d);
         return QColor::fromHslF(color.hslHueF(), color.hslSaturationF(), color.lightnessF() * lightnessFactor, color.alphaF());
-    }
-    LightnessColorFilter::LightnessColorFilter(double lightnessFactor) : AbstractColorFilter(std::bit_cast<qintptr>(lightnessFactor), &filterLightness) {
     }
 
     static QColor filterLighter(const QColor &color, qintptr d) {
         auto factor = static_cast<int>(d);
         return color.lighter(factor);
     }
-    LighterColorChange::LighterColorChange(int factor) : AbstractColorFilter(static_cast<qintptr>(factor), &filterLighter) {
-    }
 
     static QColor blendTop(const QColor &color, qintptr d) {
         auto blendColor = static_cast<QRgb>(d);
         return ColorBlender::blend<ColorBlender::Normal>(blendColor, color.rgba());
     }
-    TopBlendColorFilter::TopBlendColorFilter(const QColor &blendColor) : AbstractColorFilter(static_cast<qintptr>(blendColor.rgba()), &blendTop) {}
 
     static QColor blendBottom(const QColor &color, qintptr d) {
         auto blendColor = static_cast<QRgb>(d);
         return ColorBlender::blend<ColorBlender::Normal>(color.rgba(), blendColor);
     }
-    BottomBlendColorFilter::BottomBlendColorFilter(const QColor &blendColor) : AbstractColorFilter(static_cast<qintptr>(blendColor.rgba()), &blendBottom) {}
+
+    using Filter = QColor (*)(const QColor &, qintptr);
+
+    static Filter m_filters[] = {
+        &filterAlpha,     &filterSaturation, &filterValue, &filterHslSaturation,
+        &filterLightness, &filterLighter,    &blendTop,    &blendBottom,
+    };
+
+    QColor AbstractColorFilter::apply(const QColor &color) const {
+        return m_filters[type](color, d);
+    }
+    QDataStream &operator<<(QDataStream &stream, const AbstractColorFilter &filter) {
+        stream << filter.d;
+        stream << filter.type;
+        return stream;
+    }
+    QDataStream &operator>>(QDataStream &stream, AbstractColorFilter &filter) {
+        stream >> filter.d;
+        stream >> filter.type;
+        return stream;
+    }
+
+    AlphaColorFilter::AlphaColorFilter(double alphaFactor) : AbstractColorFilter(std::bit_cast<qintptr>(alphaFactor), Alpha) {}
+
+    SaturationColorFilter::SaturationColorFilter(double saturationFactor) : AbstractColorFilter(std::bit_cast<qintptr>(saturationFactor), Saturation) {}
+
+    ValueColorFilter::ValueColorFilter(double valueFactor) : AbstractColorFilter(std::bit_cast<qintptr>(valueFactor), Value) {}
+
+    HslSaturationColorFilter::HslSaturationColorFilter(double saturationFactor) : AbstractColorFilter(std::bit_cast<qintptr>(saturationFactor), HslSaturation) {}
+
+    LightnessColorFilter::LightnessColorFilter(double lightnessFactor) : AbstractColorFilter(std::bit_cast<qintptr>(lightnessFactor), Lightness) {
+    }
+
+    LighterColorChange::LighterColorChange(int factor) : AbstractColorFilter(static_cast<qintptr>(factor), Lighter) {
+    }
+
+    TopBlendColorFilter::TopBlendColorFilter(const QColor &blendColor) : AbstractColorFilter(static_cast<qintptr>(blendColor.rgba()), TopBlend) {}
+
+    BottomBlendColorFilter::BottomBlendColorFilter(const QColor &blendColor) : AbstractColorFilter(static_cast<qintptr>(blendColor.rgba()), BottomBlend) {}
 
     QColor ColorChange::apply(const QColor &color) const {
         auto c = color;

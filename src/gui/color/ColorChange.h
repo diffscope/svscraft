@@ -29,19 +29,19 @@ namespace SVS {
 
     struct SVSCRAFT_GUI_EXPORT AbstractColorFilter {
         AbstractColorFilter() = default;
-        using Filter = QColor (*)(const QColor &, qintptr);
-        using Cleaner = void (*)(qintptr);
-        QColor apply(const QColor &color) const {
-            return f ? f(color, d) : color;
-        }
+
+        QColor apply(const QColor &color) const;
 
         bool operator==(const AbstractColorFilter &) const = default;
 
+        SVSCRAFT_GUI_EXPORT friend QDataStream &operator<<(QDataStream &stream, const AbstractColorFilter &filter);
+        SVSCRAFT_GUI_EXPORT friend QDataStream &operator>>(QDataStream &stream, AbstractColorFilter &filter);
+
     protected:
-        explicit AbstractColorFilter(qintptr d, Filter f) : d(d), f(f) {}
+        explicit AbstractColorFilter(qintptr d, int type) : d(d), type(type) {}
     private:
         qintptr d{};
-        Filter f{};
+        int type{};
     };
 
     class SVSCRAFT_GUI_EXPORT AlphaColorFilter : public AbstractColorFilter {
