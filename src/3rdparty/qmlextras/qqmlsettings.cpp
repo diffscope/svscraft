@@ -206,8 +206,7 @@ namespace SVS {
 
     static constexpr auto settingsWriteDelay = 500ms;
 
-    class QQmlSettingsPrivate
-    {
+    class QQmlSettingsPrivate {
         Q_DISABLE_COPY_MOVE(QQmlSettingsPrivate)
         Q_DECLARE_PUBLIC(QQmlSettings)
 
@@ -225,6 +224,10 @@ namespace SVS {
 
         void _q_propertyChanged();
         QVariant readProperty(const QMetaProperty &property) const;
+
+        QVariant instanceValue(const QString &key, const QVariant &defaultValue) const;
+        void instanceSetValue(const QString &key, const QVariant &value) const;
+        bool instanceContains(const QString &key) const;
 
         QQmlSettings *q_ptr = nullptr;
         QBasicTimer timer;
@@ -276,15 +279,12 @@ namespace SVS {
         const int offset = QQmlSettings::staticMetaObject.propertyCount();
         const int count = mo->propertyCount();
 
-        if (!category.isEmpty())
-            instance()->beginGroup(category);
-
         for (int i = offset; i < count; ++i) {
             QMetaProperty property = mo->property(i);
             const QString propertyName = QString::fromUtf8(property.name());
 
             const QVariant previousValue = readProperty(property);
-            const QVariant currentValue = instance()->value(propertyName,
+            const QVariant currentValue = instanceValue(propertyName,
                                                             previousValue);
 
             if (!currentValue.isNull() && (!previousValue.isValid()
@@ -296,7 +296,7 @@ namespace SVS {
 
             // ensure that a non-existent setting gets written
             // even if the property wouldn't change later
-            if (!instance()->contains(propertyName))
+            if (!instanceContains(propertyName))
                 _q_propertyChanged();
 
             // setup change notifications on first load
@@ -305,23 +305,17 @@ namespace SVS {
                 QMetaObject::connect(q, property.notifySignalIndex(), q, propertyChangedIndex);
             }
         }
-
-        if (!category.isEmpty())
-            instance()->endGroup();
     }
 
     void QQmlSettingsPrivate::store()
     {
         QHash<const char *, QVariant>::const_iterator it = changedProperties.constBegin();
-        if (!category.isEmpty())
-            instance()->beginGroup(category);
+
         while (it != changedProperties.constEnd()) {
-            instance()->setValue(QString::fromUtf8(it.key()), it.value());
+            instanceSetValue(QString::fromUtf8(it.key()), it.value());
             qCDebug(lcQmlSettings) << "QQmlSettings: store" << it.key() << ":" << it.value();
             ++it;
         }
-        if (!category.isEmpty())
-            instance()->endGroup();
         changedProperties.clear();
     }
 
@@ -347,6 +341,30 @@ namespace SVS {
         if (var.metaType() == QMetaType::fromType<QJSValue>())
             var = var.value<QJSValue>().toVariant();
         return var;
+    }
+
+    QVariant QQmlSettingsPrivate::instanceValue(const QString &key, const QVariant &defaultValue) const {
+        if (!category.isEmpty())
+            instance()->beginGroup(category);
+        auto value = instance()->value(key, defaultValue);
+        if (!category.isEmpty())
+            instance()->endGroup();
+        return value;
+    }
+    void QQmlSettingsPrivate::instanceSetValue(const QString &key, const QVariant &value) const {
+        if (!category.isEmpty())
+            instance()->beginGroup(category);
+        instance()->setValue(key, value);
+        if (!category.isEmpty())
+            instance()->endGroup();
+    }
+    bool QQmlSettingsPrivate::instanceContains(const QString &key) const {
+        if (!category.isEmpty())
+            instance()->beginGroup(category);
+        bool ret = instance()->contains(key);
+        if (!category.isEmpty())
+            instance()->endGroup();
+        return ret;
     }
 
     QQmlSettings::QQmlSettings(QObject *parent)
@@ -413,11 +431,7 @@ namespace SVS {
     QVariant QQmlSettings::value(const QString &key, const QVariant &defaultValue) const
     {
         Q_D(const QQmlSettings);
-        if (!d->category.isEmpty())
-            d->instance()->beginGroup(d->category);
-        auto ret = d->instance()->value(key, defaultValue);
-        if (!d->category.isEmpty())
-            d->instance()->beginGroup(d->category);
+        auto ret = d->instanceValue(key, defaultValue);
         return ret;
     }
 
@@ -432,11 +446,7 @@ namespace SVS {
     void QQmlSettings::setValue(const QString &key, const QVariant &value)
     {
         Q_D(const QQmlSettings);
-        if (!d->category.isEmpty())
-            d->instance()->beginGroup(d->category);
-        d->instance()->setValue(key, value);
-        if (!d->category.isEmpty())
-            d->instance()->beginGroup(d->category);
+        d->instanceSetValue(key, value);
         qCDebug(lcQmlSettings) << "QQmlSettings: setValue" << key << ":" << value;
     }
 
