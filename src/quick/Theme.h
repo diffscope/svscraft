@@ -20,6 +20,7 @@
 #ifndef SVSCRAFT_THEME_H
 #define SVSCRAFT_THEME_H
 
+#include <QJSValue>
 #include <qqmlintegration.h>
 
 #include <SVSCraftQuick/AttachedPropertyPropagator.h>
@@ -82,6 +83,11 @@ namespace SVS {
         Q_PROPERTY(bool doubleClickResetEnabled READ doubleClickResetEnabled WRITE setDoubleClickResetEnabled RESET resetDoubleClickResetEnabled NOTIFY doubleClickResetEnabledChanged)
 
         Q_PROPERTY(double splitterHandleSize READ splitterHandleSize WRITE setSplitterHandleSize RESET resetSplitterHandleSize NOTIFY splitterHandleSizeChanged)
+
+        Q_PROPERTY(QJSValue controlColor READ controlColor NOTIFY controlColorChanged)
+        Q_PROPERTY(QJSValue backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
+        Q_PROPERTY(QJSValue foregroundColor READ foregroundColor NOTIFY foregroundColorChanged)
+        Q_PROPERTY(QJSValue dividerStrokeColor READ dividerStrokeColor NOTIFY dividerStrokeColorChanged)
 
     public:
         ~Theme() override;
@@ -226,11 +232,10 @@ namespace SVS {
         void setSplitterHandleSize(double splitterHandleSize);
         void resetSplitterHandleSize();
 
-        Q_INVOKABLE QColor controlColor(int controlType) const;
-        Q_INVOKABLE QColor backgroundColor(int backgroundLevel) const;
-        Q_INVOKABLE QColor foregroundColor(int foregroundLevel) const;
-        Q_INVOKABLE QColor dividerStrokeColor(int dividerStroke) const;
-        Q_INVOKABLE QColor dividerStrokeColor(int dividerStroke, const QColor &autoColor) const;
+        QJSValue controlColor() const;
+        QJSValue backgroundColor() const;
+        QJSValue foregroundColor() const;
+        QJSValue dividerStrokeColor() const;
 
     signals:
         void fontChanged();
@@ -267,6 +272,11 @@ namespace SVS {
         void toolTipTimeoutChanged();
         void doubleClickResetEnabledChanged();
         void splitterHandleSizeChanged();
+
+        void controlColorChanged();
+        void backgroundColorChanged();
+        void foregroundColorChanged();
+        void dividerStrokeColorChanged();
 
     protected:
         AttachedPropertyPropagatorProperties *properties() const override;

@@ -24,6 +24,7 @@
 
 #include <QQmlEngine>
 #include <QFont>
+#include <QQmlComponent>
 
 #include <SVSCraftQml/private/SVSQmlNamespace_p.h>
 
@@ -31,59 +32,50 @@
 
 namespace SVS {
 
+    static const char themeHelperPropertyName[] = "_svscraft_ThemeHelper";
+
+    static void initializeThemeHelper(QQmlEngine *engine) {
+        QQmlComponent component(engine, "SVSCraft.UIComponents.impl", "ThemeHelper");
+        auto helper = component.create();
+        Q_ASSERT(helper);
+        helper->setParent(engine);
+        engine->setProperty(themeHelperPropertyName, QVariant::fromValue(helper));
+    }
+
+    static QObject *getHelper(QQmlEngine *engine) {
+        if (!engine)
+            return nullptr;
+        if (!engine->property(themeHelperPropertyName).value<QObject *>())
+            initializeThemeHelper(engine);
+        return engine->property(themeHelperPropertyName).value<QObject *>();
+    }
+
     Theme *Theme::qmlAttachedProperties(QObject *object) {
         return new Theme(object);
     }
-    QColor Theme::controlColor(int controlType) const {
-        switch (controlType) {
-            case SVSCraft::CT_Normal:
-                return buttonColor();
-            case SVSCraft::CT_Accent:
-                return accentColor();
-            case SVSCraft::CT_Warning:
-                return warningColor();
-            case SVSCraft::CT_Error:
-                return errorColor();
-        }
-        return {};
+    QJSValue Theme::controlColor() const {
+        auto helper = getHelper(qmlEngine(parent()));
+        QVariant ret;
+        QMetaObject::invokeMethod(helper, "controlColor", qReturnArg(ret), QVariant::fromValue(this));
+        return ret.value<QJSValue>();
     }
-    QColor Theme::backgroundColor(int backgroundLevel) const {
-        switch (backgroundLevel) {
-            case SVSCraft::BL_Primary:
-                return backgroundPrimaryColor();
-            case SVSCraft::BL_Secondary:
-                return backgroundSecondaryColor();
-            case SVSCraft::BL_Tertiary:
-                return backgroundTertiaryColor();
-            case SVSCraft::BL_Quaternary:
-                return backgroundQuaternaryColor();
-        }
-        return {};
+    QJSValue Theme::backgroundColor() const {
+        auto helper = getHelper(qmlEngine(parent()));
+        QVariant ret;
+        QMetaObject::invokeMethod(helper, "backgroundColor", qReturnArg(ret), QVariant::fromValue(this));
+        return ret.value<QJSValue>();
     }
-    QColor Theme::foregroundColor(int foregroundLevel) const {
-        switch (foregroundLevel) {
-            case SVSCraft::FL_Primary:
-                return foregroundPrimaryColor();
-            case SVSCraft::FL_Secondary:
-                return foregroundSecondaryColor();
-        }
-        return {};
+    QJSValue Theme::foregroundColor() const {
+        auto helper = getHelper(qmlEngine(parent()));
+        QVariant ret;
+        QMetaObject::invokeMethod(helper, "foregroundColor", qReturnArg(ret), QVariant::fromValue(this));
+        return ret.value<QJSValue>();
     }
-    QColor Theme::dividerStrokeColor(int dividerStroke) const {
-        return dividerStrokeColor(dividerStroke, Qt::transparent);
-    }
-    QColor Theme::dividerStrokeColor(int dividerStroke, const QColor &autoColor) const {
-        switch (dividerStroke) {
-            case SVSCraft::DS_Auto:
-                return autoColor;
-            case SVSCraft::DS_None:
-                return Qt::transparent;
-            case SVSCraft::DS_Border:
-                return borderColor();
-            case SVSCraft::DS_Splitter:
-                return splitterColor();
-        }
-        return {};
+    QJSValue Theme::dividerStrokeColor() const {
+        auto helper = getHelper(qmlEngine(parent()));
+        QVariant ret;
+        QMetaObject::invokeMethod(helper, "dividerStrokeColor", qReturnArg(ret), QVariant::fromValue(this));
+        return ret.value<QJSValue>();
     }
 
     AttachedPropertyPropagatorProperties *Theme::properties() const {
@@ -92,6 +84,22 @@ namespace SVS {
     Theme::Theme(QObject *parent) : AttachedPropertyPropagator(parent), d(new ThemePrivate(this)) {
         initialize();
         Theme::properties()->inheritAll();
+
+        connect(this, &Theme::buttonColorChanged, this, &Theme::controlColorChanged);
+        connect(this, &Theme::accentColorChanged, this, &Theme::controlColorChanged);
+        connect(this, &Theme::warningColorChanged, this, &Theme::controlColorChanged);
+        connect(this, &Theme::errorColorChanged, this, &Theme::controlColorChanged);
+
+        connect(this, &Theme::backgroundPrimaryColorChanged, this, &Theme::backgroundColorChanged);
+        connect(this, &Theme::backgroundSecondaryColorChanged, this, &Theme::backgroundColorChanged);
+        connect(this, &Theme::backgroundTertiaryColorChanged, this, &Theme::backgroundColorChanged);
+        connect(this, &Theme::backgroundQuaternaryColorChanged, this, &Theme::backgroundColorChanged);
+
+        connect(this, &Theme::foregroundPrimaryColorChanged, this, &Theme::foregroundColorChanged);
+        connect(this, &Theme::foregroundSecondaryColorChanged, this, &Theme::foregroundColorChanged);
+
+        connect(this, &Theme::splitterColorChanged, this, &Theme::dividerStrokeColorChanged);
+        connect(this, &Theme::borderColorChanged, this, &Theme::dividerStrokeColorChanged);
     }
     Theme::Theme(QPrivateSignal) : d(new ThemePrivate(this)) {
         initialize();
