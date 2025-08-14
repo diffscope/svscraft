@@ -61,23 +61,15 @@ T.Dial {
             }
         }
 
-        Rectangle {
+        ButtonRectangle {
+            control: control
+            flat: false
+            checked: false
+            down: control.pressed
             anchors.centerIn: parent
             width: Math.min(parent.width, parent.height)
             height: Math.min(parent.width, parent.height)
-            color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.buttonColor) :
-                   control.pressed ? Theme.foregroundPressedColorChange.apply(Theme.buttonColor) :
-                   control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.buttonColor) :
-                   Theme.buttonColor
-            border.color: control.visualFocus ? Theme.navigationColor : Theme.borderColor
-            border.width: control.visualFocus ? 2 : 1
             radius: width / 2
-            Behavior on color {
-                ColorAnimation {
-                    duration: Theme.colorAnimationDuration
-                    easing.type: Easing.OutCubic
-                }
-            }
         }
 
         Shape {

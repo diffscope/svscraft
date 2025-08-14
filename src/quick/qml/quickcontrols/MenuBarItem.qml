@@ -24,6 +24,7 @@ import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.MenuBarItem {
     id: control
@@ -71,22 +72,17 @@ T.MenuBarItem {
         }
     }
 
-    background: Rectangle {
+    background: ButtonRectangle {
+        control: control
+        flat: true
+        checked: false
+
         implicitWidth: 40
         implicitHeight: 24
         color: !control.enabled ? "transparent" :
                control.down && control.enabled ? Theme.controlPressedColorChange.apply(Theme.accentColor) :
-               control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(Theme.accentColor) :
+               (control.hovered || control.menu?.visible) && control.enabled ? Theme.controlHoveredColorChange.apply(Theme.accentColor) :
                "transparent"
-        border.color: Theme.navigationColor
-        border.width: control.visualFocus ? 2 : 0
         radius: 4
-
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
     }
 }

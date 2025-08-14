@@ -137,6 +137,7 @@ namespace SVS {
     IMPLEMENTATION(navigationColor, navigationColor, setNavigationColor, resetNavigationColor)
     IMPLEMENTATION(shadowColor, shadowColor, setShadowColor, resetShadowColor)
     IMPLEMENTATION(highlightColor, highlightColor, setHighlightColor, resetHighlightColor)
+    IMPLEMENTATION(flatButtonHighContrastBorderColor, flatButtonHighContrastBorderColor, setFlatButtonHighContrastBorderColor, resetFlatButtonHighContrastBorderColor)
 
     IMPLEMENTATION(controlDisabledColorChange, controlDisabledColorChange, setControlDisabledColorChange, resetControlDisabledColorChange)
     IMPLEMENTATION(foregroundDisabledColorChange, foregroundDisabledColorChange, setForegroundDisabledColorChange, resetForegroundDisabledColorChange)
@@ -148,6 +149,8 @@ namespace SVS {
 
     IMPLEMENTATION(annotationPopupTitleColorChange, annotationPopupTitleColorChange, setAnnotationPopupTitleColorChange, resetAnnotationPopupTitleColorChange)
     IMPLEMENTATION(annotationPopupContentColorChange, annotationPopupContentColorChange, setAnnotationPopupContentColorChange, resetAnnotationPopupContentColorChange)
+
+    IMPLEMENTATION(dockingPanelHeaderActiveColorChange, dockingPanelHeaderActiveColorChange, setDockingPanelHeaderActiveColorChange, resetDockingPanelHeaderActiveColorChange)
 
 
     IMPLEMENTATION(colorAnimationDuration, colorAnimationDuration, setColorAnimationDuration, resetColorAnimationDuration)

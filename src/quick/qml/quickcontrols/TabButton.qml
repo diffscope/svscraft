@@ -24,6 +24,7 @@ import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.TabButton {
     id: control
@@ -49,6 +50,8 @@ T.TabButton {
         }
     }
 
+    ThemedItem.controlType: SVS.CT_Accent
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
@@ -71,7 +74,9 @@ T.TabButton {
         }
     }
 
-    background: Rectangle {
+    background: ButtonRectangle {
+        control: control
+        flat: true
         implicitWidth: 64
         implicitHeight: 20
         property color _baseColor: control.checked && control.ThemedItem.tabIndicator === SVS.TI_Fill ? Theme.accentColor : Qt.rgba(Theme.buttonColor.r, Theme.buttonColor.g, Theme.buttonColor.b, 0)
@@ -79,16 +84,7 @@ T.TabButton {
                control.down ? _baseColor.a ? Theme.controlPressedColorChange.apply(_baseColor) : Theme.controlPressedColorChange.apply(Theme.buttonColor) :
                control.hovered? _baseColor.a ? Theme.controlHoveredColorChange.apply(_baseColor) : Theme.controlHoveredColorChange.apply(Theme.buttonColor) :
                _baseColor
-        border.color: Theme.navigationColor
-        border.width: control.visualFocus ? 2 : 0
         radius: 4
-
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
 
         Rectangle {
             visible: control.ThemedItem.tabIndicator !== SVS.TI_Fill

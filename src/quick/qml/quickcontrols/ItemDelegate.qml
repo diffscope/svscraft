@@ -23,6 +23,7 @@ import QtQuick.Controls.impl
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.ItemDelegate {
     id: control
@@ -69,7 +70,9 @@ T.ItemDelegate {
         }
     }
 
-    background: Rectangle {
+    background: ButtonRectangle {
+        control: control
+        flat: true
         implicitWidth: 100
         implicitHeight: 28
         property color _baseColor: control.highlighted ? Theme.accentColor : Theme.buttonColor
@@ -77,14 +80,6 @@ T.ItemDelegate {
                control.down && control.enabled ? Theme.controlPressedColorChange.apply(_baseColor) :
                control.hovered && control.enabled ? Theme.controlHoveredColorChange.apply(_baseColor) :
                    control.highlighted ? Theme.accentColor : control.ThemedItem.flat ? "transparent" : Theme.buttonColor
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
         radius: 4
-        border.width: control.visualFocus ? 2 : 0
-        border.color: Theme.navigationColor
     }
 }

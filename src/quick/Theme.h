@@ -61,6 +61,7 @@ namespace SVS {
         Q_PROPERTY(QColor navigationColor READ navigationColor WRITE setNavigationColor RESET resetNavigationColor NOTIFY navigationColorChanged)
         Q_PROPERTY(QColor shadowColor READ shadowColor WRITE setShadowColor RESET resetShadowColor NOTIFY shadowColorChanged)
         Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor RESET resetHighlightColor NOTIFY highlightColorChanged)
+        Q_PROPERTY(QColor flatButtonHighContrastBorderColor READ flatButtonHighContrastBorderColor WRITE setFlatButtonHighContrastBorderColor RESET resetFlatButtonHighContrastBorderColor NOTIFY flatButtonHighContrastBorderColorChanged)
 
         Q_PROPERTY(ColorChange controlDisabledColorChange READ controlDisabledColorChange WRITE setControlDisabledColorChange RESET resetControlDisabledColorChange NOTIFY controlDisabledColorChangeChanged)
         Q_PROPERTY(ColorChange foregroundDisabledColorChange READ foregroundDisabledColorChange WRITE setForegroundDisabledColorChange RESET resetForegroundDisabledColorChange NOTIFY foregroundDisabledColorChangeChanged)
@@ -73,6 +74,7 @@ namespace SVS {
         Q_PROPERTY(ColorChange annotationPopupTitleColorChange READ annotationPopupTitleColorChange WRITE setAnnotationPopupTitleColorChange RESET resetAnnotationPopupTitleColorChange NOTIFY annotationPopupTitleColorChangeChanged)
         Q_PROPERTY(ColorChange annotationPopupContentColorChange READ annotationPopupContentColorChange WRITE setAnnotationPopupContentColorChange RESET resetAnnotationPopupContentColorChange NOTIFY annotationPopupContentColorChangeChanged)
 
+        Q_PROPERTY(ColorChange dockingPanelHeaderActiveColorChange READ dockingPanelHeaderActiveColorChange WRITE setDockingPanelHeaderActiveColorChange RESET resetDockingPanelHeaderActiveColorChange NOTIFY dockingPanelHeaderActiveColorChangeChanged)
 
         Q_PROPERTY(int colorAnimationDuration READ colorAnimationDuration WRITE setColorAnimationDuration RESET resetColorAnimationDuration NOTIFY colorAnimationDurationChanged)
         Q_PROPERTY(int visualEffectAnimationDuration READ visualEffectAnimationDuration WRITE setVisualEffectAnimationDuration RESET resetVisualEffectAnimationDuration NOTIFY visualEffectAnimationDurationChanged)
@@ -172,6 +174,10 @@ namespace SVS {
         void setHighlightColor(const QColor &highlightColor);
         void resetHighlightColor();
 
+        QColor flatButtonHighContrastBorderColor() const;
+        void setFlatButtonHighContrastBorderColor(const QColor &flatButtonHighContrastBorderColor);
+        void resetFlatButtonHighContrastBorderColor();
+
         ColorChange controlDisabledColorChange() const;
         void setControlDisabledColorChange(const ColorChange &controlDisabledColorChange);
         void resetControlDisabledColorChange();
@@ -207,6 +213,10 @@ namespace SVS {
         ColorChange annotationPopupContentColorChange() const;
         void setAnnotationPopupContentColorChange(const ColorChange &annotationPopupContentColorChange);
         void resetAnnotationPopupContentColorChange();
+
+        ColorChange dockingPanelHeaderActiveColorChange() const;
+        void setDockingPanelHeaderActiveColorChange(const ColorChange &dockingPanelHeaderActiveColorChange);
+        void resetDockingPanelHeaderActiveColorChange();
 
         int colorAnimationDuration() const;
         void setColorAnimationDuration(int colorAnimationDuration);
@@ -257,6 +267,7 @@ namespace SVS {
         void navigationColorChanged();
         void shadowColorChanged();
         void highlightColorChanged();
+        void flatButtonHighContrastBorderColorChanged();
         void controlDisabledColorChangeChanged();
         void foregroundDisabledColorChangeChanged();
         void controlHoveredColorChangeChanged();
@@ -266,6 +277,7 @@ namespace SVS {
         void controlCheckedColorChangeChanged();
         void annotationPopupTitleColorChangeChanged();
         void annotationPopupContentColorChangeChanged();
+        void dockingPanelHeaderActiveColorChangeChanged();
         void colorAnimationDurationChanged();
         void visualEffectAnimationDurationChanged();
         void toolTipDelayChanged();

@@ -23,6 +23,7 @@ import QtQuick.Templates as T
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.MenuItem {
     id: control
@@ -47,6 +48,8 @@ T.MenuItem {
             easing.type: Easing.OutCubic
         }
     }
+
+    ThemedItem.controlType: SVS.CT_Accent
 
     contentItem: IconLabel {
         readonly property real arrowPadding: control.arrow ? control.arrow.width + control.spacing : 0
@@ -128,23 +131,19 @@ T.MenuItem {
 
     }
 
-    background: Rectangle {
+    background: ButtonRectangle {
+        control: control
+        flat: true
+        checked: false
+
         implicitWidth: 200
         implicitHeight: 24
         width: control.width
         height: control.height
         color: !control.enabled ? Theme.buttonColor :
                control.down ? Theme.controlPressedColorChange.apply(Theme.accentColor) :
-               control.hovered ? Theme.controlHoveredColorChange.apply(Theme.accentColor) :
+               control.hovered || control.subMenu?.visible ? Theme.controlHoveredColorChange.apply(Theme.accentColor) :
                Theme.buttonColor
-        border.color: Theme.navigationColor
-        border.width: control.visualFocus ? 2 : 0
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
         radius: 2
     }
 }

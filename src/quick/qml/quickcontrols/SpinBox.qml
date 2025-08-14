@@ -22,6 +22,8 @@ import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Controls.impl
 
+import SVSCraft.UIComponents.impl
+
 T.SpinBox {
     id: control
 
@@ -72,23 +74,19 @@ T.SpinBox {
         inputMethodHints: control.inputMethodHints
     }
 
-    up.indicator: Rectangle {
+    up.indicator: ButtonRectangle {
+        control: control
+        flat: true
+        checked: false
+        visualFocus: false
+        down: control.up.pressed
+        hovered: control.up.hovered
         x: control.mirrored ? 3 : control.width - width - 3
         y: 3
         height: control.height / 2 - 3
         implicitWidth: 24
         implicitHeight: 12
         radius: 1
-        property color _statusColor: control.up.pressed ? Theme.controlPressedColorChange.apply(Theme.buttonColor) :
-                                     control.up.hovered ? Theme.controlHoveredColorChange.apply(Theme.buttonColor) :
-                                     "transparent"
-        color: !enabled ? "transparent" : _statusColor
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
         ColorImage {
             anchors.centerIn: parent
             color: !enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
@@ -103,23 +101,19 @@ T.SpinBox {
         }
     }
 
-    down.indicator: Rectangle {
+    down.indicator: ButtonRectangle {
+        control: control
+        flat: true
+        checked: false
+        visualFocus: false
+        down: control.down.pressed
+        hovered: control.down.hovered
         x: control.mirrored ? 3 : control.width - width - 3
         y: control.height / 2
         height: control.height / 2 - 3
         implicitWidth: 24
         implicitHeight: 12
         radius: 1
-        property color _statusColor: control.down.pressed ? Theme.controlPressedColorChange.apply(Theme.buttonColor) :
-                                     control.down.hovered ? Theme.controlHoveredColorChange.apply(Theme.buttonColor) :
-                                     "transparent"
-        color: !enabled ? "transparent" : _statusColor
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
         ColorImage {
             anchors.centerIn: parent
             color: !enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :

@@ -54,7 +54,7 @@ Pane {
             anchors.top: parent.top
             width: parent.width
             height: 32
-            color: GlobalHelper.dockingPanelHeaderColor(Theme.accentColor, Theme.backgroundPrimaryColor, container.active)
+            color: container.active ? Theme.dockingPanelHeaderActiveColorChange.apply(Theme.backgroundPrimaryColor) : Theme.backgroundPrimaryColor
             Behavior on color {
                 ColorAnimation {
                     duration: Theme.colorAnimationDuration

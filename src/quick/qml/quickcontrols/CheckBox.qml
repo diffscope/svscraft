@@ -24,6 +24,7 @@ import QtQuick.Controls.impl // NOTE: Qt Quick private API
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 T.CheckBox {
     id: control
@@ -44,28 +45,16 @@ T.CheckBox {
         radius: 2
     }
 
-    indicator: Rectangle {
+    indicator: ButtonRectangle {
+        control: control
+        flat: false
+        visualFocus: false
+
         implicitWidth: 16
         implicitHeight: 16
-
         x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
         y: control.topPadding + (control.availableHeight - height) / 2
-
-        property color _baseColor: control.checkState !== Qt.Unchecked ? Theme.accentColor : Theme.buttonColor
-        color: !control.enabled ? Theme.controlDisabledColorChange.apply(_baseColor) :
-               control.down ? Theme.controlPressedColorChange.apply(_baseColor) :
-               control.hovered ? Theme.controlHoveredColorChange.apply(_baseColor) :
-               _baseColor
-        border.width: 1
-        border.color: Theme.borderColor
         radius: 2
-
-        Behavior on color {
-            ColorAnimation {
-                duration: Theme.colorAnimationDuration
-                easing.type: Easing.OutCubic
-            }
-        }
 
         ColorImage {
             x: (parent.width - width) / 2
