@@ -38,6 +38,10 @@ T.CheckBox {
 
     font: Theme.font
 
+    DescriptiveText.statusTip: action?.DescriptiveAction.statusTip ?? ""
+    DescriptiveText.contextHelpTip: action?.DescriptiveAction.contextHelpTip ?? ""
+    DescriptiveText.activated: hovered
+
     background: Rectangle {
         color: "transparent"
         border.width: control.visualFocus ? 2 : 0

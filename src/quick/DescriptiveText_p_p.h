@@ -42,7 +42,7 @@ namespace SVS {
         QQuickItem *item;
         bool activated = false;
         bool bindAccessibleDescription = false;
-        int contextHelpDelay = 0;
+        int contextHelpDelay = 1000;
         QString toolTip;
         QString statusTip;
         QString contextHelpTip;

@@ -17,35 +17,43 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-import QtQml
-import QtQuick
-import QtQuick.Controls
+#include "DescriptiveAction_p.h"
+#include "DescriptiveAction_p_p.h"
 
-import SVSCraft
-import SVSCraft.UIComponents
+namespace SVS {
 
-Action {
-    id: action
-    enum MenuDisplay {
-        Top,
-        Bottom
+    DescriptiveAction *DescriptiveActionAttachedType::qmlAttachedProperties(QObject *object) {
+        return new DescriptiveAction(object);
     }
-    property Menu menu: null
-    property Item parentItem: null
-    property int menuDisplay: MenuAction.Bottom
-    readonly property Action dummyAction: Action {}
-    icon: menu?.icon ?? dummyAction.icon
-    text: menu?.title ?? ""
-    DescriptiveAction.statusTip: menu?.DescriptiveAction.statusTip ?? ""
-    DescriptiveAction.contextHelpTip: menu?.DescriptiveAction.contextHelpTip ?? ""
-    property Binding binding: Binding {
-        when: action.menu.visible
-        action.menu.y: action.menuDisplay === MenuAction.Bottom ? (menu.parent?.height ?? 0) : -menu.height
+
+    DescriptiveAction::DescriptiveAction(QObject *parent)
+        : QObject(parent), d_ptr(new DescriptiveActionPrivate) {
+        Q_D(DescriptiveAction);
+        d->q_ptr = this;
     }
-    onTriggered: (object) => {
-        if (menu) {
-            let target = parentItem ? parentItem : object instanceof Item ? object : null
-            menu.popup(target, 0, 0)
+    DescriptiveAction::~DescriptiveAction() = default;
+
+    QString DescriptiveAction::statusTip() const {
+        Q_D(const DescriptiveAction);
+        return d->statusTip;
+    }
+    void DescriptiveAction::setStatusTip(const QString &value) {
+        Q_D(DescriptiveAction);
+        if (d->statusTip != value) {
+            d->statusTip = value;
+            emit statusTipChanged();
         }
     }
+    QString DescriptiveAction::contextHelpTip() const {
+        Q_D(const DescriptiveAction);
+        return d->contextHelpTip;
+    }
+    void DescriptiveAction::setContextHelpTip(const QString &value) {
+        Q_D(DescriptiveAction);
+        if (d->contextHelpTip != value) {
+            d->contextHelpTip = value;
+            emit contextHelpTipChanged();
+        }
+    }
+
 }

@@ -17,35 +17,43 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-import QtQml
-import QtQuick
-import QtQuick.Controls
+#ifndef SVSCRAFT_DESCRIPTIVEACTION_P_H
+#define SVSCRAFT_DESCRIPTIVEACTION_P_H
 
-import SVSCraft
-import SVSCraft.UIComponents
+#include <QObject>
+#include <qqmlintegration.h>
 
-Action {
-    id: action
-    enum MenuDisplay {
-        Top,
-        Bottom
-    }
-    property Menu menu: null
-    property Item parentItem: null
-    property int menuDisplay: MenuAction.Bottom
-    readonly property Action dummyAction: Action {}
-    icon: menu?.icon ?? dummyAction.icon
-    text: menu?.title ?? ""
-    DescriptiveAction.statusTip: menu?.DescriptiveAction.statusTip ?? ""
-    DescriptiveAction.contextHelpTip: menu?.DescriptiveAction.contextHelpTip ?? ""
-    property Binding binding: Binding {
-        when: action.menu.visible
-        action.menu.y: action.menuDisplay === MenuAction.Bottom ? (menu.parent?.height ?? 0) : -menu.height
-    }
-    onTriggered: (object) => {
-        if (menu) {
-            let target = parentItem ? parentItem : object instanceof Item ? object : null
-            menu.popup(target, 0, 0)
-        }
-    }
+namespace SVS {
+
+    class DescriptiveActionAttachedType;
+    class DescriptiveActionPrivate;
+
+    class DescriptiveAction : public QObject {
+        Q_OBJECT
+        Q_DECLARE_PRIVATE(DescriptiveAction)
+        QML_ANONYMOUS
+
+        Q_PROPERTY(QString statusTip READ statusTip WRITE setStatusTip NOTIFY statusTipChanged)
+        Q_PROPERTY(QString contextHelpTip READ contextHelpTip WRITE setContextHelpTip NOTIFY contextHelpTipChanged)
+    public:
+        ~DescriptiveAction() override;
+
+        QString statusTip() const;
+        void setStatusTip(const QString &value);
+
+        QString contextHelpTip() const;
+        void setContextHelpTip(const QString &value);
+
+    signals:
+        void statusTipChanged();
+        void contextHelpTipChanged();
+
+    private:
+        friend class DescriptiveActionAttachedType;
+        explicit DescriptiveAction(QObject *parent = nullptr);
+        QScopedPointer<DescriptiveActionPrivate> d_ptr;
+    };
+
 }
+
+#endif // SVSCRAFT_DESCRIPTIVEACTION_P_H

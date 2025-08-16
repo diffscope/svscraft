@@ -50,6 +50,10 @@ T.MenuBarItem {
         }
     }
 
+    DescriptiveText.statusTip: menu?.DescriptiveAction.statusTip ?? ""
+    DescriptiveText.contextHelpTip: menu?.DescriptiveAction.contextHelpTip ?? ""
+    DescriptiveText.activated: hovered
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored

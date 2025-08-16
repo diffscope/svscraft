@@ -50,6 +50,10 @@ T.TabButton {
         }
     }
 
+    DescriptiveText.statusTip: action?.DescriptiveAction.statusTip ?? ""
+    DescriptiveText.contextHelpTip: action?.DescriptiveAction.contextHelpTip ?? ""
+    DescriptiveText.activated: hovered
+
     ThemedItem.controlType: SVS.CT_Accent
 
     contentItem: IconLabel {

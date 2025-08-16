@@ -49,6 +49,10 @@ T.ItemDelegate {
         }
     }
 
+    DescriptiveText.statusTip: action?.DescriptiveAction.statusTip ?? ""
+    DescriptiveText.contextHelpTip: action?.DescriptiveAction.contextHelpTip ?? ""
+    DescriptiveText.activated: hovered
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored

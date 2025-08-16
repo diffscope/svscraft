@@ -51,6 +51,10 @@ T.MenuItem {
 
     ThemedItem.controlType: SVS.CT_Accent
 
+    DescriptiveText.statusTip: subMenu?.DescriptiveAction.statusTip ?? action?.DescriptiveAction.statusTip ?? ""
+    DescriptiveText.contextHelpTip: subMenu?.DescriptiveAction.contextHelpTip ?? action?.DescriptiveAction.contextHelpTip ?? ""
+    DescriptiveText.activated: hovered
+
     contentItem: IconLabel {
         readonly property real arrowPadding: control.arrow ? control.arrow.width + control.spacing : 0
         readonly property real indicatorPadding: control.icon.source.toString() && !control.checkable ? 0 : 20

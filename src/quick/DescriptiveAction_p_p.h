@@ -17,35 +17,28 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-import QtQml
-import QtQuick
-import QtQuick.Controls
+#ifndef SVSCRAFT_DESCRIPTIVEACTION_P_P_H
+#define SVSCRAFT_DESCRIPTIVEACTION_P_P_H
 
-import SVSCraft
-import SVSCraft.UIComponents
+#include <SVSCraftQuick/private/DescriptiveAction_p.h>
 
-Action {
-    id: action
-    enum MenuDisplay {
-        Top,
-        Bottom
-    }
-    property Menu menu: null
-    property Item parentItem: null
-    property int menuDisplay: MenuAction.Bottom
-    readonly property Action dummyAction: Action {}
-    icon: menu?.icon ?? dummyAction.icon
-    text: menu?.title ?? ""
-    DescriptiveAction.statusTip: menu?.DescriptiveAction.statusTip ?? ""
-    DescriptiveAction.contextHelpTip: menu?.DescriptiveAction.contextHelpTip ?? ""
-    property Binding binding: Binding {
-        when: action.menu.visible
-        action.menu.y: action.menuDisplay === MenuAction.Bottom ? (menu.parent?.height ?? 0) : -menu.height
-    }
-    onTriggered: (object) => {
-        if (menu) {
-            let target = parentItem ? parentItem : object instanceof Item ? object : null
-            menu.popup(target, 0, 0)
-        }
-    }
+namespace SVS {
+
+    class DescriptiveActionAttachedType : public QObject {
+        Q_OBJECT
+        QML_NAMED_ELEMENT(DescriptiveAction)
+        QML_ATTACHED(DescriptiveAction)
+    public:
+        static DescriptiveAction *qmlAttachedProperties(QObject *object);
+    };
+
+    class DescriptiveActionPrivate {
+        Q_DECLARE_PUBLIC(DescriptiveAction)
+    public:
+        DescriptiveAction *q_ptr;
+        QString statusTip;
+        QString contextHelpTip;
+    };
 }
+
+#endif // SVSCRAFT_DESCRIPTIVEACTION_P_P_H
