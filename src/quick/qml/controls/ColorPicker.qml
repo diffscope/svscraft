@@ -109,31 +109,16 @@ Pane {
                     id: colorPreviewArea
                     Layout.fillWidth: true
                     height: 24
-                    component ColorPreview: Item {
-                        property color color: "white"
-                        readonly property bool hovered: hoverHandler.hovered
-                        Image {
-                            anchors.fill: parent
-                            fillMode: Image.Tile
-                            horizontalAlignment: Image.AlignLeft
-                            verticalAlignment: Image.AlignTop
-                            source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/transparent_tile.svg"
-                        }
-                        Rectangle {
-                            anchors.fill: parent
-                            color: parent.color
-                        }
-                        HoverHandler {
-                            id: hoverHandler
-                        }
-                    }
                     ColorPreview {
                         anchors.left: parent.left
                         width: parent.width / ((colorPicker.flags & SVS.CM_ShowCurrentColor) ? 2 : 1)
                         height: parent.height
                         color: colorPicker.color
-                        DescriptiveText.activated: hovered
+                        DescriptiveText.activated: colorPreviewHoverHandler.hovered
                         DescriptiveText.toolTip: qsTr("New color")
+                        HoverHandler {
+                            id: colorPreviewHoverHandler
+                        }
                     }
                     Button {
                         anchors.right: parent.right
