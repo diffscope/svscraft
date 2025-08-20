@@ -1,6 +1,8 @@
 #ifndef SVSCRAFT_SEMVER_H
 #define SVSCRAFT_SEMVER_H
 
+#include <compare>
+
 #include <QSharedDataPointer>
 #include <QMetaType>
 #include <QStringList>
@@ -44,7 +46,7 @@ namespace SVS {
 
         Q_INVOKABLE QString toString() const;
 
-        auto operator<=>(const Semver &) const;
+        std::partial_ordering operator<=>(const Semver &) const;
         bool operator==(const Semver &) const;
         bool operator!=(const Semver &) const;
 

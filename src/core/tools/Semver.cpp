@@ -1,8 +1,6 @@
 #include "Semver.h"
 #include "Semver_p.h"
 
-#include <compare>
-
 #include <QString>
 #include <QStringList>
 
@@ -99,11 +97,11 @@ namespace SVS {
         return d ? QString::fromStdString(d->semver.to_string()) : QString();
     }
 
-    auto Semver::operator<=>(const Semver &other) const {
+    std::partial_ordering Semver::operator<=>(const Semver &other) const {
         if (!d || !other.d) {
             return std::partial_ordering::unordered;
         }
-        return std::partial_ordering(d->semver <=> other.d->semver);
+        return d->semver <=> other.d->semver;
     }
 
     bool Semver::operator==(const Semver &other) const {
