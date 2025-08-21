@@ -11,3 +11,5 @@ add_subdirectory(WaveformThumbnail)
 add_subdirectory(AnchoredCurve)
 
 add_subdirectory(MessageBoxDialog)
+
+add_subdirectory(DownloadSession)

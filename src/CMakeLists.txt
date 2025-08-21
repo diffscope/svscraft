@@ -132,6 +132,8 @@ add_subdirectory(quick)
 
 add_subdirectory(quickimpl)
 
+add_subdirectory(network)
+
 # ----------------------------------
 # Documentation
 # ----------------------------------
