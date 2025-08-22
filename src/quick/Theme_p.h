@@ -57,7 +57,7 @@ namespace SVS {
             {"navigationColor", QVariant::fromValue(QColor(0xffffff))},
             {"shadowColor", QVariant::fromValue(QColor(0x101113))},
             {"highlightColor", QVariant::fromValue(QColor(0xb28300))},
-            {"flatButtonHighContrastBorderColor", QVariant::fromValue(QColor(0xffaa00))},
+            {"flatButtonHighContrastBorderColor", QVariant::fromValue(QColor(Qt::transparent))},
             {"controlDisabledColorChange", QVariant::fromValue(ColorChange{TopBlendColorFilter{QColor::fromRgba(0x33000000)}})},
             {"foregroundDisabledColorChange", QVariant::fromValue(ColorChange{AlphaColorFilter{0.5}})},
             {"controlHoveredColorChange", QVariant::fromValue(ColorChange{TopBlendColorFilter{QColor::fromRgba(0x1affffff)}})},
