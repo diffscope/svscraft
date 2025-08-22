@@ -72,6 +72,26 @@ Popup {
     onAboutToShow: textField.forceActiveFocus()
 
     signal accepted()
+    signal rejected()
+    signal finished(int index)
+
+    property bool isAccepting: false
+    
+    function accept() {
+        isAccepting = true
+        close();
+    }
+
+    onAboutToHide: () => {
+        if (isAccepting) {
+            accepted()
+            finished(currentIndex)
+            isAccepting = false
+        } else {
+            rejected()
+            finished(-1)
+        }
+    }
 
     ColumnLayout {
         spacing: 4
