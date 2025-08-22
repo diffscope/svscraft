@@ -22,9 +22,12 @@
 #include <QColor>
 #include <QSurfaceFormat>
 #include <QQuickStyle>
+#include <QStandardItemModel>
+#include <qqmlcontext.h>
 
 #include <SVSCraftQuick/Theme.h>
 #include <SVSCraftGui/Eyedropper.h>
+#include <SVSCraftCore/SVSCraftNamespace.h>
 
 
 using namespace SVS;
@@ -39,7 +42,42 @@ int main(int argc, char *argv[]) {
     QQuickStyle::setStyle("SVSCraft.UIComponents");
     QQuickStyle::setFallbackStyle("Basic");
 
+    // Create command palette model
+    auto commandPaletteModel = new QStandardItemModel(&a);
+    
+    // Add test items
+    struct CommandItem {
+        QString title;
+        QString subtitle;
+        QString description;
+        QString keySequence;
+        bool recentlyUsed = false;
+    };
+    
+    QList<CommandItem> commands = {
+        {"Test 1", "test 1", "Description of Test 1", "Ctrl+A", true},
+        {"Test 2", "test 2", "Description of Test 2", "Ctrl+B", false},
+        {"Test 3", "test 3", "Description of Test 3", "", false},
+        {"Test 4", "test 4", "Description of Test 4", "", false},
+        {"Test 5", "test 5", "Description of Test 5", "", false},
+        {"Test 6", "test 6", "Description of Test 6", "", false},
+        {"Test 7", "test 7", "Description of Test 7", "", false},
+        {"Test 8", "", "Description of Test 8", "", false},
+    };
+    
+    for (const auto &cmd : commands) {
+        auto item = new QStandardItem;
+        item->setData(cmd.title, SVSCraft::CP_TitleRole);
+        item->setData(cmd.subtitle, SVSCraft::CP_SubtitleRole);
+        item->setData(cmd.description, SVSCraft::CP_DescriptionRole);
+        item->setData(cmd.keySequence, SVSCraft::CP_KeySequenceRole);
+        item->setData(cmd.recentlyUsed, SVSCraft::CP_RecentlyUsedRole);
+        item->setData(cmd.title + " " + cmd.subtitle, SVSCraft::CP_KeywordRole);
+        commandPaletteModel->appendRow(item);
+    }
+
     QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("commandPaletteModel", commandPaletteModel);
     engine.load(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
 
     return a.exec();

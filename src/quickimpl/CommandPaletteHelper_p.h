@@ -35,7 +35,6 @@ namespace SVS {
         explicit CommandPaletteHelper(QObject *parent = nullptr);
         ~CommandPaletteHelper() override;
 
-        Q_INVOKABLE static QAbstractItemModel *createFilterModel(QAbstractItemModel *model, QObject *popup);
         Q_INVOKABLE static QString highlightString(const QString &s, const QString &t, const QColor &color);
     };
 }

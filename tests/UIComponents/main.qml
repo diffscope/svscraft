@@ -114,27 +114,7 @@ ApplicationWindow {
         placeholderText: "placeholder"
         emptyText: "empty"
         recentlyUsedText: "recently used"
-        model: ListModel {
-            ListElement {
-                title: "Test 1"
-                subtitle: "test 1"
-                description: "Description of Test 1"
-                keySequence: "Ctrl+A"
-                recentlyUsed: true
-            }
-            ListElement {
-                title: "Test 2"
-                subtitle: "test 2"
-                description: "Description of Test 2"
-                keySequence: "Ctrl+B"
-            }
-            ListElement { title: "Test 3"; subtitle: "test 3" }
-            ListElement { title: "Test 4"; subtitle: "test 4" }
-            ListElement { title: "Test 5"; subtitle: "test 5" }
-            ListElement { title: "Test 6"; subtitle: "test 6" }
-            ListElement { title: "Test 7"; subtitle: "test 7" }
-            ListElement { title: "Test 8"; subtitle: "test 8" }
-        }
+        model: commandPaletteModel
         onCurrentIndexChanged: console.log("command palette: currentIndex =", currentIndex)
         onAccepted: console.log("command palette: committed", currentIndex)
     }

@@ -17,35 +17,47 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#include "CommandPaletteHelper_p.h"
+#ifndef SVSCRAFT_COMMANDPALETTEPROXYMODEL_P_H
+#define SVSCRAFT_COMMANDPALETTEPROXYMODEL_P_H
 
-#include <QColor>
+#include <QSortFilterProxyModel>
+#include <qqmlintegration.h>
 
 namespace SVS {
 
-    CommandPaletteHelper::CommandPaletteHelper(QObject *parent) : QObject(parent) {
-    }
-    
-    CommandPaletteHelper::~CommandPaletteHelper() = default;
-    
-    QString CommandPaletteHelper::highlightString(const QString &s, const QString &t, const QColor &c) {
-        if (t.isEmpty()) {
-            return s.toHtmlEscaped();
+    class CommandPaletteProxyModel : public QSortFilterProxyModel {
+        Q_OBJECT
+        QML_NAMED_ELEMENT(CommandPaletteProxyModel)
+        Q_PROPERTY(QString filterText READ filterText WRITE setFilterText NOTIFY filterTextChanged)
+        Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
+    public:
+        explicit CommandPaletteProxyModel(QObject *parent = nullptr);
+        ~CommandPaletteProxyModel() override;
+
+        QString filterText() const;
+        void setFilterText(const QString &filterText);
+
+        QHash<int, QByteArray> roleNames() const override;
+
+        Q_INVOKABLE inline int mapIndexToSource(int i) const {
+            return mapToSource(index(i, 0)).row();
         }
-        QString result;
-        qsizetype pos = 0;
-        auto matchPos = s.indexOf(t, pos, Qt::CaseInsensitive);
-        while (matchPos != -1) {
-            result += s.mid(pos, matchPos - pos).toHtmlEscaped();
-            result += QStringLiteral("<span style='background-color: rgba(%1, %2, %3, %4);'>").arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alphaF());
-            result += s.mid(matchPos, t.length()).toHtmlEscaped();
-            result += QStringLiteral("</span>");
-            pos = matchPos + t.length();
-            matchPos = s.indexOf(t, pos);
+
+        Q_INVOKABLE QVariant data(const QModelIndex &index, int role) const {
+            return QSortFilterProxyModel::data(index, role);
         }
-        result += s.mid(pos).toHtmlEscaped();
-        return result;
-    }
+
+    protected:
+        bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+
+    signals:
+        void filterTextChanged();
+        void countChanged();
+
+    private:
+        QString m_filterText;
+    };
+
 }
 
-#include "moc_CommandPaletteHelper_p.cpp"
+#endif // SVSCRAFT_COMMANDPALETTEPROXYMODEL_P_H

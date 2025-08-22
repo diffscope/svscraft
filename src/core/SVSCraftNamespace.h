@@ -119,6 +119,16 @@ namespace SVS {
             Tip,
         };
         Q_ENUM_NS(MessageBoxIcon)
+
+        enum CommandPaletteRole {
+            CP_TitleRole = Qt::UserRole + 1,
+            CP_SubtitleRole,
+            CP_KeywordRole,
+            CP_DescriptionRole,
+            CP_KeySequenceRole,
+            CP_RecentlyUsedRole,
+        };
+        Q_ENUM_NS(CommandPaletteRole)
     }
 
 }

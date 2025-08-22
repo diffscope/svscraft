@@ -30,28 +30,39 @@ Popup {
     id: popup
 
     property var model: null
-    property string titleRole: "title"
-    property string subtitleRole: "subtitle"
-    property string keywordRole: "keyword"
-    property string descriptionRole: "description"
-    property string keySequenceRole: "keySequence"
-    property string recentlyUsedRole: "recentlyUsed"
     property string placeholderText: ""
     property string emptyText: ""
     property string recentlyUsedText: ""
     property string filterText: ""
     property int currentIndex: 0
+
+    CommandPaletteProxyModel {
+        id: proxyModel
+        sourceModel: popup.model
+    }
+
     Binding {
         popup.filterText: textField.text
-        popup.currentIndex: popup.model ? listView.model.mapToSource(listView.model.index(listView.currentIndex, 0)).row : 0
-        listView.currentIndex: popup.model ? listView.model.mapFromSource(model.index(popup.currentIndex, 0)).row : 0
+        popup.currentIndex: {
+            if (!popup.model || listView.currentIndex < 0) return -1
+            let proxyIndex = proxyModel.index(listView.currentIndex, 0)
+            let sourceIndex = proxyModel.mapToSource(proxyIndex)
+            return sourceIndex.row
+        }
+        listView.currentIndex: {
+            if (!popup.model || popup.currentIndex < 0) return -1
+            let sourceIndex = popup.model.index(popup.currentIndex, 0)
+            let proxyIndex = proxyModel.mapFromSource(sourceIndex)
+            return proxyIndex.row
+        }
     }
     onFilterTextChanged: () => {
-        listView.model.filterText = filterText
-        listView.currentIndex = 0
-        popup.currentIndex = Qt.binding(() => popup.model ? listView.model.mapToSource(listView.model.index(listView.currentIndex, 0)).row : 0)
+        proxyModel.filterText = filterText
         listView.contentY = 0
-        listView.DescriptiveText.statusTip = Qt.binding(() => listView.model.descriptionAt(listView._descriptionIndex))
+        listView.DescriptiveText.statusTip = Qt.binding(() => {
+            let index = proxyModel.index(listView._descriptionIndex, 0)
+            return index.valid ? proxyModel.data(index, SVS.CP_DescriptionRole) || " " : " "
+        })
     }
 
     x: parent ? (parent.width - implicitWidth) / 2 : 0
@@ -85,11 +96,14 @@ Popup {
             Layout.fillHeight: true
             property int _hoveredIndex: -1
             property int _descriptionIndex: _hoveredIndex !== -1 ? _hoveredIndex : currentIndex
-            DescriptiveText.statusTip: model.descriptionAt(_descriptionIndex) || " "
+            DescriptiveText.statusTip: {
+                let index = proxyModel.index(_descriptionIndex, 0)
+                return index.valid ? proxyModel.data(index, SVS.CP_DescriptionRole) || " " : " "
+            }
             DescriptiveText.activated: popup.opened
             ScrollBar.vertical: ScrollBar {}
             clip: true
-            model: CommandPaletteHelper.createFilterModel(popup.model, popup)
+            model: proxyModel
             delegate: ItemDelegate {
                 id: itemDelegate
                 required property var model
@@ -138,7 +152,7 @@ Popup {
                         Text {
                             Layout.fillWidth: true
                             font: popup.font
-                            text: CommandPaletteHelper.highlightString(itemDelegate.model[popup.titleRole], popup.filterText, Theme.highlightColor)
+                            text: CommandPaletteHelper.highlightString(itemDelegate.model.title || "", popup.filterText, Theme.highlightColor)
                             color: itemDelegate._titleColor
                             textFormat: Qt.RichText
                         }
@@ -153,12 +167,12 @@ Popup {
                                 id: shortcutText
                                 anchors.centerIn: parent
                                 font: popup.font
-                                text: itemDelegate.model[popup.keySequenceRole] ?? ""
+                                text: itemDelegate.model.keySequence || ""
                                 color: itemDelegate._titleColor
                             }
                         }
                         Text {
-                            visible: itemDelegate.model[popup.recentlyUsedRole] ?? false
+                            visible: itemDelegate.model.recentlyUsed || false
                             font: popup.font
                             text: popup.recentlyUsedText
                             color: itemDelegate._titleColor
@@ -166,7 +180,8 @@ Popup {
                     }
                     Text {
                         font: popup.font
-                        text: CommandPaletteHelper.highlightString(itemDelegate.model[popup.subtitleRole], popup.filterText, Theme.highlightColor)
+                        visible: text !== ""
+                        text: CommandPaletteHelper.highlightString(itemDelegate.model.subtitle || "", popup.filterText, Theme.highlightColor)
                         color: itemDelegate._subtitleColor
                         textFormat: Qt.RichText
                     }
