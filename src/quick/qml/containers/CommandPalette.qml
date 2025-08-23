@@ -106,8 +106,7 @@ Popup {
             Keys.onReturnPressed: () => {
                 if (popup.currentIndex === -1)
                     return
-                popup.accepted()
-                popup.close()
+                popup.accept()
             }
         }
         ListView {
@@ -142,8 +141,7 @@ Popup {
                         listView.currentIndex = index
                 }
                 onClicked: () => {
-                    popup.accepted()
-                    popup.close()
+                    popup.accept()
                 }
                 property color _titleColor: itemDelegate.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundPrimaryColor) :
                                             itemDelegate.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundPrimaryColor) :
@@ -176,19 +174,23 @@ Popup {
                             color: itemDelegate._titleColor
                             textFormat: Qt.RichText
                         }
-                        Rectangle {
-                            width: shortcutText.width + 2 * 4
-                            height: shortcutText.height + 2 * 2
-                            color: Theme.buttonColor
-                            border.color: Theme.borderColor
-                            radius: 2
-                            visible: shortcutText.text.length !== 0
-                            Text {
-                                id: shortcutText
-                                anchors.centerIn: parent
-                                font: popup.font
-                                text: itemDelegate.model.keySequence || ""
-                                color: itemDelegate._titleColor
+                        Repeater {
+                            model: typeof(itemDelegate.model.keySequence) === 'string' ? [itemDelegate.model.keySequence] : itemDelegate.model.keySequence
+                            Rectangle {
+                                required property string modelData
+                                width: shortcutText.width + 2 * 4
+                                height: shortcutText.height + 2 * 2
+                                color: Theme.buttonColor
+                                border.color: Theme.borderColor
+                                radius: 2
+                                visible: shortcutText.text.length !== 0
+                                Text {
+                                    id: shortcutText
+                                    anchors.centerIn: parent
+                                    font: popup.font
+                                    text: modelData
+                                    color: itemDelegate._titleColor
+                                }
                             }
                         }
                         Text {
