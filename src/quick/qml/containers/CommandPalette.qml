@@ -41,6 +41,16 @@ Popup {
         sourceModel: popup.model
     }
 
+    onCurrentIndexChanged: () => {
+        if (!popup.model || popup.currentIndex < 0) {
+            listView.currentIndex = 0
+            return
+        }
+        let sourceIndex = popup.model.index(popup.currentIndex, 0)
+        let proxyIndex = proxyModel.mapFromSource(sourceIndex)
+        listView.currentIndex = proxyIndex.row
+    }
+
     Binding {
         popup.filterText: textField.text
         popup.currentIndex: {
@@ -50,7 +60,7 @@ Popup {
             return sourceIndex.row
         }
         listView.currentIndex: {
-            if (!popup.model || popup.currentIndex < 0) return -1
+            if (!popup.model || popup.currentIndex < 0) return 0
             let sourceIndex = popup.model.index(popup.currentIndex, 0)
             let proxyIndex = proxyModel.mapFromSource(sourceIndex)
             return proxyIndex.row
