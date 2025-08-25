@@ -50,7 +50,8 @@ namespace SVS {
             {SVSCraft::CP_KeywordRole, "keyword"},
             {SVSCraft::CP_DescriptionRole, "description"},
             {SVSCraft::CP_KeySequenceRole, "keySequence"},
-            {SVSCraft::CP_RecentlyUsedRole, "recentlyUsed"},
+            {SVSCraft::CP_TagRole, "tag"},
+            {SVSCraft::CP_IsSeparatorRole, "isSeparator"},
         };
         return roles;
     }

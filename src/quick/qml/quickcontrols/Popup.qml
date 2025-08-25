@@ -36,6 +36,8 @@ T.Popup {
     font: Theme.font
 
     background: Item {
+        id: backgroundItem
+        property Item shadowItem: null
         Rectangle {
             id: backgroundArea
             anchors.fill: parent
@@ -43,12 +45,28 @@ T.Popup {
             border.color: Theme.borderColor
             radius: 4
         }
-        MultiEffect {
-            source: backgroundArea
-            anchors.fill: parent
-            shadowEnabled: true
-            shadowColor: Theme.shadowColor
+        Component {
+            id: shadowComponent
+            MultiEffect {
+                source: backgroundArea
+                anchors.fill: parent
+                shadowEnabled: true
+                shadowColor: Theme.shadowColor
+            }
         }
+        // FIXME
+        Connections {
+            target: control
+            function onAboutToShow() {
+                backgroundItem.shadowItem = shadowComponent.createObject(backgroundItem)
+            }
+            function onClosed() {
+                if (backgroundItem.shadowItem) {
+                    backgroundItem.shadowItem.destroy()
+                }
+            }
+        }
+
     }
 
     T.Overlay.modal: Rectangle {

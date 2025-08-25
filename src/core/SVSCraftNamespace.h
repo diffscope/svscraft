@@ -126,7 +126,8 @@ namespace SVS {
             CP_KeywordRole,
             CP_DescriptionRole,
             CP_KeySequenceRole,
-            CP_RecentlyUsedRole,
+            CP_TagRole,
+            CP_IsSeparatorRole,
         };
         Q_ENUM_NS(CommandPaletteRole)
     }

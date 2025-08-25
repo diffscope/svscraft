@@ -113,7 +113,6 @@ ApplicationWindow {
         id: commandPalette
         placeholderText: "placeholder"
         emptyText: "empty"
-        recentlyUsedText: "recently used"
         model: commandPaletteModel
         onCurrentIndexChanged: console.log("command palette: currentIndex =", currentIndex)
         onAccepted: console.log("command palette: committed", currentIndex)
