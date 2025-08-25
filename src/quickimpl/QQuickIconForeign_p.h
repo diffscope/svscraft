@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #ifndef SVSCRAFT_QQUICKICONFOREIGN_P_H
-#define SVSCRAFR_QQUICKICONFOREIGN_P_H
+#define SVSCRAFT_QQUICKICONFOREIGN_P_H
 
 #include <QtQuickTemplates2/private/qquickicon_p.h>
 #include <QMetaType>

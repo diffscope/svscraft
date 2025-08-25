@@ -41,7 +41,12 @@ ToolTip {
         }
         Text {
             visible: control.shortcut.length !== 0
-            text: control.shortcut
+            Shortcut {
+                id: keySequenceShortcutHelper
+                enabled: false
+                sequence: control.shortcut
+            }
+            text: keySequenceShortcutHelper.nativeText
             font: control.font
             color: Theme.foregroundSecondaryColor
         }

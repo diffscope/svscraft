@@ -108,10 +108,24 @@ T.MenuItem {
 
         Text {
             id: keySequenceItem
-            text: control.action?.shortcut ?? ""
+            Shortcut {
+                id: keySequenceShortcutHelper
+                enabled: false
+                sequence: control.action?.shortcut ?? ""
+            }
+            text: keySequenceShortcutHelper.nativeText
             visible: !control.subMenu
             font: control.font
-            color: arrowItem.color
+            color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundSecondaryColor) :
+                   control.down ? Theme.foregroundPressedColorChange.apply(Theme.foregroundSecondaryColor) :
+                   control.hovered ? Theme.foregroundHoveredColorChange.apply(Theme.foregroundSecondaryColor) :
+                   Theme.foregroundSecondaryColor
+            Behavior on color {
+                ColorAnimation {
+                    duration: Theme.colorAnimationDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
 
         ColorImage {

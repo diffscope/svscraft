@@ -31,8 +31,8 @@ namespace SVS {
 #elif defined(Q_OS_MAC)
             if (info.isDir()) {
                 QString dirname = filename;
-                if (!dirname.endsWith(Slash)) {
-                    dirname.append(Slash);
+                if (!dirname.endsWith("/")) {
+                    dirname.append("/");
                 }
                 if (QProcess::startDetached("bash", {"-c", "open \'" + dirname + "\'"})) {
                     return true;
