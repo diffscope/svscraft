@@ -54,7 +54,7 @@ Popup {
     Binding {
         popup.filterText: textField.text
         popup.currentIndex: {
-            if (!popup.model || listView.currentIndex < 0) return -1
+            if (!popup.model || !listView.currentItem || listView.currentIndex < 0) return -1
             let proxyIndex = proxyModel.index(listView.currentIndex, 0)
             let sourceIndex = proxyModel.mapToSource(proxyIndex)
             return sourceIndex.row
@@ -189,7 +189,7 @@ Popup {
                 Text {
                     visible: text !== ""
                     font: popup.font
-                    text: itemDelegate.model.tag
+                    text: itemDelegate.model.tag ?? ""
                     color: itemDelegate._tagColor
                 }
             }

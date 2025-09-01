@@ -200,6 +200,9 @@ namespace SVS {
     QWindow *GlobalHelper::focusWindow() {
         return QGuiApplication::focusWindow();
     }
+    void GlobalHelper::beep() {
+        QGuiApplicationPrivate::platformIntegration()->beep();
+    }
 }
 
 #include "GlobalHelper.moc"

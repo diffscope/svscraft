@@ -90,7 +90,7 @@ T.TextField {
         border.width: control.activeFocus ? 2 : 1
         color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.textFieldColor) :
                Theme.textFieldColor
-        border.color: control.activeFocus ? Theme.accentColor : Theme.borderColor
+        border.color: control.activeFocus ? control.ThemedItem.controlType === SVS.CT_Normal ? Theme.accentColor : Theme.controlColor(control.ThemedItem.controlType) : Theme.borderColor
         radius: 4
         Behavior on color {
             ColorAnimation {

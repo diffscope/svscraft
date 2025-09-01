@@ -58,6 +58,9 @@ T.Popup {
         Connections {
             target: control
             function onAboutToShow() {
+                if (backgroundItem.shadowItem) {
+                    backgroundItem.shadowItem.destroy()
+                }
                 backgroundItem.shadowItem = shadowComponent.createObject(backgroundItem)
             }
             function onClosed() {

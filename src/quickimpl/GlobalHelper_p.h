@@ -62,6 +62,7 @@ namespace SVS {
         Q_INVOKABLE static QQuickIcon defaultIcon();
         Q_INVOKABLE static QColor dockingPanelHeaderColor(const QColor &accentColor, const QColor &backgroundColor, bool active);
         Q_INVOKABLE static QWindow *focusWindow();
+        Q_INVOKABLE static void beep();
     };
 }
 
