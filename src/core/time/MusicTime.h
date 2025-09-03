@@ -23,6 +23,7 @@
 #include <QSharedPointer>
 
 #include <SVSCraftCore/SVSCraftCoreGlobal.h>
+#include <SVSCraftCore/LongTime.h>
 
 namespace SVS {
 
@@ -94,8 +95,21 @@ namespace SVS {
         int beat() const;
         int tick() const;
 
-        inline MusicTime toTime() const {
+
+        inline MusicTime toMusicTime() const {
             return {measure(), beat(), tick()};
+        }
+
+        [[deprecated]] inline MusicTime toTime() const {
+            return toMusicTime();
+        }
+
+        inline LongTime toLongTime() const {
+            return LongTime(static_cast<int>(millisecond()));
+        }
+
+        inline operator MusicTime() const {
+            return toMusicTime();
         }
 
         double millisecond() const;
@@ -114,6 +128,17 @@ namespace SVS {
         PersistentMusicTime operator-(int t) const;
         PersistentMusicTime &operator+=(int t);
         PersistentMusicTime &operator-=(int t);
+
+        PersistentMusicTime floorMeasure() const;
+        PersistentMusicTime ceilMeasure() const;
+        PersistentMusicTime roundMeasure() const;
+        PersistentMusicTime floorBeat() const;
+        PersistentMusicTime ceilBeat() const;
+        PersistentMusicTime roundBeat() const;
+        PersistentMusicTime previousMeasure() const;
+        PersistentMusicTime nextMeasure() const;
+        PersistentMusicTime previousBeat() const;
+        PersistentMusicTime nextBeat() const;
 
         Q_INVOKABLE inline QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const {
             return toTime().toString(measureWidth, beatWidth, tickWidth);

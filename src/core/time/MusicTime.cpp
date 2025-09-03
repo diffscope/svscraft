@@ -174,6 +174,103 @@ namespace SVS {
     PersistentMusicTime &PersistentMusicTime::operator-=(int t) {
         return (*this = *this - t);
     }
+    PersistentMusicTime PersistentMusicTime::floorMeasure() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.beat == 0 && d->cache.tick == 0) {
+            return *this;
+        }
+        return d->timeline->create(d->cache.measure, 0, 0);
+    }
+    PersistentMusicTime PersistentMusicTime::ceilMeasure() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.beat == 0 && d->cache.tick == 0) {
+            return *this;
+        }
+        return d->timeline->create(d->cache.measure + 1, 0, 0);
+    }
+    PersistentMusicTime PersistentMusicTime::roundMeasure() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.beat == 0 && d->cache.tick == 0) {
+            return *this;
+        }
+        auto timeSignature = d->timeline->timeSignatureAt(d->cache.measure);
+        double b = d->cache.beat + (d->cache.tick * timeSignature.denominator() / 4.0) / d->timeline->ticksPerQuarterNote();
+        if (b < 0.5 * timeSignature.numerator()) {
+            return d->timeline->create(d->cache.measure, 0, 0);
+        } else {
+            return d->timeline->create(d->cache.measure + 1, 0, 0);
+        }
+    }
+    PersistentMusicTime PersistentMusicTime::floorBeat() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.tick == 0) {
+            return *this;
+        }
+        return d->timeline->create(d->cache.measure, d->cache.beat, 0);
+    }
+    PersistentMusicTime PersistentMusicTime::ceilBeat() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.tick == 0) {
+            return *this;
+        }
+        return d->timeline->create(d->cache.measure, d->cache.beat + 1, 0);
+    }
+    PersistentMusicTime PersistentMusicTime::roundBeat() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.tick == 0) {
+            return *this;
+        }
+        auto timeSignature = d->timeline->timeSignatureAt(d->cache.measure);
+        if (d->cache.tick < 0.5 * d->timeline->ticksPerQuarterNote() * 4 / timeSignature.denominator()) {
+            return d->timeline->create(d->cache.measure, d->cache.beat, 0);
+        } else {
+            return d->timeline->create(d->cache.measure, d->cache.beat + 1, 0);
+        }
+    }
+    PersistentMusicTime PersistentMusicTime::previousMeasure() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.beat == 0 && d->cache.tick == 0) {
+            return d->timeline->create(d->cache.measure - 1, 0, 0);
+        } else {
+            return d->timeline->create(d->cache.measure, 0, 0);
+        }
+    }
+    PersistentMusicTime PersistentMusicTime::nextMeasure() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        return d->timeline->create(d->cache.measure + 1, 0, 0);
+    }
+    PersistentMusicTime PersistentMusicTime::previousBeat() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        if (d->cache.tick == 0) {
+            return d->timeline->create(d->cache.measure, d->cache.beat - 1, 0);
+        } else {
+            return d->timeline->create(d->cache.measure, d->cache.beat, 0);
+        }
+    }
+    PersistentMusicTime PersistentMusicTime::nextBeat() const {
+        if (!d)
+            return {};
+        d->ensureMbtCached();
+        return d->timeline->create(d->cache.measure, d->cache.beat + 1, 0);
+    }
 
     QDebug operator<<(QDebug debug, const PersistentMusicTime &mt) {
         QDebugStateSaver saver(debug);
