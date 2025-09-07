@@ -167,6 +167,12 @@ Popup {
                     color: itemDelegate._titleColor
                     textFormat: Qt.RichText
                 }
+                Text {
+                    visible: text !== ""
+                    font: popup.font
+                    text: itemDelegate.model.tag ?? ""
+                    color: itemDelegate._tagColor
+                }
                 Repeater {
                     model: typeof(itemDelegate.model.keySequence) === 'string' ? [itemDelegate.model.keySequence] : itemDelegate.model.keySequence
                     Rectangle {
@@ -185,12 +191,6 @@ Popup {
                             color: itemDelegate._titleColor
                         }
                     }
-                }
-                Text {
-                    visible: text !== ""
-                    font: popup.font
-                    text: itemDelegate.model.tag ?? ""
-                    color: itemDelegate._tagColor
                 }
             }
             Text {

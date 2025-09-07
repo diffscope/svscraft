@@ -33,6 +33,8 @@ T.MenuBarItem {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
 
     padding: 4
+    leftPadding: 8
+    rightPadding: 8
     spacing: 4
 
     font: Theme.font
@@ -81,7 +83,7 @@ T.MenuBarItem {
         flat: true
         checked: false
 
-        implicitWidth: 40
+        implicitWidth: 24
         implicitHeight: 24
         color: !control.enabled ? "transparent" :
                control.down && control.enabled ? Theme.controlPressedColorChange.apply(Theme.accentColor) :
