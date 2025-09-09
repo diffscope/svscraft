@@ -39,12 +39,14 @@ T.Container {
         addItem(toolButtonComponent.createObject(this, { action }))
     }
     function addMenu(menu) {
+        menu.parent = this
         addAction(menuActionComponent.createObject(this, { menu }))
     }
     function insertAction(index, action) {
         insertItem(index, toolButtonComponent.createObject(this, { action }))
     }
     function insertMenu(index, menu) {
+        menu.parent = this
         insertAction(index, menuActionComponent.createObject(this, { menu }))
     }
     function removeAction(action) {

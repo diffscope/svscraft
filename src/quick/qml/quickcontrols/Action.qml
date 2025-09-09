@@ -8,5 +8,5 @@ import SVSCraft.UIComponents
 T.Action {
     icon.width: 16
     icon.height: 16
-    icon.color: !enabled ? Theme.controlDisabledColorChange.apply(Theme.foregroundPrimaryColor) : Theme.foregroundPrimaryColor
+    icon.color: !enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) : Theme.foregroundPrimaryColor
 }
