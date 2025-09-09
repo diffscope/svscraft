@@ -24,7 +24,7 @@
 
 #include <QPointer>
 
-#include <SVSCraftQuickImpl/private/StatusText_p.h>
+#include <SVSCraftQuick/StatusTextContext.h>
 
 namespace SVS {
     class DescriptiveTextAttachedType : public QObject {
@@ -42,12 +42,12 @@ namespace SVS {
         QQuickItem *item;
         bool activated = false;
         bool bindAccessibleDescription = false;
-        int contextHelpDelay = 1000;
         QString toolTip;
         QString statusTip;
         QString contextHelpTip;
 
-        QPointer<StatusText> statusText;
+        QPointer<StatusTextContext> statusContext;
+        QPointer<StatusTextContext> contextHelpContext;
     };
 }
 

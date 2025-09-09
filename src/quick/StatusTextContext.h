@@ -17,49 +17,50 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_STATUSTEXT_P_H
-#define SVSCRAFT_STATUSTEXT_P_H
+#ifndef SVSCRAFT_STATUSTEXTCONTEXT_H
+#define SVSCRAFT_STATUSTEXTCONTEXT_H
 
 #include <QObject>
 #include <qqmlintegration.h>
 
-#include <SVSCraftQuickImpl/SVSCraftQuickImplGlobal.h>
+#include <SVSCraftQuick/SVSCraftQuickGlobal.h>
+
+class QQuickWindow;
 
 namespace SVS {
 
-    class StatusTextAttachedType;
+    class StatusTextContextPrivate;
 
-    class StatusTextPrivate;
-
-    class SVSCRAFT_QUICK_IMPL_EXPORT StatusText : public QObject {
+    class SVSCRAFT_QUICK_EXPORT StatusTextContext : public QObject {
         Q_OBJECT
-        Q_DECLARE_PRIVATE(StatusText)
-        QML_ANONYMOUS
+        QML_ELEMENT
+        Q_DECLARE_PRIVATE(StatusTextContext)
+
+        Q_PROPERTY(QString text READ text NOTIFY textChanged)
 
     public:
-        ~StatusText() override;
+        explicit StatusTextContext(QObject *parent = nullptr);
+        ~StatusTextContext() override;
 
-        void pushStatusText(QObject *contextObject, const QString &text);
-        void popStatusText(QObject *contextObject);
+        QString text() const;
 
-        void pushContextHelpText(QObject *contextObject, const QString &text, int delay);
-        void popContextHelpText(QObject *contextObject, int delay);
+        Q_INVOKABLE void push(QObject *contextObject, const QString &text);
+        Q_INVOKABLE void update(QObject *contextObject, const QString &text);
+        Q_INVOKABLE void pop(QObject *contextObject);
 
-        QString statusText() const;
-        QString contextHelpText() const;
+        static void setStatusContext(QQuickWindow *window, StatusTextContext *context);
+        static StatusTextContext *statusContext(QQuickWindow *window);
 
-    signals:
-        void statusTextChanged();
-        void contextHelpTextChanged();
+        static void setContextHelpContext(QQuickWindow *window, StatusTextContext *context);
+        static StatusTextContext *contextHelpContext(QQuickWindow *window);
+
+    Q_SIGNALS:
+        void textChanged();
 
     private:
-        friend class StatusTextAttachedType;
-        explicit StatusText(QObject *parent = nullptr);
-
-        QScopedPointer<StatusTextPrivate> d_ptr;
-
+        QScopedPointer<StatusTextContextPrivate> d_ptr;
     };
 
 }
 
-#endif // SVSCRAFT_STATUSTEXT_P_H
+#endif // SVSCRAFT_STATUSTEXTCONTEXT_H

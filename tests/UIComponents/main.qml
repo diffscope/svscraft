@@ -104,7 +104,7 @@ ApplicationWindow {
             anchors.fill: parent
             spacing: 4
             Label {
-                text: DescriptiveText.statusText
+                text: StatusTextContext.statusContext.text
             }
         }
     }

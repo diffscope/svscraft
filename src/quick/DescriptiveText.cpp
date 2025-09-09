@@ -25,7 +25,7 @@
 #include <QQmlEngine>
 #include <QQmlInfo>
 
-#include <SVSCraftQuickImpl/private/StatusText_p_p.h>
+#include <SVSCraftQuick/StatusTextContext.h>
 
 namespace SVS {
 
@@ -53,57 +53,97 @@ namespace SVS {
         Q_D(DescriptiveText);
         d->q_ptr = this;
         d->item = parent;
-        connect(parent, &QQuickItem::windowChanged, this, [=] {
-            if (d->statusText) {
-                d->statusText->popStatusText(this);
-                d->statusText->popContextHelpText(this, d->contextHelpDelay);
-                disconnect(d->statusText, nullptr, this, nullptr);
-            }
-            d->statusText = nullptr;
-            auto *window = parent->window();
-            if (window) {
-                d->statusText = qobject_cast<StatusText *>(qmlAttachedPropertiesObject<StatusTextAttachedType>(parent->window()));
-                connect(d->statusText, &StatusText::statusTextChanged, this, &DescriptiveText::statusTextChanged);
-                connect(d->statusText, &StatusText::contextHelpTextChanged, this, &DescriptiveText::contextHelpTextChanged);
-            }
-            emit statusTextChanged();
-        });
-        d->statusText = qobject_cast<StatusText *>(qmlAttachedPropertiesObject<StatusTextAttachedType>(parent->window()));
-        if (d->statusText) {
-            connect(d->statusText, &StatusText::statusTextChanged, this, &DescriptiveText::statusTextChanged);
-            connect(d->statusText, &StatusText::contextHelpTextChanged, this, &DescriptiveText::contextHelpTextChanged);
+
+        // Initialize status contexts from the current window
+        if (parent && parent->window()) {
+            d->statusContext = StatusTextContext::statusContext(parent->window());
+            d->contextHelpContext = StatusTextContext::contextHelpContext(parent->window());
         }
-        connect(this, &DescriptiveText::activatedChanged, [=] {
-            if (!d->statusText)
-                return;
+
+        // Connect statusTipChanged signal
+        connect(this, &DescriptiveText::statusTipChanged, this, [this]() {
+            Q_D(DescriptiveText);
+            if (d->activated && !d->statusTip.isEmpty() && d->statusContext) {
+                d->statusContext->update(this, d->statusTip);
+            }
+        });
+
+        // Connect contextHelpTipChanged signal
+        connect(this, &DescriptiveText::contextHelpTipChanged, this, [this]() {
+            Q_D(DescriptiveText);
+            if (d->activated && !d->contextHelpTip.isEmpty() && d->contextHelpContext) {
+                d->contextHelpContext->update(this, d->contextHelpTip);
+            }
+        });
+
+        // Connect activatedChanged signal
+        connect(this, &DescriptiveText::activatedChanged, this, [this]() {
+            Q_D(DescriptiveText);
             if (d->activated) {
-                d->statusText->pushStatusText(this, d->statusTip);
-                d->statusText->pushContextHelpText(this, d->contextHelpTip, d->contextHelpDelay);
+                // Push status tip if not empty
+                if (!d->statusTip.isEmpty() && d->statusContext) {
+                    d->statusContext->push(this, d->statusTip);
+                }
+                // Push context help tip if not empty
+                if (!d->contextHelpTip.isEmpty() && d->contextHelpContext) {
+                    d->contextHelpContext->push(this, d->contextHelpTip);
+                }
             } else {
-                d->statusText->popStatusText(this);
-                d->statusText->popContextHelpText(this, d->contextHelpDelay);
+                // Pop from both contexts
+                if (d->statusContext) {
+                    d->statusContext->pop(this);
+                }
+                if (d->contextHelpContext) {
+                    d->contextHelpContext->pop(this);
+                }
             }
         });
-        connect(this, &DescriptiveText::statusTipChanged, [=] {
-            if (!d->statusText)
-                return;
+
+        // Connect to item's windowChanged signal
+        connect(parent, &QQuickItem::windowChanged, this, [this](QQuickWindow *window) {
+            Q_D(DescriptiveText);
+            
+            // Store old contexts
+            StatusTextContext *oldStatusContext = d->statusContext;
+            StatusTextContext *oldContextHelpContext = d->contextHelpContext;
+            
+            // Get new contexts from the new window
+            StatusTextContext *newStatusContext = window ? StatusTextContext::statusContext(window) : nullptr;
+            StatusTextContext *newContextHelpContext = window ? StatusTextContext::contextHelpContext(window) : nullptr;
+            
+            // Update contexts
+            d->statusContext = newStatusContext;
+            d->contextHelpContext = newContextHelpContext;
+            
+            // If activated and contexts changed, update registrations
             if (d->activated) {
-                d->statusText->pushStatusText(this, d->statusTip);
+                // Pop from old contexts if they exist and are different
+                if (oldStatusContext && oldStatusContext != newStatusContext) {
+                    oldStatusContext->pop(this);
+                }
+                if (oldContextHelpContext && oldContextHelpContext != newContextHelpContext) {
+                    oldContextHelpContext->pop(this);
+                }
+                
+                // Push to new contexts if they exist and tips are not empty
+                if (newStatusContext && !d->statusTip.isEmpty()) {
+                    newStatusContext->push(this, d->statusTip);
+                }
+                if (newContextHelpContext && !d->contextHelpTip.isEmpty()) {
+                    newContextHelpContext->push(this, d->contextHelpTip);
+                }
             }
         });
-        connect(this, &DescriptiveText::contextHelpTipChanged, [=] {
-            if (!d->statusText)
-                return;
-            if (d->activated) {
-                d->statusText->pushContextHelpText(this, d->contextHelpTip, d->contextHelpDelay);
-            }
-        });
+
     }
     DescriptiveText::~DescriptiveText() {
         Q_D(DescriptiveText);
-        if (d->statusText) {
-            d->statusText->popStatusText(this);
-            d->statusText->popContextHelpText(this, d->contextHelpDelay);
+        // Clean up status contexts when object is destroyed
+        if (d->statusContext) {
+            d->statusContext->pop(this);
+        }
+        if (d->contextHelpContext) {
+            d->contextHelpContext->pop(this);
         }
     }
 
@@ -152,17 +192,6 @@ namespace SVS {
             emit contextHelpTipChanged();
         }
     }
-    int DescriptiveText::contextHelpDelay() const {
-        Q_D(const DescriptiveText);
-        return d->contextHelpDelay;
-    }
-    void DescriptiveText::setContextHelpDelay(int contextHelpDelay) {
-        Q_D(DescriptiveText);
-        if (d->contextHelpDelay != contextHelpDelay) {
-            d->contextHelpDelay = contextHelpDelay;
-            emit contextHelpDelayChanged();
-        }
-    }
     bool DescriptiveText::bindAccessibleDescription() const {
         Q_D(const DescriptiveText);
         return d->bindAccessibleDescription;
@@ -173,14 +202,6 @@ namespace SVS {
             d->bindAccessibleDescription = bindAccessibleDescription;
             emit bindAccessibleDescriptionChanged();
         }
-    }
-    QString DescriptiveText::statusText() const {
-        Q_D(const DescriptiveText);
-        return d->statusText ? d->statusText->statusText() : QString();
-    }
-    QString DescriptiveText::contextHelpText() const {
-        Q_D(const DescriptiveText);
-        return d->statusText ? d->statusText->contextHelpText() : QString();
     }
 
 }
