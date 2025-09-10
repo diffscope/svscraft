@@ -36,6 +36,7 @@ namespace SVS {
     void StatusTextContextPrivate::updateTextProperty() {
         Q_Q(StatusTextContext);
         emit q->textChanged();
+        emit q->contextObjectChanged();
     }
 
     StatusTextContext::StatusTextContext(QObject *parent) 
@@ -52,6 +53,14 @@ namespace SVS {
             return QString();
         }
         return d->contextList.last().second;
+    }
+
+    QObject *StatusTextContext::contextObject() const {
+        Q_D(const StatusTextContext);
+        if (d->contextList.isEmpty()) {
+            return nullptr;
+        }
+        return d->contextList.last().first;
     }
 
     void StatusTextContext::push(QObject *contextObject, const QString &text) {

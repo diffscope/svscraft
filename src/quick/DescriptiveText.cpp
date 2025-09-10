@@ -60,25 +60,38 @@ namespace SVS {
             d->contextHelpContext = StatusTextContext::contextHelpContext(parent->window());
         }
 
+        auto initialUpdateContext = [=] {
+            if (!d->statusContext) {
+                if (parent->window()) {
+                    d->statusContext = StatusTextContext::statusContext(parent->window());
+                }
+            }
+            if (!d->contextHelpContext) {
+                if (parent->window()) {
+                    d->contextHelpContext = StatusTextContext::contextHelpContext(parent->window());
+                }
+            }
+        };
+
         // Connect statusTipChanged signal
-        connect(this, &DescriptiveText::statusTipChanged, this, [this]() {
-            Q_D(DescriptiveText);
+        connect(this, &DescriptiveText::statusTipChanged, this, [=]() {
+            initialUpdateContext();
             if (d->activated && !d->statusTip.isEmpty() && d->statusContext) {
                 d->statusContext->update(this, d->statusTip);
             }
         });
 
         // Connect contextHelpTipChanged signal
-        connect(this, &DescriptiveText::contextHelpTipChanged, this, [this]() {
-            Q_D(DescriptiveText);
+        connect(this, &DescriptiveText::contextHelpTipChanged, this, [=]() {
+            initialUpdateContext();
             if (d->activated && !d->contextHelpTip.isEmpty() && d->contextHelpContext) {
                 d->contextHelpContext->update(this, d->contextHelpTip);
             }
         });
 
         // Connect activatedChanged signal
-        connect(this, &DescriptiveText::activatedChanged, this, [this]() {
-            Q_D(DescriptiveText);
+        connect(this, &DescriptiveText::activatedChanged, this, [=]() {
+            initialUpdateContext();
             if (d->activated) {
                 // Push status tip if not empty
                 if (!d->statusTip.isEmpty() && d->statusContext) {
@@ -100,9 +113,7 @@ namespace SVS {
         });
 
         // Connect to item's windowChanged signal
-        connect(parent, &QQuickItem::windowChanged, this, [this](QQuickWindow *window) {
-            Q_D(DescriptiveText);
-            
+        connect(parent, &QQuickItem::windowChanged, this, [=](QQuickWindow *window) {
             // Store old contexts
             StatusTextContext *oldStatusContext = d->statusContext;
             StatusTextContext *oldContextHelpContext = d->contextHelpContext;

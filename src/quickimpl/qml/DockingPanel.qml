@@ -135,6 +135,7 @@ Pane {
                     visible: container.undockToolButtonVisible && !container.pane?.locked
                     display: AbstractButton.IconOnly
                     text: container.dockingWindow ? qsTr("Drag to Dock") : container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
+                    DescriptiveText.statusTip: container.dockingWindow ? qsTr("Drag this button to a side bar to dock current panel") : container.pane?.dock ? qsTr("Show current panel in a popup window") : qsTr("Dock current panel back to the side bar")
                     Layout.alignment: Qt.AlignVCenter
                     onClicked: () => {
                         if (!container.pane || container.dockingWindow)

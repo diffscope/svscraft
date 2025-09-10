@@ -397,7 +397,7 @@ Item {
                         action: modelData instanceof Action ? modelData : null
                         DescriptiveText.activated: hovered && !_isStretch
                         text: (modelData instanceof Action ? modelData.text : modelData.title) ?? ""
-                        DescriptiveText.statusTip: modelData.description ?? ""
+                        DescriptiveText.statusTip: (modelData instanceof Action ? modelData.DescriptiveAction.statusTip : modelData.description) ?? ""
                         Accessible.role: modelData instanceof Action ? checkable ? Accessible.CheckBox : Accessible.Button : Accessible.PageTab
                         Accessible.checkable: modelData instanceof Action ? modelData.checkable : true
                         Accessible.checked: modelData instanceof Action ? modelData.checked: highlighted

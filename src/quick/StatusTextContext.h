@@ -37,12 +37,14 @@ namespace SVS {
         Q_DECLARE_PRIVATE(StatusTextContext)
 
         Q_PROPERTY(QString text READ text NOTIFY textChanged)
+        Q_PROPERTY(QObject *contextObject READ contextObject NOTIFY contextObjectChanged)
 
     public:
         explicit StatusTextContext(QObject *parent = nullptr);
         ~StatusTextContext() override;
 
         QString text() const;
+        QObject *contextObject() const;
 
         Q_INVOKABLE void push(QObject *contextObject, const QString &text);
         Q_INVOKABLE void update(QObject *contextObject, const QString &text);
@@ -56,6 +58,7 @@ namespace SVS {
 
     Q_SIGNALS:
         void textChanged();
+        void contextObjectChanged();
 
     private:
         QScopedPointer<StatusTextContextPrivate> d_ptr;
