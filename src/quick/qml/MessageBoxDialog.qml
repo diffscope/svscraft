@@ -107,6 +107,8 @@ Window {
                     color: dialog.icon.color ?? "transparent"
                     source: dialog.icon.source ?? ""
                     cache: dialog.icon.cache ?? false
+                    sourceSize.width: Layout.preferredWidth
+                    sourceSize.height: Layout.preferredHeight
                 }
                 ColumnLayout {
                     Layout.fillWidth: true
