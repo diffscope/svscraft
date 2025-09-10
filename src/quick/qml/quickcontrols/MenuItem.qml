@@ -54,6 +54,7 @@ T.MenuItem {
     DescriptiveText.statusTip: subMenu?.DescriptiveAction.statusTip ?? action?.DescriptiveAction.statusTip ?? ""
     DescriptiveText.contextHelpTip: subMenu?.DescriptiveAction.contextHelpTip ?? action?.DescriptiveAction.contextHelpTip ?? ""
     DescriptiveText.activated: hovered
+    DescriptiveText.bindAccessibleDescription: true
 
     contentItem: IconLabel {
         readonly property real arrowPadding: control.arrow ? control.arrow.width + control.spacing : 0

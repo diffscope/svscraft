@@ -33,6 +33,7 @@ T.Container {
     property bool vertical: false
     property Component toolButtonComponent: ToolButton {
         display: icon.source.toString().length !== 0 ? T.AbstractButton.IconOnly : T.AbstractButton.TextBesideIcon
+        DescriptiveText.bindAccessibleDescription: true
     }
 
     function addAction(action) {
