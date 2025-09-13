@@ -62,6 +62,8 @@ T.Button {
                         return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Question16Regular.svg"
                 }
             }
+            icon.width: 16
+            icon.height: 16
         }
     }
 
