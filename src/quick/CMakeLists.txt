@@ -17,14 +17,15 @@ foreach(_file IN LISTS _resource_files_abs)
     list(APPEND _resource_files ${_rel_path})
 endforeach()
 
-svs_add_library(${PROJECT_NAME} AUTOGEN STATIC
+svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
-    LINKS SVSCraftCore SVSCraftGui SVSCraftQml SVSCraftQuickImpl SVSCraftQuickImplplugin
+    LINKS SVSCraftCore SVSCraftGui SVSCraftQml SVSCraftQuickImpl
     QT_LINKS Core Gui Qml Quick QuickControls2
     QT_LINKS_PRIVATE Quick QuickTemplates2
     QT_INCLUDE_PRIVATE Core Gui Qml Quick QuickControls2 QuickTemplates2
     INCLUDE_PRIVATE *
     PREFIX SVSCRAFT_QUICK
+    FEATURES cxx_std_20
 )
 
 if(QT_KNOWN_POLICY_QTP0001)
@@ -39,10 +40,7 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES ${_qml_files}
     RESOURCES ${_resource_files}
     NAMESPACE SVS
-    OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/SVSCraft/UIComponents
+    OUTPUT_DIRECTORY ${QMSETUP_BUILD_DIR}/qml/SVSCraft/UIComponents
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED TRUE
-)
+qm_install_qml_modules(${PROJECT_NAME})
