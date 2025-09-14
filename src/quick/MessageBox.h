@@ -7,6 +7,7 @@
 #include <qqmlintegration.h>
 
 #include <SVSCraftCore/SVSCraftNamespace.h>
+#include <SVSCraftQuick/SVSCraftQuickGlobal.h>
 
 class QWindow;
 class QQuickItem;
@@ -16,7 +17,7 @@ namespace SVS {
 
     class MessageBoxAttachedType;
 
-    class MessageBox : public QObject {
+    class SVSCRAFT_QUICK_EXPORT MessageBox : public QObject {
         Q_OBJECT
         QML_ANONYMOUS
     public:
