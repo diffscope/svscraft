@@ -44,7 +44,7 @@ namespace SVS {
         int type{};
     };
 
-    class SVSCRAFT_GUI_EXPORT AlphaColorFilter : public AbstractColorFilter {
+    struct SVSCRAFT_GUI_EXPORT AlphaColorFilter : AbstractColorFilter {
     public:
         AlphaColorFilter(double alphaFactor);
     };
@@ -76,6 +76,8 @@ namespace SVS {
     struct SVSCRAFT_GUI_EXPORT BottomBlendColorFilter : AbstractColorFilter {
         BottomBlendColorFilter(const QColor &blendColor);
     };
+
+    template class SVSCRAFT_GUI_EXPORT ::QList<AbstractColorFilter>;
 
     class SVSCRAFT_GUI_EXPORT ColorChange : public QList<AbstractColorFilter> {
         Q_GADGET

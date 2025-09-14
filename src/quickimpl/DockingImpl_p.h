@@ -24,13 +24,15 @@
 #include <QPointer>
 #include <qqmlintegration.h>
 
+#include <SVSCraftQuickImpl/SVSCraftQuickImplGlobal.h>
+
 class QQuickWindow;
 
 namespace SVS {
 
     class DockingImpl;
 
-    class DockingImplAttachedType : public QObject {
+    class SVSCRAFT_QUICK_IMPL_EXPORT DockingImplAttachedType : public QObject {
         Q_OBJECT
         QML_NAMED_ELEMENT(DockingImpl)
         QML_ATTACHED(DockingImpl)
@@ -38,7 +40,7 @@ namespace SVS {
         static DockingImpl *qmlAttachedProperties(QObject *object);
     };
 
-    class DockingImpl : public QObject {
+    class SVSCRAFT_QUICK_IMPL_EXPORT DockingImpl : public QObject {
         Q_OBJECT
         QML_ANONYMOUS
 
