@@ -65,6 +65,7 @@ Item {
     signal lastActivated()
     signal undockedActivated(QtObject dockingPane)
     signal undockedDeactivated(QtObject dockingPane)
+    signal floatingWindowCreated(Window window)
 
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
     implicitHeight: view.edge === Qt.TopEdge || view.edge === Qt.BottomEdge ? tabBar.height + (panel.visible ? panel.height : 0) : 0
@@ -261,6 +262,7 @@ Item {
                 }
 
             }
+            Component.onCompleted: view.floatingWindowCreated()
         }
     }
     Pane {
