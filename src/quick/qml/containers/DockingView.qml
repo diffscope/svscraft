@@ -142,8 +142,8 @@ Item {
         let contentData = [...view.contentData.slice(0, sourceIndex), ...view.contentData.slice(sourceIndex + 1)]
         if (sourceIndex === previousFirstIndex)
             previousFirstIndex = -1
-        else if (sourceIndex < previousLastIndex)
-            previousLastIndex--
+        else if (sourceIndex < previousFirstIndex)
+            previousFirstIndex--
         if (sourceIndex === previousLastIndex)
             previousLastIndex = -1
         else if (sourceIndex < previousLastIndex)
