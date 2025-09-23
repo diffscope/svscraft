@@ -262,7 +262,7 @@ Item {
                 }
 
             }
-            Component.onCompleted: view.floatingWindowCreated()
+            Component.onCompleted: view.floatingWindowCreated(window)
         }
     }
     Pane {
