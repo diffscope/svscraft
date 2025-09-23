@@ -33,6 +33,8 @@ T.MenuSeparator {
 
     font: Theme.font
 
+    containmentMask: Item {}
+
     contentItem: Rectangle {
         implicitWidth: 188
         implicitHeight: 1

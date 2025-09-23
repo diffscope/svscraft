@@ -20,6 +20,7 @@
 import QtQuick
 import QtQuick.Controls.impl
 import QtQuick.Templates as T
+import QtQml.Models
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -55,6 +56,20 @@ T.MenuItem {
     DescriptiveText.contextHelpTip: subMenu?.DescriptiveAction.contextHelpTip ?? action?.DescriptiveAction.contextHelpTip ?? ""
     DescriptiveText.activated: hovered
     DescriptiveText.bindAccessibleDescription: true
+
+    containmentMask: QtObject {
+        function contains(point: point) : bool {
+            if (point.x < 0 || point.x > control.width) {
+                return false
+            }
+            let topIsSeparator = control.menu.contentModel.get(control.ObjectModel.index - 1) instanceof T.MenuSeparator
+            let bottomIsSeparator = control.menu.contentModel.get(control.ObjectModel.index + 1) instanceof T.MenuSeparator
+            if (point.y < (topIsSeparator ? -2.5 : 0) || point.y > control.height + (bottomIsSeparator ? 2.5 : 0)) {
+                return false
+            }
+            return true
+        }
+    }
 
     contentItem: IconLabel {
         readonly property real arrowPadding: control.arrow ? control.arrow.width + control.spacing : 0

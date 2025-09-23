@@ -37,6 +37,13 @@ T.MenuBarItem {
     rightPadding: 8
     spacing: 4
 
+    containmentMask: Item {
+        x: (control.width - width) / 2
+        y: (control.height - height) / 2
+        width: control.width + (control.menuBar?.spacing ?? 0)
+        height: Math.max(control.height, control.menuBar?.height ?? 0)
+    }
+
     font: Theme.font
 
     icon.width: 16
