@@ -77,8 +77,6 @@ namespace SVS {
         BottomBlendColorFilter(const QColor &blendColor);
     };
 
-    template class SVSCRAFT_GUI_EXPORT ::QList<AbstractColorFilter>;
-
     class SVSCRAFT_GUI_EXPORT ColorChange : public QList<AbstractColorFilter> {
         Q_GADGET
 
@@ -90,5 +88,7 @@ namespace SVS {
     };
 
 }
+
+template class SVSCRAFT_GUI_EXPORT QList<SVS::AbstractColorFilter>;
 
 #endif // SVSCRAFT_COLORCHANGE_H
