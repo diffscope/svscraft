@@ -7,10 +7,10 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QUrl>
-#include <QDBusInterface>
-#include <QDBusReply>
 
 #ifdef Q_OS_LINUX
+#   include <QDBusInterface>
+#   include <QDBusReply>
 #   include <gio/gio.h>
 #endif
 
