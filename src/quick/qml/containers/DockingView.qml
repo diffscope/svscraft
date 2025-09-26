@@ -241,6 +241,7 @@ Item {
             required property DockingPane currentItem
             title: currentItem.title + " - " + view.Window.window.title
             transientParent: view.Window.window
+            flags: Qt.platform.os === "osx" || Qt.platform.os === "macos" ? Qt.Tool : Qt.Window
             LayoutMirroring.enabled: view.LayoutMirroring.enabled
             LayoutMirroring.childrenInherit: true
             DockingPanel {
