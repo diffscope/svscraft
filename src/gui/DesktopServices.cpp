@@ -1,3 +1,5 @@
+#define QT_NO_KEYWORDS
+
 #include "DesktopServices.h"
 
 #include <QFileInfo>
@@ -5,6 +7,13 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDBusInterface>
+#include <QDBusReply>
+
+#ifdef Q_OS_LINUX
+#   include <gio/gio.h>
+#endif
+
 
 namespace SVS {
     bool DesktopServices::reveal(const QString &filename) {
@@ -57,20 +66,53 @@ namespace SVS {
                 return false;
             }
 #else
-            if (info.isDir()) {
-                if (QProcess::startDetached("bash", {"-c", "xdg-open \'" + filename + "\'"})) {
-                    return true;
-                }
-            } else if (info.isFile()) {
-                QString arg = info.absolutePath();
-                if (QProcess::startDetached("bash", {"-c", "xdg-open \'" + arg + "\'"})) {
-                    return true;
-                }
-            } else {
+            if (!info.isDir() && !info.isFile()) {
                 return false;
             }
+            QUrl url = QUrl::fromLocalFile(filename);
+
+            QStringList uris;
+            uris << url.toString();
+
+            QDBusInterface iface(
+                QStringLiteral("org.freedesktop.FileManager1"),
+                QStringLiteral("/org/freedesktop/FileManager1"),
+                QStringLiteral("org.freedesktop.FileManager1"),
+                QDBusConnection::sessionBus()
+            );
+
+            if (!iface.isValid()) {
+                break;
+            }
+
+            QDBusReply<void> reply = iface.call(info.isDir() ? QStringLiteral("ShowFolders") : QStringLiteral("ShowItems"), uris, QString(""));
+
+            if (!reply.isValid()) {
+                break;
+            }
+            return true;
 #endif
         } while (false);
         return QDesktopServices::openUrl(QUrl::fromLocalFile(info.isDir() ? filename : info.absolutePath()));
+    }
+    QString DesktopServices::fileManagerName() {
+#if defined(Q_OS_WINDOWS)
+        return tr("File Explorer");
+#elif defined(Q_OS_MAC)
+        return tr("Finder")
+#else
+        static QString name;
+        static const QString defaultName = tr("File Manager");
+        if (!name.isEmpty()) {
+            return name;
+        }
+        if (GAppInfo *appInfo = g_app_info_get_default_for_type("inode/directory", FALSE)) {
+            name = QString::fromUtf8(g_app_info_get_display_name(appInfo));
+            g_object_unref(appInfo);
+            return name;
+        } else {
+            return name = defaultName;
+        }
+#endif
     }
 }

@@ -177,4 +177,7 @@ namespace SVS {
     bool DesktopServicesForeign::reveal(const QString &filename) {
         return DesktopServices::reveal(filename);
     }
+    QString DesktopServicesForeign::fileManagerName() {
+        return DesktopServices::fileManagerName();
+    }
 }

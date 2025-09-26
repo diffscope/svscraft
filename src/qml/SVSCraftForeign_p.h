@@ -103,10 +103,12 @@ namespace SVS {
         Q_OBJECT
         QML_NAMED_ELEMENT(DesktopServices)
         QML_SINGLETON
+        Q_PROPERTY(QString fileManagerName READ fileManagerName CONSTANT)
     public:
         explicit DesktopServicesForeign(QObject *parent = nullptr);
         ~DesktopServicesForeign() override;
         Q_INVOKABLE static bool reveal(const QString &filename);
+        static QString fileManagerName();
     };
 
 }

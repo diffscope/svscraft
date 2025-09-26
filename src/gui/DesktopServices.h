@@ -20,13 +20,17 @@
 #ifndef SVSCRAFT_DESKTOPSERVICES_H
 #define SVSCRAFT_DESKTOPSERVICES_H
 
+#include <QObject>
+
 #include <SVSCraftGui/SVSCraftGuiGlobal.h>
 
 namespace SVS {
 
-    class SVSCRAFT_GUI_EXPORT DesktopServices {
+    class SVSCRAFT_GUI_EXPORT DesktopServices : public QObject {
+        Q_OBJECT
     public:
         static bool reveal(const QString &filename);
+        static QString fileManagerName();
     };
 
 }
