@@ -28,7 +28,7 @@ import SVSCraft.UIComponents.impl
 
 Pane {
     id: container
-    Accessible.name: container.pane ? qsTr("Docking View Panel of %1").replace("%1", container.pane.title) : ""
+    Accessible.name: container.pane ? qsTr("Docking View Panel of %1").arg(container.pane.title) : ""
     implicitWidth: 400
     implicitHeight: 400
     function set() {

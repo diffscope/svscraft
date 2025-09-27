@@ -99,7 +99,7 @@ namespace SVS {
 #if defined(Q_OS_WINDOWS)
         return tr("File Explorer");
 #elif defined(Q_OS_MAC)
-        return tr("Finder")
+        return tr("Finder");
 #else
         static QString name;
         static const QString defaultName = tr("File Manager");
