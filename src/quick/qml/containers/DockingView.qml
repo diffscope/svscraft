@@ -256,9 +256,9 @@ Item {
             }
             onActiveChanged: () => {
                 GlobalHelper.setProperty(null, "", "")
-                if (active && GlobalHelper.focusWindow() === window) {
+                if (active && GlobalHelper.focusWindow === window) {
                     view.undockedActivated(currentItem)
-                } else if (GlobalHelper.focusWindow() !== window) {
+                } else if (GlobalHelper.focusWindow !== window) {
                     view.undockedDeactivated(currentItem)
                 }
 

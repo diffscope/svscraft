@@ -38,6 +38,7 @@ namespace SVS {
         Q_OBJECT
         QML_ELEMENT
         QML_SINGLETON
+        Q_PROPERTY(QWindow *focusWindow READ focusWindow)
     public:
         explicit GlobalHelper(QObject *parent = nullptr);
         ~GlobalHelper() override;
@@ -61,7 +62,7 @@ namespace SVS {
         }
         Q_INVOKABLE static QQuickIcon defaultIcon();
         Q_INVOKABLE static QColor dockingPanelHeaderColor(const QColor &accentColor, const QColor &backgroundColor, bool active);
-        Q_INVOKABLE static QWindow *focusWindow();
+        static QWindow *focusWindow();
         Q_INVOKABLE static void beep();
     };
 }
