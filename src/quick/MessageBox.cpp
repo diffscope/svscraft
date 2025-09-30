@@ -57,14 +57,15 @@ namespace SVS {
             return SVSCraft::NoButton;
         }
         QQmlComponent component(engine, ":/qt/qml/SVSCraft/UIComponents/qml/MessageBoxDialog.qml");
-        std::unique_ptr<QQuickWindow> mb(qobject_cast<QQuickWindow *>(component.create()));
+        std::unique_ptr<QQuickWindow> mb(qobject_cast<QQuickWindow *>(component.createWithInitialProperties({
+            {"text", title},
+            {"informativeText", text},
+            {"buttons", buttons.toInt()},
+            {"primaryButton", defaultButton},
+            {"icon", icon},
+            {"transientParent", QVariant::fromValue(parent)}
+        })));
         Q_ASSERT(mb);
-        mb->setTransientParent(parent);
-        mb->setProperty("text", title);
-        mb->setProperty("informativeText", text);
-        mb->setProperty("buttons", buttons.toInt());
-        mb->setProperty("primaryButton", defaultButton);
-        mb->setProperty("icon", icon);
         QEventLoop eventLoop;
         MessageBoxDialogDoneListener listener(&eventLoop);
         QObject::connect(mb.get(), SIGNAL(done(QVariant)), &listener, SLOT(done(QVariant)));
