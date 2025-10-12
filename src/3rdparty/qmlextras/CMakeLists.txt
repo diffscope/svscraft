@@ -4,18 +4,8 @@ project(SVSCraftQmlExtras
 )
 
 file(GLOB_RECURSE _src *.h *.cpp)
-file(GLOB_RECURSE _qml_files_abs *.qml *.js *.mjs)
-set(_qml_files)
-foreach(_file IN LISTS _qml_files_abs)
-    file(RELATIVE_PATH _rel_path ${CMAKE_CURRENT_SOURCE_DIR} ${_file})
-    list(APPEND _qml_files ${_rel_path})
-endforeach()
-file(GLOB_RECURSE _resource_files_abs assets/*)
-set(_resource_files)
-foreach(_file IN LISTS _resource_files_abs)
-    file(RELATIVE_PATH _rel_path ${CMAKE_CURRENT_SOURCE_DIR} ${_file})
-    list(APPEND _resource_files ${_rel_path})
-endforeach()
+file(GLOB_RECURSE _qml_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.qml *.js *.mjs)
+file(GLOB_RECURSE _resource_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} assets/*)
 
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
