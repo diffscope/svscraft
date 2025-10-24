@@ -404,7 +404,7 @@ Item {
                         Accessible.role: modelData instanceof Action ? checkable ? Accessible.CheckBox : Accessible.Button : Accessible.PageTab
                         Accessible.checkable: modelData instanceof Action ? modelData.checkable : true
                         Accessible.checked: modelData instanceof Action ? modelData.checked: highlighted
-                        Accessible.description: modelData instanceof Action ? "" : (modelData.description ?? "") + "\n" + qsTr("Show or hide the docking pane")
+                        Accessible.description: modelData instanceof Action ? "" : (modelData.description ?? "") + "\n" + qsTr("Toggle docking pane")
                         onClicked: () => {
                             if (modelData instanceof Action) {
                                 return

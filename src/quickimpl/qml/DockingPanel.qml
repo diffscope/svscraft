@@ -51,6 +51,8 @@ Pane {
         Rectangle {
             id: header
             Accessible.role: Accessible.ToolBar
+            Accessible.name: container.pane?.title ?? ""
+            Accessible.description: qsTr("Docking panel title bar")
             anchors.top: parent.top
             width: parent.width
             height: 32
