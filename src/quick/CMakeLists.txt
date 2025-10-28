@@ -11,7 +11,7 @@ svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
     LINKS SVSCraftCore SVSCraftGui SVSCraftQml SVSCraftQuickImpl
     QT_LINKS Core Gui Qml Quick QuickControls2
-    QT_LINKS_PRIVATE Quick QuickTemplates2
+    QT_LINKS_PRIVATE Quick QuickTemplates2 ShaderTools # TODO QtShaderTools used by Qt5Compat.GraphicalEffects
     QT_INCLUDE_PRIVATE Core Gui Qml Quick QuickControls2 QuickTemplates2
     INCLUDE_PRIVATE *
     PREFIX SVSCRAFT_QUICK
