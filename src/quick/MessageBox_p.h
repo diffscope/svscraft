@@ -1,6 +1,8 @@
 #ifndef SVSCRAFT_MESSAGEBOX_P_H
 #define SVSCRAFT_MESSAGEBOX_P_H
 
+#include <QVariant>
+
 #include <SVSCraftQuick/MessageBox.h>
 
 class QEventLoop;
@@ -20,9 +22,10 @@ namespace SVS {
     public:
         inline explicit MessageBoxDialogDoneListener(QEventLoop *eventLoop) : eventLoop(eventLoop) {
         }
+        QVariant data;
 
     public slots:
-        void done(const QVariant &id) const;
+        void done(const QVariant &id);
 
     private:
         QEventLoop *eventLoop;

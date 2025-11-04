@@ -18,7 +18,8 @@ namespace SVS {
             qmlWarning(object) << "MessageBox should be attached to an Item";
         return new MessageBox(item);
     }
-    void MessageBoxDialogDoneListener::done(const QVariant &id) const {
+    void MessageBoxDialogDoneListener::done(const QVariant &id) {
+        data = id;
         eventLoop->exit(id.toInt());
     }
 
@@ -108,6 +109,15 @@ namespace SVS {
                                                  SVSCraft::StandardButton defaultButton) {
         return showMessageBox(engine, parent, title, text, buttons, defaultButton,
                               SVSCraft::Success);
+    }
+
+    QVariant MessageBox::customExec(QObject *dialog) {
+        QEventLoop eventLoop;
+        MessageBoxDialogDoneListener listener(&eventLoop);
+        connect(dialog, SIGNAL(done(QVariant)), &listener, SLOT(done(QVariant)));
+        QMetaObject::invokeMethod(dialog, "show");
+        eventLoop.exec();
+        return listener.data;
     }
 
     MessageBox::AlertHandler MessageBox::alertHandler() {

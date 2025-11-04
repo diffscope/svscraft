@@ -93,6 +93,8 @@ namespace SVS {
             SVSCraft::StandardButtons buttons = SVSCraft::Ok,
             SVSCraft::StandardButton defaultButton = SVSCraft::Ok);
 
+        static QVariant customExec(QObject *dialog);
+
         using AlertHandler = std::function<void(QObject *)>;
         static AlertHandler alertHandler();
         static void setAlertHandler(const AlertHandler &handler);
