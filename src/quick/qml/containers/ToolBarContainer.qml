@@ -36,6 +36,8 @@ T.Container {
         DescriptiveText.bindAccessibleDescription: true
     }
 
+    spacing: 5
+
     function addAction(action) {
         addItem(toolButtonComponent.createObject(this, { action }))
     }
