@@ -50,8 +50,7 @@ namespace SVS {
         painter.setRenderHint(QPainter::TextAntialiasing);
         painter.setPen(Qt::black);
         painter.setFont(font);
-        QStringView s = QChar::fromUcs4(ch);
-        painter.drawText(QRect(0, 0, size, size), Qt::AlignCenter, s.toString());
+        painter.drawText(QRect(0, 0, size, size), Qt::AlignCenter, QStringView(QChar::fromUcs4(ch)).toString());
         return pixmap;
     }
 
