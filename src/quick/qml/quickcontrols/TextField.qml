@@ -113,6 +113,8 @@ T.TextField {
         anchors.left: parent.left
         anchors.leftMargin: 8
         source: control.ThemedItem.icon.source
+        sourceSize.width: control.ThemedItem.icon.width
+        sourceSize.height: control.ThemedItem.icon.height
         color: control.ThemedItem.icon.color
     }
 }

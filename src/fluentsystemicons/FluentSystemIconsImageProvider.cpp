@@ -34,7 +34,7 @@ namespace SVS {
         auto sizeStr = query.queryItemValue("size");
         int sz = sizeStr.toInt();
         if (!sz) {
-            sz = size->width();
+            sz = 16;
         }
         auto styleStr = query.queryItemValue("style");
         FluentSystemIcons::Style style;
@@ -43,7 +43,7 @@ namespace SVS {
         } else {
             style = FluentSystemIcons::Filled;
         }
-        auto pixmap = FluentSystemIcons::getIcon(iconId, direction, sz, style).scaled(size->width(), size->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        auto pixmap = FluentSystemIcons::getIcon(iconId, direction, sz, style, qMax(size->width(), size->height()));
         return pixmap;
     }
 

@@ -49,17 +49,17 @@ T.Button {
             icon.source: {
                 switch (button.type) {
                     case SystemButton.Close:
-                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Dismiss16Regular.svg"
+                        return "image://fluent-system-icons/dismiss?size=16&style=regular"
                     case SystemButton.MaximizeRestore:
-                        return Window.visibility === Window.Windowed ? "qrc:/qt/qml/SVSCraft/UIComponents/assets/Maximize16Regular.svg" : "qrc:/qt/qml/SVSCraft/UIComponents/assets/SquareMultiple16Regular.svg"
+                        return Window.visibility === Window.Windowed ? "image://fluent-system-icons/maximize?size=16&style=regular" : "image://fluent-system-icons/square_multiple?size=16&style=regular"
                     case SystemButton.Maximize:
-                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Maximize16Regular.svg"
+                        return "image://fluent-system-icons/maximize?size=16&style=regular"
                     case SystemButton.Restore:
-                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/SquareMultiple16Regular.svg"
+                        return "image://fluent-system-icons/square_multiple?size=16&style=regular"
                     case SystemButton.Minimize:
-                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Subtract16Regular.svg"
+                        return "image://fluent-system-icons/subtract?size=16&style=regular"
                     case SystemButton.Help:
-                        return "qrc:/qt/qml/SVSCraft/UIComponents/assets/Question16Regular.svg"
+                        return "image://fluent-system-icons/question?size=16&style=regular"
                 }
             }
             icon.width: 16

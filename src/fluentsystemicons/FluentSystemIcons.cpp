@@ -71,7 +71,7 @@ namespace SVS {
         return QPixmap::fromImageReader(&reader);
     }
 
-    QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style) {
+    QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style, int pixmapSize) {
         static const auto ltrString = QStringLiteral("_ltr");
         static const auto rtlString = QStringLiteral("_rtl");
         static const QStringList ltrTrySteps {ltrString, {}, rtlString};
@@ -88,14 +88,17 @@ namespace SVS {
         static const QStringList trySizes48 = {"_48", "_32", "_28", "_24", "_20", "_16", "_12", "_10"};
         static const QSet<QString> customIconList = loadCustomIconList();
 
-        auto normalizedSize = normalizeSize(size);
-        auto cacheKey = QStringList{name, QString::number(direction), QString::number(normalizedSize), QString::number(style), QString::number(QGuiApplication::layoutDirection())}.join(",");
+        if (pixmapSize < 0)
+            pixmapSize = size;
+
+        size = normalizeSize(size);
+        auto cacheKey = QStringList{name, QString::number(direction), QString::number(size), QString::number(style), QString::number(pixmapSize), QString::number(QGuiApplication::layoutDirection())}.join(",");
         if (m_cache.contains(cacheKey))
             return m_cache[cacheKey];
 
         const auto &tryDirections = direction == Ltr ? ltrTrySteps : direction == Rtl ? rtlTrySteps : QGuiApplication::layoutDirection() == Qt::LeftToRight ? autoLtrTrySteps : autoRtlTrySteps;
-        auto trySizes = [normalizedSize] {
-            switch (normalizedSize) {
+        auto trySizes = [size] {
+            switch (size) {
                 case 10: return trySizes10;
                 case 12: return trySizes12;
                 case 16: return trySizes16;
@@ -119,11 +122,11 @@ namespace SVS {
                     QPixmap pixmap;
                     if (customIconList.contains(key)) {
                         qCDebug(lcFluentSystemIcons) << "Found custom icon" << key;
-                        pixmap = loadPixmapFromCustomIcon(key, size);
+                        pixmap = loadPixmapFromCustomIcon(key, pixmapSize);
                     } else if (auto ch = charset.value(key)) {
                         qCDebug(lcFluentSystemIcons) << "Found icon" << key;
                         auto foundStyle = tryStyle.at(1) == 'r' ? Regular : Filled;
-                        pixmap = paintPixmapFromFont(ch, size, foundStyle);
+                        pixmap = paintPixmapFromFont(ch, pixmapSize, foundStyle);
                     } else {
                         continue;
                     }

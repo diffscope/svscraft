@@ -9,7 +9,7 @@ file(GLOB_RECURSE _resource_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} assets/*)
 
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
-    LINKS SVSCraftCore SVSCraftGui SVSCraftQml SVSCraftQuickImpl
+    LINKS SVSCraftCore SVSCraftGui SVSCraftQml SVSCraftFluentSystemIcons SVSCraftQuickImpl
     QT_LINKS Core Gui Qml Quick QuickControls2
     QT_LINKS_PRIVATE Quick QuickTemplates2 ShaderTools # TODO QtShaderTools used by Qt5Compat.GraphicalEffects
     QT_INCLUDE_PRIVATE Core Gui Qml Quick QuickControls2 QuickTemplates2

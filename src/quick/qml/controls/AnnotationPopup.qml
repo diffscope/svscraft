@@ -32,13 +32,13 @@ Popup {
     property QtObject icon: QtObject {
         property string name: ""
         property url source: popup.ThemedItem.controlType === SVS.CT_Normal ?
-                "qrc:/qt/qml/SVSCraft/UIComponents/assets/Info16Regular.svg" :
+                "image://fluent-system-icons/info?style=regular" :
             popup.ThemedItem.controlType === SVS.CT_Accent ?
-                "qrc:/qt/qml/SVSCraft/UIComponents/assets/CheckmarkCircle16Regular.svg" :
+                "image://fluent-system-icons/checkmark_circle?style=regular" :
             popup.ThemedItem.controlType === SVS.CT_Warning ?
-                "qrc:/qt/qml/SVSCraft/UIComponents/assets/ErrorCircle16Regular.svg" :
+                "image://fluent-system-icons/error_circle?style=regular" :
             popup.ThemedItem.controlType === SVS.CT_Error ?
-                "qrc:/qt/qml/SVSCraft/UIComponents/assets/DismissCircle16Regular.svg" : ""
+                "image://fluent-system-icons/dismiss_circle?style=regular" : ""
         property int width: 16
         property int height: 16
         property color color: Theme.foregroundPrimaryColor
@@ -175,7 +175,7 @@ Popup {
                 }
                 ToolButton {
                     visible: popup.closable
-                    icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Dismiss12Filled.svg"
+                    icon.source: "image://fluent-system-icons/dismiss?size=12"
                     icon.width: 12
                     icon.height: 12
                     ThemedItem.foregroundLevel: SVS.FL_Secondary

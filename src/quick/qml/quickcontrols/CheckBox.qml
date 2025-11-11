@@ -63,7 +63,9 @@ T.CheckBox {
         ColorImage {
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Checkmark16Filled.svg"
+            sourceSize.width: 16
+            sourceSize.height: 16
+            source: "image://fluent-system-icons/checkmark?size=16"
             opacity: color.a ? 1 : 0
             property color _baseColor: control.checkState === Qt.Checked ? Theme.foregroundPrimaryColor : "transparent"
             color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(_baseColor) :

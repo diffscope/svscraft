@@ -55,7 +55,9 @@ Control {
             anchors.centerIn: parent
             color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
                 Theme.foregroundPrimaryColor
-            source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/ChevronDown12Filled.svg"
+            sourceSize.width: 12
+            sourceSize.height: 12
+            source: "image://fluent-system-icons/chevron_down?size=12"
             Behavior on color {
                 ColorAnimation {
                     duration: Theme.colorAnimationDuration
@@ -134,7 +136,7 @@ Control {
             Button {
                 text: qsTr("OK")
                 ThemedItem.controlType: SVS.CT_Accent
-                icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Checkmark16Filled.svg"
+                icon.source: "image://fluent-system-icons/checkmark"
                 Layout.fillWidth: true
                 onClicked: () => {
                     GlobalHelper.setProperty(control, "color", colorPicker.color)

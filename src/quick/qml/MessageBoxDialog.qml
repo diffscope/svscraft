@@ -97,7 +97,9 @@ Window {
                     Layout.preferredWidth: 48
                     Layout.preferredHeight: 48
                     color: dialog.icon === SVS.Warning ? Theme.warningColor : dialog.icon === SVS.Critical ? Theme.errorColor : dialog.icon === SVS.Success || dialog.icon === SVS.Tip ? Theme.accentColor : Theme.foregroundPrimaryColor
-                    source: `qrc:/qt/qml/SVSCraft/UIComponents/assets/${dialog.icon === SVS.Information ? "Info48Regular.svg" : dialog.icon === SVS.Warning ? "Warning48Regular.svg" : dialog.icon === SVS.Critical ? "DismissCircle48Regular.svg" : dialog.icon === SVS.Question ? "QuestionCircle48Regular.svg" : dialog.icon === SVS.Success ? "CheckmarkCircle48Regular.svg" : "InfoSparkle48Regular.svg"}`
+                    sourceSize.width: 48
+                    sourceSize.height: 48
+                    source: `image://fluent-system-icons/${dialog.icon === SVS.Information ? "info" : dialog.icon === SVS.Warning ? "warning" : dialog.icon === SVS.Critical ? "dismiss_circle" : dialog.icon === SVS.Question ? "question_circle" : dialog.icon === SVS.Success ? "checkmark_circle" : "info_sparkle"}?size=48&style=regular`
                 }
                 ColorImage {
                     visible: typeof(dialog.icon) !== "number"
@@ -164,7 +166,7 @@ Window {
                     flat: true
                     display: AbstractButton.IconOnly
                     text: checked ? qsTr("Hide Details...") : qsTr("Show Details...")
-                    icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/MoreCircle24Filled.svg"
+                    icon.source: "image://fluent-system-icons/more_circle"
                     icon.width: 24
                     icon.height: 24
                     padding: 2
@@ -179,7 +181,7 @@ Window {
                     flat: true
                     display: AbstractButton.IconOnly
                     text: "Help"
-                    icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/QuestionCircle24Filled.svg"
+                    icon.source: "image://fluent-system-icons/question_circle"
                     icon.width: 24
                     icon.height: 24
                     padding: 2

@@ -19,7 +19,9 @@ Label {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         visible: label.externalLink
-        source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/ArrowUpRight12Filled.svg"
+        sourceSize.width: 12
+        sourceSize.height: 12
+        source: "image://fluent-system-icons/arrow_up_right?size=12"
         color: Theme.linkColor
     }
 }

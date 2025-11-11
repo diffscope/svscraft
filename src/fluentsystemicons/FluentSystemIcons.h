@@ -20,7 +20,7 @@ namespace SVS {
             Regular,
         };
 
-        static QPixmap getIcon(const QString &name, Direction direction, int size, Style style);
+        static QPixmap getIcon(const QString &name, Direction direction, int size, Style style, int pixmapSize = -1);
     };
 
 }

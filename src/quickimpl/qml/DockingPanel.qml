@@ -130,10 +130,10 @@ Pane {
                 }
                 ToolButton {
                     icon.source: container.dockingWindow ?
-                        "qrc:/qt/qml/SVSCraft/UIComponents/assets/Drag24Filled.svg" :
+                        "image://fluent-system-icons/drag" :
                         container.pane?.dock ?
-                        "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelSeparateWindow20Filled.svg" :
-                        "qrc:/qt/qml/SVSCraft/UIComponents/assets/PanelLeft16Filled.svg"
+                        "image://fluent-system-icons/panel_separate_window" :
+                        "image://fluent-system-icons/panel_left"
                     visible: container.undockToolButtonVisible && !container.pane?.locked
                     display: AbstractButton.IconOnly
                     text: container.dockingWindow ? qsTr("Drag to Dock") : container.pane?.dock ? qsTr("Undock") : qsTr("Dock")
@@ -178,7 +178,7 @@ Pane {
                     }
                 }
                 ToolButton {
-                    icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/MoreHorizontal16Filled.svg"
+                    icon.source: "image://fluent-system-icons/more_horizontal"
                     display: AbstractButton.IconOnly
                     text: qsTr("Menu")
                     Layout.alignment: Qt.AlignVCenter

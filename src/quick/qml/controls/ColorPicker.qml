@@ -80,7 +80,7 @@ Pane {
                     }
                 }
                 ToolButton {
-                    icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Color16Filled.svg"
+                    icon.source: "image://fluent-system-icons/color"
                     visible: (colorPicker.flags & SVS.CM_NativeColorDialog) && GlobalHelper.hasNativeColorChooser()
                     display: AbstractButton.IconOnly
                     text: qsTr("Show native color dialog")
@@ -92,7 +92,7 @@ Pane {
                     }
                 }
                 ToolButton {
-                    icon.source: "qrc:/qt/qml/SVSCraft/UIComponents/assets/Eyedropper20Filled.svg"
+                    icon.source: "image://fluent-system-icons/eyedropper"
                     visible: colorPicker.flags & SVS.CM_Eyedropper
                     display: AbstractButton.IconOnly
                     text: qsTr("Pick a color on the screen")
