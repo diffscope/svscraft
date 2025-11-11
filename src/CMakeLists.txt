@@ -134,6 +134,8 @@ add_subdirectory(quickimpl)
 
 add_subdirectory(network)
 
+add_subdirectory(fluentsystemicons)
+
 # ----------------------------------
 # Documentation
 # ----------------------------------
