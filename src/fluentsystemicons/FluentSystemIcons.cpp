@@ -1,7 +1,10 @@
 #include "FluentSystemIcons.h"
 
+#include <QDir>
+#include <QFileInfo>
 #include <QFontDatabase>
 #include <QHash>
+#include <QImageReader>
 #include <QPainter>
 #include <QPixmap>
 #include <QGuiApplication>
@@ -52,6 +55,22 @@ namespace SVS {
         return pixmap;
     }
 
+    static QDir customIconDir(":/svscraft/fluent-system-icons/icons");
+
+    static QSet<QString> loadCustomIconList() {
+        QSet<QString> s;
+        for (const auto &fileInfo : customIconDir.entryInfoList(QDir::Files)) {
+            s.insert(fileInfo.baseName());
+        }
+        return s;
+    }
+
+    static QPixmap loadPixmapFromCustomIcon(const QString &name, int size) {
+        QImageReader reader(customIconDir.filePath(name + ".svg"));
+        reader.setScaledSize(QSize(size, size));
+        return QPixmap::fromImageReader(&reader);
+    }
+
     QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style) {
         static const auto ltrString = QStringLiteral("_ltr");
         static const auto rtlString = QStringLiteral("_rtl");
@@ -67,9 +86,10 @@ namespace SVS {
         static const QStringList trySizes28 = {"_28", "_32", "_48", "_16", "_20", "_24", "_12", "_10"};
         static const QStringList trySizes32 = {"_32", "_48", "_16", "_20", "_24", "_28", "_12", "_10"};
         static const QStringList trySizes48 = {"_48", "_32", "_28", "_24", "_20", "_16", "_12", "_10"};
+        static const QSet<QString> customIconList = loadCustomIconList();
 
         auto normalizedSize = normalizeSize(size);
-        auto cacheKey = QStringList{name, QString::number(direction), QString::number(normalizedSize), QString::number(style)}.join(",");
+        auto cacheKey = QStringList{name, QString::number(direction), QString::number(normalizedSize), QString::number(style), QString::number(QGuiApplication::layoutDirection())}.join(",");
         if (m_cache.contains(cacheKey))
             return m_cache[cacheKey];
 
@@ -96,12 +116,17 @@ namespace SVS {
                 for (const auto &tryStyle : tryStyles) {
                     const auto &charset = tryStyle.at(1) == 'r' ? fluentSystemIcons_RegularIconsCharset : fluentSystemIcons_FilledIconsCharset;
                     auto key = QStringList{QStringLiteral("ic_fluent_"), name, tryDirection, trySize, tryStyle}.join("");
-                    auto ch = charset.value(key);
-                    if (!ch)
+                    QPixmap pixmap;
+                    if (customIconList.contains(key)) {
+                        qCDebug(lcFluentSystemIcons) << "Found custom icon" << key;
+                        pixmap = loadPixmapFromCustomIcon(key, size);
+                    } else if (auto ch = charset.value(key)) {
+                        qCDebug(lcFluentSystemIcons) << "Found icon" << key;
+                        auto foundStyle = tryStyle.at(1) == 'r' ? Regular : Filled;
+                        pixmap = paintPixmapFromFont(ch, size, foundStyle);
+                    } else {
                         continue;
-                    qCDebug(lcFluentSystemIcons) << "Found icon" << key;
-                    auto foundStyle = tryStyle.at(1) == 'r' ? Regular : Filled;
-                    auto pixmap = paintPixmapFromFont(ch, size, foundStyle);
+                    }
                     if ((direction == Rtl || direction == Auto && QGuiApplication::layoutDirection() == Qt::RightToLeft) && fluentSystemIcons_MirrorRtlIcons.contains(key)) {
                         pixmap = pixmap.transformed(QTransform().scale(-1, 1));
                     }

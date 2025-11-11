@@ -1,5 +1,6 @@
 #include "FluentSystemIconsImageProvider.h"
 
+#include <QQmlEngine>
 #include <QUrlQuery>
 
 #include <SVSCraftFluentSystemIcons/FluentSystemIcons.h>
@@ -44,6 +45,10 @@ namespace SVS {
         }
         auto pixmap = FluentSystemIcons::getIcon(iconId, direction, sz, style).scaled(size->width(), size->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         return pixmap;
+    }
+
+    void FluentSystemIconsImageProvider::addToEngine(QQmlEngine *engine) {
+        engine->addImageProvider("fluent-system-icons", new FluentSystemIconsImageProvider);
     }
 
 }

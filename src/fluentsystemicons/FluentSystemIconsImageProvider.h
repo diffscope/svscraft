@@ -14,6 +14,8 @@ namespace SVS {
         ~FluentSystemIconsImageProvider() override;
 
         QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override;
+
+        static void addToEngine(QQmlEngine *engine);
     };
 
 }
