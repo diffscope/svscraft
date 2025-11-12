@@ -45,6 +45,7 @@ T.ComboBox {
         required property int index
 
         width: ListView.view.width
+        height: control.implicitHeight
         text: model[control.textRole]
         highlighted: control.currentIndex === index
         hoverEnabled: control.hoverEnabled
