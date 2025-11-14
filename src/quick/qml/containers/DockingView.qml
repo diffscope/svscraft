@@ -64,7 +64,6 @@ Item {
     signal firstActivated()
     signal lastActivated()
     signal undockedActivated(QtObject dockingPane)
-    signal undockedDeactivated(QtObject dockingPane)
     signal floatingWindowCreated(Window window)
 
     implicitWidth: view.edge === Qt.LeftEdge || view.edge === Qt.RightEdge ? tabBar.width + (panel.visible ? panel.width : 0) : 0
@@ -249,19 +248,11 @@ Item {
                 anchors.fill: parent
                 pane: window.currentItem
                 active: view.activeUndockedPane === window.currentItem
+                onActivated: view.undockedActivated(window.currentItem)
             }
             onVisibleChanged: () => {
                 if (visible)
                     panel.set()
-            }
-            onActiveChanged: () => {
-                GlobalHelper.setProperty(null, "", "")
-                if (active && GlobalHelper.focusWindow === window) {
-                    view.undockedActivated(currentItem)
-                } else if (GlobalHelper.focusWindow !== window) {
-                    view.undockedDeactivated(currentItem)
-                }
-
             }
             Component.onCompleted: view.floatingWindowCreated(window)
         }
