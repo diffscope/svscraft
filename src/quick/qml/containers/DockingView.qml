@@ -230,6 +230,7 @@ Item {
                 content.Docking.window.height = content.Docking.windowGeometryHint.height
             }
         }
+        view.activeUndockedPane = content
         content.Docking.window.show()
     }
 
