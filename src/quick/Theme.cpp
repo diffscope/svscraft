@@ -129,6 +129,7 @@ namespace SVS {
     IMPLEMENTATION(backgroundTertiaryColor, backgroundTertiaryColor, setBackgroundTertiaryColor, resetBackgroundTertiaryColor)
     IMPLEMENTATION(backgroundQuaternaryColor, backgroundQuaternaryColor, setBackgroundQuaternaryColor, resetBackgroundQuaternaryColor)
     IMPLEMENTATION(splitterColor, splitterColor, setSplitterColor, resetSplitterColor)
+    IMPLEMENTATION(paneSeparatorColor, paneSeparatorColor, setPaneSeparatorColor, resetPaneSeparatorColor)
 
     IMPLEMENTATION(foregroundPrimaryColor, foregroundPrimaryColor, setForegroundPrimaryColor, resetForegroundPrimaryColor)
     IMPLEMENTATION(foregroundSecondaryColor, foregroundSecondaryColor, setForegroundSecondaryColor, resetForegroundSecondaryColor)

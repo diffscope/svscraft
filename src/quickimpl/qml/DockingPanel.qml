@@ -217,7 +217,7 @@ Pane {
             anchors.top: header.bottom
             width: header.width
             height: 1
-            color: Theme.splitterColor
+            color: Theme.paneSeparatorColor
         }
     }
     MouseArea {

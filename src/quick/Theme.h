@@ -53,6 +53,7 @@ namespace SVS {
         Q_PROPERTY(QColor backgroundTertiaryColor READ backgroundTertiaryColor WRITE setBackgroundTertiaryColor RESET resetBackgroundTertiaryColor NOTIFY backgroundTertiaryColorChanged)
         Q_PROPERTY(QColor backgroundQuaternaryColor READ backgroundQuaternaryColor WRITE setBackgroundQuaternaryColor RESET resetBackgroundQuaternaryColor NOTIFY backgroundQuaternaryColorChanged)
         Q_PROPERTY(QColor splitterColor READ splitterColor WRITE setSplitterColor RESET resetSplitterColor NOTIFY splitterColorChanged)
+        Q_PROPERTY(QColor paneSeparatorColor READ paneSeparatorColor WRITE setPaneSeparatorColor RESET resetPaneSeparatorColor NOTIFY paneSeparatorColorChanged)
 
         Q_PROPERTY(QColor foregroundPrimaryColor READ foregroundPrimaryColor WRITE setForegroundPrimaryColor RESET resetForegroundPrimaryColor NOTIFY foregroundPrimaryColorChanged)
         Q_PROPERTY(QColor foregroundSecondaryColor READ foregroundSecondaryColor WRITE setForegroundSecondaryColor RESET resetForegroundSecondaryColor NOTIFY foregroundSecondaryColorChanged)
@@ -149,6 +150,10 @@ namespace SVS {
         QColor splitterColor() const;
         void setSplitterColor(const QColor &splitterColor);
         void resetSplitterColor();
+
+        QColor paneSeparatorColor() const;
+        void setPaneSeparatorColor(const QColor &paneSeparatorColor);
+        void resetPaneSeparatorColor();
 
         QColor foregroundPrimaryColor() const;
         void setForegroundPrimaryColor(const QColor &foregroundPrimaryColor);
@@ -261,6 +266,7 @@ namespace SVS {
         void backgroundTertiaryColorChanged();
         void backgroundQuaternaryColorChanged();
         void splitterColorChanged();
+        void paneSeparatorColorChanged();
         void foregroundPrimaryColorChanged();
         void foregroundSecondaryColorChanged();
         void linkColorChanged();

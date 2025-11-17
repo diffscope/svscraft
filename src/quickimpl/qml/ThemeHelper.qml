@@ -60,6 +60,8 @@ QtObject {
                     return theme.borderColor
                 case SVS.DS_Splitter:
                     return theme.splitterColor
+                case SVS.DS_PaneSeparator:
+                    return theme.paneSeparatorColor
             }
             return undefined
         }

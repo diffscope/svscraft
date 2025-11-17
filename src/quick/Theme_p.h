@@ -51,6 +51,7 @@ namespace SVS {
             {"backgroundTertiaryColor", QVariant::fromValue(QColor(0x252629))},
             {"backgroundQuaternaryColor", QVariant::fromValue(QColor(0x313235))},
             {"splitterColor", QVariant::fromValue(QColor(0x121315))},
+            {"paneSeparatorColor" , QVariant::fromValue(QColor(0x343538))},
             {"foregroundPrimaryColor", QVariant::fromValue(QColor(0xdadada))},
             {"foregroundSecondaryColor", QVariant::fromValue(QColor::fromRgba(0xa0dadada))},
             {"linkColor", QVariant::fromValue(QColor(0x5566ff))},

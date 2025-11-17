@@ -537,7 +537,7 @@ Item {
             LayoutMirroring.enabled: false
             implicitHeight: 1
             implicitWidth: 1
-            color: Theme.splitterColor
+            color: Theme.paneSeparatorColor
             z: 10
         }
         SplitView {

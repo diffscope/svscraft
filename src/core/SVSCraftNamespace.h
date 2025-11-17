@@ -49,7 +49,7 @@ namespace SVS {
         Q_ENUM_NS(TabIndicator)
 
         enum DividerStroke {
-            DS_Auto, DS_None, DS_Border, DS_Splitter,
+            DS_Auto, DS_None, DS_Border, DS_Splitter, DS_PaneSeparator,
         };
         Q_ENUM_NS(DividerStroke)
 
