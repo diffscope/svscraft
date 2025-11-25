@@ -20,13 +20,14 @@
 import QtQml
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls.Basic as T
+import QtQuick.Controls.Basic as Basic
+import QtQuick.Templates as T
 
 import SVSCraft
 import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
 
-T.Container {
+Basic.Container {
     id: container
 
     property bool showMenuAboveButton: false
@@ -38,21 +39,21 @@ T.Container {
 
     spacing: 5
 
-    function addAction(action) {
+    function addAction(action: T.Action) {
         addItem(toolButtonComponent.createObject(this, { action }))
     }
-    function addMenu(menu) {
+    function addMenu(menu: T.Menu) {
         menu.parent = this
         addAction(menuActionComponent.createObject(this, { menu }))
     }
-    function insertAction(index, action) {
+    function insertAction(index: int, action: T.Action) {
         insertItem(index, toolButtonComponent.createObject(this, { action }))
     }
-    function insertMenu(index, menu) {
+    function insertMenu(index: int, menu: T.Menu) {
         menu.parent = this
         insertAction(index, menuActionComponent.createObject(this, { menu }))
     }
-    function removeAction(action) {
+    function removeAction(action: T.Action) {
         if (!action)
             return
         for (let i = count - 1; i >= 0; i--) {
@@ -63,7 +64,7 @@ T.Container {
             }
         }
     }
-    function removeMenu(menu) {
+    function removeMenu(menu: T.Menu) {
         if (!menu)
             return
         for (let i = count - 1; i >= 0; i--) {
@@ -74,7 +75,7 @@ T.Container {
             }
         }
     }
-    function takeAction(index) {
+    function takeAction(index: int) {
         let item = itemAt(i)
         let action = item.action
         if (action) {
@@ -82,7 +83,7 @@ T.Container {
         }
         return action
     }
-    function takeMenu(index) {
+    function takeMenu(index: int) {
         let item = itemAt(i)
         let menu = item.action?.menu
         if (menu) {
