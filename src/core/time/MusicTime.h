@@ -79,7 +79,7 @@ namespace SVS {
         Q_PROPERTY(MusicTime musicTime READ toTime)
         Q_PROPERTY(double millisecond READ millisecond)
         Q_PROPERTY(int totalTick READ totalTick CONSTANT)
-        Q_PROPERTY(bool isValid READ isValid CONSTANT)
+        Q_PROPERTY(bool valid READ isValid CONSTANT)
 
     public:
         PersistentMusicTime();
@@ -129,16 +129,18 @@ namespace SVS {
         PersistentMusicTime &operator+=(int t);
         PersistentMusicTime &operator-=(int t);
 
-        PersistentMusicTime floorMeasure() const;
-        PersistentMusicTime ceilMeasure() const;
-        PersistentMusicTime roundMeasure() const;
-        PersistentMusicTime floorBeat() const;
-        PersistentMusicTime ceilBeat() const;
-        PersistentMusicTime roundBeat() const;
-        PersistentMusicTime previousMeasure() const;
-        PersistentMusicTime nextMeasure() const;
-        PersistentMusicTime previousBeat() const;
-        PersistentMusicTime nextBeat() const;
+        Q_INVOKABLE PersistentMusicTime floorMeasure() const;
+        Q_INVOKABLE PersistentMusicTime ceilMeasure() const;
+        Q_INVOKABLE PersistentMusicTime roundMeasure() const;
+        Q_INVOKABLE PersistentMusicTime floorBeat() const;
+        Q_INVOKABLE PersistentMusicTime ceilBeat() const;
+        Q_INVOKABLE PersistentMusicTime roundBeat() const;
+        Q_INVOKABLE PersistentMusicTime previousMeasure() const;
+        Q_INVOKABLE PersistentMusicTime nextMeasure() const;
+        Q_INVOKABLE PersistentMusicTime previousBeat() const;
+        Q_INVOKABLE PersistentMusicTime nextBeat() const;
+        Q_INVOKABLE PersistentMusicTime previousTick() const { return operator+(1); }
+        Q_INVOKABLE PersistentMusicTime nextTick() const { return operator+(-1); }
 
         Q_INVOKABLE inline QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const {
             return toTime().toString(measureWidth, beatWidth, tickWidth);

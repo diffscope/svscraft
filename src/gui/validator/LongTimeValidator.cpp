@@ -19,26 +19,67 @@
 
 #include "LongTimeValidator.h"
 
+#include <limits>
+
 #include <QRegularExpression>
 
 #include <SVSCraftCore/LongTime.h>
 
 namespace SVS {
-    LongTimeValidator::LongTimeValidator(QObject *parent) : QIntValidator(parent) {
+    LongTimeValidator::LongTimeValidator(QObject *parent) 
+        : QValidator(parent), m_bottom(LongTime()), m_top(LongTime(std::numeric_limits<int>::max())) {
     }
-    LongTimeValidator::LongTimeValidator(int minimum, int maximum, QObject *parent) : QIntValidator(minimum, maximum, parent) {
+    
+    LongTimeValidator::LongTimeValidator(const LongTime &minimum, const LongTime &maximum, QObject *parent) 
+        : QValidator(parent), m_bottom(minimum), m_top(maximum) {
     }
+    
+    LongTime LongTimeValidator::bottom() const {
+        return m_bottom;
+    }
+    
+    void LongTimeValidator::setBottom(const LongTime &bottom) {
+        setRange(bottom, top());
+    }
+    
+    LongTime LongTimeValidator::top() const {
+        return m_top;
+    }
+    
+    void LongTimeValidator::setTop(const LongTime &top) {
+        setRange(bottom(), top);
+    }
+    
+    void LongTimeValidator::setRange(const LongTime &bottom, const LongTime &top) {
+        bool rangeChanged = false;
+        if (m_bottom != bottom) {
+            m_bottom = bottom;
+            rangeChanged = true;
+            emit bottomChanged(m_bottom);
+        }
+
+        if (m_top != top) {
+            m_top = top;
+            rangeChanged = true;
+            emit topChanged(m_top);
+        }
+
+        if (rangeChanged)
+            emit changed();
+    }
+    
     QValidator::State LongTimeValidator::validate(QString &s, int &) const {
         static QRegularExpression rx(R"(^(-?)(\d*)([:\x{ff1a}]?)(\d*)([:\x{ff1a}]?)(\d*)[.\x{3002}\x{ff0e}]?(\d*)$)");
         static QRegularExpression rxPositive(R"(^(\d*)([:\x{ff1a}]?)(\d*)([:\x{ff1a}]?)(\d*)[.\x{3002}\x{ff0e}]?(\d*)$)");
-        auto match = (bottom() < 0 ? rx : rxPositive).match(s);
+        auto match = (m_bottom.negative() ? rx : rxPositive).match(s);
         if (!match.hasMatch())
             return Invalid;
-        if (s != qBound(LongTime(bottom()), LongTime::fromString(s), LongTime(top())).toString())
+        if (s != qBound(m_bottom, LongTime::fromString(s), m_top).toString())
             return Intermediate;
         return Acceptable;
     }
+    
     void LongTimeValidator::fixup(QString &s) const {
-        s = qBound(LongTime(bottom()), LongTime::fromString(s), LongTime(top())).toString();
+        s = qBound(m_bottom, LongTime::fromString(s), m_top).toString();
     }
 }

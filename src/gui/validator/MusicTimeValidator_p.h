@@ -17,46 +17,28 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_LONGTIMEVALIDATOR_H
-#define SVSCRAFT_LONGTIMEVALIDATOR_H
+#ifndef SVSCRAFT_MUSICTIMEVALIDATOR_P_H
+#define SVSCRAFT_MUSICTIMEVALIDATOR_P_H
 
-#include <QValidator>
+#include <SVSCraftGui/MusicTimeValidator.h>
 
-#include <SVSCraftCore/LongTime.h>
-#include <SVSCraftGui/SVSCraftGuiGlobal.h>
+#include <limits>
 
 namespace SVS {
 
-    class SVSCRAFT_GUI_EXPORT LongTimeValidator : public QValidator {
-        Q_OBJECT
-        Q_PROPERTY(LongTime bottom READ bottom WRITE setBottom NOTIFY bottomChanged)
-        Q_PROPERTY(LongTime top READ top WRITE setTop NOTIFY topChanged)
-
+    class MusicTimeValidatorPrivate {
+        Q_DECLARE_PUBLIC(MusicTimeValidator)
     public:
-        explicit LongTimeValidator(QObject *parent = nullptr);
-        LongTimeValidator(const LongTime &minimum, const LongTime &maximum, QObject *parent = nullptr);
-
-        LongTime bottom() const;
-        void setBottom(const LongTime &bottom);
+        MusicTimeValidator *q_ptr;
         
-        LongTime top() const;
-        void setTop(const LongTime &top);
-
-        void setRange(const LongTime &bottom, const LongTime &top);
-
-        State validate(QString &, int &) const override;
-        void fixup(QString &) const override;
-
-    Q_SIGNALS:
-        void bottomChanged(const LongTime &bottom);
-        void topChanged(const LongTime &top);
-
-    private:
-        LongTime m_bottom;
-        LongTime m_top;
-
+        int top{std::numeric_limits<int>::max()};
+        int bottom{0};
+        int measureWidth{1};
+        int beatWidth{1};
+        int tickWidth{3};
+        MusicTimeline *timeline{};
     };
 
 }
 
-#endif // SVSCRAFT_LONGTIMEVALIDATOR_H
+#endif // SVSCRAFT_MUSICTIMEVALIDATOR_P_H
