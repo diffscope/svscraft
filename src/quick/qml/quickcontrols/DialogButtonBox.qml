@@ -19,32 +19,40 @@
 
 import QtQuick
 import QtQuick.Templates as T
-import QtQuick.Effects
 import QtQuick.Controls.impl
 
 import SVSCraft
 import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
 
-T.Popup {
+T.DialogButtonBox {
     id: control
 
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+        (control.count === 1 ? implicitContentWidth * 2 : implicitContentWidth) + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+        implicitContentHeight + topPadding + bottomPadding)
+    contentWidth: (contentItem as ListView)?.contentWidth
 
-    padding: 8
+    spacing: 12
+    padding: 12
+    alignment: Qt.AlignRight
 
-    font: Theme.font
-
-    background: PopupBackground {
-        control: control
+    delegate: Button {
+        ThemedItem.controlType: T.DialogButtonBox.buttonRole === T.DialogButtonBox.AcceptRole ? SVS.CT_Accent : SVS.CT_Normal
     }
 
-    T.Overlay.modal: Rectangle {
-        color: Color.transparent(Theme.shadowColor, 0.5)
+    contentItem: ListView {
+        implicitWidth: contentWidth
+        model: control.contentModel
+        spacing: control.spacing
+        orientation: ListView.Horizontal
+        boundsBehavior: Flickable.StopAtBounds
+        snapMode: ListView.SnapToItem
     }
 
-    T.Overlay.modeless: Rectangle {
-        color: Color.transparent(Theme.shadowColor, 0.12)
+    background: Rectangle {
+        implicitHeight: 60
+        color: Theme.backgroundColor(control.ThemedItem.backgroundLevel)
     }
 }

@@ -28,6 +28,7 @@
 #include <SVSCraftQuick/Theme.h>
 #include <SVSCraftGui/Eyedropper.h>
 #include <SVSCraftCore/SVSCraftNamespace.h>
+#include <SVSCraftFluentSystemIcons/FluentSystemIconsImageProvider.h>
 
 
 using namespace SVS;
@@ -77,6 +78,7 @@ int main(int argc, char *argv[]) {
     }
 
     QQmlApplicationEngine engine;
+    SVS::FluentSystemIconsImageProvider::addToEngine(&engine);
     engine.rootContext()->setContextProperty("commandPaletteModel", commandPaletteModel);
     engine.load(":/qt/qml/SVSCraft/Test/UIComponents/main.qml");
 

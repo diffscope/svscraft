@@ -442,6 +442,14 @@ ApplicationWindow {
                         width: 320
                         height: 200
                     }
+                    Dialog {
+                        id: dialog
+                        anchors.centerIn: Overlay.overlay
+                        width: 320
+                        height: 200
+                        title: "Dialog"
+                        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+                    }
                     RowLayout {
                         anchors.fill: parent
                         spacing: 8
@@ -457,6 +465,12 @@ ApplicationWindow {
                             onClicked: () => {
                                 popup.modal = false
                                 popup.open()
+                            }
+                        }
+                        Button {
+                            text: "Show Dialog"
+                            onClicked: () => {
+                                dialog.open()
                             }
                         }
                     }

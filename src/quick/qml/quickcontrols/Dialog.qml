@@ -26,25 +26,67 @@ import SVSCraft
 import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
 
-T.Popup {
+T.Dialog {
     id: control
 
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+        implicitContentWidth + leftPadding + rightPadding,
+        implicitHeaderWidth,
+        implicitFooterWidth)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+        implicitContentHeight + topPadding + bottomPadding
+        + (implicitHeaderHeight > 0 ? implicitHeaderHeight + spacing : 0)
+        + (implicitFooterHeight > 0 ? implicitFooterHeight + spacing : 0))
 
-    padding: 8
-
-    font: Theme.font
+    padding: 12
 
     background: PopupBackground {
         control: control
     }
 
+    header: Label {
+        text: control.title
+        visible: parent?.parent === T.Overlay.overlay && control.title
+        elide: Label.ElideRight
+        padding: 12
+        Rectangle {
+            anchors.bottom: parent.bottom
+            x: 1
+            width: parent.width - 2
+            height: 1
+            color: Theme.paneSeparatorColor
+        }
+        MouseArea {
+            anchors.fill: parent
+            property point lastMousePos: Qt.point(0, 0)
+
+            onPressed: (mouse) => {
+                lastMousePos = Qt.point(mouse.x, mouse.y)
+            }
+
+            onPositionChanged: (mouse) => {
+                let deltaX = mouse.x - lastMousePos.x
+                let deltaY = mouse.y - lastMousePos.y
+                control.x += deltaX
+                control.y += deltaY
+            }
+        }
+    }
+
+    footer: DialogButtonBox {
+        ThemedItem.backgroundLevel: control.ThemedItem.backgroundLevel
+        topPadding: 0
+        background: Item {
+            implicitHeight: 48
+        }
+        visible: count > 0
+    }
+
     T.Overlay.modal: Rectangle {
-        color: Color.transparent(Theme.shadowColor, 0.5)
+        color: Color.transparent(control.palette.shadow, 0.5)
     }
 
     T.Overlay.modeless: Rectangle {
-        color: Color.transparent(Theme.shadowColor, 0.12)
+        color: Color.transparent(control.palette.shadow, 0.12)
     }
 }

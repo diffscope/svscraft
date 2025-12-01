@@ -24,27 +24,45 @@ import QtQuick.Controls.impl
 
 import SVSCraft
 import SVSCraft.UIComponents
-import SVSCraft.UIComponents.impl
 
-T.Popup {
-    id: control
-
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
-
-    padding: 8
-
-    font: Theme.font
-
-    background: PopupBackground {
-        control: control
+Item {
+    id: backgroundItem
+    property Item shadowItem: null
+    property T.Popup control: null
+    Rectangle {
+        id: backgroundArea
+        anchors.fill: parent
+        color: Theme.backgroundColor(control?.ThemedItem.backgroundLevel ?? SVS.BL_Primary)
+        border.color: Theme.borderColor
+        radius: 4
+    }
+    Component {
+        id: shadowComponent
+        MultiEffect {
+            source: backgroundArea
+            anchors.fill: parent
+            shadowEnabled: true
+            shadowColor: Theme.shadowColor
+        }
+    }
+    Component.onCompleted: () => {
+        backgroundItem.shadowItem = shadowComponent.createObject(backgroundItem)
+    }
+    // FIXME
+    Connections {
+        target: control
+        function onAboutToShow() {
+            if (backgroundItem.shadowItem) {
+                backgroundItem.shadowItem.destroy()
+            }
+            console.log(123123)
+            backgroundItem.shadowItem = shadowComponent.createObject(backgroundItem)
+        }
+        function onClosed() {
+            if (backgroundItem.shadowItem) {
+                backgroundItem.shadowItem.destroy()
+            }
+        }
     }
 
-    T.Overlay.modal: Rectangle {
-        color: Color.transparent(Theme.shadowColor, 0.5)
-    }
-
-    T.Overlay.modeless: Rectangle {
-        color: Color.transparent(Theme.shadowColor, 0.12)
-    }
 }
