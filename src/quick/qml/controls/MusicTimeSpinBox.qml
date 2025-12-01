@@ -31,6 +31,8 @@ SpinBox {
     property MusicTimeline timeline: null
     validator: MusicTimeValidator {
         timeline: control.timeline
+        bottom: control.from
+        top: control.to
     }
     textFromValue: function(value) {
         return GlobalHelper.musicTimelineTextFromValue(timeline, value, validator.measureWidth, validator.beatWidth, validator.tickWidth)
@@ -38,4 +40,6 @@ SpinBox {
     valueFromText: function(text) {
         return GlobalHelper.musicTimelineValueFromText(timeline, text)
     }
+    from: 0
+    to: 2147483647
 }

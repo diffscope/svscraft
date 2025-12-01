@@ -55,7 +55,6 @@ Item {
             if (backgroundItem.shadowItem) {
                 backgroundItem.shadowItem.destroy()
             }
-            console.log(123123)
             backgroundItem.shadowItem = shadowComponent.createObject(backgroundItem)
         }
         function onClosed() {
