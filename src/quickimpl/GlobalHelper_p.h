@@ -34,6 +34,8 @@ class QQuickIcon;
 
 namespace SVS {
 
+    class MusicTimeline;
+
     class SVSCRAFT_QUICK_IMPL_EXPORT GlobalHelper : public QObject {
         Q_OBJECT
         QML_ELEMENT
@@ -64,6 +66,9 @@ namespace SVS {
         Q_INVOKABLE static QColor dockingPanelHeaderColor(const QColor &accentColor, const QColor &backgroundColor, bool active);
         static QWindow *focusWindow();
         Q_INVOKABLE static void beep();
+
+        Q_INVOKABLE static int musicTimelineValueFromText(const MusicTimeline *timeline, const QString &text);
+        Q_INVOKABLE static QString musicTimelineTextFromValue(const MusicTimeline *timeline, int value, int mw, int bw, int tw);
     };
 }
 

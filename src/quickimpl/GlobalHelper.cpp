@@ -35,6 +35,8 @@
 #    include <qt_windows.h>
 #endif
 
+#include <SVSCraftCore/MusicTime.h>
+#include <SVSCraftCore/MusicTimeline.h>
 #include <SVSCraftGui/ColorBlender.h>
 
 namespace SVS {
@@ -202,6 +204,18 @@ namespace SVS {
     }
     void GlobalHelper::beep() {
         QGuiApplicationPrivate::platformIntegration()->beep();
+    }
+
+    int GlobalHelper::musicTimelineValueFromText(const MusicTimeline *timeline, const QString &text) {
+        if (!timeline)
+            return 0;
+        return timeline->create(text).totalTick();
+    }
+
+    QString GlobalHelper::musicTimelineTextFromValue(const MusicTimeline *timeline, int value, int mw, int bw, int tw) {
+        if (!timeline)
+            return {};
+        return timeline->create(0, 0, value).toString(mw, bw, tw);
     }
 }
 

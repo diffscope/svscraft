@@ -29,6 +29,9 @@
 #include <SVSCraftCore/MusicTime.h>
 #include <SVSCraftCore/MusicTimeSignature.h>
 
+#include <SVSCraftGui/LongTimeValidator.h>
+#include <SVSCraftGui/MusicTimeValidator.h>
+
 namespace SVS {
 
     class MusicTimelineExtended : public QObject {
@@ -109,6 +112,18 @@ namespace SVS {
         ~DesktopServicesForeign() override;
         Q_INVOKABLE static bool reveal(const QString &filename);
         static QString fileManagerName();
+    };
+
+    struct LongTimeValidatorForeign {
+        Q_GADGET
+        QML_NAMED_ELEMENT(LongTimeValidator)
+        QML_FOREIGN(LongTimeValidator)
+    };
+
+    struct MusicTimeValidatorForeign {
+        Q_GADGET
+        QML_NAMED_ELEMENT(MusicTimeValidator)
+        QML_FOREIGN(MusicTimeValidator)
     };
 
 }
