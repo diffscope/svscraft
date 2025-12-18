@@ -21,6 +21,7 @@ import QtQml
 import QtQuick
 import QtQuick.Controls
 
+import SVSCraft
 import SVSCraft.UIComponents.impl
 
 Pane {
@@ -32,6 +33,8 @@ Pane {
     property bool locked: false
     property bool dock: true
     property Menu menu: null
+    property int badgeType: SVS.CT_Accent
+    property int badgeNumber: 0
 
     Accessible.name: title
     Accessible.description: description
