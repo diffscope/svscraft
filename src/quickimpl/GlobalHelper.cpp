@@ -212,10 +212,15 @@ namespace SVS {
         return timeline->create(text).totalTick();
     }
 
-    QString GlobalHelper::musicTimelineTextFromValue(const MusicTimeline *timeline, int value, int mw, int bw, int tw) {
+    QString GlobalHelper::musicTimelineTextFromValue(const MusicTimeline *timeline, int value,
+                                                     int mw, int bw, int tw) {
         if (!timeline)
             return {};
         return timeline->create(0, 0, value).toString(mw, bw, tw);
+    }
+
+    QUrl GlobalHelper::localFileUrl(const QString &filePath) {
+        return QUrl::fromLocalFile(filePath);
     }
 }
 

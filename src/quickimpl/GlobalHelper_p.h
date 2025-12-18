@@ -69,6 +69,7 @@ namespace SVS {
 
         Q_INVOKABLE static int musicTimelineValueFromText(const MusicTimeline *timeline, const QString &text);
         Q_INVOKABLE static QString musicTimelineTextFromValue(const MusicTimeline *timeline, int value, int mw, int bw, int tw);
+        Q_INVOKABLE static QUrl localFileUrl(const QString &filePath);
     };
 }
 
