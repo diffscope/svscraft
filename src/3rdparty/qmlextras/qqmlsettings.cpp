@@ -446,7 +446,11 @@ namespace SVS {
     void QQmlSettings::setValue(const QString &key, const QVariant &value)
     {
         Q_D(const QQmlSettings);
-        d->instanceSetValue(key, value);
+        if (value.metaType() == QMetaType::fromType<QJSValue>()) {
+            d->instanceSetValue(key, value.value<QJSValue>().toVariant());
+        } else {
+            d->instanceSetValue(key, value);
+        }
         qCDebug(lcQmlSettings) << "QQmlSettings: setValue" << key << ":" << value;
     }
 
