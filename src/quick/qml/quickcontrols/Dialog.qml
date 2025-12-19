@@ -85,9 +85,9 @@ T.Dialog {
         }
         RowLayout {
             visible: header.isMacOS
-            spacing: 9
+            spacing: 6
             anchors.left: parent.left
-            anchors.leftMargin: 9
+            anchors.leftMargin: 8
             anchors.verticalCenter: parent.verticalCenter
             T.Button {
                 id: macOSCloseButton
@@ -100,9 +100,9 @@ T.Dialog {
                     ColorImage {
                         anchors.fill: parent
                         anchors.margins: 3
-                        color: "#64000000"
+                        color: "#7F000000"
                         source: "image://fluent-system-icons/dismiss?size=12"
-                        visible: macOSCloseButton.hovered
+                        visible: macOSButtonAreaHoverHandler.hovered
                     }
                     border.color: "#1A000000"
                     border.width: 1
@@ -116,7 +116,7 @@ T.Dialog {
                 enabled: false
                 background: Rectangle {
                     radius: height / 2
-                    color: Theme.controlDisabledColorChange.apply(Theme.buttonColor)
+                    color: Theme.buttonColor
                     border.color: "#1A000000"
                     border.width: 1
                 }
@@ -128,10 +128,13 @@ T.Dialog {
                 enabled: false
                 background: Rectangle {
                     radius: height / 2
-                    color: Theme.controlDisabledColorChange.apply(Theme.buttonColor)
+                    color: Theme.buttonColor
                     border.color: "#1A000000"
                     border.width: 1
                 }
+            }
+            HoverHandler {
+                id: macOSButtonAreaHoverHandler
             }
         }
         Button {
