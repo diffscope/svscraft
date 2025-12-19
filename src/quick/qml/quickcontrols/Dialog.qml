@@ -18,6 +18,7 @@
  ******************************************************************************/
 
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Templates as T
 import QtQuick.Effects
 import QtQuick.Controls.impl
@@ -44,11 +45,22 @@ T.Dialog {
         control: control
     }
 
-    header: Label {
-        text: control.title
-        visible: parent?.parent === T.Overlay.overlay && control.title
-        elide: Label.ElideRight
-        padding: 12
+    header: Item {
+        id: header
+        implicitHeight: 32
+        readonly property bool isMacOS: Qt.platform.os === "osx" || Qt.platform.os === "macos"
+        Label {
+            anchors.left: header.isMacOS ? undefined : parent.left
+            anchors.horizontalCenter: header.isMacOS ? parent.horizontalCenter : undefined
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: header.isMacOS ? 0 : 12
+            text: control.title
+            visible: control.title !== ""
+            Component.onCompleted: () => {
+                if (header.isMacOS)
+                    font.weight = Font.ExtraBold
+            }
+        }
         Rectangle {
             anchors.bottom: parent.bottom
             x: 1
@@ -70,6 +82,69 @@ T.Dialog {
                 control.x += deltaX
                 control.y += deltaY
             }
+        }
+        RowLayout {
+            visible: header.isMacOS
+            spacing: 9
+            anchors.left: parent.left
+            anchors.leftMargin: 9
+            anchors.verticalCenter: parent.verticalCenter
+            T.Button {
+                id: macOSCloseButton
+                implicitWidth: 14
+                implicitHeight: 14
+                Accessible.name: qsTr("Close")
+                background: Rectangle {
+                    radius: height / 2
+                    color: "#FF736A"
+                    ColorImage {
+                        anchors.fill: parent
+                        anchors.margins: 3
+                        color: "#64000000"
+                        source: "image://fluent-system-icons/dismiss?size=12"
+                        visible: macOSCloseButton.hovered
+                    }
+                    border.color: "#1A000000"
+                    border.width: 1
+                }
+                onClicked: control.reject()
+            }
+            T.Button {
+                implicitWidth: 14
+                implicitHeight: 14
+                Accessible.name: qsTr("Minimize")
+                enabled: false
+                background: Rectangle {
+                    radius: height / 2
+                    color: Theme.controlDisabledColorChange.apply(Theme.buttonColor)
+                    border.color: "#1A000000"
+                    border.width: 1
+                }
+            }
+            T.Button {
+                implicitWidth: 14
+                implicitHeight: 14
+                Accessible.name: qsTr("Zoom")
+                enabled: false
+                background: Rectangle {
+                    radius: height / 2
+                    color: Theme.controlDisabledColorChange.apply(Theme.buttonColor)
+                    border.color: "#1A000000"
+                    border.width: 1
+                }
+            }
+        }
+        Button {
+            visible: !header.isMacOS
+            anchors.right: parent.right
+            anchors.rightMargin: 4
+            anchors.verticalCenter: parent.verticalCenter
+            Accessible.name: qsTr("Close")
+            icon.source: "image://fluent-system-icons/dismiss"
+            flat: true
+            implicitHeight: 24
+            implicitWidth: 24
+            onClicked: control.reject()
         }
     }
 
