@@ -100,7 +100,7 @@ T.Dialog {
                     ColorImage {
                         anchors.fill: parent
                         anchors.margins: 3
-                        color: "#7F000000"
+                        color: "#90000000"
                         source: "image://fluent-system-icons/dismiss?size=12"
                         visible: macOSButtonAreaHoverHandler.hovered
                     }
