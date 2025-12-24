@@ -41,6 +41,9 @@ T.Menu {
     padding: 3
 
     font: Theme.font
+    icon.width: 16
+    icon.height: 16
+    icon.color: !enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) : Theme.foregroundPrimaryColor
 
     delegate: MenuItem {
 
