@@ -62,8 +62,8 @@ T.Button {
                         return "image://fluent-system-icons/question?size=16&style=regular"
                 }
             }
-            icon.width: 16
-            icon.height: 16
+            icon.width: 14
+            icon.height: 14
         }
     }
 
