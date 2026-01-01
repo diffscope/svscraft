@@ -61,4 +61,12 @@ Rectangle {
             }
         }
     }
+
+    Rectangle {
+        anchors.fill: parent
+        radius: 4
+        color: "transparent"
+        border.color: Theme.borderColor
+        border.width: 0.5
+    }
 }
