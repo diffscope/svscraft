@@ -67,7 +67,7 @@ T.Slider {
             GlobalHelper.ungrabMouse(control)
             control.handle._doubleClicked = control.handle._doubleClickTriggered = true
             GlobalHelper.setProperty(control, "value", 0)
-            control.moved()
+            control.ThemedItem.doubleClickReset()
             control.handle._doubleClickTriggered = false
         }
     }

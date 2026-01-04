@@ -103,6 +103,8 @@ namespace SVS {
         void toolTipFollowsCursorChanged();
         void iconChanged();
 
+        void doubleClickReset();
+
     private:
         friend class ThemedItemAttachedType;
         explicit ThemedItem(QObject *parent = nullptr);
