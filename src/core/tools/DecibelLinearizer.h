@@ -35,6 +35,14 @@ namespace SVS {
         inline static double linearValueToDecibel(double linearValue, double factor = -15) {
             return -factor * std::log(linearValue + std::exp(1)) + factor;
         }
+
+        inline static double decibelsToGain(double decibels, double minusInfinityDb = -96) {
+            return decibels > minusInfinityDb ? std::pow (10.0, decibels * .05) : .0;
+        }
+
+        inline static double gainToDecibels(float gain, double minusInfinityDb = -96) {
+            return gain > .0f ? qMax (minusInfinityDb, std::log10 (gain) * 20.0) : minusInfinityDb;
+        }
     };
 
 } // SVS
