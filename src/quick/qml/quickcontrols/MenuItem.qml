@@ -62,8 +62,8 @@ T.MenuItem {
             if (point.x < 0 || point.x > control.width) {
                 return false
             }
-            let topIsSeparator = control.menu.contentModel.get(control.ObjectModel.index - 1) instanceof T.MenuSeparator
-            let bottomIsSeparator = control.menu.contentModel.get(control.ObjectModel.index + 1) instanceof T.MenuSeparator
+            let topIsSeparator = control.menu.itemAt(control.ObjectModel.index - 1) instanceof T.MenuSeparator
+            let bottomIsSeparator = control.menu.itemAt(control.ObjectModel.index + 1) instanceof T.MenuSeparator
             if (point.y < (topIsSeparator ? -2.5 : 0) || point.y > control.height + (bottomIsSeparator ? 2.5 : 0)) {
                 return false
             }
