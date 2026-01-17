@@ -9,8 +9,9 @@
 #include <QPixmap>
 #include <QGuiApplication>
 #include <QLoggingCategory>
-
-#include <SVSCraftFluentSystemIcons/private/iconmanifest_p.h>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 namespace SVS {
 
@@ -70,6 +71,57 @@ namespace SVS {
         return QPixmap::fromImageReader(&reader);
     }
 
+    static QHash<QString, int> loadRegularIconsCharset() {
+        QFile file(":/svscraft/fluent-system-icons/FluentSystemIcons-Regular.json");
+        if (!file.open(QIODevice::ReadOnly)) {
+            qFatal() << "Failed to open Fluent System Icons json file" << file.errorString();
+        }
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &error);
+        if (error.error != QJsonParseError::NoError) {
+            qFatal() << "Failed to parse Fluent System Icons json file" << error.errorString();
+        }
+        QHash<QString, int> s;
+        for (const auto &[key, value] : doc.object().asKeyValueRange()) {
+            s.insert(key.toString(), value.toInt());
+        }
+        return s;
+    }
+
+    static QHash<QString, int> loadFilledIconsCharset() {
+        QFile file(":/svscraft/fluent-system-icons/FluentSystemIcons-Filled.json");
+        if (!file.open(QIODevice::ReadOnly)) {
+            qFatal() << "Failed to open Fluent System Icons json file" << file.errorString();
+        }
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &error);
+        if (error.error != QJsonParseError::NoError) {
+            qFatal() << "Failed to parse Fluent System Icons json file" << error.errorString();
+        }
+        QHash<QString, int> s;
+        for (const auto &[key, value] : doc.object().asKeyValueRange()) {
+            s.insert(key.toString(), value.toInt());
+        }
+        return s;
+    }
+
+    static QSet<QString> loadMirrorRtlIcons() {
+        QFile file(":/svscraft/fluent-system-icons/rtl.json");
+        if (!file.open(QIODevice::ReadOnly)) {
+            qFatal() << "Failed to open Fluent System Icons json file" << file.errorString();
+        }
+        QJsonParseError error;
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &error);
+        if (error.error != QJsonParseError::NoError) {
+            qFatal() << "Failed to parse Fluent System Icons json file" << error.errorString();
+        }
+        QSet<QString> s;
+        for (const auto &key : doc.array()) {
+            s.insert(key.toString());
+        }
+        return s;
+    }
+
     QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style, int pixmapSize) {
         static const auto ltrString = QStringLiteral("_ltr");
         static const auto rtlString = QStringLiteral("_rtl");
@@ -86,6 +138,9 @@ namespace SVS {
         static const QStringList trySizes32 = {"_32", "_48", "_16", "_20", "_24", "_28", "_12", "_10"};
         static const QStringList trySizes48 = {"_48", "_32", "_28", "_24", "_20", "_16", "_12", "_10"};
         static const QSet<QString> customIconList = loadCustomIconList();
+        static const auto fluentSystemIcons_RegularIconsCharset = loadRegularIconsCharset();
+        static const auto fluentSystemIcons_FilledIconsCharset = loadFilledIconsCharset();
+        static const auto fluentSystemIcons_MirrorRtlIcons = loadMirrorRtlIcons();
 
         if (pixmapSize < 0)
             pixmapSize = size;
