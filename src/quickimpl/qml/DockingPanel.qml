@@ -112,7 +112,7 @@ Pane {
                                 let w = 100
                                 for (let i = 0; i < count; i++) {
                                     let item = itemAtIndex(i)
-                                    w = Math.max(w, item.implicitWidth)
+                                    w = Math.max(w, item?.implicitWidth ?? 0)
                                 }
                                 return w
                             }
@@ -157,7 +157,7 @@ Pane {
                         required property int index
 
                         width: ListView.view.width
-                        height: 28
+                        height: 32
                         icon: model[comboBox.valueRole].icon
                         text: model[comboBox.textRole]
                         highlighted: comboBox.currentIndex === index
