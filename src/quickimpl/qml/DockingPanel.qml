@@ -22,6 +22,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Controls.impl
+import QtQuick.Templates as T
 
 import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
@@ -39,8 +40,11 @@ Pane {
     property bool undockToolButtonVisible: true
     property bool dockingWindow: false
     property bool active: false
+    property var selectorModel: null
     signal removed()
     signal activated()
+    signal selectorActivated(selectedPane: DockingPane)
+
     onPaneChanged: set()
     FocusScope {
         anchors.fill: parent
@@ -67,21 +71,98 @@ Pane {
                 spacing: 4
                 anchors.fill: parent
                 anchors.margins: 4
-                IconLabel {
-                    leftPadding: 4
-                    icon.source: container.pane?.icon.source ?? ""
-                    icon.color: Theme.foregroundPrimaryColor
-                    icon.width: 16
-                    icon.height: 16
-                    font: container.font
+                T.ComboBox {
+                    id: comboBox
+                    padding: 4
+                    rightPadding: container.selectorModel ? 20 : 4
+                    implicitWidth: implicitContentWidth + leftPadding + rightPadding
+                    implicitHeight: implicitContentHeight + topPadding + bottomPadding
                     Layout.alignment: Qt.AlignVCenter
-                }
-                Text {
-                    color: Theme.foregroundPrimaryColor
-                    rightPadding: 4
-                    font: container.font
-                    text: container.pane?.title ?? ""
-                    Layout.alignment: Qt.AlignVCenter
+                    contentItem: IconLabel {
+                        spacing: 4
+                        icon: container.pane?.icon ?? GlobalHelper.defaultIcon()
+                        font: container.font
+                        text: container.pane?.title ?? ""
+                        color: Theme.foregroundPrimaryColor
+                    }
+                    indicator: Item {
+                        x: comboBox.mirrored ? comboBox.padding : comboBox.width - width - comboBox.padding + 4
+                        y: comboBox.topPadding + (comboBox.availableHeight - height) / 2
+                        width: image.width + 8
+                        visible: Boolean(container.selectorModel)
+                        ColorImage {
+                            id: image
+                            anchors.centerIn: parent
+                            color: Theme.foregroundPrimaryColor
+                            sourceSize.width: 12
+                            sourceSize.height: 12
+                            source: "image://fluent-system-icons/chevron_down?size=12"
+                        }
+                    }
+                    popup: T.Popup {
+                        y: comboBox.height
+                        width: contentItem.implicitWidth
+                        height: Math.min(contentItem.implicitHeight, comboBox.Window.height - topMargin - bottomMargin)
+                        topMargin: 6
+                        bottomMargin: 6
+
+                        contentItem: ListView {
+                            clip: true
+                            implicitWidth: {
+                                let w = 100
+                                for (let i = 0; i < count; i++) {
+                                    let item = itemAtIndex(i)
+                                    w = Math.max(w, item.implicitWidth)
+                                }
+                                return w
+                            }
+                            implicitHeight: contentHeight
+                            model: comboBox.delegateModel
+                            currentIndex: comboBox.currentIndex
+                            highlightMoveDuration: 0
+
+                            Rectangle {
+                                z: 10
+                                width: parent.width
+                                height: parent.height
+                                color: "transparent"
+                                border.color: Theme.borderColor
+                                radius: 4
+                            }
+
+                            T.ScrollIndicator.vertical: ScrollIndicator { }
+                        }
+
+                        background: Rectangle {
+                            id: backgroundArea
+                            color: Theme.buttonColor
+                            radius: 4
+                        }
+                    }
+                    textRole: "text"
+                    valueRole: "data"
+                    currentIndex: {
+                        if (!container.selectorModel)
+                            return 0
+                        for (let i = 0; i < container.selectorModel.length; i++) {
+                            if (container.selectorModel[i].data === container.pane)
+                                return i
+                        }
+                        return 0
+                    }
+                    model: container.selectorModel
+                    onActivated: (index) => container.selectorActivated(valueAt(index))
+                    delegate: ItemDelegate {
+                        required property var model
+                        required property int index
+
+                        width: ListView.view.width
+                        height: 28
+                        icon: model[comboBox.valueRole].icon
+                        text: model[comboBox.textRole]
+                        highlighted: comboBox.currentIndex === index
+                        hoverEnabled: comboBox.hoverEnabled
+                    }
                 }
                 Rectangle {
                     width: 1

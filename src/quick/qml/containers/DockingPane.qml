@@ -29,7 +29,12 @@ Pane {
     property Item header: null
     property string title: ""
     property string description: ""
-    property qQuickIcon icon: GlobalHelper.defaultIcon()
+    property qQuickIcon icon: {
+        let i = GlobalHelper.defaultIcon()
+        i.width = i.height = 16
+        i.color = Theme.foregroundPrimaryColor
+        return i
+    }
     property bool locked: false
     property bool dock: true
     property Menu menu: null

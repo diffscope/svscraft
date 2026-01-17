@@ -54,6 +54,7 @@ Item {
     default property list<QtObject> contentData: []
     property int edge: Qt.LeftEdge
     property double barSize: 32
+    property bool barVisible: true
     property double panelSize: 400
     property int barBackgroundLevel: SVS.BL_Primary
     property bool firstActive: false
@@ -270,6 +271,7 @@ Item {
         anchors.left: view.edge === Qt.LeftEdge ? parent.left : undefined
         anchors.right: view.edge === Qt.RightEdge ? parent.right : undefined
         anchors.bottom: view.edge === Qt.BottomEdge ? parent.bottom : undefined
+        visible: view.barVisible
         LayoutMirroring.enabled: false
         ThemedItem.backgroundLevel: view.barBackgroundLevel
         property int firstIndex: -1
@@ -537,6 +539,7 @@ Item {
             LayoutMirroring.enabled: false
             implicitHeight: 1
             implicitWidth: 1
+            visible: view.barVisible
             color: Theme.paneSeparatorColor
             z: 10
         }
@@ -564,12 +567,44 @@ Item {
                 }
                 onActivated: view.firstActivated()
                 active: view.firstActive
+                selectorModel: {
+                    let a = []
+                    for (let i = 0; i < view.contentData.length; i++) {
+                        let o = view.contentData[i]
+                        if (o instanceof DockingStretch) {
+                            break
+                        }
+                        if (o instanceof DockingPane && o.dock) {
+                            a.push({ text: o.title, data: o })
+                        }
+                    }
+                    return a
+                }
+                onSelectorActivated: (selectedPane) => view.showPane(selectedPane)
             }
             DockingPanel {
                 pane: view.lastItem
                 visible: view.lastItem !== null
                 onActivated: view.lastActivated()
                 active: view.lastActive
+                selectorModel: {
+                    let a = []
+                    let i
+                    for (i = 0; i < view.contentData.length; i++) {
+                        let o = view.contentData[i]
+                        if (o instanceof DockingStretch) {
+                            break
+                        }
+                    }
+                    for (i++; i < view.contentData.length; i++) {
+                        let o = view.contentData[i]
+                        if (o instanceof DockingPane && o.dock) {
+                            a.push({ text: o.title, data: o })
+                        }
+                    }
+                    return a
+                }
+                onSelectorActivated: (selectedPane) => view.showPane(selectedPane)
             }
         }
     }
