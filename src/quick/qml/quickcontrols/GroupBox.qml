@@ -55,7 +55,7 @@ T.GroupBox {
         Button {
             id: foldButton
             property bool _folded: control.ThemedItem.folded
-            property double _rotation: control.ThemedItem.folded ? 0 : 180
+            property double _rotation: { _rotation = control.ThemedItem.folded ? 0 : 180 }
             Layout.rightMargin: control.leftPadding
             visible: control.ThemedItem.foldable
             width: 20
@@ -74,10 +74,20 @@ T.GroupBox {
                 foldButton._folded: control.ThemedItem.folded
                 foldButton.contentItem.rotation: foldButton._rotation
             }
-            Behavior on _rotation {
-                NumberAnimation {
-                    duration: Theme.visualEffectAnimationDuration
-                    easing.type: Easing.OutCubic
+            NumberAnimation on _rotation {
+                id: animation
+                duration: Theme.visualEffectAnimationDuration
+                easing.type: Easing.OutCubic
+            }
+            on_FoldedChanged: () => {
+                if (_folded) {
+                    animation.from = 180
+                    animation.to = 360
+                    animation.start()
+                } else {
+                    animation.from = 0
+                    animation.to = 180
+                    animation.start()
                 }
             }
         }
