@@ -36,6 +36,8 @@ namespace SVS {
 
         Q_INVOKABLE static double decibelToLinearValue(double decibel, double factor = -15);
         Q_INVOKABLE static double linearValueToDecibel(double linearValue, double factor = -15);
+        Q_INVOKABLE static double decibelsToGain(double decibels, double minusInfinityDb = -96);
+        Q_INVOKABLE static double gainToDecibels(double gain, double minusInfinityDb = -96);
     };
 
 }
