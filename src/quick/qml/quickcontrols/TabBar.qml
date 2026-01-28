@@ -34,6 +34,7 @@ T.TabBar {
     contentItem: ListView {
         model: control.contentModel
         currentIndex: control.currentIndex
+        clip: true
 
         spacing: control.spacing
         orientation: ListView.Horizontal
