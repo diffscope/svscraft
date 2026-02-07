@@ -25,12 +25,12 @@
 
 namespace SVS {
 
-    static const char *keyNameStrFlat[12] = {"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"};
-    static const char *keyNameStrSharp[12] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+    static const char *keyNameStrFlat[12] = {"C", "D\u266d", "D", "E\u266d", "E", "F", "G\u266d", "G", "A\u266d", "A", "B\u266d", "B"};
+    static const char *keyNameStrSharp[12] = {"C", "C\u266f", "D", "D\u266f", "E", "F", "F\u266f", "G", "G\u266f", "A", "A\u266f", "B"};
     static int natureKeyPitch[7] = {9, 11, 0, 2, 4, 5, 7};
 
     MusicPitch MusicPitch::fromString(QStringView s, bool *ok) {
-        QRegularExpression rx(R"(^\s*([A-G])([b#]*)\s*(\?|\d*)\s*$)");
+        QRegularExpression rx("^\\s*([A-G])([b#\u266d\u266f]*)\\s*(\\?|\uff1f|\\d*)\\s*$");
         auto match = rx.match(s);
         if (!match.hasMatch()) {
             if (ok)
@@ -42,15 +42,15 @@ namespace SVS {
         auto capOctave = match.capturedView(3);
 
         int keyName = natureKeyPitch[capName[0].toLatin1() - 'A'];
-        keyName -= int(std::count(capAccidental.begin(), capAccidental.end(), 'b'));
-        keyName += int(std::count(capAccidental.begin(), capAccidental.end(), '#'));
+        keyName -= int(std::ranges::count(capAccidental, 'b') + std::ranges::count(capAccidental, L'\u266d'));
+        keyName += int(std::ranges::count(capAccidental, '#') + std::ranges::count(capAccidental, L'\u266f'));
 
         if (capOctave.isEmpty()) {
             if (ok)
                 *ok = false;
             return MusicPitch(static_cast<qint8>(keyName));
         }
-        if (capOctave[0] == '?') {
+        if (capOctave[0] == '?' || capOctave[0] == L'\uff1f') {
             if (ok)
                 *ok = true;
             return {keyName >= 0 ? qint8(keyName % 12) : qint8(12 + keyName % 12), -1};

@@ -20,6 +20,7 @@
 #include "SVSQmlNamespace_p.h"
 
 #include <SVSCraftCore/DecibelLinearizer.h>
+#include <SVSCraftCore/MusicPitch.h>
 
 namespace SVS {
 
@@ -33,7 +34,18 @@ namespace SVS {
         return decibels > minusInfinityDb ? std::pow (10.0, decibels * .05) : .0;
     }
     double SVSQmlNamespace::gainToDecibels(double gain, double minusInfinityDb) {
-        return gain > .0f ? qMax (minusInfinityDb, std::log10 (gain) * 20.0) : minusInfinityDb;
+        return gain > .0f ? qMax(minusInfinityDb, std::log10(gain) * 20.0) : minusInfinityDb;
     }
-    
+    MusicPitch SVSQmlNamespace::musicPitch(int key) {
+        return MusicPitch(static_cast<qint8>(key));
+    }
+    MusicPitch SVSQmlNamespace::musicPitch(int key, int octave) {
+        return MusicPitch(static_cast<qint8>(key), static_cast<qint8>(octave));
+    }
+    MusicPitch SVSQmlNamespace::musicPitch(const QString &s) {
+        return MusicPitch::fromString(s);
+    }
+
 }
+
+#include "moc_SVSQmlNamespace_p.cpp"
