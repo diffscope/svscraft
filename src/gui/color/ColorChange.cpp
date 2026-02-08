@@ -23,6 +23,7 @@
 #include <QDebug>
 
 #include <SVSCraftGui/ColorBlender.h>
+#include <SVSCraftGui/ColorUtils.h>
 
 namespace SVS {
 
@@ -35,6 +36,7 @@ namespace SVS {
         Lighter,
         TopBlend,
         BottomBlend,
+        OkLabLighter,
     };
 
     static QColor filterAlpha(const QColor &color, qintptr d) {
@@ -79,11 +81,19 @@ namespace SVS {
         return ColorBlender::blend<ColorBlender::Normal>(color.rgba(), blendColor);
     }
 
+    static QColor filterOkLabLighter(const QColor &color, qintptr d) {
+        auto factor = std::bit_cast<double>(d);
+        auto oklab = ColorUtils::toOkLab(color);
+        oklab.L = std::clamp(oklab.L * factor, 0.0, 100.0);
+        return ColorUtils::fromOkLab(oklab);
+    }
+
     using Filter = QColor (*)(const QColor &, qintptr);
 
     static Filter m_filters[] = {
         &filterAlpha,     &filterSaturation, &filterValue, &filterHslSaturation,
         &filterLightness, &filterLighter,    &blendTop,    &blendBottom,
+        &filterOkLabLighter,
     };
 
     QColor AbstractColorFilter::apply(const QColor &color) const {
@@ -111,7 +121,12 @@ namespace SVS {
     LightnessColorFilter::LightnessColorFilter(double lightnessFactor) : AbstractColorFilter(std::bit_cast<qintptr>(lightnessFactor), Lightness) {
     }
 
-    LighterColorChange::LighterColorChange(int factor) : AbstractColorFilter(static_cast<qintptr>(factor), Lighter) {
+    LighterColorChange::LighterColorChange(int factor)
+        : AbstractColorFilter(static_cast<qintptr>(factor), Lighter) {
+    }
+
+    OkLabLighterColorChange::OkLabLighterColorChange(double factor)
+        : AbstractColorFilter(std::bit_cast<qintptr>(factor), OkLabLighter){
     }
 
     TopBlendColorFilter::TopBlendColorFilter(const QColor &blendColor) : AbstractColorFilter(static_cast<qintptr>(blendColor.rgba()), TopBlend) {}

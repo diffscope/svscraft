@@ -77,6 +77,10 @@ namespace SVS {
         BottomBlendColorFilter(const QColor &blendColor);
     };
 
+    struct SVSCRAFT_GUI_EXPORT OkLabLighterColorChange : AbstractColorFilter {
+        OkLabLighterColorChange(double factor);
+    };
+
     class SVSCRAFT_GUI_EXPORT ColorChange : public QList<AbstractColorFilter> {
         Q_GADGET
 

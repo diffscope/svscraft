@@ -11,6 +11,15 @@ namespace SVS {
     public:
         static QColor selectHighestContrastColor(const QColor &baseColor, const QList<QColor> &availableColors);
 
+        struct OkLab {
+            double L;
+            double a;
+            double b;
+            double alpha;
+        };
+        static OkLab toOkLab(const QColor &color);
+        static QColor fromOkLab(const OkLab &lab);
+
     };
 
 }
