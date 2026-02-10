@@ -42,15 +42,15 @@ namespace SVS {
         auto capOctave = match.capturedView(3);
 
         int keyName = natureKeyPitch[capName[0].toLatin1() - 'A'];
-        keyName -= int(std::ranges::count(capAccidental, 'b') + std::ranges::count(capAccidental, L'\u266d'));
-        keyName += int(std::ranges::count(capAccidental, '#') + std::ranges::count(capAccidental, L'\u266f'));
+        keyName -= int(std::ranges::count(capAccidental, 'b') + std::ranges::count(capAccidental, QChar(L'\u266d')));
+        keyName += int(std::ranges::count(capAccidental, '#') + std::ranges::count(capAccidental, QChar(L'\u266f')));
 
         if (capOctave.isEmpty()) {
             if (ok)
                 *ok = false;
             return MusicPitch(static_cast<qint8>(keyName));
         }
-        if (capOctave[0] == '?' || capOctave[0] == L'\uff1f') {
+        if (capOctave[0] == '?' || capOctave[0] == QChar(L'\uff1f')) {
             if (ok)
                 *ok = true;
             return {keyName >= 0 ? qint8(keyName % 12) : qint8(12 + keyName % 12), -1};
