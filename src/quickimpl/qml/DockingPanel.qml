@@ -41,6 +41,7 @@ Pane {
     property bool dockingWindow: false
     property bool active: false
     property var selectorModel: null
+    signal hideTriggered()
     signal removed()
     signal activated()
     signal selectorActivated(selectedPane: DockingPane)
@@ -210,6 +211,14 @@ Pane {
                     visible: !container.pane?.locked || (container.pane?.menu ?? false)
                 }
                 ToolButton {
+                    icon.source: "image://fluent-system-icons/more_vertical"
+                    display: AbstractButton.IconOnly
+                    text: qsTr("Menu")
+                    Layout.alignment: Qt.AlignVCenter
+                    visible: container.pane?.menu ?? false
+                    onClicked: container.pane.menu.popup()
+                }
+                ToolButton {
                     icon.source: container.dockingWindow ?
                         "image://fluent-system-icons/drag" :
                         container.pane?.dock ?
@@ -259,12 +268,11 @@ Pane {
                     }
                 }
                 ToolButton {
-                    icon.source: "image://fluent-system-icons/more_horizontal"
+                    icon.source: "image://fluent-system-icons/subtract"
                     display: AbstractButton.IconOnly
-                    text: qsTr("Menu")
+                    text: qsTr("Hide")
                     Layout.alignment: Qt.AlignVCenter
-                    visible: container.pane?.menu ?? false
-                    onClicked: container.pane.menu.popup()
+                    onClicked: container.hideTriggered()
                 }
             }
         }

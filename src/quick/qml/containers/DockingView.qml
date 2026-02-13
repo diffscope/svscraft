@@ -251,6 +251,7 @@ Item {
                 pane: window.currentItem
                 active: view.activeUndockedPane === window.currentItem
                 onActivated: view.undockedActivated(window.currentItem)
+                onHideTriggered: view.hidePane(pane)
             }
             onVisibleChanged: () => {
                 if (visible)
@@ -581,6 +582,7 @@ Item {
                     return a
                 }
                 onSelectorActivated: (selectedPane) => view.showPane(selectedPane)
+                onHideTriggered: view.hidePane(pane)
             }
             DockingPanel {
                 pane: view.lastItem
@@ -605,6 +607,7 @@ Item {
                     return a
                 }
                 onSelectorActivated: (selectedPane) => view.showPane(selectedPane)
+                onHideTriggered: view.hidePane(pane)
             }
         }
     }
