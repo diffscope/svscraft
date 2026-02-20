@@ -31,8 +31,8 @@ T.TextField {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding, placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
-    leftPadding: ThemedItem.icon.source.toString().length ? 32 : 8
-    rightPadding: 8
+    leftPadding: ThemedItem.flat ? 0 : ThemedItem.icon.source.toString().length ? 32 : 8
+    rightPadding: ThemedItem.flat ? 0 : 8
 
     ThemedItem.icon.width: 16
     ThemedItem.icon.height: 16
@@ -87,8 +87,9 @@ T.TextField {
     background: Rectangle {
         implicitWidth: 200
         implicitHeight: 28
-        border.width: control.activeFocus ? 2 : 1
-        color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.textFieldColor) :
+        border.width: control.ThemedItem.flat ? 0 : control.activeFocus ? 2 : 1
+        color: control.ThemedItem.flat ? "transparent" :
+               !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.textFieldColor) :
                Theme.textFieldColor
         border.color: control.activeFocus ? control.ThemedItem.controlType === SVS.CT_Normal ? Theme.accentColor : Theme.controlColor(control.ThemedItem.controlType) : Theme.borderColor
         radius: 4
