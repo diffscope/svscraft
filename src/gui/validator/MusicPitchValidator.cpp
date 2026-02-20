@@ -40,12 +40,12 @@ namespace SVS {
         s = qBound(MusicPitch(qBound(-12, bottom(), 127)), MusicPitch::fromString(s), MusicPitch(qBound(-12, top(), 127))).toString(m_accidental);
     }
     QValidator::State MusicPitchValidator::validate(QString &s, int &) const {
-        static QString rxTemplate = R"(^([A-G])([b#]*)(%1)?$)";
+        static QString rxTemplate = R"(^([A-G])([b#\x{266d}\x{266f}]*)(%1)?$)";
         if (s.isEmpty())
             return Intermediate;
         QStringList octaveTypes;
         if (bottom() < 0)
-            octaveTypes.append(R"(\?)");
+            octaveTypes.append(R"(\?|\x{ff1f})");
         if (bottom() < MusicPitch(MusicPitch::C, 10).pitch() && top() >= 0) {
             octaveTypes.append(QString("[%1-%2]").arg(MusicPitch(bottom()).octave()).arg(qMin(9, MusicPitch(top()).octave())));
         }
