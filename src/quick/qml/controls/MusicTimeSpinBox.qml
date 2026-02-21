@@ -29,7 +29,11 @@ SpinBox {
     id: control
 
     property MusicTimeline timeline: null
+    property alias measureWidth: validator.measureWidth
+    property alias beatWidth: validator.beatWidth
+    property alias tickWidth: validator.tickWidth
     validator: MusicTimeValidator {
+        id: validator
         timeline: control.timeline
         bottom: control.from
         top: control.to

@@ -17,41 +17,26 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_SVSQMLNAMESPACE_P_H
-#define SVSCRAFT_SVSQMLNAMESPACE_P_H
+#ifndef SVSCRAFT_MUSICTIMEOFFSETVALIDATOR_P_H
+#define SVSCRAFT_MUSICTIMEOFFSETVALIDATOR_P_H
 
-#include <QObject>
-#include <qqmlintegration.h>
+#include <SVSCraftGui/MusicTimeOffsetValidator.h>
 
-#include <SVSCraftCore/SVSCraftNamespace.h>
+#include <limits>
 
 namespace SVS {
 
-    class MusicPitch;
-    class MusicTime;
-    class MusicTimeOffset;
-
-    class SVSQmlNamespace : public QObject {
-        Q_OBJECT
-        QML_NAMED_ELEMENT(SVS)
-        QML_EXTENDED_NAMESPACE(SVS::SVSCraft)
-        QML_SINGLETON
+    class MusicTimeOffsetValidatorPrivate {
+        Q_DECLARE_PUBLIC(MusicTimeOffsetValidator)
     public:
-
-        Q_INVOKABLE static double decibelToLinearValue(double decibel, double factor = -15);
-        Q_INVOKABLE static double linearValueToDecibel(double linearValue, double factor = -15);
-        Q_INVOKABLE static double decibelsToGain(double decibels, double minusInfinityDb = -96);
-        Q_INVOKABLE static double gainToDecibels(double gain, double minusInfinityDb = -96);
-        Q_INVOKABLE static MusicPitch musicPitch(int key);
-        Q_INVOKABLE static MusicPitch musicPitch(int key, int octave);
-        Q_INVOKABLE static MusicPitch musicPitch(const QString &s);
-        Q_INVOKABLE static MusicTime musicTime(int measure, int beat, int tick);
-        Q_INVOKABLE static MusicTime musicTime(const QString &s);
-        Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int quarterNote, int tick);
-        Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int totalTick);
-        Q_INVOKABLE static MusicTimeOffset musicTimeOffset(const QString &s);
+        MusicTimeOffsetValidator *q_ptr;
+        
+        int top{std::numeric_limits<int>::max()};
+        int bottom{0};
+        int quarterNoteWidth{1};
+        int tickWidth{3};
     };
 
 }
 
-#endif // SVSCRAFT_SVSQMLNAMESPACE_P_H
+#endif // SVSCRAFT_MUSICTIMEOFFSETVALIDATOR_P_H

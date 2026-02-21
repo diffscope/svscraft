@@ -83,7 +83,7 @@ namespace SVS {
         Q_PROPERTY(int measure READ measure CONSTANT)
         Q_PROPERTY(int beat READ beat CONSTANT)
         Q_PROPERTY(int tick READ tick CONSTANT)
-        Q_PROPERTY(bool isValid READ isValid CONSTANT)
+        Q_PROPERTY(bool valid READ isValid CONSTANT)
 
         MusicTime v;
 

@@ -21,6 +21,7 @@
 
 #include <SVSCraftCore/DecibelLinearizer.h>
 #include <SVSCraftCore/MusicPitch.h>
+#include <SVSCraftCore/MusicTime.h>
 
 namespace SVS {
 
@@ -44,6 +45,21 @@ namespace SVS {
     }
     MusicPitch SVSQmlNamespace::musicPitch(const QString &s) {
         return MusicPitch::fromString(s);
+    }
+    MusicTime SVSQmlNamespace::musicTime(int measure, int beat, int tick) {
+        return MusicTime(measure, beat, tick);
+    }
+    MusicTime SVSQmlNamespace::musicTime(const QString &s) {
+        return MusicTime::fromString(s);
+    }
+    MusicTimeOffset SVSQmlNamespace::musicTimeOffset(int quarterNote, int tick) {
+        return MusicTimeOffset(quarterNote, tick);
+    }
+    MusicTimeOffset SVSQmlNamespace::musicTimeOffset(int totalTick) {
+        return MusicTimeOffset(totalTick);
+    }
+    MusicTimeOffset SVSQmlNamespace::musicTimeOffset(const QString &s) {
+        return MusicTimeOffset::fromString(s);
     }
 
 }

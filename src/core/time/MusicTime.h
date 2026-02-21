@@ -38,7 +38,7 @@ namespace SVS {
         Q_PROPERTY(int measure READ measure CONSTANT)
         Q_PROPERTY(int beat READ beat CONSTANT)
         Q_PROPERTY(int tick READ tick CONSTANT)
-        Q_PROPERTY(bool isValid READ isValid CONSTANT)
+        Q_PROPERTY(bool valid READ isValid CONSTANT)
     public:
         constexpr inline MusicTime() : MusicTime(0, 0, 0) {
         }
@@ -154,6 +154,42 @@ namespace SVS {
         QSharedPointer<PersistentMusicTimeData> d;
 
         friend class MusicTimeline;
+    };
+
+    class SVSCRAFT_CORE_EXPORT MusicTimeOffset {
+        Q_GADGET
+        Q_PROPERTY(int quarterNote READ quarterNote CONSTANT)
+        Q_PROPERTY(int tick READ tick CONSTANT)
+        Q_PROPERTY(int totalTick READ totalTick CONSTANT)
+        Q_PROPERTY(bool valid READ isValid CONSTANT)
+    public:
+        constexpr MusicTimeOffset() : t(0) {
+        }
+        constexpr MusicTimeOffset(int quarterNote, int tick) : t(quarterNote * 480 + tick) {
+        }
+        constexpr MusicTimeOffset(int totalTick) : t(totalTick) {
+        }
+
+        constexpr int quarterNote() const {
+            return t / 480;
+        }
+        constexpr int tick() const {
+            return t % 480;
+        }
+        constexpr int totalTick() const {
+            return t;
+        }
+        constexpr bool isValid() const {
+            return t >= 0;
+        }
+
+        static MusicTimeOffset fromString(QStringView str, bool *ok = nullptr);
+        Q_INVOKABLE QString toString(int quarterNoteWidth = 1, int tickWidth = 3) const;
+
+        friend SVSCRAFT_CORE_EXPORT QDebug operator<<(QDebug debug, const MusicTimeOffset &offset);
+
+    private:
+        int t;
     };
 
 }

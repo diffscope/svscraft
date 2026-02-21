@@ -31,6 +31,7 @@
 
 #include <SVSCraftGui/LongTimeValidator.h>
 #include <SVSCraftGui/MusicTimeValidator.h>
+#include <SVSCraftGui/MusicTimeOffsetValidator.h>
 #include <SVSCraftGui/MusicPitchValidator.h>
 
 namespace SVS {
@@ -125,6 +126,12 @@ namespace SVS {
         Q_GADGET
         QML_NAMED_ELEMENT(MusicTimeValidator)
         QML_FOREIGN(MusicTimeValidator)
+    };
+
+    struct MusicTimeOffsetValidatorForeign {
+        Q_GADGET
+        QML_NAMED_ELEMENT(MusicTimeOffsetValidator)
+        QML_FOREIGN(MusicTimeOffsetValidator)
     };
 
     struct MusicPitchValidatorForeign {

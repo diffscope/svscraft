@@ -17,41 +17,30 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_SVSQMLNAMESPACE_P_H
-#define SVSCRAFT_SVSQMLNAMESPACE_P_H
+import QtQml
+import QtQuick
+import QtQuick.Controls
 
-#include <QObject>
-#include <qqmlintegration.h>
+import SVSCraft
+import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
-#include <SVSCraftCore/SVSCraftNamespace.h>
+SpinBox {
+    id: control
 
-namespace SVS {
-
-    class MusicPitch;
-    class MusicTime;
-    class MusicTimeOffset;
-
-    class SVSQmlNamespace : public QObject {
-        Q_OBJECT
-        QML_NAMED_ELEMENT(SVS)
-        QML_EXTENDED_NAMESPACE(SVS::SVSCraft)
-        QML_SINGLETON
-    public:
-
-        Q_INVOKABLE static double decibelToLinearValue(double decibel, double factor = -15);
-        Q_INVOKABLE static double linearValueToDecibel(double linearValue, double factor = -15);
-        Q_INVOKABLE static double decibelsToGain(double decibels, double minusInfinityDb = -96);
-        Q_INVOKABLE static double gainToDecibels(double gain, double minusInfinityDb = -96);
-        Q_INVOKABLE static MusicPitch musicPitch(int key);
-        Q_INVOKABLE static MusicPitch musicPitch(int key, int octave);
-        Q_INVOKABLE static MusicPitch musicPitch(const QString &s);
-        Q_INVOKABLE static MusicTime musicTime(int measure, int beat, int tick);
-        Q_INVOKABLE static MusicTime musicTime(const QString &s);
-        Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int quarterNote, int tick);
-        Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int totalTick);
-        Q_INVOKABLE static MusicTimeOffset musicTimeOffset(const QString &s);
-    };
-
+    property alias quarterNoteWidth: validator.quarterNoteWidth
+    property alias tickWidth: validator.tickWidth
+    validator: MusicTimeOffsetValidator {
+        id: validator
+        bottom: control.from
+        top: control.to
+    }
+    textFromValue: function(value) {
+        return SVS.musicTimeOffset(value).toString(validator.quarterNoteWidth, validator.tickWidth)
+    }
+    valueFromText: function(text) {
+        return SVS.musicTimeOffset(text).totalTick
+    }
+    from: 0
+    to: 2147483647
 }
-
-#endif // SVSCRAFT_SVSQMLNAMESPACE_P_H

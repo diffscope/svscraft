@@ -285,6 +285,42 @@ namespace SVS {
     PersistentMusicTime::PersistentMusicTime(SVS::PersistentMusicTimeData *d) : d(d) {
     }
 
+    MusicTimeOffset MusicTimeOffset::fromString(QStringView str, bool *ok) {
+        QRegularExpression rx(R"(^\s*(\d*)\s*[:\x{ff1a}]?\s*(\d*)\s*$)");
+        auto match = rx.matchView(str);
+        if (!match.hasMatch()) {
+            if (ok)
+                *ok = false;
+            return {};
+        }
+        if (ok)
+            *ok = true;
+        return {match.capturedView(1).isEmpty() ? 0 : match.capturedView(1).toInt(), match.capturedView(2).toInt()};
+    }
+
+    QString MusicTimeOffset::toString(int quarterNoteWidth, int tickWidth) const {
+        if (!isValid())
+            return {};
+        QString str;
+        QTextStream textStream(&str);
+        textStream.setPadChar('0');
+        textStream.setFieldAlignment(QTextStream::AlignRight);
+        textStream.setFieldWidth(quarterNoteWidth);
+        textStream << quarterNote();
+        textStream.setFieldWidth(0);
+        textStream << ":";
+        textStream.setFieldWidth(tickWidth);
+        textStream << tick();
+        textStream.flush();
+        return str;
+    }
+
+    QDebug operator<<(QDebug debug, const MusicTimeOffset &offset) {
+        QDebugStateSaver saver(debug);
+        debug.nospace() << "MusicTimeOffset(" << offset.totalTick() << ", " << offset.toString() << ")";
+        return debug;
+    }
+
 }
 
 #include "moc_MusicTime.cpp"
