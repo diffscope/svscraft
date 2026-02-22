@@ -46,4 +46,11 @@ SpinBox {
     }
     from: 0
     to: 2147483647
+    Connections {
+        target: control.timeline
+        function onChanged() {
+            // TODO waiting for QTBUG-116423 to be fixed
+            GlobalHelper.setProperty(control.contentItem, "text", GlobalHelper.musicTimelineTextFromValue(control.timeline, control.value, validator.measureWidth, validator.beatWidth, validator.tickWidth))
+        }
+    }
 }

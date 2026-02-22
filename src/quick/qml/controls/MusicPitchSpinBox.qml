@@ -40,4 +40,9 @@ SpinBox {
     }
     from: 0
     to: 127
+
+    onAccidentalTypeChanged: () => {
+        // TODO waiting for QTBUG-116423 to be fixed
+        GlobalHelper.setProperty(contentItem, "text", SVS.musicPitch(control.value).toString(control.accidentalType))
+    }
 }
