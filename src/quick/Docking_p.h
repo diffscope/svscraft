@@ -53,6 +53,8 @@ namespace SVS {
         void windowChanged();
         void windowGeometryHintChanged();
 
+        void activated();
+
     private:
         friend class DockingAttachedType;
         explicit Docking(QObject *parent = nullptr);

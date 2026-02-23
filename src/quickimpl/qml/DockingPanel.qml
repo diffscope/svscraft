@@ -47,6 +47,7 @@ Pane {
     signal selectorActivated(selectedPane: DockingPane)
 
     onPaneChanged: set()
+    onActivated: pane.Docking.activated()
     FocusScope {
         anchors.fill: parent
         onActiveFocusChanged: () => {
