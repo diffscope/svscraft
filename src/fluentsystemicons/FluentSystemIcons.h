@@ -20,7 +20,20 @@ namespace SVS {
             Regular,
         };
 
-        static QPixmap getIcon(const QString &name, Direction direction, int size, Style style, int pixmapSize = -1);
+        enum Mirror {
+            NoMirror,
+            Horizontal,
+            Vertical
+        };
+
+        enum Rotate {
+            NoRotate,
+            Rotate90,
+            Rotate180,
+            Rotate270
+        };
+
+        static QPixmap getIcon(const QString &name, Direction direction, int size, Style style, Mirror mirror = NoMirror, Rotate rotate = NoRotate, int pixmapSize = -1);
     };
 
 }

@@ -122,7 +122,7 @@ namespace SVS {
         return s;
     }
 
-    QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style, int pixmapSize) {
+    QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style, Mirror mirror, Rotate rotate, int pixmapSize) {
         static const auto ltrString = QStringLiteral("_ltr");
         static const auto rtlString = QStringLiteral("_rtl");
         static const QStringList ltrTrySteps {ltrString, {}, rtlString};
@@ -146,7 +146,7 @@ namespace SVS {
             pixmapSize = size;
 
         size = normalizeSize(size);
-        auto cacheKey = QStringList{name, QString::number(direction), QString::number(size), QString::number(style), QString::number(pixmapSize), QString::number(QGuiApplication::layoutDirection())}.join(",");
+        auto cacheKey = QStringList{name, QString::number(direction), QString::number(size), QString::number(style), QString::number(mirror), QString::number(rotate), QString::number(pixmapSize), QString::number(QGuiApplication::layoutDirection())}.join(",");
         if (m_cache.contains(cacheKey))
             return m_cache[cacheKey];
 
@@ -186,6 +186,40 @@ namespace SVS {
                     }
                     if ((direction == Rtl || direction == Auto && QGuiApplication::layoutDirection() == Qt::RightToLeft) && fluentSystemIcons_MirrorRtlIcons.contains(key)) {
                         pixmap = pixmap.transformed(QTransform().scale(-1, 1));
+                    }
+                    // Apply mirror transformation
+                    if (mirror != NoMirror) {
+                        QTransform mirrorTransform;
+                        if (mirror == Horizontal) {
+                            mirrorTransform.scale(-1, 1);
+                        } else if (mirror == Vertical) {
+                            mirrorTransform.scale(1, -1);
+                        }
+                        pixmap = pixmap.transformed(mirrorTransform);
+                    }
+                    // Apply rotation transformation
+                    if (rotate != NoRotate) {
+                        int rotateAngle = 0;
+                        switch (rotate) {
+                            case Rotate90:
+                                rotateAngle = 90;
+                                break;
+                            case Rotate180:
+                                rotateAngle = 180;
+                                break;
+                            case Rotate270:
+                                rotateAngle = 270;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (rotateAngle > 0) {
+                            QTransform rotateTransform;
+                            rotateTransform.translate(pixmap.width() / 2.0, pixmap.height() / 2.0);
+                            rotateTransform.rotate(rotateAngle);
+                            rotateTransform.translate(-pixmap.width() / 2.0, -pixmap.height() / 2.0);
+                            pixmap = pixmap.transformed(rotateTransform, Qt::SmoothTransformation);
+                        }
                     }
                     m_cache.insert(cacheKey, pixmap);
                     return pixmap;

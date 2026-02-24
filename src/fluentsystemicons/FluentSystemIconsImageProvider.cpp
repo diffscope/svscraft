@@ -43,7 +43,23 @@ namespace SVS {
         } else {
             style = FluentSystemIcons::Filled;
         }
-        auto pixmap = FluentSystemIcons::getIcon(iconId, direction, sz, style, qMax(size->width(), size->height()));
+        auto mirrorStr = query.queryItemValue("mirror");
+        FluentSystemIcons::Mirror mirror = FluentSystemIcons::NoMirror;
+        if (mirrorStr == "h") {
+            mirror = FluentSystemIcons::Horizontal;
+        } else if (mirrorStr == "v") {
+            mirror = FluentSystemIcons::Vertical;
+        }
+        auto rotateStr = query.queryItemValue("rotate");
+        FluentSystemIcons::Rotate rotate = FluentSystemIcons::NoRotate;
+        if (rotateStr == "1") {
+            rotate = FluentSystemIcons::Rotate90;
+        } else if (rotateStr == "2") {
+            rotate = FluentSystemIcons::Rotate180;
+        } else if (rotateStr == "3") {
+            rotate = FluentSystemIcons::Rotate270;
+        }
+        auto pixmap = FluentSystemIcons::getIcon(iconId, direction, sz, style, mirror, rotate, qMax(size->width(), size->height()));
         return pixmap;
     }
 
