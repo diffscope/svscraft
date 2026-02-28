@@ -19,9 +19,12 @@
 
 #include "SVSQmlNamespace_p.h"
 
+#include <QVariant>
+
 #include <SVSCraftCore/DecibelLinearizer.h>
 #include <SVSCraftCore/MusicPitch.h>
 #include <SVSCraftCore/MusicTime.h>
+#include <SVSCraftCore/MusicModeInfo.h>
 
 namespace SVS {
 
@@ -60,6 +63,16 @@ namespace SVS {
     }
     MusicTimeOffset SVSQmlNamespace::musicTimeOffset(const QString &s) {
         return MusicTimeOffset::fromString(s);
+    }
+    QVariant SVSQmlNamespace::getBuiltInMusicModeInfoList() {
+        QVariantList a;
+        for (auto musicModeInfo : MusicModeInfo::getBuiltInMusicModeInfoList()) {
+            QVariantMap m;
+            m["musicMode"] = musicModeInfo.musicMode.mask();
+            m["name"] = musicModeInfo.name;
+            a.append(m);
+        }
+        return a;
     }
 
 }

@@ -17,23 +17,23 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#include "MusicMode.h"
+#ifndef SVSCRAFT_MUSICMODEINFO_H
+#define SVSCRAFT_MUSICMODEINFO_H
+
+#include <QString>
+#include <QList>
+
+#include <SVSCraftCore/MusicMode.h>
 
 namespace SVS {
 
-    QList<MusicPitch> MusicMode::scale(MusicPitch tonic) const {
-        QList<MusicPitch> pitches;
-        pitches.reserve(12);
-        for (int i = 0; i < 12; i++) {
-            if ((1 << i) & m_mask) {
-                if (tonic.isWildcard()) {
-                    pitches.append(MusicPitch(qint8(tonic.key() + i % 12), MusicPitch::Wildcard));
-                } else if (tonic.pitch() + i < 128) {
-                    pitches.append(MusicPitch(qint8(tonic.pitch() + i)));
-                }
-            }
-        }
-        return pitches;
-    }
+    struct SVSCRAFT_CORE_EXPORT MusicModeInfo {
+        MusicMode musicMode;
+        QString name;
+
+        static QList<MusicModeInfo> getBuiltInMusicModeInfoList();
+    };
 
 }
+
+#endif // SVSCRAFT_MUSICMODEINFO_H

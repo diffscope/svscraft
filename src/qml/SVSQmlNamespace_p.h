@@ -50,6 +50,7 @@ namespace SVS {
         Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int quarterNote, int tick);
         Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int totalTick);
         Q_INVOKABLE static MusicTimeOffset musicTimeOffset(const QString &s);
+        Q_INVOKABLE static QVariant getBuiltInMusicModeInfoList();
     };
 
 }
