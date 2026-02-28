@@ -26,7 +26,7 @@ namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT MusicMode {
     public:
-        constexpr explicit MusicMode(int mask) : m_mask(mask) {
+        constexpr explicit MusicMode(int mask) : m_mask(mask & 0xFFF) {
         }
 
         constexpr int mask() const {
@@ -34,6 +34,12 @@ namespace SVS {
         }
 
         QList<MusicPitch> scale(MusicPitch tonic) const;
+
+        constexpr int translateMask(int sourceTonality, int targetTonality) const {
+            int delta = (targetTonality - sourceTonality + 12) % 12;
+            int deltaMask = (1 << delta) - 1;
+            return (m_mask & deltaMask) << (12 - delta) | (m_mask >> delta);
+        }
 
     private:
         int m_mask;
