@@ -25,17 +25,19 @@
 namespace SVS {
 
     class SVSCRAFT_CORE_EXPORT MusicMode {
+        Q_GADGET
+        Q_PROPERTY(int mask READ mask CONSTANT)
     public:
-        constexpr explicit MusicMode(int mask) : m_mask(mask & 0xFFF) {
+        constexpr explicit MusicMode(int mask = 0) : m_mask(mask & 0xFFF) {
         }
 
         constexpr int mask() const {
             return m_mask;
         }
 
-        QList<MusicPitch> scale(MusicPitch tonic) const;
+        Q_INVOKABLE QList<MusicPitch> scale(MusicPitch tonic) const;
 
-        constexpr int translateMask(int sourceTonality, int targetTonality) const {
+        Q_INVOKABLE constexpr int translateMask(int sourceTonality, int targetTonality) const {
             int delta = (targetTonality - sourceTonality + 12) % 12;
             int deltaMask = (1 << delta) - 1;
             return (m_mask & deltaMask) << (12 - delta) | (m_mask >> delta);

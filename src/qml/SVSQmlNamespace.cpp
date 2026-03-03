@@ -25,6 +25,7 @@
 #include <SVSCraftCore/MusicPitch.h>
 #include <SVSCraftCore/MusicTime.h>
 #include <SVSCraftCore/MusicModeInfo.h>
+#include <SVSCraftCore/MusicMode.h>
 
 namespace SVS {
 
@@ -73,6 +74,10 @@ namespace SVS {
             a.append(m);
         }
         return a;
+    }
+
+    MusicMode SVSQmlNamespace::musicMode(int mask) {
+        return MusicMode(mask);
     }
 
 }

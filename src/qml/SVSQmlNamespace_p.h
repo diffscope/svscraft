@@ -30,6 +30,7 @@ namespace SVS {
     class MusicPitch;
     class MusicTime;
     class MusicTimeOffset;
+    class MusicMode;
 
     class SVSQmlNamespace : public QObject {
         Q_OBJECT
@@ -51,6 +52,7 @@ namespace SVS {
         Q_INVOKABLE static MusicTimeOffset musicTimeOffset(int totalTick);
         Q_INVOKABLE static MusicTimeOffset musicTimeOffset(const QString &s);
         Q_INVOKABLE static QVariant getBuiltInMusicModeInfoList();
+        Q_INVOKABLE static MusicMode musicMode(int mask);
     };
 
 }
