@@ -2,6 +2,7 @@ import QtQml
 import QtQuick
 import QtQuick.Templates as T
 import QtQuick.Controls.impl
+import QtCore
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -17,8 +18,9 @@ T.Button {
         Help
     }
     required property int type
+    property bool useWindowsStyle: false
 
-    implicitWidth: 47
+    implicitWidth: button.useWindowsStyle && Qt.platform.os === "windows" ? 48 : 32
     implicitHeight: 28
 
     Accessible.name: {
@@ -39,14 +41,44 @@ T.Button {
     }
 
     contentItem: Item {
-        IconLabel {
-            id: image
+        Text {
+            id: windowsPlatformIcon
             anchors.centerIn: parent
-            icon.color: !button.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
-                        button.hovered ? Theme.foregroundPrimaryColor :
-                        !Window.active ? Theme.foregroundSecondaryColor :
-                        Theme.foregroundPrimaryColor
-            icon.source: {
+            visible: button.useWindowsStyle && Qt.platform.os === "windows"
+            color: !button.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
+                   button.hovered ? Theme.foregroundPrimaryColor :
+                   !Window.active ? Theme.foregroundSecondaryColor :
+                   Theme.foregroundPrimaryColor
+            text: {
+                switch (button.type) {
+                    case SystemButton.Close:
+                        return "\ue8bb"
+                    case SystemButton.MaximizeRestore:
+                        return Window.visibility === Window.Windowed ? "\ue922" : "\ue923"
+                    case SystemButton.Maximize:
+                        return "\ue922"
+                    case SystemButton.Restore:
+                        return "\ue923"
+                    case SystemButton.Minimize:
+                        return "\ue921"
+                    case SystemButton.Help:
+                        return "\ue897"
+                }
+            }
+            font.family: SystemInformation.productVersion === "11" ? "Segoe Fluent Icons" : "Segoe MDL2 Assets"
+            font.pointSize: 7.2
+        }
+        IconImage {
+            id: genericIcon
+            anchors.centerIn: parent
+            visible: !button.useWindowsStyle || Qt.platform.os !== "windows"
+            color: !button.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
+                   button.hovered ? Theme.foregroundPrimaryColor :
+                   !Window.active ? Theme.foregroundSecondaryColor :
+                   Theme.foregroundPrimaryColor
+            sourceSize.width: 12
+            sourceSize.height: 12
+            source: {
                 switch (button.type) {
                     case SystemButton.Close:
                         return "image://fluent-system-icons/dismiss?size=16&style=regular"
@@ -62,24 +94,28 @@ T.Button {
                         return "image://fluent-system-icons/question?size=16&style=regular"
                 }
             }
-            icon.width: 14
-            icon.height: 14
         }
     }
 
-    background: Rectangle {
-        readonly property color hoveredColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.2)
-        readonly property color pressedColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.1)
-        readonly property color closeHoveredColor: "#E81123"
-        readonly property color closePressedColor: "#9E1E2A"
-        color: {
-            if (button.pressed) {
-                return button.type === SystemButton.Close ? closePressedColor : pressedColor
+    background: Item {
+        Rectangle {
+            anchors.centerIn: parent
+            width: button.useWindowsStyle && Qt.platform.os === "windows" ? parent.width : 20
+            height: button.useWindowsStyle && Qt.platform.os === "windows" ? parent.height : 20
+            radius: button.useWindowsStyle && Qt.platform.os === "windows" ? 0 : 10
+            readonly property color hoveredColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.2)
+            readonly property color pressedColor: Qt.rgba(Theme.foregroundPrimaryColor.r, Theme.foregroundPrimaryColor.g, Theme.foregroundPrimaryColor.b, Theme.foregroundPrimaryColor.a * 0.1)
+            readonly property color closeHoveredColor: "#E81123"
+            readonly property color closePressedColor: "#9E1E2A"
+            color: {
+                if (button.pressed) {
+                    return button.type === SystemButton.Close ? closePressedColor : pressedColor
+                }
+                if (button.hovered) {
+                    return button.type === SystemButton.Close ? closeHoveredColor : hoveredColor
+                }
+                return "transparent"
             }
-            if (button.hovered) {
-                return button.type === SystemButton.Close ? closeHoveredColor : hoveredColor
-            }
-            return "transparent"
         }
     }
 
