@@ -193,6 +193,7 @@ Item {
         } else {
             createWindow(item)
         }
+        item.DockingImpl.visible = true
     }
     function hidePane(content) {
         let {index, item} = getItemWithIndex(content)
@@ -206,6 +207,7 @@ Item {
         } else {
             item.Docking.window?.close()
         }
+        item.DockingImpl.visible = false
     }
     function togglePane(content) {
         let {index, item} = getItemWithIndex(content)

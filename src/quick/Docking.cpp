@@ -39,6 +39,7 @@ namespace SVS {
         d->dockingImpl = qobject_cast<DockingImpl *>(qmlAttachedPropertiesObject<DockingImplAttachedType>(parent));
         connect(d->dockingImpl, &DockingImpl::dockingViewChanged, this, &Docking::dockingViewChanged);
         connect(d->dockingImpl, &DockingImpl::windowChanged, this, &Docking::windowChanged);
+        connect(d->dockingImpl, &DockingImpl::visibleChanged, this, &Docking::visibleChanged);
     }
     Docking::~Docking() = default;
     QObject *Docking::dockingView() const {
@@ -57,6 +58,10 @@ namespace SVS {
         Q_D(Docking);
         d->windowGeometryHint = geometryHint;
         emit windowGeometryHintChanged();
+    }
+    bool Docking::visible() const {
+        Q_D(const Docking);
+        return d->dockingImpl->isVisible();
     }
 }
 

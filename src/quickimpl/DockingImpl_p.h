@@ -46,6 +46,7 @@ namespace SVS {
 
         Q_PROPERTY(QObject *dockingView READ dockingView WRITE setDockingView NOTIFY dockingViewChanged)
         Q_PROPERTY(QQuickWindow *window READ window WRITE setWindow NOTIFY windowChanged)
+        Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
 
     public:
         ~DockingImpl() override;
@@ -56,9 +57,13 @@ namespace SVS {
         QQuickWindow *window() const;
         void setWindow(QQuickWindow *window);
 
+        bool isVisible() const;
+        void setVisible(bool visible);
+
     signals:
         void dockingViewChanged();
         void windowChanged();
+        void visibleChanged();
 
     private:
         friend class DockingImplAttachedType;
@@ -66,6 +71,7 @@ namespace SVS {
 
         QPointer<QObject> m_dockingView;
         QPointer<QQuickWindow> m_window;
+        bool m_visible;
     };
 }
 

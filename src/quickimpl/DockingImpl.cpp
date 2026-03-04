@@ -30,7 +30,7 @@ namespace SVS {
 
 
     DockingImpl::DockingImpl(QObject *parent)
-        : QObject(parent), m_dockingView(nullptr), m_window(nullptr) {
+        : QObject(parent), m_dockingView(nullptr), m_window(nullptr), m_visible(true) {
     }
     DockingImpl::~DockingImpl() = default;
     QObject *DockingImpl::dockingView() const {
@@ -49,6 +49,15 @@ namespace SVS {
         if (m_window != window) {
             m_window = window;
             emit windowChanged();
+        }
+    }
+    bool DockingImpl::isVisible() const {
+        return m_visible;
+    }
+    void DockingImpl::setVisible(bool visible) {
+        if (m_visible != visible) {
+            m_visible = visible;
+            emit visibleChanged();
         }
     }
 }
