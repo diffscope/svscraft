@@ -96,7 +96,7 @@ T.Dialog {
                 Accessible.name: qsTr("Close")
                 background: Rectangle {
                     radius: height / 2
-                    color: "#FF736A"
+                    color: "#fc4646"
                     ColorImage {
                         anchors.fill: parent
                         anchors.margins: 3
