@@ -42,13 +42,13 @@ namespace SVS {
         }
 
         constexpr int minute() const {
-            return qAbs(t) / 60000;
+            return qAbs(t / 60000);
         }
         constexpr int second() const {
-            return qAbs(t) % 60000 / 1000;
+            return qAbs(t % 60000 / 1000);
         }
         constexpr int millisecond() const {
-            return qAbs(t) % 1000;
+            return qAbs(t % 1000);
         }
         constexpr bool negative() const {
             return t < 0;
