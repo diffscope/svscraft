@@ -53,7 +53,16 @@ T.Slider {
 
     background: SliderBackground {
         controlItem: control
-        property double trackStart: -Math.min(control.from, control.to) / Math.abs(control.to - control.from)
+        property double trackStart: {
+            switch (control.ThemedItem.sliderTrackStartType) {
+                case SVS.TS_Begin:
+                    return 0
+                case SVS.TS_Zero:
+                    return -Math.min(control.from, control.to) / Math.abs(control.to - control.from)
+                case SVS.TS_End:
+                    return 1
+            }
+        }
         start: control.vertical || control.mirrored ? 1 - trackStart : trackStart
         end: control.handle._animatedVisualPosition
     }

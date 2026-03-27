@@ -163,6 +163,17 @@ namespace SVS {
             emit iconChanged();
         }
     }
+    SVSCraft::SliderTrackStartType ThemedItem::sliderTrackStartType() const {
+        Q_D(const ThemedItem);
+        return d->sliderTrackStartType;
+    }
+    void ThemedItem::setSliderTrackStartType(SVSCraft::SliderTrackStartType value) {
+        Q_D(ThemedItem);
+        if (d->sliderTrackStartType != value) {
+            d->sliderTrackStartType = value;
+            emit sliderTrackStartTypeChanged();
+        }
+    }
 
 
 }

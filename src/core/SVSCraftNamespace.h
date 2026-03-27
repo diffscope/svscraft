@@ -130,6 +130,13 @@ namespace SVS {
             CP_IsSeparatorRole,
         };
         Q_ENUM_NS(CommandPaletteRole)
+
+        enum SliderTrackStartType {
+            TS_Begin,
+            TS_Zero,
+            TS_End,
+        };
+        Q_ENUM_NS(SliderTrackStartType)
     }
 
 }

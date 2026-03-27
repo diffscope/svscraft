@@ -49,6 +49,7 @@ namespace SVS {
         Q_PROPERTY(bool splitHandleEnabled READ splitHandleEnabled WRITE setSplitHandleEnabled NOTIFY splitHandleEnabledChanged)
         Q_PROPERTY(bool toolTipFollowsCursor READ toolTipFollowsCursor WRITE setToolTipFollowsCursor NOTIFY toolTipFollowsCursorChanged)
         Q_PROPERTY(QQuickIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
+        Q_PROPERTY(SVS::SVSCraft::SliderTrackStartType sliderTrackStartType READ sliderTrackStartType WRITE setSliderTrackStartType NOTIFY sliderTrackStartTypeChanged)
     public:
         ~ThemedItem() override;
 
@@ -88,6 +89,9 @@ namespace SVS {
         QQuickIcon icon() const;
         void setIcon(const QQuickIcon &icon);
 
+        SVSCraft::SliderTrackStartType sliderTrackStartType() const;
+        void setSliderTrackStartType(SVSCraft::SliderTrackStartType value);
+
     signals:
         void controlTypeChanged();
         void backgroundLevelChanged();
@@ -102,6 +106,7 @@ namespace SVS {
         void splitHandleEnabledChanged();
         void toolTipFollowsCursorChanged();
         void iconChanged();
+        void sliderTrackStartTypeChanged();
 
         void doubleClickReset();
 
