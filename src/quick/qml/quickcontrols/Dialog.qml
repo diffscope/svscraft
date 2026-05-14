@@ -83,63 +83,10 @@ T.Dialog {
                 control.y += deltaY
             }
         }
-        RowLayout {
-            visible: header.isMacOS
-            spacing: 6
-            anchors.left: parent.left
-            anchors.leftMargin: 8
-            anchors.verticalCenter: parent.verticalCenter
-            T.Button {
-                id: macOSCloseButton
-                implicitWidth: 14
-                implicitHeight: 14
-                Accessible.name: qsTr("Close")
-                background: Rectangle {
-                    radius: height / 2
-                    color: "#fc4646"
-                    ColorImage {
-                        anchors.fill: parent
-                        anchors.margins: 3
-                        color: "#90000000"
-                        source: "image://fluent-system-icons/dismiss?size=12"
-                        visible: macOSButtonAreaHoverHandler.hovered
-                    }
-                    border.color: "#1A000000"
-                    border.width: 1
-                }
-                onClicked: control.reject()
-            }
-            T.Button {
-                implicitWidth: 14
-                implicitHeight: 14
-                Accessible.name: qsTr("Minimize")
-                enabled: false
-                background: Rectangle {
-                    radius: height / 2
-                    color: Theme.buttonColor
-                    border.color: "#1A000000"
-                    border.width: 1
-                }
-            }
-            T.Button {
-                implicitWidth: 14
-                implicitHeight: 14
-                Accessible.name: qsTr("Zoom")
-                enabled: false
-                background: Rectangle {
-                    radius: height / 2
-                    color: Theme.buttonColor
-                    border.color: "#1A000000"
-                    border.width: 1
-                }
-            }
-            HoverHandler {
-                id: macOSButtonAreaHoverHandler
-            }
-        }
         Button {
-            visible: !header.isMacOS
-            anchors.right: parent.right
+            anchors.left: header.isMacOS ? parent.left : undefined
+            anchors.right: header.isMacOS ? undefined : parent.right
+            anchors.leftMargin: 4
             anchors.rightMargin: 4
             anchors.verticalCenter: parent.verticalCenter
             Accessible.name: qsTr("Close")
