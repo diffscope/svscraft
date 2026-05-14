@@ -46,6 +46,7 @@ Frame {
     property var label: ""
     property bool closable: false
     property Action action: null
+    property int display: AbstractButton.IconOnly
 
     spacing: 4
     padding: 4
@@ -96,7 +97,7 @@ Frame {
         ToolButton {
             visible: annotation.action !== null
             action: annotation.action
-            display: AbstractButton.IconOnly
+            display: annotation.display
             ThemedItem.foregroundLevel: SVS.FL_Secondary
             Layout.alignment: Qt.AlignVCenter
         }
