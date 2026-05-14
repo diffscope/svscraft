@@ -18,6 +18,10 @@ if(NOT WIN32 AND NOT APPLE)
     set(_link_directories_private ${GIO_LIBRARY_DIRS})
 endif()
 
+if(WIN32)
+    set(_links_private Shlwapi.lib)
+endif()
+
 svs_add_library(${PROJECT_NAME} AUTOGEN
     SOURCES ${_src}
     LINKS SVSCraftCore

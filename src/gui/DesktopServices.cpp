@@ -14,6 +14,10 @@
 #   include <gio/gio.h>
 #endif
 
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#   include <Shlwapi.h>
+#endif
 
 namespace SVS {
     bool DesktopServices::reveal(const QString &filename) {
@@ -97,7 +101,18 @@ namespace SVS {
     }
     QString DesktopServices::fileManagerName() {
 #if defined(Q_OS_WINDOWS)
-        return tr("File Explorer");
+        wchar_t buffer[256];
+        HRESULT hr = SHLoadIndirectString(
+            L"@shell32.dll,-12352",
+            buffer,
+            256,
+            nullptr
+        );
+        if (SUCCEEDED(hr)) {
+            return QString::fromWCharArray(buffer);
+        } else {
+            return QStringLiteral("File Explorer");
+        }
 #elif defined(Q_OS_MAC)
         return tr("Finder");
 #else
