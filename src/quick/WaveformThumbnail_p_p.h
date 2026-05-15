@@ -33,7 +33,7 @@ namespace SVS {
         QColor color;
         QColor rmsColor;
         double waveformOffset{};
-        double waveformLength{};
+        QList<WaveformThumbnailSection> waveformSections{{0.0, 1.0, 0.0}};
         WaveformMipmap waveformMipmap;
         mutable bool waveformMipmapUpdatePending{};
     };

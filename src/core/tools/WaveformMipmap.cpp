@@ -146,7 +146,7 @@ namespace SVS {
                 });
                 loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->originalData.data()), destination, length, offset16,
                     0, d->originalData.size() / 2,
-                    reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->max16.data()));
+                    reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->min16.data()), reinterpret_cast<qint16 *>(d->rms16.data()));
             }
         } else if (d->level == WaveformMipmap::Downscale) {
             if (d->sampleType == WaveformMipmap::Int8) {
@@ -216,15 +216,15 @@ namespace SVS {
             endIndex = qMin(d->max16.size() * 16, (endIndex + 15) / 16 * 16);
         }
         for (auto i = initialIndex; i < endIndex;) {
-            if (i % 4096 && endIndex - i > 4096) {
+            if (i % 4096 == 0 && endIndex - i >= 4096) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->min4096.data(), i / 4096));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max4096.data(), i / 4096));
                 i += 4096;
-            } else if (i % 256 && endIndex - i > 256) {
+            } else if (i % 256 == 0 && endIndex - i >= 256) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->min256.data(), i / 256));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max256.data(), i / 256));
                 i += 256;
-            } else if (d->level == Downscale || i % 16 && endIndex - i > 16) {
+            } else if (d->level == Downscale || (i % 16 == 0 && endIndex - i >= 16)) {
                 ret.first = qMin(ret.first, getSampleFrom(d, d->min16.data(), i / 16));
                 ret.second = qMax(ret.second, getSampleFrom(d, d->max16.data(), i / 16));
                 i += 16;
@@ -261,17 +261,17 @@ namespace SVS {
             endIndex = qMin(d->max16.size() * 16, (endIndex + 15) / 16 * 16);
         }
         for (auto i = initialIndex; i < endIndex;) {
-            if (i % 4096 && endIndex - i > 4096) {
+            if (i % 4096 == 0 && endIndex - i >= 4096) {
                 auto x = getSampleNormalized(d, d->rms4096.data(), i / 4096);
                 ret += x * x * 4096;
                 i += 4096;
                 n += 4096;
-            } else if (i % 256 && endIndex - i > 256) {
+            } else if (i % 256 == 0 && endIndex - i >= 256) {
                 auto x = getSampleNormalized(d, d->rms256.data(), i / 256);
                 ret += x * x * 256;
                 i += 256;
                 n += 256;
-            } else if (d->level == Downscale || i % 16 && endIndex - i > 16) {
+            } else if (d->level == Downscale || (i % 16 == 0 && endIndex - i >= 16)) {
                 auto x = getSampleNormalized(d, d->rms16.data(), i / 16);
                 ret += x * x * 16;
                 i += 16;

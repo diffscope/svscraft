@@ -21,10 +21,31 @@
 #define SVSCRAFT_WAVEFORMTHUMBNAIL_P_H
 
 #include <QQuickItem>
+#include <QList>
+#include <QVariant>
+
+#include <qqmlintegration.h>
 
 namespace SVS {
 
     class WaveformMipmap;
+
+    struct WaveformThumbnailSection {
+        Q_GADGET
+        QML_VALUE_TYPE(waveformThumbnailSection)
+        Q_PROPERTY(double start MEMBER start)
+        Q_PROPERTY(double end MEMBER end)
+        Q_PROPERTY(double length MEMBER length)
+
+    public:
+        double start{};
+        double end{};
+        double length{};
+
+        constexpr bool operator==(const WaveformThumbnailSection &other) const {
+            return start == other.start && end == other.end && length == other.length;
+        }
+    };
 
     class WaveformThumbnailPrivate;
 
@@ -35,7 +56,7 @@ namespace SVS {
         Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
         Q_PROPERTY(QColor rmsColor READ rmsColor WRITE setRmsColor NOTIFY rmsColorChanged)
         Q_PROPERTY(double waveformOffset READ waveformOffset WRITE setWaveformOffset NOTIFY waveformOffsetChanged)
-        Q_PROPERTY(double waveformLength READ waveformLength WRITE setWaveformLength NOTIFY waveformLengthChanged)
+        Q_PROPERTY(QVariant waveformSections READ waveformSectionsVariant WRITE setWaveformSectionsVariant NOTIFY waveformSectionsChanged)
         Q_PROPERTY(SVS::WaveformMipmap waveformMipmap READ waveformMipmap WRITE setWaveformMipmap NOTIFY waveformMipmapChanged)
 
     public:
@@ -51,8 +72,10 @@ namespace SVS {
         double waveformOffset() const;
         void setWaveformOffset(double waveformOffset);
 
-        double waveformLength() const;
-        void setWaveformLength(double waveformLength);
+        QVariant waveformSectionsVariant() const;
+        void setWaveformSectionsVariant(const QVariant &waveformSections);
+        QList<WaveformThumbnailSection> waveformSections() const;
+        void setWaveformSections(const QList<WaveformThumbnailSection> &waveformSections);
 
         WaveformMipmap waveformMipmap() const;
         void setWaveformMipmap(const WaveformMipmap &waveformMipmap);
@@ -61,7 +84,7 @@ namespace SVS {
         void colorChanged();
         void rmsColorChanged();
         void waveformOffsetChanged();
-        void waveformLengthChanged();
+        void waveformSectionsChanged();
         void waveformMipmapChanged();
 
     protected:
@@ -72,5 +95,7 @@ namespace SVS {
     };
 
 }
+
+Q_DECLARE_METATYPE(SVS::WaveformThumbnailSection)
 
 #endif //SVSCRAFT_WAVEFORMTHUMBNAIL_P_H

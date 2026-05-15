@@ -128,12 +128,55 @@ ApplicationWindow {
                             onValueModified: rangeSlider.second.value = value
                         }
                     }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Label {
+                            text: "Width Ratio"
+                        }
+                        Slider {
+                            id: widthRatioSlider
+                            Layout.fillWidth: true
+                            from: 0
+                            to: 1
+                            value: 0.5
+                        }
+                        Label {
+                            text: widthRatioSlider.value.toFixed(2)
+                        }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Label {
+                            text: "Length Ratio"
+                        }
+                        Slider {
+                            id: lengthRatioSlider
+                            Layout.fillWidth: true
+                            from: 0
+                            to: 1
+                            value: 0.5
+                        }
+                        Label {
+                            text: lengthRatioSlider.value.toFixed(2)
+                        }
+                    }
                     WaveformThumbnail {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         waveformMipmap: main.helper.waveformMipmap
                         waveformOffset: rangeSlider.first.value
-                        waveformLength: rangeSlider.second.value - rangeSlider.first.value
+                        waveformSections: [
+                            {
+                                start: 0.0,
+                                end: widthRatioSlider.value,
+                                length: (rangeSlider.second.value - rangeSlider.first.value) * lengthRatioSlider.value
+                            },
+                            {
+                                start: widthRatioSlider.value,
+                                end: 1.0,
+                                length: (rangeSlider.second.value - rangeSlider.first.value) * (1.0 - lengthRatioSlider.value)
+                            }
+                        ]
                         color: Theme.accentColor
                         rmsColor: Qt.rgba(1, 1, 1, 0.5)
                     }
