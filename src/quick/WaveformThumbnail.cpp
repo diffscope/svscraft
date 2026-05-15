@@ -17,8 +17,8 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
+#include "WaveformThumbnail.h"
 #include "WaveformThumbnail_p.h"
-#include "WaveformThumbnail_p_p.h"
 
 #include <cmath>
 #include <limits>
@@ -389,4 +389,4 @@ namespace SVS {
     }
 }
 
-#include "moc_WaveformThumbnail_p.cpp"
+#include "moc_WaveformThumbnail.cpp"

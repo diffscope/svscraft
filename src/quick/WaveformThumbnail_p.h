@@ -17,85 +17,26 @@
  * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
  ******************************************************************************/
 
-#ifndef SVSCRAFT_WAVEFORMTHUMBNAIL_P_H
-#define SVSCRAFT_WAVEFORMTHUMBNAIL_P_H
+#ifndef SVSCRAFT_WAVEFORMTHUMBNAIL_P_P_H
+#define SVSCRAFT_WAVEFORMTHUMBNAIL_P_P_H
 
-#include <QQuickItem>
-#include <QList>
-#include <QVariant>
+#include <SVSCraftQuick/WaveformThumbnail.h>
 
-#include <qqmlintegration.h>
+#include <SVSCraftCore/WaveformMipmap.h>
 
 namespace SVS {
-
-    class WaveformMipmap;
-
-    struct WaveformThumbnailSection {
-        Q_GADGET
-        QML_VALUE_TYPE(waveformThumbnailSection)
-        Q_PROPERTY(double start MEMBER start)
-        Q_PROPERTY(double end MEMBER end)
-        Q_PROPERTY(double length MEMBER length)
-
+    class WaveformThumbnailPrivate {
+        Q_DECLARE_PUBLIC(WaveformThumbnail)
     public:
-        double start{};
-        double end{};
-        double length{};
+        WaveformThumbnail *q_ptr;
 
-        constexpr bool operator==(const WaveformThumbnailSection &other) const {
-            return start == other.start && end == other.end && length == other.length;
-        }
+        QColor color;
+        QColor rmsColor;
+        double waveformOffset{};
+        QList<WaveformThumbnailSection> waveformSections{{0.0, 1.0, 0.0}};
+        WaveformMipmap waveformMipmap;
+        mutable bool waveformMipmapUpdatePending{};
     };
-
-    class WaveformThumbnailPrivate;
-
-    class WaveformThumbnail : public QQuickItem {
-        Q_OBJECT
-        QML_ELEMENT
-        Q_DECLARE_PRIVATE(WaveformThumbnail)
-        Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-        Q_PROPERTY(QColor rmsColor READ rmsColor WRITE setRmsColor NOTIFY rmsColorChanged)
-        Q_PROPERTY(double waveformOffset READ waveformOffset WRITE setWaveformOffset NOTIFY waveformOffsetChanged)
-        Q_PROPERTY(QVariant waveformSections READ waveformSectionsVariant WRITE setWaveformSectionsVariant NOTIFY waveformSectionsChanged)
-        Q_PROPERTY(SVS::WaveformMipmap waveformMipmap READ waveformMipmap WRITE setWaveformMipmap NOTIFY waveformMipmapChanged)
-
-    public:
-        explicit WaveformThumbnail(QQuickItem *parent = nullptr);
-        ~WaveformThumbnail() override;
-
-        QColor color() const;
-        void setColor(const QColor &color);
-
-        QColor rmsColor() const;
-        void setRmsColor(const QColor &rmsColor);
-
-        double waveformOffset() const;
-        void setWaveformOffset(double waveformOffset);
-
-        QVariant waveformSectionsVariant() const;
-        void setWaveformSectionsVariant(const QVariant &waveformSections);
-        QList<WaveformThumbnailSection> waveformSections() const;
-        void setWaveformSections(const QList<WaveformThumbnailSection> &waveformSections);
-
-        WaveformMipmap waveformMipmap() const;
-        void setWaveformMipmap(const WaveformMipmap &waveformMipmap);
-
-    signals:
-        void colorChanged();
-        void rmsColorChanged();
-        void waveformOffsetChanged();
-        void waveformSectionsChanged();
-        void waveformMipmapChanged();
-
-    protected:
-        QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *) override;
-
-    private:
-        QScopedPointer<WaveformThumbnailPrivate> d_ptr;
-    };
-
 }
 
-Q_DECLARE_METATYPE(SVS::WaveformThumbnailSection)
-
-#endif //SVSCRAFT_WAVEFORMTHUMBNAIL_P_H
+#endif //SVSCRAFT_WAVEFORMTHUMBNAIL_P_P_H
