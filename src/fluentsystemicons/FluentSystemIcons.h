@@ -33,6 +33,7 @@ namespace SVS {
             Rotate270
         };
 
+        static QStringList getAllIconNames();
         static QPixmap getIcon(const QString &name, Direction direction, int size, Style style, Mirror mirror = NoMirror, Rotate rotate = NoRotate, int pixmapSize = -1);
     };
 

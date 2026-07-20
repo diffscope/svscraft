@@ -122,6 +122,42 @@ namespace SVS {
         return s;
     }
 
+    QStringList FluentSystemIcons::getAllIconNames() {
+        static const QStringList iconNames = [] {
+            static const QString prefix = QStringLiteral("ic_fluent_");
+            static const QStringList directions {{}, QStringLiteral("_ltr"), QStringLiteral("_rtl")};
+            static const QStringList sizes {
+                QStringLiteral("_10"), QStringLiteral("_12"), QStringLiteral("_16"), QStringLiteral("_20"),
+                QStringLiteral("_24"), QStringLiteral("_28"), QStringLiteral("_32"), QStringLiteral("_48")
+            };
+            static const QStringList styles {QStringLiteral("_regular"), QStringLiteral("_filled")};
+
+            QSet<QString> keys = loadCustomIconList();
+            const auto regularIconsCharset = loadRegularIconsCharset();
+            const auto filledIconsCharset = loadFilledIconsCharset();
+            keys.unite(QSet<QString>(regularIconsCharset.keyBegin(), regularIconsCharset.keyEnd()));
+            keys.unite(QSet<QString>(filledIconsCharset.keyBegin(), filledIconsCharset.keyEnd()));
+
+            QSet<QString> names;
+            for (const auto &key : keys) {
+                if (!key.startsWith(prefix))
+                    continue;
+                for (const auto &direction : directions) {
+                    for (const auto &size : sizes) {
+                        for (const auto &style : styles) {
+                            const auto suffix = direction + size + style;
+                            if (key.endsWith(suffix)) {
+                                names.insert(key.mid(prefix.size(), key.size() - prefix.size() - suffix.size()));
+                            }
+                        }
+                    }
+                }
+            }
+            return QStringList(names.begin(), names.end());
+        }();
+        return iconNames;
+    }
+
     QPixmap FluentSystemIcons::getIcon(const QString &name, Direction direction, int size, Style style, Mirror mirror, Rotate rotate, int pixmapSize) {
         static const auto ltrString = QStringLiteral("_ltr");
         static const auto rtlString = QStringLiteral("_rtl");
