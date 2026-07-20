@@ -31,7 +31,7 @@ T.Menu {
         let w = implicitBackgroundWidth + leftInset + rightInset
         for (let i = 0; i < count; i++) {
             let item = itemAt(i)
-            w = Math.max(w, item.implicitWidth + leftPadding + rightPadding + 8)
+            w = Math.max(w, (item?.implicitWidth ?? 0) + leftPadding + rightPadding + 8)
         }
         return w
     }
