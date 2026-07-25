@@ -36,4 +36,23 @@ namespace SVS {
         return pitches;
     }
 
+    MusicPitch::Key MusicMode::detectTonality(const QList<MusicPitch> &notes) const {
+        int bestTonic = 0;
+        int bestCount = -1;
+        for (int tonic = 0; tonic < 12; ++tonic) {
+            int count = 0;
+            for (const auto &note : notes) {
+                const int interval = (note.key() - tonic + 12) % 12;
+                if (m_mask & (1 << interval)) {
+                    ++count;
+                }
+            }
+            if (count > bestCount) {
+                bestTonic = tonic;
+                bestCount = count;
+            }
+        }
+        return static_cast<MusicPitch::Key>(bestTonic);
+    }
+
 }

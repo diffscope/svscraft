@@ -43,6 +43,8 @@ namespace SVS {
             return (m_mask & deltaMask) << (12 - delta) | (m_mask >> delta);
         }
 
+        Q_INVOKABLE MusicPitch::Key detectTonality(const QList<MusicPitch> &notes) const;
+
     private:
         int m_mask;
     };
