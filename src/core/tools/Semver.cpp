@@ -11,15 +11,15 @@ namespace SVS {
     Semver::Semver(int major, int minor, int patch, const QStringList& preRelease,
                    const QStringList &build) {
         QString semverString = QString("%1.%2.%3").arg(major).arg(minor).arg(patch);
-        
+
         if (!preRelease.isEmpty()) {
             semverString += "-" + preRelease.join(".");
         }
-        
+
         if (!build.isEmpty()) {
             semverString += "+" + build.join(".");
         }
-        
+
         semver::version<> version;
         if (semver::parse(semverString.toStdString(), version)) {
             auto data = new SemverData;
@@ -79,7 +79,7 @@ namespace SVS {
         if (preReleaseTag.empty()) {
             return {};
         }
-        return QString::fromStdString(preReleaseTag).split('.');
+        return QString::fromUtf8(preReleaseTag).split('.');
     }
 
     QStringList Semver::build() const {
@@ -90,7 +90,7 @@ namespace SVS {
         if (buildMetadata.empty()) {
             return {};
         }
-        return QString::fromStdString(buildMetadata).split('.');
+        return QString::fromUtf8(buildMetadata).split('.');
     }
 
     QString Semver::toString() const {
