@@ -19,7 +19,7 @@
 
 import QtQuick
 import QtQuick.Templates as T
-import QtQuick.Controls.impl
+import QtQuick.Controls.impl as Impl
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -53,11 +53,11 @@ T.ItemDelegate {
     DescriptiveText.contextHelpTip: action?.DescriptiveAction.contextHelpTip ?? ""
     DescriptiveText.activated: hovered
 
-    contentItem: IconLabel {
+    contentItem: Impl.IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display
-        alignment: control.display === IconLabel.IconOnly || control.display === IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
+        alignment: control.display === Impl.IconLabel.IconOnly || control.display === Impl.IconLabel.TextUnderIcon ? Qt.AlignCenter : Qt.AlignLeft
 
         icon: control.icon
         text: control.text

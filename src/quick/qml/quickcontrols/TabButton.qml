@@ -20,7 +20,7 @@
 import QtQml
 import QtQuick
 import QtQuick.Templates as T
-import QtQuick.Controls.impl // NOTE: Qt Quick private API
+import QtQuick.Controls.impl as Impl // NOTE: Qt Quick private API
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -56,7 +56,7 @@ T.TabButton {
 
     ThemedItem.controlType: SVS.CT_Accent
 
-    contentItem: IconLabel {
+    contentItem: Impl.IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
         display: control.display

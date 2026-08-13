@@ -21,7 +21,7 @@ import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Controls.impl
+import QtQuick.Controls.impl as Impl
 import QtQuick.Templates as T
 
 import SVSCraft.UIComponents
@@ -80,7 +80,7 @@ Pane {
                     implicitWidth: implicitContentWidth + leftPadding + rightPadding
                     implicitHeight: implicitContentHeight + topPadding + bottomPadding
                     Layout.alignment: Qt.AlignVCenter
-                    contentItem: IconLabel {
+                    contentItem: Impl.IconLabel {
                         spacing: 4
                         icon: container.pane?.icon ?? GlobalHelper.defaultIcon()
                         font: container.font
@@ -92,7 +92,7 @@ Pane {
                         y: comboBox.topPadding + (comboBox.availableHeight - height) / 2
                         width: image.width + 8
                         visible: Boolean(container.selectorModel)
-                        ColorImage {
+                        Impl.ColorImage {
                             id: image
                             anchors.centerIn: parent
                             color: Theme.foregroundPrimaryColor

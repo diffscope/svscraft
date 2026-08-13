@@ -21,7 +21,6 @@ import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Controls.impl
 
 import SVSCraft
 import SVSCraft.UIComponents
@@ -431,7 +430,6 @@ Item {
                             IconLabel {
                                 anchors.fill: parent
                                 icon: tabButton.icon
-                                font: Theme.font
                                 display: AbstractButton.IconOnly
                             }
                         }

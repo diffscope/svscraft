@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 import QtQuick
-import QtQuick.Controls.impl
+import QtQuick.Controls.impl as Impl
 import QtQuick.Templates as T
 import QtQml.Models
 
@@ -71,7 +71,7 @@ T.MenuItem {
         }
     }
 
-    contentItem: IconLabel {
+    contentItem: Impl.IconLabel {
         readonly property real arrowPadding: control.arrow ? control.arrow.width + control.spacing : 0
         readonly property real indicatorPadding: control.icon.source.toString() && !control.checkable ? 0 : 20
         leftPadding: !control.mirrored ? indicatorPadding : arrowPadding
@@ -79,7 +79,7 @@ T.MenuItem {
 
         spacing: control.spacing
         mirrored: control.mirrored
-        display: control.checkable ? IconLabel.TextOnly : control.display
+        display: control.checkable ? Impl.IconLabel.TextOnly : control.display
         alignment: Qt.AlignLeft
 
         icon: control.icon
@@ -97,7 +97,7 @@ T.MenuItem {
         }
     }
 
-    indicator: ColorImage {
+    indicator: Impl.ColorImage {
         x: control.mirrored ? control.width - width - control.rightPadding - 2 : control.leftPadding + 2
         y: control.topPadding + (control.availableHeight - height) / 2
         width: 12
@@ -146,7 +146,7 @@ T.MenuItem {
             }
         }
 
-        ColorImage {
+        Impl.ColorImage {
             id: arrowItem
             visible: control.subMenu
             mirror: control.mirrored
