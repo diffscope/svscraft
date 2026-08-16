@@ -21,7 +21,9 @@
 
 #include <cstring>
 
+#include <QClipboard>
 #include <QCursor>
+#include <QGuiApplication>
 #include <QQuickItem>
 #include <QtGui/private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
@@ -186,6 +188,9 @@ namespace SVS {
     }
     void GlobalHelper::invokeAlertHandler(QObject *o) {
         m_alertHandler(o);
+    }
+    void GlobalHelper::setClipboardText(const QString &text) {
+        QGuiApplication::clipboard()->setText(text);
     }
     QQuickIcon GlobalHelper::defaultIcon() {
         return {};

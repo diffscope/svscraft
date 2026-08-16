@@ -72,6 +72,25 @@ Window {
         }
     }
 
+    Shortcut {
+        sequence: StandardKey.Copy
+        onActivated: dialog.copyMessageContent()
+    }
+
+    function copyMessageContent() {
+        GlobalHelper.setClipboardText(
+`---------------------------
+${dialog.title}
+---------------------------
+${dialog.text}
+---------------------------
+${dialog.informativeText.length !== 0 ? `${dialog.informativeText}\n---------------------------` : ""}
+${buttonRepeater.model.map(button => button.text).join("   ")}
+---------------------------
+${dialog.detailedText.length !== 0 ? `${dialog.detailedText}\n---------------------------` : ""}
+`)
+    }
+
     ColumnLayout {
         id: mainLayout
         Accessible.role: Accessible.AlertMessage

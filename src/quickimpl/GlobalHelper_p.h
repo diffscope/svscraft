@@ -62,6 +62,7 @@ namespace SVS {
         Q_INVOKABLE static inline QString toHtmlEscaped(const QString &text) {
             return text.toHtmlEscaped();
         }
+        Q_INVOKABLE static void setClipboardText(const QString &text);
         Q_INVOKABLE static QQuickIcon defaultIcon();
         Q_INVOKABLE static QColor dockingPanelHeaderColor(const QColor &accentColor, const QColor &backgroundColor, bool active);
         static QWindow *focusWindow();
