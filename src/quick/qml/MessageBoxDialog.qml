@@ -73,7 +73,7 @@ Window {
     }
 
     Shortcut {
-        sequence: StandardKey.Copy
+        sequences: [StandardKey.Copy]
         onActivated: dialog.copyMessageContent()
     }
 
