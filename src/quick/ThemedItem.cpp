@@ -174,6 +174,17 @@ namespace SVS {
             emit sliderTrackStartTypeChanged();
         }
     }
+    double ThemedItem::doubleClickResetValue() const {
+        Q_D(const ThemedItem);
+        return d->doubleClickResetValue;
+    }
+    void ThemedItem::setDoubleClickResetValue(double value) {
+        Q_D(ThemedItem);
+        if (d->doubleClickResetValue != value) {
+            d->doubleClickResetValue = value;
+            emit doubleClickResetValueChanged();
+        }
+    }
 
 
 }

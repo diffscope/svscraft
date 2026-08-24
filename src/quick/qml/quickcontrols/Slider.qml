@@ -71,11 +71,12 @@ T.Slider {
         onDoubleTapped: () => {
             if (!Theme.doubleClickResetEnabled)
                 return
-            if (from > 0 && to > 0 || from < 0 && to < 0)
+            let resetValue = control.ThemedItem.doubleClickResetValue
+            if (resetValue < Math.min(from, to) || resetValue > Math.max(from, to))
                 return
             GlobalHelper.ungrabMouse(control)
             control.handle._doubleClicked = control.handle._doubleClickTriggered = true
-            GlobalHelper.setProperty(control, "value", 0)
+            GlobalHelper.setProperty(control, "value", resetValue)
             control.ThemedItem.doubleClickReset()
             control.handle._doubleClickTriggered = false
         }

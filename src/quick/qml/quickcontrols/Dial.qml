@@ -42,10 +42,12 @@ T.Dial {
 
         property double _animatedAngle: control.angle
         property bool _doubleClicked: false
+        property bool _doubleClickTriggered: false
         Connections {
             target: control
             function onAngleChanged() {
-                control.background._doubleClicked = false
+                if (!control.background._doubleClickTriggered)
+                    control.background._doubleClicked = false
             }
         }
         Behavior on _animatedAngle {
@@ -122,12 +124,14 @@ T.Dial {
         onDoubleTapped: () => {
             if (!Theme.doubleClickResetEnabled)
                 return
-            if (from > 0 && to > 0 || from < 0 && to < 0)
+            let resetValue = control.ThemedItem.doubleClickResetValue
+            if (resetValue < Math.min(from, to) || resetValue > Math.max(from, to))
                 return
             GlobalHelper.ungrabMouse(control)
-            control.background._doubleClicked = true
-            GlobalHelper.setProperty(control, "value", 0)
+            control.background._doubleClicked = control.background._doubleClickTriggered = true
+            GlobalHelper.setProperty(control, "value", resetValue)
             control.ThemedItem.doubleClickReset()
+            control.background._doubleClickTriggered = false
         }
     }
 }

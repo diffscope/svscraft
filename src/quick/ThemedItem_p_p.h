@@ -49,6 +49,7 @@ namespace SVS {
         bool toolTipFollowsCursor = false;
         QQuickIcon icon;
         SVSCraft::SliderTrackStartType sliderTrackStartType = SVSCraft::TS_Zero;
+        double doubleClickResetValue = 0;
 
     };
 }
