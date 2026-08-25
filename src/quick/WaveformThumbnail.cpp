@@ -319,7 +319,7 @@ namespace SVS {
                 lineGraphNodeGeometry->allocate(0);
             } else if (isMipmap) {
                 peakNodeGeometry->allocate((sectionPixelCount + 1) * 2);
-                peakLineNodeGeometry->allocate(0);
+                peakLineNodeGeometry->allocate(2);
                 rmsNodeGeometry->allocate((sectionPixelCount + 1) * 2);
                 lineGraphNodeGeometry->allocate(0);
             } else {
@@ -332,11 +332,8 @@ namespace SVS {
             }
 
             if (isMipmap && sectionLength > 0.0 && sectionWidth != 0.0) {
-                QList<QPair<QPair<float, float>, float>> zeroDynamicPeaks;
-                zeroDynamicPeaks.reserve(sectionPixelCount + 1);
                 for (int i = 0; i <= sectionPixelCount; i++) {
                     const auto x = sectionStartX + sectionWidth * i / sectionPixelCount;
-                    const auto nextX = i < sectionPixelCount ? sectionStartX + sectionWidth * (i + 1) / sectionPixelCount : x;
                     const auto waveformBlockOffset = sectionOffset + qMin(i, sectionPixelCount - 1) * waveformLengthPerPixel;
                     const auto waveformBlockLength = qMax(2.0, waveformLengthPerPixel);
                     const auto peak = d->waveformMipmap.peak(std::round(waveformBlockOffset), std::round(waveformBlockOffset + waveformBlockLength) - std::round(waveformBlockOffset));
@@ -344,9 +341,6 @@ namespace SVS {
                         qMax(-1.0, 1.0 * peak.first / (d->waveformMipmap.sampleType() == WaveformMipmap::Int8 ? 127.0 : 32767.0)),
                         qMax(-1.0, 1.0 * peak.second / (d->waveformMipmap.sampleType() == WaveformMipmap::Int8 ? 127.0 : 32767.0))
                     );
-                    if (peak.first == peak.second) {
-                        zeroDynamicPeaks.emplace_back(qMakePair(static_cast<float>(x), static_cast<float>(nextX)), static_cast<float>((1.0 - normalizedPeak.first) * 0.5));
-                    }
                     peakNodeGeometry->vertexDataAsPoint2D()[i * 2].set(x, (1.0 - normalizedPeak.first) * 0.5);
                     peakNodeGeometry->vertexDataAsPoint2D()[i * 2 + 1].set(x, (1.0 - normalizedPeak.second) * 0.5);
                     if (d->waveformMipmap.useRms() && waveformLengthPerPixel > 16) {
@@ -358,12 +352,8 @@ namespace SVS {
                         rmsNodeGeometry->vertexDataAsPoint2D()[i * 2 + 1].set(0, 0);
                     }
                 }
-                peakLineNodeGeometry->allocate(zeroDynamicPeaks.size() * 2);
-                for (int i = 0; i < zeroDynamicPeaks.size(); i++) {
-                    const auto p = zeroDynamicPeaks.at(i);
-                    peakLineNodeGeometry->vertexDataAsPoint2D()[i * 2].set(p.first.first, p.second);
-                    peakLineNodeGeometry->vertexDataAsPoint2D()[i * 2 + 1].set(p.first.second, p.second);
-                }
+                peakLineNodeGeometry->vertexDataAsPoint2D()[0].set(sectionStartX, 0.5);
+                peakLineNodeGeometry->vertexDataAsPoint2D()[1].set(sectionEndX, 0.5);
             } else if (sectionLength > 0.0 && sectionWidth != 0.0) {
                 const int interpolateLevel = qBound(1.0, std::pow(2, std::floor(2 - std::log2(waveformLengthPerPixel))), 1.0 * INTERPOLATE_MAX);
                 lineGraphNodeGeometry->vertexDataAsPoint2D()[0].set(sectionStartX, (1.0 - sampleValue(d->waveformMipmap, sectionOffset)) * 0.5);
