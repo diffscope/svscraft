@@ -90,6 +90,7 @@ namespace SVS {
         void waveformMipmapChanged();
 
     protected:
+        void itemChange(ItemChange change, const ItemChangeData &value) override;
         QSGNode *updatePaintNode(QSGNode *node, UpdatePaintNodeData *) override;
 
     private:
