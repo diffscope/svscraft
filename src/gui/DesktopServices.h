@@ -21,6 +21,7 @@
 #define SVSCRAFT_DESKTOPSERVICES_H
 
 #include <QObject>
+#include <QStringList>
 
 #include <SVSCraftGui/SVSCraftGuiGlobal.h>
 
@@ -30,6 +31,7 @@ namespace SVS {
         Q_OBJECT
     public:
         static bool reveal(const QString &filename);
+        static bool reveal(const QString &dir, const QStringList &files);
         static QString fileManagerName();
     };
 
