@@ -1,0 +1,158 @@
+/******************************************************************************
+ * Copyright (c) 2025 OpenVPI                                                 *
+ *                                                                            *
+ * This file is part of SVSCraft                                              *
+ *                                                                            *
+ * SVSCraft is free software: you can redistribute it and/or modify it under  *
+ * the terms of the GNU Lesser General Public License as published by the     *
+ * Free Software Foundation, either version 3 of the License, or (at your     *
+ * option) any later version.                                                 *
+ *                                                                            *
+ * SVSCraft is distributed in the hope that it will be useful, but WITHOUT    *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or      *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public        *
+ * License for more details.                                                  *
+ *                                                                            *
+ * You should have received a copy of the GNU Lesser General Public License   *
+ * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
+ ******************************************************************************/
+
+import QtQml
+import QtQuick
+import QtQuick.Templates as T
+import QtQuick.Controls.impl
+
+import SVSCraft.UIComponents.impl
+
+T.DoubleSpinBox {
+    id: control
+
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
+
+    leftPadding: padding + control.mirrored ? Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0)) : 0
+    rightPadding: padding + control.mirrored ? 0 : Math.max((down.indicator ? down.indicator.width : 0), (up.indicator ? up.indicator.width : 0))
+
+    font: Theme.font
+
+    editable: true
+
+    validator: DoubleValidator {
+        locale: control.locale.name
+        bottom: Math.min(control.from, control.to)
+        top: Math.max(control.from, control.to)
+        decimals: control.decimals
+        notation: DoubleValidator.StandardNotation
+    }
+
+    contentItem: TextInput {
+        text: control.displayText
+        padding: 6
+        leftPadding: 8
+        rightPadding: 8
+        font: control.font
+
+        color: !control.enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
+            Theme.foregroundPrimaryColor
+        selectionColor: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.accentColor) :
+            Theme.accentColor
+        selectedTextColor: color
+        Behavior on color {
+            ColorAnimation {
+                duration: Theme.colorAnimationDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+        Behavior on selectionColor {
+            ColorAnimation {
+                duration: Theme.colorAnimationDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+
+        verticalAlignment: Text.AlignVCenter
+        readOnly: !control.editable
+        validator: control.validator
+        inputMethodHints: control.inputMethodHints
+    }
+
+    up.indicator: ButtonRectangle {
+        control: control
+        flat: true
+        checked: false
+        visualFocus: false
+        down: control.up.pressed
+        hovered: control.up.hovered
+        x: control.mirrored ? 3 : control.width - width - 3
+        y: 3
+        height: control.height / 2 - 3
+        implicitWidth: 24
+        implicitHeight: 12
+        radius: 1
+        ColorImage {
+            anchors.centerIn: parent
+            color: !enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
+                Theme.foregroundPrimaryColor
+            sourceSize.width: 12
+            sourceSize.height: 12
+            source: "image://fluent-system-icons/chevron_up?size=12"
+            Behavior on color {
+                ColorAnimation {
+                    duration: Theme.colorAnimationDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+    }
+
+    down.indicator: ButtonRectangle {
+        control: control
+        flat: true
+        checked: false
+        visualFocus: false
+        down: control.down.pressed
+        hovered: control.down.hovered
+        x: control.mirrored ? 3 : control.width - width - 3
+        y: control.height / 2
+        height: control.height / 2 - 3
+        implicitWidth: 24
+        implicitHeight: 12
+        radius: 1
+        ColorImage {
+            anchors.centerIn: parent
+            color: !enabled ? Theme.foregroundDisabledColorChange.apply(Theme.foregroundPrimaryColor) :
+                Theme.foregroundPrimaryColor
+            sourceSize.width: 12
+            sourceSize.height: 12
+            source: "image://fluent-system-icons/chevron_down?size=12"
+            Behavior on color {
+                ColorAnimation {
+                    duration: Theme.colorAnimationDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+    }
+
+    background: Rectangle {
+        implicitWidth: 100
+        implicitHeight: 28
+        border.width: control.activeFocus ? 2 : 1
+        color: !control.enabled ? Theme.controlDisabledColorChange.apply(Theme.textFieldColor) :
+            Theme.textFieldColor
+        border.color: control.activeFocus ? Theme.accentColor : Theme.borderColor
+        radius: 4
+        Behavior on color {
+            ColorAnimation {
+                duration: Theme.colorAnimationDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+        Behavior on border.color {
+            ColorAnimation {
+                duration: Theme.colorAnimationDuration
+                easing.type: Easing.OutCubic
+            }
+        }
+    }
+}
