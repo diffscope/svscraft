@@ -25,13 +25,18 @@
 #include <limits>
 #include <numbers>
 
+#include <QPainter>
+#include <QPainterPath>
 #include <QQuickWindow>
 #include <QSGGeometry>
 #include <QSGGeometryNode>
 #include <QSGNode>
+#include <QSGRendererInterface>
 #include <QSGTransformNode>
 #include <QSGVertexColorMaterial>
 #include <QVariant>
+
+#include <SVSCraftQuick/SoftwarePainterNode.h>
 
 namespace SVS {
     
@@ -209,8 +214,12 @@ namespace SVS {
         QVector<double> weights;
     };
 
-    class WaveformThumbnailSGNode : public QSGNode {
+    class WaveformThumbnailSGNode : public QSGTransformNode {
     public:
+        explicit WaveformThumbnailSGNode(bool software) : m_software(software) {
+        }
+
+        bool m_software = false;
         double m_waveformOffset = -1;
         QList<WaveformThumbnailSection> m_waveformSections;
         double m_width = 0;
@@ -370,6 +379,108 @@ namespace SVS {
         double x = 0.0;
         double firstY = 0.0;
         double secondY = 0.0;
+    };
+
+    struct WaveformSectionRenderData {
+        QVector<WaveformAreaPoint> peakPoints;
+        QVector<WaveformAreaPoint> rmsPoints;
+        QVector<QPointF> peakLinePoints;
+        QVector<QPointF> lineGraphPoints;
+    };
+
+    static QPainterPath areaPath(const QVector<WaveformAreaPoint> &points) {
+        QPainterPath path;
+        if (points.size() < 2) {
+            return path;
+        }
+        path.moveTo(points.first().x, std::min(points.first().firstY, points.first().secondY));
+        for (qsizetype i = 1; i < points.size(); ++i) {
+            path.lineTo(points.at(i).x, std::min(points.at(i).firstY, points.at(i).secondY));
+        }
+        for (qsizetype i = points.size(); i > 0; --i) {
+            const auto &point = points.at(i - 1);
+            path.lineTo(point.x, std::max(point.firstY, point.secondY));
+        }
+        path.closeSubpath();
+        return path;
+    }
+
+    static QPainterPath polylinePath(const QVector<QPointF> &points) {
+        QPainterPath path;
+        if (points.isEmpty()) {
+            return path;
+        }
+        path.moveTo(points.first());
+        for (qsizetype i = 1; i < points.size(); ++i) {
+            path.lineTo(points.at(i));
+        }
+        return path;
+    }
+
+    class WaveformSectionSoftwareNode : public SoftwarePainterNode {
+    public:
+        explicit WaveformSectionSoftwareNode(QQuickItem *item) : SoftwarePainterNode(item) {
+            setFlag(QSGNode::OwnedByParent);
+        }
+
+        void synchronize(const WaveformSectionRenderData &data,
+                         const QColor &color,
+                         const QColor &rmsColor,
+                         double lineWidth) {
+            m_peakPath = areaPath(data.peakPoints);
+            m_peakLinePath = polylinePath(data.peakLinePoints);
+            m_rmsPath = areaPath(data.rmsPoints);
+            m_lineGraphPath = polylinePath(data.lineGraphPoints);
+            m_color = color;
+            m_rmsColor = rmsColor;
+            m_lineWidth = lineWidth;
+            QRectF bounds = m_peakPath.boundingRect()
+                | m_peakLinePath.boundingRect()
+                | m_rmsPath.boundingRect()
+                | m_lineGraphPath.boundingRect();
+            if (!bounds.isEmpty()) {
+                const double margin = std::max(0.5 * lineWidth, 0.5) + 0.5;
+                bounds.adjust(-margin, -margin, margin, margin);
+            }
+            setBoundingRect(bounds);
+            markDirty(QSGNode::DirtyGeometry | QSGNode::DirtyMaterial);
+        }
+
+        void synchronizeColors(const QColor &color, const QColor &rmsColor) {
+            if (m_color == color && m_rmsColor == rmsColor) {
+                return;
+            }
+            m_color = color;
+            m_rmsColor = rmsColor;
+            markDirty(QSGNode::DirtyMaterial);
+        }
+
+    protected:
+        void paint(QPainter *painter) override {
+            painter->setRenderHint(QPainter::Antialiasing);
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(m_color);
+            painter->drawPath(m_peakPath);
+            QPen pen(m_color, m_lineWidth, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
+            painter->setPen(pen);
+            painter->setBrush(Qt::NoBrush);
+            painter->drawPath(m_peakLinePath);
+            painter->setPen(Qt::NoPen);
+            painter->setBrush(m_rmsColor);
+            painter->drawPath(m_rmsPath);
+            painter->setPen(pen);
+            painter->setBrush(Qt::NoBrush);
+            painter->drawPath(m_lineGraphPath);
+        }
+
+    private:
+        QPainterPath m_peakPath;
+        QPainterPath m_peakLinePath;
+        QPainterPath m_rmsPath;
+        QPainterPath m_lineGraphPath;
+        QColor m_color;
+        QColor m_rmsColor;
+        double m_lineWidth = 1.0;
     };
 
     static quint32 appendVertex(WaveformGeometry &geometry,
@@ -549,6 +660,11 @@ namespace SVS {
         return sectionNode;
     }
 
+    static bool usesSoftwareRenderer(const QQuickItem *item) {
+        return item->window()
+            && item->window()->rendererInterface()->graphicsApi() == QSGRendererInterface::Software;
+    }
+
     QSGNode *WaveformThumbnail::updatePaintNode(QSGNode *node_, UpdatePaintNodeData *update_paint_node_data) {
         Q_UNUSED(update_paint_node_data)
         Q_D(const WaveformThumbnail);
@@ -557,13 +673,17 @@ namespace SVS {
             return nullptr;
         }
         const WaveformRasterMetrics rasterMetrics = rasterMetricsForItem(this);
+        const bool software = usesSoftwareRenderer(this);
         auto node = static_cast<WaveformThumbnailSGNode *>(node_);
-        if (!node) {
-            node = new WaveformThumbnailSGNode();
+        if (!node || node->m_software != software) {
+            delete node;
+            node = new WaveformThumbnailSGNode(software);
         }
 
         while (node->childCount() < d->waveformSections.size()) {
-            node->appendChildNode(createWaveformSectionNode());
+            node->appendChildNode(software
+                ? static_cast<QSGNode *>(new WaveformSectionSoftwareNode(this))
+                : static_cast<QSGNode *>(createWaveformSectionNode()));
         }
         while (node->childCount() > d->waveformSections.size()) {
             auto child = node->lastChild();
@@ -572,14 +692,25 @@ namespace SVS {
         }
         node->m_filterKernels.resize(d->waveformSections.size());
 
-        if (!d->waveformMipmapUpdatePending
+        const bool geometryUnchanged = !d->waveformMipmapUpdatePending
             && d->waveformOffset == node->m_waveformOffset
             && d->waveformSections == node->m_waveformSections
             && width() == node->m_width
             && height() == node->m_height
-            && d->color == node->m_color
-            && d->rmsColor == node->m_rmsColor
-            && rasterMetrics == node->m_rasterMetrics) {
+            && rasterMetrics == node->m_rasterMetrics;
+        const bool colorsUnchanged = d->color == node->m_color
+            && d->rmsColor == node->m_rmsColor;
+        if (geometryUnchanged && colorsUnchanged) {
+            return node;
+        }
+
+        if (software && geometryUnchanged) {
+            for (int sectionIndex = 0; sectionIndex < node->childCount(); ++sectionIndex) {
+                static_cast<WaveformSectionSoftwareNode *>(node->childAtIndex(sectionIndex))
+                    ->synchronizeColors(d->color, d->rmsColor);
+            }
+            node->m_color = d->color;
+            node->m_rmsColor = d->rmsColor;
             return node;
         }
 
@@ -603,16 +734,11 @@ namespace SVS {
             const auto sectionStartX = section.start * width();
             const auto sectionEndX = section.end * width();
             const auto sectionWidth = sectionEndX - sectionStartX;
-            const auto sectionNode = static_cast<QSGTransformNode *>(node->childAtIndex(sectionIndex));
-            auto peakNode = static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(0));
-            auto peakLineNode = static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(1));
-            auto rmsNode = static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(2));
-            auto lineGraphNode = static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(3));
-
             WaveformGeometry peakGeometry;
             WaveformGeometry peakLineGeometry;
             WaveformGeometry rmsGeometry;
             WaveformGeometry lineGraphGeometry;
+            WaveformSectionRenderData renderData;
 
             const auto logicalPixelCount = qMax(0, static_cast<int>(std::ceil(std::abs(sectionWidth))));
             const auto waveformLengthPerPixel = logicalPixelCount == 0
@@ -667,29 +793,32 @@ namespace SVS {
                     }
                     summaries.append(summary);
                 }
-                QVector<WaveformAreaPoint> peakPoints;
-                QVector<WaveformAreaPoint> rmsPoints;
-                peakPoints.reserve(boundaries.size());
+                renderData.peakPoints.reserve(boundaries.size());
                 if (d->waveformMipmap.useRms() && waveformLengthPerPixel > 16) {
-                    rmsPoints.reserve(boundaries.size());
+                    renderData.rmsPoints.reserve(boundaries.size());
                 }
                 for (qsizetype i = 0; i < boundaries.size(); ++i) {
-                    peakPoints.append({boundaries.at(i),
-                                       summaries.at(i).peakFirstY,
-                                       summaries.at(i).peakSecondY});
+                    renderData.peakPoints.append({boundaries.at(i),
+                                                  summaries.at(i).peakFirstY,
+                                                  summaries.at(i).peakSecondY});
                     if (d->waveformMipmap.useRms() && waveformLengthPerPixel > 16) {
-                        rmsPoints.append({boundaries.at(i),
-                                          summaries.at(i).rmsFirstY,
-                                          summaries.at(i).rmsSecondY});
+                        renderData.rmsPoints.append({boundaries.at(i),
+                                                     summaries.at(i).rmsFirstY,
+                                                     summaries.at(i).rmsSecondY});
                     }
                 }
-                appendAntialiasedArea(peakGeometry, peakPoints, verticalAntialiasWidth);
-                appendAntialiasedArea(rmsGeometry, rmsPoints, verticalAntialiasWidth);
-                appendAntialiasedPolyline(peakLineGeometry,
-                                          {QPointF(sectionStartX, height() * 0.5),
-                                           QPointF(sectionEndX, height() * 0.5)},
-                                          antialiasWidth,
-                                          antialiasWidth);
+                renderData.peakLinePoints = {
+                    QPointF(sectionStartX, height() * 0.5),
+                    QPointF(sectionEndX, height() * 0.5),
+                };
+                if (!software) {
+                    appendAntialiasedArea(peakGeometry, renderData.peakPoints, verticalAntialiasWidth);
+                    appendAntialiasedArea(rmsGeometry, renderData.rmsPoints, verticalAntialiasWidth);
+                    appendAntialiasedPolyline(peakLineGeometry,
+                                              renderData.peakLinePoints,
+                                              antialiasWidth,
+                                              antialiasWidth);
+                }
             } else if (sectionLength > 0.0 && sectionWidth != 0.0 && height() > 0.0) {
                 QVector<QPointF> linePoints;
                 const double physicalWidth = std::abs(sectionWidth)
@@ -730,16 +859,25 @@ namespace SVS {
                     linePoints.append(QPointF(sectionEndX,
                                               (1.0 - sampleValue(d->waveformMipmap, sectionOffset + sectionLength)) * height() * 0.5));
                 }
-                appendAntialiasedPolyline(lineGraphGeometry,
-                                          linePoints,
-                                          antialiasWidth,
-                                          antialiasWidth);
+                if (!software) {
+                    appendAntialiasedPolyline(lineGraphGeometry,
+                                              linePoints,
+                                              antialiasWidth,
+                                              antialiasWidth);
+                }
+                renderData.lineGraphPoints = std::move(linePoints);
             }
 
-            updateGeometryNode(peakNode, peakGeometry, d->color);
-            updateGeometryNode(peakLineNode, peakLineGeometry, d->color);
-            updateGeometryNode(rmsNode, rmsGeometry, d->rmsColor);
-            updateGeometryNode(lineGraphNode, lineGraphGeometry, d->color);
+            if (software) {
+                static_cast<WaveformSectionSoftwareNode *>(node->childAtIndex(sectionIndex))
+                    ->synchronize(renderData, d->color, d->rmsColor, antialiasWidth);
+            } else {
+                const auto sectionNode = static_cast<QSGTransformNode *>(node->childAtIndex(sectionIndex));
+                updateGeometryNode(static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(0)), peakGeometry, d->color);
+                updateGeometryNode(static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(1)), peakLineGeometry, d->color);
+                updateGeometryNode(static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(2)), rmsGeometry, d->rmsColor);
+                updateGeometryNode(static_cast<QSGGeometryNode *>(sectionNode->childAtIndex(3)), lineGraphGeometry, d->color);
+            }
             sectionOffset += sectionLength;
         }
 
