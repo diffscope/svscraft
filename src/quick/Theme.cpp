@@ -36,8 +36,13 @@ namespace SVS {
 
     static void initializeThemeHelper(QQmlEngine *engine) {
         QQmlComponent component(engine, "SVSCraft.UIComponents.impl", "ThemeHelper");
+        if (component.isError()) {
+            qFatal() << component.errorString();
+        }
         auto helper = component.create();
-        Q_ASSERT(helper);
+        if (!helper) {
+            qFatal() << component.errorString();
+        }
         helper->setParent(engine);
         engine->setProperty(themeHelperPropertyName, QVariant::fromValue(helper));
     }

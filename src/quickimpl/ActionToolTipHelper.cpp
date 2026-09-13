@@ -41,16 +41,20 @@ namespace SVS {
         if (!tip && create) {
             // FIXME: "There are still \"1\" items in the process of being created at engine destruction."
             QQmlComponent component(engine, "SVSCraft.UIComponents", "ActionToolTip");
+            if (component.isError()) {
+                qFatal() << component.errorString();
+            }
 
             QObject *object = component.create();
-            if (object)
-                object->setParent(engine);
-
+            if (!object) {
+                qFatal() << component.errorString();
+            }
             tip = qobject_cast<QQuickToolTip *>(object);
-            if (!tip)
-                delete object;
-            else
-                engine->setProperty(name, QVariant::fromValue(object));
+            if (!tip) {
+                qFatal("ActionToolTip in SVSCraft.UIComponents is not QQuickToolTip");
+            }
+            object->setParent(engine);
+            engine->setProperty(name, QVariant::fromValue(object));
         }
         return tip;
     }
