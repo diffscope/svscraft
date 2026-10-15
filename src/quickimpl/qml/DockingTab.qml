@@ -8,21 +8,9 @@ import QtQuick.Controls
 import SVSCraft
 import SVSCraft.UIComponents
 
-ToolButton {
+DockingTabButton {
     id: control
-    required property DockingPanel panel
-    property var groupView: null
-    text: panel?.title ?? ""
-    icon.source: panel?.iconSource ?? ""
-    display: AbstractButton.IconOnly
     highlighted: panel?.shown ?? false
-
-    Binding {
-        target: control
-        property: "icon.color"
-        value: control.panel?.iconColor
-        when: control.panel?.iconColor.valid ?? false
-    }
     Accessible.role: Accessible.PageTab
     Accessible.checkable: true
     Accessible.checked: highlighted
@@ -73,7 +61,6 @@ ToolButton {
     DockingPanelMenu {
         id: options
         panel: control.panel
-        groupView: control.groupView
     }
 
     DragHandler {

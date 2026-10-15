@@ -11,6 +11,7 @@
 #include <SVSCraftQuick/DockingHost.h>
 #include <SVSCraftQuick/DockingLayout.h>
 #include <SVSCraftQuick/DockingPanel.h>
+#include <SVSCraftQuick/private/DockingGroup_p.h>
 
 namespace SVS {
     DockingGroupView::DockingGroupView(QQuickItem *parent)
@@ -89,15 +90,29 @@ namespace SVS {
     }
 
     qreal DockingGroupView::barThickness() const {
-        return 32;
+        return tabButtonSize() + 2 * barPadding();
     }
 
-    QRectF DockingGroupViewPrivate::slot(int side) const {
+    qreal DockingGroupView::barPadding() const {
+        auto g = group();
+        return g ? DockingGroupPrivate::get(g)->tabBarPadding() : 4;
+    }
+
+    qreal DockingGroupView::tabButtonSize() const {
+        auto g = group();
+        return g ? DockingGroupPrivate::get(g)->tabButtonSize() : 24;
+    }
+
+    qreal DockingGroupView::panelHeaderHeight() const {
+        return DockingGroupPrivate::panelHeaderHeight;
+    }
+
+    QRectF DockingGroupViewPrivate::slot(int side, bool excludeRevealedBar) const {
         Q_Q(const DockingGroupView);
         if (!group || !group->selectedPanel(DockingGroup::Side(side)))
             return {};
         QRectF r(0, 0, q->width(), q->height());
-        if (!group->isBarHidden()) {
+        if (!group->isBarHidden() || (excludeRevealedBar && q->revealBar())) {
             switch (group->tabBarEdge()) {
                 case Qt::TopEdge:
                     r.adjust(0, q->barThickness(), 0, 0);
@@ -152,7 +167,7 @@ namespace SVS {
             return {};
         const bool horizontal = g->tabBarEdge() == Qt::TopEdge || g->tabBarEdge() == Qt::BottomEdge;
         for (int side = 0; side < 2; ++side) {
-            const auto rect = side ? trailingRect() : leadingRect();
+            const auto rect = d->slot(side, true);
             if (rect.isEmpty())
                 continue;
             const auto band = std::min(qreal(32), std::min(rect.width(), rect.height()) / 4);
@@ -230,8 +245,8 @@ namespace SVS {
         auto a = g->leadingPanel()->minimumSize(), b = g->trailingPanel()->minimumSize();
         qreal extent = horizontal ? leadingRect().width() + trailingRect().width()
                                   : leadingRect().height() + trailingRect().height();
-        qreal amin = horizontal ? a.width() : a.height() + 32,
-              bmin = horizontal ? b.width() : b.height() + 32;
+        qreal amin = horizontal ? a.width() : a.height() + panelHeaderHeight(),
+              bmin = horizontal ? b.width() : b.height() + panelHeaderHeight();
         if (extent <= 0 || amin + bmin > extent)
             return;
         auto lower = std::max(qreal(0.001), amin / extent);

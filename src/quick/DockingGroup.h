@@ -20,6 +20,8 @@ namespace SVS {
         QML_UNCREATABLE("Groups belong to a DockingLayout")
         Q_PROPERTY(Qt::Edge tabBarEdge READ tabBarEdge WRITE setTabBarEdge NOTIFY changed)
         Q_PROPERTY(bool autoHide READ autoHide WRITE setAutoHide NOTIFY changed)
+        Q_PROPERTY(bool showPanelNames READ showPanelNames WRITE setShowPanelNames NOTIFY changed)
+        Q_PROPERTY(bool compactLayout READ compactLayout WRITE setCompactLayout NOTIFY changed)
         Q_PROPERTY(bool widthLocked READ widthLocked WRITE setWidthLocked NOTIFY changed)
         Q_PROPERTY(bool heightLocked READ heightLocked WRITE setHeightLocked NOTIFY changed)
         Q_PROPERTY(QSizeF lockedSize READ lockedSize WRITE setLockedSize NOTIFY changed)
@@ -43,6 +45,10 @@ namespace SVS {
         void setTabBarEdge(Qt::Edge edge);
         bool autoHide() const;
         void setAutoHide(bool hide);
+        bool showPanelNames() const;
+        void setShowPanelNames(bool show);
+        bool compactLayout() const;
+        void setCompactLayout(bool compact);
         bool widthLocked() const override;
         void setWidthLocked(bool locked);
         bool heightLocked() const override;

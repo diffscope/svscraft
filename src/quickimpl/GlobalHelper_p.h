@@ -22,7 +22,9 @@
 
 #include <functional>
 
+#include <QFont>
 #include <QObject>
+#include <QStringList>
 #include <QWindow>
 #include <qqmlintegration.h>
 
@@ -67,6 +69,9 @@ namespace SVS {
         Q_INVOKABLE static int musicTimelineValueFromText(const MusicTimeline *timeline, const QString &text);
         Q_INVOKABLE static QString musicTimelineTextFromValue(const MusicTimeline *timeline, int value, int mw, int bw, int tw);
         Q_INVOKABLE static QUrl localFileUrl(const QString &filePath);
+        Q_INVOKABLE static QStringList graphemeClusters(const QString &text);
+        Q_INVOKABLE static QFont fontWithPixelSize(QFont font, int pixelSize);
+        Q_INVOKABLE static QFont fontWithVerticalAlternates(QFont font);
     };
 }
 

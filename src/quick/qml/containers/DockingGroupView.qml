@@ -13,7 +13,9 @@ DockingGroupViewTemplate {
     property DockingViewTemplate dockingView: null
 
     property Component tabDelegate: DockingTab {
-        groupView: control
+        showPanelNames: control.group?.showPanelNames ?? false
+        compactLayout: control.group?.compactLayout ?? false
+        vertical: control.verticalBar
     }
 
     property Component panelDelegate: DockingPanelFrame {}
@@ -26,7 +28,11 @@ DockingGroupViewTemplate {
 
     property Component dropGuideDelegate: DockingDropGuide {}
 
-    property Component ghostDelegate: DockingTabGhost {}
+    property Component ghostDelegate: DockingTabGhost {
+        showPanelNames: control.group?.showPanelNames ?? false
+        compactLayout: control.group?.compactLayout ?? false
+        vertical: control.verticalBar
+    }
     property bool revealRequested: false
     readonly property var currentDropTarget: tabDrop.containsDrag ? tabDrop.target : panelDrop.target
     readonly property DockingContext context: group?.layout.host.context ?? null
@@ -210,7 +216,6 @@ DockingGroupViewTemplate {
         DockingGroupMenu {
             id: groupOptions
             group: control.group
-            groupView: control
         }
 
         component SideBar: Item {
@@ -219,7 +224,7 @@ DockingGroupViewTemplate {
             readonly property DockingGroup sourceGroup: control.group
             property var panels: []
             readonly property real total: control.verticalBar ? bar.height : bar.width
-            readonly property real available: Math.max(0, total - 8)
+            readonly property real available: Math.max(0, total - 2 * control.barPadding)
             readonly property bool hasPanels: panels.length > 0 || hasGhost
             readonly property bool oppositeHasPanels: (side ? control.group?.leadingPanels.length ?? 0 : control.group?.trailingPanels.length ?? 0) > 0 || (tabDrop.containsDrag && tabDrop.target.side === 1 - side)
             readonly property real start: side ? available - length : 0
@@ -239,10 +244,10 @@ DockingGroupViewTemplate {
                     value += control.verticalBar ? tab.height : tab.width
                     ++count
                 }
-                value += Math.max(0, count - 1) * 4
+                value += Math.max(0, count - 1) * control.barPadding
                 return value
             }
-            readonly property real contentExtent: tabsExtent + (hasGhost ? tabDrop.ghostExtent + (tabsExtent > 0 ? 4 : 0) : 0)
+            readonly property real contentExtent: tabsExtent + (hasGhost ? tabDrop.ghostExtent + (tabsExtent > 0 ? control.barPadding : 0) : 0)
             readonly property real length: {
                 if (!hasPanels)
                     return 0
@@ -254,10 +259,10 @@ DockingGroupViewTemplate {
                 return Math.max(Math.min(contentExtent, available / 2), available - oppositeExtent)
             }
             readonly property real leadingPadding: side ? Math.max(0, length - contentExtent) : 0
-            width: control.verticalBar ? 24 : length
-            height: control.verticalBar ? length : 24
-            x: control.verticalBar ? 4 : control.mirrored ? total - 4 - start - length : 4 + start
-            y: control.verticalBar ? 4 + start : 4
+            width: control.verticalBar ? control.tabButtonSize : length
+            height: control.verticalBar ? length : control.tabButtonSize
+            x: control.verticalBar ? control.barPadding : control.mirrored ? total - control.barPadding - start - length : control.barPadding + start
+            y: control.verticalBar ? control.barPadding + start : control.barPadding
 
             function updatePanels() {
                 const updated = side ? sourceGroup?.trailingPanels ?? [] : sourceGroup?.leadingPanels ?? []
@@ -283,7 +288,7 @@ DockingGroupViewTemplate {
                 for (let i = 0; i < index; ++i) {
                     const tab = tabRepeater.itemAt(i)
                     if (tab && !tab.sourceHidden)
-                        value += (control.verticalBar ? tab.height : tab.width) + 4
+                        value += (control.verticalBar ? tab.height : tab.width) + control.barPadding
                 }
                 return value
             }
@@ -311,18 +316,18 @@ DockingGroupViewTemplate {
                     x: 0
                     y: sideBar.height
                     width: sideBar.width
-                    height: 4
-                    padding: 1
-                    visible: !control.verticalBar && size < 1 && width > 0
+                    height: control.barPadding
+                    padding: Math.max(0, (control.barPadding - 2) / 2)
+                    visible: !control.verticalBar && size < 1 && width > 0 && height > 0
                 }
                 ScrollBar.vertical: ScrollBar {
                     parent: sideBar
                     x: sideBar.width
                     y: 0
-                    width: 4
+                    width: control.barPadding
                     height: sideBar.height
-                    padding: 1
-                    visible: control.verticalBar && size < 1 && height > 0
+                    padding: Math.max(0, (control.barPadding - 2) / 2)
+                    visible: control.verticalBar && size < 1 && width > 0 && height > 0
                 }
 
                 Repeater {
@@ -335,11 +340,11 @@ DockingGroupViewTemplate {
                         required property var modelData
                         required property int index
                         readonly property bool sourceHidden: sideBar.hasGhost && modelData.key === control.context?.draggedPanelKey
-                        readonly property real logicalPosition: sideBar.offset(index) + (sideBar.hasGhost && index >= sideBar.ghostIndex() ? tabDrop.ghostExtent + 4 : 0)
+                        readonly property real logicalPosition: sideBar.offset(index) + (sideBar.hasGhost && index >= sideBar.ghostIndex() ? tabDrop.ghostExtent + control.barPadding : 0)
                         x: control.verticalBar ? 0 : control.mirrored ? flickable.contentWidth - logicalPosition - width : logicalPosition
                         y: control.verticalBar ? logicalPosition : 0
-                        width: control.verticalBar ? 24 : sourceHidden ? 0 : item?.implicitWidth ?? 24
-                        height: control.verticalBar ? sourceHidden ? 0 : item?.implicitHeight ?? 24 : 24
+                        width: control.verticalBar ? control.tabButtonSize : sourceHidden ? 0 : item?.implicitWidth ?? control.tabButtonSize
+                        height: control.verticalBar ? sourceHidden ? 0 : item?.implicitHeight ?? control.tabButtonSize : control.tabButtonSize
                         opacity: sourceHidden ? 0 : 1
                         sourceComponent: control.tabDelegate
                         initialProperties: ({panel: modelData})
@@ -367,8 +372,8 @@ DockingGroupViewTemplate {
                     id: ghostLoader
                     x: control.verticalBar ? 0 : control.mirrored ? flickable.contentWidth - sideBar.offset(sideBar.ghostIndex()) - width : sideBar.offset(sideBar.ghostIndex())
                     y: control.verticalBar ? sideBar.offset(sideBar.ghostIndex()) : 0
-                    width: control.verticalBar ? 24 : tabDrop.ghostExtent
-                    height: control.verticalBar ? tabDrop.ghostExtent : 24
+                    width: control.verticalBar ? control.tabButtonSize : tabDrop.ghostExtent
+                    height: control.verticalBar ? tabDrop.ghostExtent : control.tabButtonSize
                     visible: sideBar.hasGhost
                     sourceComponent: sideBar.hasGhost ? control.ghostDelegate : null
                     initialProperties: sideBar.hasGhost ? ({panel: control.context?.panel(control.context.draggedPanelKey) ?? null}) : ({})
@@ -393,7 +398,7 @@ DockingGroupViewTemplate {
             property var target: ({})
             property real ghostExtent: {
                 const ghost = target.side ? trailingBar.ghost.item : leadingBar.ghost.item
-                return (control.verticalBar ? ghost?.implicitHeight : ghost?.implicitWidth) ?? 24
+                return (control.verticalBar ? ghost?.implicitHeight : ghost?.implicitWidth) ?? control.tabButtonSize
             }
             property real scrollDelta: 0
             property var scrollBar: null
@@ -402,8 +407,8 @@ DockingGroupViewTemplate {
                 drag.accepted = drag.source?.dockingContext === control.context
                 if (!drag.accepted)
                     return
-                const coordinate = (control.verticalBar ? drag.y : control.mirrored ? width - drag.x : drag.x) - 4
-                const total = Math.max(0, (control.verticalBar ? height : width) - 8)
+                const coordinate = (control.verticalBar ? drag.y : control.mirrored ? width - drag.x : drag.x) - control.barPadding
+                const total = Math.max(0, (control.verticalBar ? height : width) - 2 * control.barPadding)
                 let side = coordinate < total / 2 ? 0 : 1
                 for (const candidate of [leadingBar, trailingBar]) {
                     const point = candidate.flickable.mapFromItem(bar, drag.x, drag.y)

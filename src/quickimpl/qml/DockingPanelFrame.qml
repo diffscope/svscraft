@@ -20,7 +20,7 @@ Pane {
         Accessible.role: Accessible.ToolBar
         Accessible.name: control.panel?.title ?? ""
         width: parent.width
-        height: control.groupView?.barThickness ?? 32
+        height: control.groupView?.panelHeaderHeight ?? 32
         color: control.panel?.active ? Theme.dockingPanelHeaderActiveColorChange.apply(Theme.backgroundPrimaryColor) : Theme.backgroundPrimaryColor
 
         Behavior on color {
@@ -28,6 +28,12 @@ Pane {
                 duration: Theme.colorAnimationDuration
                 easing.type: Easing.OutCubic
             }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            onClicked: mouse => options.popup(header, mouse.x, mouse.y)
         }
 
         RowLayout {
@@ -56,6 +62,9 @@ Pane {
                 Layout.minimumHeight: 24
                 Layout.maximumHeight: 24
                 Accessible.name: control.panel?.title ?? ""
+                DescriptiveText.toolTip: qsTr("Switch Panel")
+                DescriptiveText.activated: hovered && !down && !(control.panel?.context?.dragging ?? false)
+                DescriptiveText.bindAccessibleDescription: true
                 background: Item {}
 
                 contentItem: IconLabel {
@@ -101,6 +110,22 @@ Pane {
                     }
                 }
                 onActivated: index => control.panel.context.show(valueAt(index))
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.RightButton
+                    onClicked: mouse => options.popup(selector, mouse.x, mouse.y)
+                }
+
+                DragHandler {
+                    target: null
+                    onActiveChanged: {
+                        if (!active || !control.panel?.context)
+                            return
+                        selector.popup.close()
+                        control.panel.context.startDrag(control.panel)
+                    }
+                }
             }
 
             Rectangle {
@@ -204,17 +229,26 @@ Pane {
             }
 
             ToolButton {
+                id: optionsButton
                 text: qsTr("Panel Options")
                 icon.source: "image://fluent-system-icons/settings"
                 display: AbstractButton.IconOnly
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: options.popup()
+                onClicked: options.popup(optionsButton)
 
                 DockingPanelMenu {
                     id: options
                     panel: control.panel
-                    groupView: control.groupView
                 }
+            }
+
+            ToolButton {
+                visible: control.panel?.group?.canHide(control.panel) ?? false
+                text: qsTr("Hide")
+                icon.source: "image://fluent-system-icons/subtract"
+                display: AbstractButton.IconOnly
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: control.panel.context.hide(control.panel)
             }
         }
     }

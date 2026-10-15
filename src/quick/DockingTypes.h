@@ -72,6 +72,8 @@ namespace SVS {
         QVector<qreal> weights;
         Qt::Edge tabBarEdge = Qt::TopEdge;
         bool autoHide = false;
+        bool showPanelNames = false;
+        bool compactLayout = false;
         bool widthLocked = false;
         bool heightLocked = false;
         QSizeF expandedSize = {400, 400};

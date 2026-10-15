@@ -47,6 +47,32 @@ namespace SVS {
         layout()->commit();
     }
 
+    bool DockingGroup::showPanelNames() const {
+        Q_D(const DockingGroup);
+        return d->state.showPanelNames;
+    }
+
+    void DockingGroup::setShowPanelNames(bool v) {
+        Q_D(DockingGroup);
+        if (d->state.showPanelNames == v)
+            return;
+        d->state.showPanelNames = v;
+        layout()->commit();
+    }
+
+    bool DockingGroup::compactLayout() const {
+        Q_D(const DockingGroup);
+        return d->state.compactLayout;
+    }
+
+    void DockingGroup::setCompactLayout(bool v) {
+        Q_D(DockingGroup);
+        if (d->state.compactLayout == v)
+            return;
+        d->state.compactLayout = v;
+        layout()->commit();
+    }
+
     bool DockingGroup::widthLocked() const {
         Q_D(const DockingGroup);
         return d->state.widthLocked;
@@ -263,7 +289,7 @@ namespace SVS {
             if (!p)
                 continue;
             sizes[i] = preferred ? p->effectivePreferredSize() : p->minimumSize();
-            sizes[i].rheight() += 32;
+            sizes[i].rheight() += panelHeaderHeight;
             open[i] = true;
         }
         bool horizontal = state.tabBarEdge == Qt::TopEdge || state.tabBarEdge == Qt::BottomEdge;
@@ -276,9 +302,9 @@ namespace SVS {
         }
         if (!q->isBarHidden()) {
             if (horizontal)
-                size.rheight() += 32;
+                size.rheight() += tabBarThickness();
             else
-                size.rwidth() += 32;
+                size.rwidth() += tabBarThickness();
         }
         return size;
     }

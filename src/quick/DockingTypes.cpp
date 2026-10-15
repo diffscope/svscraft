@@ -54,6 +54,8 @@ namespace SVS {
             {"nodeId", nodeId},
             {"tabBarEdge", int(tabBarEdge)},
             {"autoHide", autoHide},
+            {"showPanelNames", showPanelNames},
+            {"compactLayout", compactLayout},
             {"widthLocked", widthLocked},
             {"heightLocked", heightLocked},
             {"expandedSize", expandedSize},
@@ -85,7 +87,7 @@ namespace SVS {
             for (auto key : {"children", "weights"})
                 if (node.contains(key) && !node.value(key).canConvert<QVariantList>())
                     return invalid();
-            for (auto key : {"autoHide", "widthLocked", "heightLocked"})
+            for (auto key : {"autoHide", "showPanelNames", "compactLayout", "widthLocked", "heightLocked"})
                 if (node.contains(key) && node.value(key).metaType().id() != QMetaType::Bool)
                     return invalid();
             if (!validNumber("orientation", true) || !validNumber("tabBarEdge", true) || !validNumber("contentRatio", false))
@@ -107,6 +109,8 @@ namespace SVS {
             }
             s.tabBarEdge = Qt::Edge(node.value("tabBarEdge", int(Qt::TopEdge)).toInt());
             s.autoHide = node.value("autoHide").toBool();
+            s.showPanelNames = node.value("showPanelNames").toBool();
+            s.compactLayout = node.value("compactLayout").toBool();
             s.widthLocked = node.value("widthLocked").toBool();
             s.heightLocked = node.value("heightLocked").toBool();
             s.expandedSize = node.value("expandedSize", QSizeF(400, 400)).toSizeF();

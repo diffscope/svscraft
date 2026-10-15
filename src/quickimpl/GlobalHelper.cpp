@@ -26,6 +26,7 @@
 #include <QEventLoop>
 #include <QGuiApplication>
 #include <QQuickItem>
+#include <QTextBoundaryFinder>
 
 #include <qpa/qplatformdialoghelper.h>
 #include <qpa/qplatformintegration.h>
@@ -210,6 +211,27 @@ namespace SVS {
 
     QUrl GlobalHelper::localFileUrl(const QString &filePath) {
         return QUrl::fromLocalFile(filePath);
+    }
+
+    QStringList GlobalHelper::graphemeClusters(const QString &text) {
+        QStringList result;
+        QTextBoundaryFinder finder(QTextBoundaryFinder::Grapheme, text);
+        qsizetype start = 0;
+        for (qsizetype end = finder.toNextBoundary(); end >= 0; end = finder.toNextBoundary()) {
+            result.append(text.mid(start, end - start));
+            start = end;
+        }
+        return result;
+    }
+
+    QFont GlobalHelper::fontWithPixelSize(QFont font, int pixelSize) {
+        font.setPixelSize(pixelSize);
+        return font;
+    }
+
+    QFont GlobalHelper::fontWithVerticalAlternates(QFont font) {
+        font.setFeature("vrt2", 1);
+        return font;
     }
 }
 

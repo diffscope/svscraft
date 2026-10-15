@@ -22,7 +22,7 @@ namespace SVS {
         mutable QVariantList regions;
         QMetaObject::Connection connection;
         QMetaObject::Connection destroyedConnection;
-        QRectF slot(int side) const;
+        QRectF slot(int side, bool excludeRevealedBar = false) const;
     };
 }
 

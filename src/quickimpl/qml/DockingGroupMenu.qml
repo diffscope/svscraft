@@ -10,14 +10,21 @@ import SVSCraft.UIComponents
 Menu {
     id: control
     required property DockingGroup group
-    property var groupView: null
     title: qsTr("Panel Group")
     enabled: Boolean(group)
 
     MenuItem {
-        text: qsTr("Show Tab Bar")
-        enabled: Boolean(control.groupView)
-        onTriggered: control.groupView.revealRequested = true
+        text: qsTr("Show Panel Names")
+        checkable: true
+        checked: control.group?.showPanelNames ?? false
+        onTriggered: control.group.showPanelNames = checked
+    }
+
+    MenuItem {
+        text: qsTr("Compact Layout")
+        checkable: true
+        checked: control.group?.compactLayout ?? false
+        onTriggered: control.group.compactLayout = checked
     }
 
     MenuItem {
@@ -81,6 +88,7 @@ Menu {
 
     MenuItem {
         text: qsTr("Close Panel Group")
+        icon.source: "image://fluent-system-icons/dismiss"
         onTriggered: control.group.layout.removeGroup(control.group)
     }
 }

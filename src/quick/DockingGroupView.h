@@ -21,7 +21,10 @@ namespace SVS {
         QML_NAMED_ELEMENT(DockingGroupViewTemplate)
         Q_PROPERTY(DockingGroup *group READ group WRITE setGroup NOTIFY groupChanged)
         Q_PROPERTY(QRectF barRect READ barRect NOTIFY geometryChanged)
-        Q_PROPERTY(qreal barThickness READ barThickness CONSTANT)
+        Q_PROPERTY(qreal barThickness READ barThickness NOTIFY geometryChanged)
+        Q_PROPERTY(qreal barPadding READ barPadding NOTIFY geometryChanged)
+        Q_PROPERTY(qreal tabButtonSize READ tabButtonSize NOTIFY geometryChanged)
+        Q_PROPERTY(qreal panelHeaderHeight READ panelHeaderHeight CONSTANT)
         Q_PROPERTY(QRectF leadingRect READ leadingRect NOTIFY geometryChanged)
         Q_PROPERTY(QRectF trailingRect READ trailingRect NOTIFY geometryChanged)
         Q_PROPERTY(QVariantList dropRegions READ dropRegions NOTIFY geometryChanged)
@@ -34,6 +37,9 @@ namespace SVS {
         void setGroup(DockingGroup *group);
         QRectF barRect() const;
         qreal barThickness() const;
+        qreal barPadding() const;
+        qreal tabButtonSize() const;
+        qreal panelHeaderHeight() const;
         QRectF leadingRect() const;
         QRectF trailingRect() const;
         QVariantList dropRegions() const;

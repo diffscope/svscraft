@@ -18,6 +18,20 @@ namespace SVS {
         bool explicitLockedSize = false;
         bool hasExpandedSize = false;
 
+        static constexpr qreal panelHeaderHeight = 32;
+
+        qreal tabBarPadding() const {
+            return state.compactLayout ? 0 : 4;
+        }
+
+        qreal tabButtonSize() const {
+            return 24;
+        }
+
+        qreal tabBarThickness() const {
+            return tabButtonSize() + 2 * tabBarPadding();
+        }
+
         static DockingGroupPrivate *get(DockingGroup *group) { return group->d_func(); }
 
         QSizeF sizeHint(bool preferred, bool expanded = false) const;
