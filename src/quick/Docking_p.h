@@ -1,71 +1,26 @@
-/******************************************************************************
- * Copyright (c) 2025 OpenVPI                                                 *
- *                                                                            *
- * This file is part of SVSCraft                                              *
- *                                                                            *
- * SVSCraft is free software: you can redistribute it and/or modify it under  *
- * the terms of the GNU Lesser General Public License as published by the     *
- * Free Software Foundation, either version 3 of the License, or (at your     *
- * option) any later version.                                                 *
- *                                                                            *
- * SVSCraft is distributed in the hope that it will be useful, but WITHOUT    *
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or      *
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public        *
- * License for more details.                                                  *
- *                                                                            *
- * You should have received a copy of the GNU Lesser General Public License   *
- * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
- ******************************************************************************/
+// SPDX-FileCopyrightText: OpenVPI
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #ifndef SVSCRAFT_DOCKING_P_H
 #define SVSCRAFT_DOCKING_P_H
 
-#include <QObject>
-#include <qqmlintegration.h>
+#include <SVSCraftQuick/Docking.h>
 
-class QQuickWindow;
+#include <QPointer>
+
+#include <SVSCraftQuick/DockingPanel.h>
 
 namespace SVS {
-
-    class DockingAttachedType;
-
-    class DockingPrivate;
-
-    class Docking : public QObject {
-        Q_OBJECT
-        Q_DECLARE_PRIVATE(Docking)
-        QML_ANONYMOUS
-
-        Q_PROPERTY(QObject *dockingView READ dockingView NOTIFY dockingViewChanged)
-        Q_PROPERTY(QQuickWindow *window READ window NOTIFY windowChanged)
-        Q_PROPERTY(QRect windowGeometryHint READ windowGeometryHint WRITE setWindowGeometryHint NOTIFY windowGeometryHintChanged)
-        Q_PROPERTY(bool visible READ visible NOTIFY visibleChanged)
+    class DockingPrivate {
+        Q_DECLARE_PUBLIC(Docking)
     public:
-        ~Docking() override;
-
-        QObject *dockingView() const;
-        QQuickWindow *window() const;
-
-        QRect windowGeometryHint() const;
-        void setWindowGeometryHint(const QRect &geometryHint);
-
-        bool visible() const;
-
-    signals:
-        void dockingViewChanged();
-        void windowChanged();
-        void windowGeometryHintChanged();
-        void visibleChanged();
-
-        void activated();
-
-    private:
-        friend class DockingAttachedType;
-        explicit Docking(QObject *parent = nullptr);
-
-        QScopedPointer<DockingPrivate> d_ptr;
+        Docking *q_ptr = nullptr;
+        QPointer<DockingPanel> panel;
+        QList<QMetaObject::Connection> connections;
+        QMetaObject::Connection windowConnection;
+        bool lastVisible = false;
+        bool lastEffectiveVisible = false;
     };
-
 }
 
-#endif // SVSCRAFT_DOCKING_P_H
+#endif

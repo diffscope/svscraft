@@ -1,50 +1,61 @@
-/******************************************************************************
- * Copyright (c) 2025 OpenVPI                                                 *
- *                                                                            *
- * This file is part of SVSCraft                                              *
- *                                                                            *
- * SVSCraft is free software: you can redistribute it and/or modify it under  *
- * the terms of the GNU Lesser General Public License as published by the     *
- * Free Software Foundation, either version 3 of the License, or (at your     *
- * option) any later version.                                                 *
- *                                                                            *
- * SVSCraft is distributed in the hope that it will be useful, but WITHOUT    *
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or      *
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public        *
- * License for more details.                                                  *
- *                                                                            *
- * You should have received a copy of the GNU Lesser General Public License   *
- * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
- ******************************************************************************/
+// SPDX-FileCopyrightText: OpenVPI
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 import QtQml
 import QtQuick
 
-import SVSCraft
 import SVSCraft.UIComponents
-import SVSCraft.UIComponents.impl
 
 Window {
     id: window
-    default property DockingPane pane
-    Component.onCompleted: () => {
-        pane.DockingImpl.dockingView = null
+    required property DockingHost host
+    property bool automaticDestruction: false
+    property bool interactionEnabled: true
+    property bool disposing: false
+    property rect savedNormalGeometry: Qt.rect(x, y, width, height)
+
+    function saveNormalGeometry() {
+        if (visibility === Window.Windowed)
+            savedNormalGeometry = Qt.rect(x, y, width, height)
     }
-    DockingPanel {
-        id: panel
+    onXChanged: saveNormalGeometry()
+    onYChanged: saveNormalGeometry()
+    onWidthChanged: saveNormalGeometry()
+    onHeightChanged: saveNormalGeometry()
+    title: host.context?.activePanel?.group?.layout.host === host ? host.context.activePanel.title : qsTr("Panels")
+    width: 400
+    height: 300
+    StatusTextContext.statusContext: transientParent?.StatusTextContext.statusContext ?? null
+    StatusTextContext.contextHelpContext: transientParent?.StatusTextContext.contextHelpContext ?? null
+
+    DockingView {
+        id: view
         anchors.fill: parent
-        pane: window.pane
-        dockingWindow: true
-        onRemoved: () => {
-            window.close()
-            window.pane.DockingImpl.window = null
-        }
+        host: window.host
+        enabled: window.interactionEnabled
     }
-    onVisibleChanged: () => {
-        if (visible) {
-            pane.DockingImpl.dockingView = null
-            pane.DockingImpl.window = window
-            panel.set()
+    Component.onCompleted: host.window = window
+    onClosing: close => {
+        close.accepted = interactionEnabled && host.close().accepted
+    }
+
+    Connections {
+        target: window.host
+
+        function onCloseRequested() {
+            if (window.disposing)
+                return
+            window.visible = false
+            if (window.automaticDestruction) {
+                window.disposing = true
+                Qt.callLater(() => {
+                    if (window.host) {
+                        window.host.context?.unregisterHost(window.host, true)
+                        window.host.destroy()
+                    }
+                    window.destroy()
+                })
+            }
         }
     }
 }

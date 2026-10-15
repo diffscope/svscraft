@@ -1,68 +1,136 @@
-/******************************************************************************
- * Copyright (c) 2025 OpenVPI                                                 *
- *                                                                            *
- * This file is part of SVSCraft                                              *
- *                                                                            *
- * SVSCraft is free software: you can redistribute it and/or modify it under  *
- * the terms of the GNU Lesser General Public License as published by the     *
- * Free Software Foundation, either version 3 of the License, or (at your     *
- * option) any later version.                                                 *
- *                                                                            *
- * SVSCraft is distributed in the hope that it will be useful, but WITHOUT    *
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or      *
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public        *
- * License for more details.                                                  *
- *                                                                            *
- * You should have received a copy of the GNU Lesser General Public License   *
- * along with SVSCraft. If not, see <https://www.gnu.org/licenses/>.          *
- ******************************************************************************/
+// SPDX-FileCopyrightText: OpenVPI
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "Docking.h"
 #include "Docking_p.h"
-#include "Docking_p_p.h"
 
-#include <QQmlEngine>
+#include <QQuickItem>
 #include <QQuickWindow>
 
-#include <SVSCraftQuickImpl/private/DockingImpl_p.h>
+#include <SVSCraftQuick/DockingContext.h>
+#include <SVSCraftQuick/DockingGroup.h>
+#include <SVSCraftQuick/DockingHost.h>
+#include <SVSCraftQuick/DockingLayout.h>
 
 namespace SVS {
-
-    Docking *DockingAttachedType::qmlAttachedProperties(QObject *object) {
-        auto o = new Docking(object);
-        return o;
-    }
-
-
     Docking::Docking(QObject *parent) : QObject(parent), d_ptr(new DockingPrivate) {
-        Q_D(Docking);
-        d->q_ptr = this;
-        d->dockingImpl = qobject_cast<DockingImpl *>(qmlAttachedPropertiesObject<DockingImplAttachedType>(parent));
-        connect(d->dockingImpl, &DockingImpl::dockingViewChanged, this, &Docking::dockingViewChanged);
-        connect(d->dockingImpl, &DockingImpl::windowChanged, this, &Docking::windowChanged);
-        connect(d->dockingImpl, &DockingImpl::visibleChanged, this, &Docking::visibleChanged);
+        d_ptr->q_ptr = this;
+        if (auto item = qobject_cast<QQuickItem *>(parent)) {
+            auto updateWindow = [this, item] {
+                disconnect(d_ptr->windowConnection);
+                if (item->window())
+                    d_ptr->windowConnection = connect(item->window(), &QWindow::visibilityChanged, this, &Docking::updateVisibility);
+                Q_EMIT windowChanged();
+                updateVisibility();
+            };
+            connect(item, &QQuickItem::windowChanged, this, updateWindow);
+            updateWindow();
+            connect(item, &QQuickItem::visibleChanged, this, &Docking::updateVisibility);
+        }
     }
+
     Docking::~Docking() = default;
-    QObject *Docking::dockingView() const {
-        Q_D(const Docking);
-        return d->dockingImpl->dockingView();
+
+    Docking *Docking::qmlAttachedProperties(QObject *object) {
+        return new Docking(object);
     }
-    QQuickWindow *Docking::window() const {
+
+    DockingPanel *Docking::panel() const {
         Q_D(const Docking);
-        return d->dockingImpl->window();
+        return d->panel;
     }
-    QRect Docking::windowGeometryHint() const {
-        Q_D(const Docking);
-        return d->windowGeometryHint;
-    }
-    void Docking::setWindowGeometryHint(const QRect &geometryHint) {
+
+    void Docking::setPanel(DockingPanel *p) {
         Q_D(Docking);
-        d->windowGeometryHint = geometryHint;
-        emit windowGeometryHintChanged();
+        if (d->panel == p)
+            return;
+        for (const auto &c : d->connections)
+            disconnect(c);
+        d->connections.clear();
+        d->panel = p;
+        if (p) {
+            d->connections.append(connect(p, &DockingPanel::placementChanged, this, [this] {
+                Q_EMIT changed();
+                updateVisibility();
+            }));
+            d->connections.append(connect(p, &DockingPanel::activated, this, &Docking::activated));
+            d->connections.append(connect(p, &QObject::destroyed, this, [this] {
+                Q_EMIT changed();
+                updateVisibility();
+            }));
+        }
+        Q_EMIT changed();
+        updateVisibility();
     }
+
+    DockingContext *Docking::context() const {
+        return panel() ? panel()->context() : nullptr;
+    }
+
+    DockingGroup *Docking::group() const {
+        return panel() ? panel()->group() : nullptr;
+    }
+
+    int Docking::side() const {
+        return group() ? group()->sideOf(panel()) : -1;
+    }
+
+    DockingHost *Docking::host() const {
+        return group() ? group()->layout()->host() : nullptr;
+    }
+
+    QQuickWindow *Docking::window() const {
+        auto item = qobject_cast<QQuickItem *>(parent());
+        return item ? item->window() : nullptr;
+    }
+
     bool Docking::visible() const {
-        Q_D(const Docking);
-        return d->dockingImpl->isVisible();
+        return panel() && panel()->isShown();
+    }
+
+    bool Docking::effectiveVisible() const {
+        auto item = qobject_cast<QQuickItem *>(parent());
+        return visible() && item && item->isVisible() && window() && window()->isVisible() && window()->visibility() != QWindow::Minimized;
+    }
+
+    void Docking::updateVisibility() {
+        Q_D(Docking);
+        auto logical = visible();
+        auto effective = effectiveVisible();
+        bool logicalChanged = d->lastVisible != logical;
+        bool effectiveChanged = d->lastEffectiveVisible != effective;
+        d->lastVisible = logical;
+        d->lastEffectiveVisible = effective;
+        if (logicalChanged)
+            Q_EMIT visibleChanged();
+        if (effectiveChanged)
+            Q_EMIT effectiveVisibleChanged();
+    }
+
+    bool Docking::active() const {
+        return panel() && panel()->isActive();
+    }
+
+    DockingResult Docking::show() {
+        return context() ? context()->show(panel()) : DockingResult{DockingResult::Rejected, "unregisteredPanel"};
+    }
+
+    DockingResult Docking::hide() {
+        return context() ? context()->hide(panel()) : DockingResult{DockingResult::Rejected, "unregisteredPanel"};
+    }
+
+    DockingResult Docking::remove() {
+        return context() ? context()->remove(panel()) : DockingResult{DockingResult::Rejected, "unregisteredPanel"};
+    }
+
+    DockingResult Docking::activate() {
+        return context() ? context()->activate(panel()) : DockingResult{DockingResult::Rejected, "unregisteredPanel"};
+    }
+
+    void Docking::floatPanel() {
+        if (context())
+            context()->requestFloat(panel());
     }
 }
 
-#include "moc_Docking_p.cpp"
+#include "moc_Docking.cpp"

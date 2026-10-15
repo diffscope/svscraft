@@ -23,15 +23,16 @@
 
 #include <QClipboard>
 #include <QCursor>
+#include <QEventLoop>
 #include <QGuiApplication>
 #include <QQuickItem>
-#include <QtGui/private/qguiapplication_p.h>
-#include <qpa/qplatformtheme.h>
+
 #include <qpa/qplatformdialoghelper.h>
 #include <qpa/qplatformintegration.h>
 #include <qpa/qplatformservices.h>
-#include <QEventLoop>
-#include <QtQuickTemplates2/private/qquickicon_p.h>
+#include <qpa/qplatformtheme.h>
+
+#include <QtGui/private/qguiapplication_p.h>
 
 #ifdef Q_OS_WIN
 #    include <qt_windows.h>
@@ -39,7 +40,6 @@
 
 #include <SVSCraftCore/MusicTime.h>
 #include <SVSCraftCore/MusicTimeline.h>
-#include <SVSCraftGui/ColorBlender.h>
 
 namespace SVS {
     GlobalHelper::GlobalHelper(QObject *parent) : QObject(parent) {
@@ -104,7 +104,9 @@ namespace SVS {
 #ifdef Q_OS_WIN
         return true;
 #else
-        return QGuiApplicationPrivate::platformTheme()->usePlatformNativeDialog(QPlatformTheme::ColorDialog);
+        return QGuiApplicationPrivate::platformTheme()->usePlatformNativeDialog(
+            QPlatformTheme::ColorDialog
+        );
 #endif
     }
     QColor GlobalHelper::nativeChooseColor(const QColor &color, QWindow *window, bool hasAlpha) {
@@ -122,15 +124,12 @@ namespace SVS {
 
         if (ChooseColor(&cc)) {
             rgbCurrent = cc.rgbResult;
-            return QColor::fromRgb(GetRValue(rgbCurrent), GetGValue(rgbCurrent),
-                                   GetBValue(rgbCurrent));
+            return QColor::fromRgb(GetRValue(rgbCurrent), GetGValue(rgbCurrent), GetBValue(rgbCurrent));
         }
 
         return {};
 #else
-        QScopedPointer<QPlatformColorDialogHelper> dlg(qobject_cast<QPlatformColorDialogHelper *>(
-            QGuiApplicationPrivate::platformTheme()->createPlatformDialogHelper(
-                QPlatformTheme::ColorDialog)));
+        QScopedPointer<QPlatformColorDialogHelper> dlg(qobject_cast<QPlatformColorDialogHelper *>(QGuiApplicationPrivate::platformTheme()->createPlatformDialogHelper(QPlatformTheme::ColorDialog)));
         if (!dlg)
             return color;
         auto options = QColorDialogOptions::create();
@@ -138,10 +137,8 @@ namespace SVS {
         dlg->setOptions(options);
         dlg->setCurrentColor(color);
         QEventLoop eventLoop;
-        connect(dlg.get(), &QPlatformDialogHelper::accept, &eventLoop,
-                [&] { eventLoop.exit(QPlatformDialogHelper::Accepted); });
-        connect(dlg.get(), &QPlatformDialogHelper::reject, &eventLoop,
-                [&] { eventLoop.exit(QPlatformDialogHelper::Rejected); });
+        connect(dlg.get(), &QPlatformDialogHelper::accept, &eventLoop, [&] { eventLoop.exit(QPlatformDialogHelper::Accepted); });
+        connect(dlg.get(), &QPlatformDialogHelper::reject, &eventLoop, [&] { eventLoop.exit(QPlatformDialogHelper::Rejected); });
         dlg->show(Qt::Dialog, Qt::ApplicationModal, window);
         if (eventLoop.exec() == QPlatformDialogHelper::Accepted)
             return dlg->currentColor();
@@ -192,18 +189,6 @@ namespace SVS {
     void GlobalHelper::setClipboardText(const QString &text) {
         QGuiApplication::clipboard()->setText(text);
     }
-    QQuickIcon GlobalHelper::defaultIcon() {
-        return {};
-    }
-    QColor GlobalHelper::dockingPanelHeaderColor(const QColor &accentColor,
-                                                 const QColor &backgroundColor, bool active) {
-        if (!active)
-            return backgroundColor;
-        QColor accentColorTransparent = accentColor;
-        accentColorTransparent.setAlphaF(0.15);
-        return ColorBlender::blend<ColorBlender::Normal>(accentColorTransparent.rgba(),
-                                                         backgroundColor.rgba());
-    }
     QWindow *GlobalHelper::focusWindow() {
         return QGuiApplication::focusWindow();
     }
@@ -217,8 +202,7 @@ namespace SVS {
         return timeline->create(text).totalTick();
     }
 
-    QString GlobalHelper::musicTimelineTextFromValue(const MusicTimeline *timeline, int value,
-                                                     int mw, int bw, int tw) {
+    QString GlobalHelper::musicTimelineTextFromValue(const MusicTimeline *timeline, int value, int mw, int bw, int tw) {
         if (!timeline)
             return {};
         return timeline->create(0, 0, value).toString(mw, bw, tw);

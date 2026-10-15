@@ -20,8 +20,10 @@
 import QtQml
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.impl
 
 import SVSCraft
+import SVSCraft.UIComponents
 import SVSCraft.UIComponents.impl
 
 Pane {
@@ -29,17 +31,38 @@ Pane {
     property Item header: null
     property string title: ""
     property string description: ""
-    property qQuickIcon icon: {
-        let i = GlobalHelper.defaultIcon()
-        i.width = i.height = 16
-        i.color = Theme.foregroundPrimaryColor
-        return i
-    }
-    property bool locked: false
-    property bool dock: true
+    property qQuickIcon icon
     property Menu menu: null
     property int badgeType: SVS.CT_Accent
     property int badgeNumber: 0
+    property string panelKey: ""
+    property size minimumSize: Qt.size(0, 0)
+    property size preferredSize: Qt.size(-1, -1)
+
+    icon.width: 16
+    icon.height: 16
+    icon.color: Theme.foregroundPrimaryColor
+
+    property DockingPanel panel: DockingPanel {
+        key: pane.panelKey
+        contentItem: pane
+    }
+
+    Binding {
+        when: pane.panel?.contentItem === pane
+        pane.panel.title: pane.title
+        pane.panel.description: pane.description
+        pane.panel.iconSource: pane.icon.source
+        pane.panel.iconColor: pane.icon.color
+        pane.panel.badgeNumber: pane.badgeNumber
+        pane.panel.badgeType: pane.badgeType
+        pane.panel.minimumSize: pane.minimumSize
+        pane.panel.preferredSize: pane.preferredSize
+        pane.panel.headerItem: pane.header
+    }
+
+    background: Item {}
+    Docking.panel: panel
 
     Accessible.name: title
     Accessible.description: description

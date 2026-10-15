@@ -23,14 +23,12 @@
 #include <functional>
 
 #include <QObject>
-#include <qqmlintegration.h>
-
 #include <QWindow>
+#include <qqmlintegration.h>
 
 #include <SVSCraftQuickImpl/SVSCraftQuickImplGlobal.h>
 
 class QQuickItem;
-class QQuickIcon;
 
 namespace SVS {
 
@@ -63,8 +61,6 @@ namespace SVS {
             return text.toHtmlEscaped();
         }
         Q_INVOKABLE static void setClipboardText(const QString &text);
-        Q_INVOKABLE static QQuickIcon defaultIcon();
-        Q_INVOKABLE static QColor dockingPanelHeaderColor(const QColor &accentColor, const QColor &backgroundColor, bool active);
         static QWindow *focusWindow();
         Q_INVOKABLE static void beep();
 

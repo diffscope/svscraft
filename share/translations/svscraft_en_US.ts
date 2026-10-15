@@ -77,71 +77,11 @@
     </message>
 </context>
 <context>
-    <name>DockingPanel</name>
-    <message>
-        <location filename="../../src/quickimpl/qml/DockingPanel.qml" line="31"/>
-        <source>Docking View Panel of %1</source>
-        <translation type="unfinished">Docking View Panel of %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/quickimpl/qml/DockingPanel.qml" line="137"/>
-        <source>Drag to Dock</source>
-        <translation type="unfinished">Drag to Dock</translation>
-    </message>
-    <message>
-        <location filename="../../src/quickimpl/qml/DockingPanel.qml" line="137"/>
-        <source>Undock</source>
-        <translation type="unfinished">Undock</translation>
-    </message>
-    <message>
-        <location filename="../../src/quickimpl/qml/DockingPanel.qml" line="137"/>
-        <source>Dock</source>
-        <translation type="unfinished">Dock</translation>
-    </message>
-    <message>
-        <location filename="../../src/quickimpl/qml/DockingPanel.qml" line="180"/>
-        <source>Menu</source>
-        <translation type="unfinished">Menu</translation>
-    </message>
-</context>
-<context>
     <name>DockingView</name>
     <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="34"/>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="268"/>
-        <source>Docking View</source>
-        <translation type="unfinished">Docking View</translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="360"/>
-        <source>&amp;Hide</source>
-        <translation type="unfinished">&amp;Hide</translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="360"/>
-        <source>&amp;Show</source>
-        <translation type="unfinished">&amp;Show</translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="364"/>
-        <source>&amp;Undock</source>
-        <translation type="unfinished">&amp;Undock</translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="364"/>
-        <source>&amp;Dock</source>
-        <translation type="unfinished">&amp;Dock</translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="374"/>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="382"/>
-        <source>&amp;Remove from Sidebar</source>
-        <translation type="unfinished">&amp;Remove from Sidebar</translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/containers/DockingView.qml" line="404"/>
-        <source>Show or hide the docking pane</source>
-        <translation type="unfinished">Show or hide the docking pane</translation>
+        <location filename="../../src/quick/qml/containers/DockingView.qml" line="80"/>
+        <source>Resize Panels</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -309,6 +249,184 @@
         <location filename="../../src/quick/qml/controls/SystemButton.qml" line="37"/>
         <source>Help</source>
         <translation type="unfinished">Help</translation>
+    </message>
+</context>
+<context>
+    <name>DockingWindow</name>
+    <message>
+        <location filename="../../src/quick/qml/containers/DockingWindow.qml" line="22"/>
+        <source>Panels</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockingGroupView</name>
+    <message>
+        <location filename="../../src/quick/qml/containers/DockingGroupView.qml" line="58"/>
+        <source>Resize Panel Directions</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockingPanelFrame</name>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingPanelFrame.qml" line="34"/>
+        <source>Panel Menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingPanelFrame.qml" line="40"/>
+        <source>Panel Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockingMoveMenu</name>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="14"/>
+        <source>Move Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="26"/>
+        <source>Trailing Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="26"/>
+        <source>Leading Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="28"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="33"/>
+        <source>End</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="47"/>
+        <source>Before</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="52"/>
+        <source>After</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="68"/>
+        <source>Workspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="70"/>
+        <source>Fill Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="87"/>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="91"/>
+        <source>Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="95"/>
+        <source>Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="99"/>
+        <source>Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockingPanelMenu</name>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="16"/>
+        <source>Float</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="21"/>
+        <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="21"/>
+        <source>Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="36"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DockingGroupMenu</name>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="14"/>
+        <source>Panel Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="18"/>
+        <source>Show Tab Bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="24"/>
+        <source>Auto Hide Tab Bar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="31"/>
+        <source>Lock Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="38"/>
+        <source>Lock Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="45"/>
+        <source>Tab Bar Edge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="48"/>
+        <source>Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="56"/>
+        <source>Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="64"/>
+        <source>Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="72"/>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/quickimpl/qml/DockingGroupMenu.qml" line="83"/>
+        <source>Close Panel Group</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

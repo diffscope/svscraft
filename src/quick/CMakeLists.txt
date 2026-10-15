@@ -3,8 +3,8 @@ project(SVSCraftQuick
     LANGUAGES CXX
 )
 
-file(GLOB_RECURSE _src *.h *.cpp)
-file(GLOB_RECURSE _qml_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.qml *.js *.mjs)
+file(GLOB_RECURSE _src CONFIGURE_DEPENDS *.h *.cpp)
+file(GLOB_RECURSE _qml_files CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.qml *.js *.mjs)
 file(GLOB_RECURSE _resource_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} assets/*)
 
 svs_add_library(${PROJECT_NAME} AUTOGEN
