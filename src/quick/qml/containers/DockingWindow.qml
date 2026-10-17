@@ -22,11 +22,56 @@ Window {
     onYChanged: saveNormalGeometry()
     onWidthChanged: saveNormalGeometry()
     onHeightChanged: saveNormalGeometry()
-    title: host.context?.activePanel?.group?.layout.host === host ? host.context.activePanel.title : qsTr("Panels")
+    title: d.titlePanel?.title ?? qsTr("Panels")
     width: 400
     height: 300
     StatusTextContext.statusContext: transientParent?.StatusTextContext.statusContext ?? null
     StatusTextContext.contextHelpContext: transientParent?.StatusTextContext.contextHelpContext ?? null
+
+    QtObject {
+        id: d
+        readonly property DockingHost host: window.host
+        property DockingPanel lastActivePanel: null
+        readonly property DockingPanel titlePanel: {
+            if (!host)
+                return null
+            const activePanel = host.context?.activePanel
+            if (activePanel?.group?.layout.host === host)
+                return activePanel
+            const previousPanel = lastActivePanel?.group?.layout.host === host ? lastActivePanel : null
+            if (previousPanel?.shown)
+                return previousPanel
+            const groups = host.layout.groups
+            for (const group of groups) {
+                const selectedPanel = group.leadingPanel ?? group.trailingPanel
+                if (selectedPanel)
+                    return selectedPanel
+            }
+            if (previousPanel)
+                return previousPanel
+            for (const group of groups) {
+                const panel = group.leadingPanels[0] ?? group.trailingPanels[0]
+                if (panel)
+                    return panel
+            }
+            return null
+        }
+        onHostChanged: rememberActivePanel()
+
+        function rememberActivePanel() {
+            const activePanel = host?.context?.activePanel
+            if (activePanel && activePanel.group?.layout.host === host)
+                lastActivePanel = activePanel
+        }
+    }
+
+    Connections {
+        target: d.host?.context ?? null
+
+        function onChanged() {
+            d.rememberActivePanel()
+        }
+    }
 
     DockingView {
         id: view
@@ -34,7 +79,10 @@ Window {
         host: window.host
         enabled: window.interactionEnabled
     }
-    Component.onCompleted: host.window = window
+    Component.onCompleted: {
+        host.window = window
+        d.rememberActivePanel()
+    }
     onClosing: close => {
         close.accepted = interactionEnabled && host.close().accepted
     }
