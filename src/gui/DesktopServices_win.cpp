@@ -4,7 +4,9 @@
 
 #include <vector>
 
+#include <QDesktopServices>
 #include <QDir>
+#include <QUrl>
 
 #include <windows.h>
 #include <shlobj.h>
@@ -13,6 +15,9 @@
 namespace SVS {
     bool DesktopServices::reveal(const QString &dir, const QStringList &files) {
         const QDir root(dir);
+        if (files.isEmpty()) {
+            return QDesktopServices::openUrl(QUrl::fromLocalFile(root.absolutePath()));
+        }
 
         PIDLIST_ABSOLUTE dirPidl = nullptr;
         const QString nativeDirPath = QDir::toNativeSeparators(root.absolutePath());
