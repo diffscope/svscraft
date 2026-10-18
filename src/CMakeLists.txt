@@ -1,4 +1,4 @@
-qm_import(Preprocess Qml)
+qm_import(Preprocess QtQml)
 
 set(SVSCRAFT_PROJECT_DESCRIPTION "SVS Application Foundation")
 set(SVSCRAFT_PROJECT_COPYRIGHT "Copyright 2023 Team OpenVPI")

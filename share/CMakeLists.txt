@@ -1,5 +1,5 @@
 if(SVSCRAFT_BUILD_TRANSLATIONS)
-    qm_import(Translate)
+    qm_import(QtLinguist)
     qm_find_qt(LinguistTools)
 
     add_custom_target(svscraft_lupdate_task)
