@@ -7,6 +7,7 @@ import QtQuick.Controls
 
 import SVSCraft
 import SVSCraft.UIComponents
+import SVSCraft.UIComponents.impl
 
 DockingTabButton {
     id: control
@@ -19,25 +20,29 @@ DockingTabButton {
 
     Rectangle {
         id: badge
+        readonly property bool showsNumber: !control.compactLayout && (control.panel?.badgeNumber ?? 0) > 0
+
         visible: (control.panel?.badgeNumber ?? 0) !== 0
-        width: control.panel?.badgeNumber > 0 ? Math.max(height, badgeText.implicitWidth) : 8
-        height: control.panel?.badgeNumber > 0 ? Math.max(16, badgeText.implicitHeight) : 8
+        width: showsNumber ? Math.max(height + 2, Math.ceil(badgeText.implicitWidth) + 4) : 4
+        height: showsNumber ? Math.max(10, Math.ceil(badgeText.implicitHeight)) : 4
         radius: height / 2
-        anchors.right: control.mirrored ? undefined : parent.right
-        anchors.left: control.mirrored ? parent.left : undefined
-        anchors.leftMargin: control.padding
-        anchors.rightMargin: control.padding
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 1
+        LayoutMirroring.enabled: false
         color: Theme.controlColor(control.panel?.badgeType ?? SVS.CT_Accent)
 
         Label {
             id: badgeText
             anchors.centerIn: parent
-            visible: control.panel?.badgeNumber > 0
-            padding: 2
+            visible: badge.showsNumber
+            font: GlobalHelper.fontWithPixelSize(control.font, 8)
+            textFormat: Text.PlainText
             text: (control.panel?.badgeNumber ?? 0).toLocaleString()
+            Accessible.ignored: true
         }
     }
+
     onClicked: {
         if (!panel)
             return
