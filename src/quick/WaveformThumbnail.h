@@ -40,6 +40,7 @@ namespace SVS {
         Q_PROPERTY(double length MEMBER length)
 
     public:
+        // Horizontal positions are fractions of the item width. Length is a sample count.
         double start{};
         double end{};
         double length{};
@@ -71,6 +72,7 @@ namespace SVS {
         QColor rmsColor() const;
         void setRmsColor(const QColor &rmsColor);
 
+        // Returns the sample offset of the first section.
         double waveformOffset() const;
         void setWaveformOffset(double waveformOffset);
 

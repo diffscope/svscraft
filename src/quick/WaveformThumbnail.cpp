@@ -668,7 +668,7 @@ namespace SVS {
     QSGNode *WaveformThumbnail::updatePaintNode(QSGNode *node_, UpdatePaintNodeData *update_paint_node_data) {
         Q_UNUSED(update_paint_node_data)
         Q_D(const WaveformThumbnail);
-        if (!d->waveformMipmap.isValid()) {
+        if (!d->waveformMipmap.isValid() || !std::isfinite(width()) || !std::isfinite(height()) || width() <= 0 || height() <= 0) {
             delete node_;
             return nullptr;
         }
@@ -730,24 +730,31 @@ namespace SVS {
         double sectionOffset = d->waveformOffset;
         for (int sectionIndex = 0; sectionIndex < d->waveformSections.size(); ++sectionIndex) {
             const auto &section = d->waveformSections.at(sectionIndex);
-            const auto sectionLength = qMax(0.0, section.length);
+            const auto sectionLength = std::isfinite(section.length) ? qMax(0.0, section.length) : 0.0;
             const auto sectionStartX = section.start * width();
             const auto sectionEndX = section.end * width();
             const auto sectionWidth = sectionEndX - sectionStartX;
+            // Clip geometry before sampling while retaining the section's sample mapping.
+            const auto visibleStartX = std::clamp(sectionStartX, 0.0, width());
+            const auto visibleEndX = std::clamp(sectionEndX, 0.0, width());
+            const auto visibleDataStart = sectionOffset + (visibleStartX - sectionStartX) / sectionWidth * sectionLength;
+            const auto visibleDataEnd = sectionOffset + (visibleEndX - sectionStartX) / sectionWidth * sectionLength;
+            const bool visible = std::isfinite(sectionWidth) && std::isfinite(visibleDataStart) && std::isfinite(visibleDataEnd)
+                && sectionLength > 0.0 && visibleStartX != visibleEndX;
             WaveformGeometry peakGeometry;
             WaveformGeometry peakLineGeometry;
             WaveformGeometry rmsGeometry;
             WaveformGeometry lineGraphGeometry;
             WaveformSectionRenderData renderData;
 
-            const auto logicalPixelCount = qMax(0, static_cast<int>(std::ceil(std::abs(sectionWidth))));
+            const auto logicalPixelCount = std::ceil(std::abs(sectionWidth));
             const auto waveformLengthPerPixel = logicalPixelCount == 0
                 ? 0.0
                 : sectionLength / logicalPixelCount;
             const bool isMipmap = d->waveformMipmap.level() == WaveformMipmap::Downscale || waveformLengthPerPixel >= 4;
 
-            if (sectionLength > 0.0 && sectionWidth != 0.0 && height() > 0.0 && isMipmap) {
-                const QVector<double> boundaries = devicePixelBoundaries(sectionStartX, sectionEndX, rasterMetrics);
+            if (visible && isMipmap) {
+                const QVector<double> boundaries = devicePixelBoundaries(visibleStartX, visibleEndX, rasterMetrics);
                 struct WaveformSummary {
                     double peakFirstY = 0.0;
                     double peakSecondY = 0.0;
@@ -808,8 +815,8 @@ namespace SVS {
                     }
                 }
                 renderData.peakLinePoints = {
-                    QPointF(sectionStartX, height() * 0.5),
-                    QPointF(sectionEndX, height() * 0.5),
+                    QPointF(visibleStartX, height() * 0.5),
+                    QPointF(visibleEndX, height() * 0.5),
                 };
                 if (!software) {
                     appendAntialiasedArea(peakGeometry, renderData.peakPoints, verticalAntialiasWidth);
@@ -819,7 +826,7 @@ namespace SVS {
                                               antialiasWidth,
                                               antialiasWidth);
                 }
-            } else if (sectionLength > 0.0 && sectionWidth != 0.0 && height() > 0.0) {
+            } else if (visible) {
                 QVector<QPointF> linePoints;
                 const double physicalWidth = std::abs(sectionWidth)
                     * rasterMetrics.devicePixelRatio
@@ -828,10 +835,10 @@ namespace SVS {
                     ? sectionLength / physicalWidth
                     : 0.0;
                 if (samplesPerDevicePixel > 1.0) {
-                    const QVector<double> boundaries = devicePixelBoundaries(sectionStartX, sectionEndX, rasterMetrics);
+                    const QVector<double> boundaries = devicePixelBoundaries(visibleStartX, visibleEndX, rasterMetrics);
                     linePoints.reserve(boundaries.size() + 1);
-                    linePoints.append(QPointF(sectionStartX,
-                                              (1.0 - sampleValue(d->waveformMipmap, sectionOffset)) * height() * 0.5));
+                    linePoints.append(QPointF(visibleStartX,
+                                              (1.0 - sampleValue(d->waveformMipmap, visibleDataStart)) * height() * 0.5));
                     const FilteredWaveformSampler sampler(d->waveformMipmap,
                                                           samplesPerDevicePixel,
                                                           &node->m_filterKernels[sectionIndex]);
@@ -840,24 +847,26 @@ namespace SVS {
                         const double index = sectionOffset + (x - sectionStartX) / sectionWidth * sectionLength;
                         linePoints.append(QPointF(x, (1.0 - sampler.value(index)) * height() * 0.5));
                     }
-                    linePoints.append(QPointF(sectionEndX,
-                                              (1.0 - sampleValue(d->waveformMipmap, sectionOffset + sectionLength)) * height() * 0.5));
+                    linePoints.append(QPointF(visibleEndX,
+                                              (1.0 - sampleValue(d->waveformMipmap, visibleDataEnd)) * height() * 0.5));
                 } else {
                     const int interpolateLevel = qBound(1.0,
                                                         std::pow(2, std::floor(2 - std::log2(waveformLengthPerPixel))),
                                                         1.0 * INTERPOLATE_MAX);
-                    linePoints.append(QPointF(sectionStartX,
-                                              (1.0 - sampleValue(d->waveformMipmap, sectionOffset)) * height() * 0.5));
-                    for (qint64 i = std::ceil(sectionOffset * interpolateLevel);
-                         i <= std::floor((sectionOffset + sectionLength) * interpolateLevel);
+                    linePoints.append(QPointF(visibleStartX,
+                                              (1.0 - sampleValue(d->waveformMipmap, visibleDataStart)) * height() * 0.5));
+                    const auto firstSample = std::clamp(std::min(visibleDataStart, visibleDataEnd), 0.0, static_cast<double>(d->waveformMipmap.size()));
+                    const auto lastSample = std::clamp(std::max(visibleDataStart, visibleDataEnd), 0.0, static_cast<double>(d->waveformMipmap.size()));
+                    for (qint64 i = std::ceil(firstSample * interpolateLevel);
+                         i <= std::floor(lastSample * interpolateLevel);
                          ++i) {
                         const double index = 1.0 * i / interpolateLevel;
                         const auto value = sampleValue(d->waveformMipmap, index);
                         const double pointX = sectionStartX + (index - sectionOffset) / sectionLength * sectionWidth;
                         linePoints.append(QPointF(pointX, (1.0 - value) * height() * 0.5));
                     }
-                    linePoints.append(QPointF(sectionEndX,
-                                              (1.0 - sampleValue(d->waveformMipmap, sectionOffset + sectionLength)) * height() * 0.5));
+                    linePoints.append(QPointF(visibleEndX,
+                                              (1.0 - sampleValue(d->waveformMipmap, visibleDataEnd)) * height() * 0.5));
                 }
                 if (!software) {
                     appendAntialiasedPolyline(lineGraphGeometry,

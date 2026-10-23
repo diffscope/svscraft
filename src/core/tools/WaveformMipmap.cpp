@@ -21,8 +21,10 @@
 #include "WaveformMipmap_p.h"
 
 #include <algorithm>
-#include <type_traits>
+#include <cmath>
 #include <limits>
+#include <numeric>
+#include <type_traits>
 
 #include <QDataStream>
 #include <QtEndian>
@@ -103,14 +105,18 @@ namespace SVS {
             return qMax(-1.0, 1.0 * value / std::numeric_limits<T>::max());
         }
     }
+    // Offsets are measured in elements of the input level.
     template <typename T, typename S>
     static inline void loadMipmap16FromOriginal(WaveformMipmapData *d, const T *maxOriginal, const T *minOriginal, const T *rmsOriginal, qsizetype offset, qsizetype length, qsizetype destination, qsizetype restrictedBase, qsizetype restrictedEnd, S *max16, S *min16, S *rms16) {
-        auto alignedOffset = offset / 16 * 16;
-        auto alignedLength = (offset + length + 15) / 16 * 16 - alignedOffset;
-        for (auto i = alignedOffset / 16; i < alignedLength / 16; i++) {
-            auto mipmapIndex = i - alignedOffset / 16 + destination;
-            auto blockOffset = qMax(restrictedBase, i * 16);
-            auto blockLength = qMin(restrictedEnd, (i + 1) * 16) - blockOffset;
+        const auto firstBlock = destination / 16;
+        const auto lastBlock = (destination + length - 1) / 16;
+        for (auto mipmapIndex = firstBlock; mipmapIndex <= lastBlock; ++mipmapIndex) {
+            const auto relativeOffset = mipmapIndex * 16 - destination;
+            const auto relativeBase = qMax(restrictedBase - offset, relativeOffset);
+            const auto relativeEnd = qMin(restrictedEnd - offset, relativeOffset + 16);
+            const auto blockOffset = offset + relativeBase;
+            const auto blockLength = relativeEnd - relativeBase;
+            Q_ASSERT(blockLength > 0);
             min16[mipmapIndex] = convertSample<T, S>(*std::min_element(minOriginal + blockOffset, minOriginal + blockOffset + blockLength));
             max16[mipmapIndex] = convertSample<T, S>(*std::max_element(maxOriginal + blockOffset, maxOriginal + blockOffset + blockLength));
             if (d->useRms) {
@@ -127,50 +133,59 @@ namespace SVS {
     }
     template <typename T>
     static inline void loadImpl(WaveformMipmapData *d, const T *data, qsizetype offset, qsizetype length, qsizetype destination) {
-        auto offset16 = destination / 16 * 16;
-        auto length16 = (destination + length + 15) / 16 - offset16;
-        auto offset256 = offset16 / 16 * 16;
-        auto length256 = (offset16 + length16 + 15) / 16 - offset256;
-        auto offset4096 = offset256 / 16 * 16;
+        if (length == 0)
+            return;
+        const bool validRange = data && offset >= 0 && length > 0 && destination >= 0 && destination <= d->size
+            && length <= d->size - destination && offset <= std::numeric_limits<qsizetype>::max() - length;
+        Q_ASSERT(validRange);
+        if (!validRange)
+            return;
+        const auto end = destination + length;
+        const auto offset16 = destination / 16;
+        const auto end16 = (end - 1) / 16 + 1;
+        const auto length16 = end16 - offset16;
+        const auto offset256 = offset16 / 16;
+        const auto end256 = (end16 - 1) / 16 + 1;
+        const auto length256 = end256 - offset256;
         if (d->level == WaveformMipmap::Original) {
             if (d->sampleType == WaveformMipmap::Int8) {
                 std::transform(data + offset, data + offset + length, d->originalData.data() + destination, [](T value) {
                     return convertSample<T, qint8>(value);
                 });
-                loadMipmap16FromOriginal(d, d->originalData.data(), destination, length, offset16,
+                loadMipmap16FromOriginal(d, d->originalData.data(), destination, length, destination,
                     0, d->originalData.size(),
                     d->max16.data(), d->min16.data(), d->rms16.data());
             } else {
                 std::transform(data + offset, data + offset + length, reinterpret_cast<qint16 *>(d->originalData.data()) + destination, [](T value) {
                     return convertSample<T, qint16>(value);
                 });
-                loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->originalData.data()), destination, length, offset16,
+                loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->originalData.data()), destination, length, destination,
                     0, d->originalData.size() / 2,
                     reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->min16.data()), reinterpret_cast<qint16 *>(d->rms16.data()));
             }
         } else if (d->level == WaveformMipmap::Downscale) {
             if (d->sampleType == WaveformMipmap::Int8) {
-                loadMipmap16FromOriginal(d, data, offset, length, destination / 16 * 16,
+                loadMipmap16FromOriginal(d, data, offset, length, destination,
                     offset, offset + length,
                     d->max16.data(), d->min16.data(), d->rms16.data());
             } else {
-                loadMipmap16FromOriginal(d, data, offset, length, destination / 16 * 16,
+                loadMipmap16FromOriginal(d, data, offset, length, destination,
                     offset, offset + length,
                     reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->min16.data()), reinterpret_cast<qint16 *>(d->rms16.data()));
             }
         }
         if (d->sampleType == WaveformMipmap::Int8) {
-            loadMipmap16FromOriginal(d, d->max16.data(), d->min16.data(), d->rms16.data(), offset16, length16, offset256,
+            loadMipmap16FromOriginal(d, d->max16.data(), d->min16.data(), d->rms16.data(), offset16, length16, offset16,
                     0, d->max16.size(),
                     d->max256.data(), d->min256.data(), d->rms256.data());
-            loadMipmap16FromOriginal(d, d->max256.data(), d->min256.data(), d->rms256.data(), offset256, length256, offset4096,
+            loadMipmap16FromOriginal(d, d->max256.data(), d->min256.data(), d->rms256.data(), offset256, length256, offset256,
                 0, d->max256.size(),
                 d->max4096.data(), d->min4096.data(), d->rms4096.data());
         } else {
-            loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->min16.data()), reinterpret_cast<qint16 *>(d->rms16.data()), offset16, length16, offset256,
+            loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->max16.data()), reinterpret_cast<qint16 *>(d->min16.data()), reinterpret_cast<qint16 *>(d->rms16.data()), offset16, length16, offset16,
                     0, d->max16.size() / 2,
                     reinterpret_cast<qint16 *>(d->max256.data()), reinterpret_cast<qint16 *>(d->min256.data()), reinterpret_cast<qint16 *>(d->rms256.data()));
-            loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->max256.data()), reinterpret_cast<qint16 *>(d->min256.data()), reinterpret_cast<qint16 *>(d->rms256.data()), offset256, length256, offset4096,
+            loadMipmap16FromOriginal(d, reinterpret_cast<qint16 *>(d->max256.data()), reinterpret_cast<qint16 *>(d->min256.data()), reinterpret_cast<qint16 *>(d->rms256.data()), offset256, length256, offset256,
                 0, d->max256.size() / 2,
                 reinterpret_cast<qint16 *>(d->max4096.data()), reinterpret_cast<qint16 *>(d->min4096.data()), reinterpret_cast<qint16 *>(d->rms4096.data()));
         }
