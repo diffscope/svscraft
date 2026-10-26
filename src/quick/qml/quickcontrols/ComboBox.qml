@@ -122,7 +122,11 @@ T.ComboBox {
         height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         topMargin: 6
         bottomMargin: 6
-        popupType: Popup.Window
+        // Cached popup windows cannot reopen after their host window is destroyed (QTBUG-150265).
+        // The qtdeclarative fix, commit 7b96f2c3a078cd9a0c5084d9f3ea78cd6e988ec9, updates transientParent
+        // when the host window changes and is expected in Qt 6.12.
+        // Restore Popup.Window when the required Qt version includes the fix.
+        popupType: Popup.Item
 
         contentItem: ListView {
             clip: true
