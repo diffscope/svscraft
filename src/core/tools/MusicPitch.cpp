@@ -29,8 +29,18 @@ namespace SVS {
     static const char *keyNameStrSharp[12] = {"C", "C\u266f", "D", "D\u266f", "E", "F", "F\u266f", "G", "G\u266f", "A", "A\u266f", "B"};
     static int natureKeyPitch[7] = {9, 11, 0, 2, 4, 5, 7};
 
+    static qint8 s_displayOctaveBase = 0;
+
+    qint8 MusicPitch::displayOctaveBase() {
+        return s_displayOctaveBase;
+    }
+
+    void MusicPitch::setDisplayOctaveBase(qint8 base) {
+        s_displayOctaveBase = base;
+    }
+
     MusicPitch MusicPitch::fromString(QStringView s, bool *ok) {
-        QRegularExpression rx("^\\s*([A-G])([b#\u266d\u266f]*)\\s*(\\?|\uff1f|\\d*)\\s*$");
+        QRegularExpression rx("^\\s*([A-G])([b#\u266d\u266f]*)\\s*(\\?|\uff1f|-?\\d*)\\s*$");
         auto match = rx.match(s);
         if (!match.hasMatch()) {
             if (ok)
@@ -45,7 +55,7 @@ namespace SVS {
         keyName -= int(std::ranges::count(capAccidental, 'b') + std::ranges::count(capAccidental, QChar(L'\u266d')));
         keyName += int(std::ranges::count(capAccidental, '#') + std::ranges::count(capAccidental, QChar(L'\u266f')));
 
-        if (capOctave.isEmpty()) {
+        if (capOctave.isEmpty() || (capOctave.size() == 1 && capOctave[0] == u'-')) {
             if (ok)
                 *ok = false;
             return MusicPitch(static_cast<qint8>(keyName));
@@ -55,7 +65,7 @@ namespace SVS {
                 *ok = true;
             return {keyName >= 0 ? qint8(keyName % 12) : qint8(12 + keyName % 12), -1};
         }
-        int pitch = keyName + 12 * capOctave.toInt();
+        int pitch = keyName + 12 * (capOctave.toInt() - displayOctaveBase());
         if (pitch < 0 || pitch >= 128) {
             if (ok)
                 *ok = false;
@@ -67,7 +77,7 @@ namespace SVS {
     }
 
     QString MusicPitch::toString(MusicPitch::Accidental accidental) const {
-        return keyName(accidental) + (n >= 0 ? QString::number(octave()) : "?");
+        return keyName(accidental) + (n >= 0 ? QString::number(octave() + displayOctaveBase()) : "?");
     }
 
     QString MusicPitch::keyName(MusicPitch::Accidental accidental) const {

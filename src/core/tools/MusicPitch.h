@@ -81,6 +81,9 @@ namespace SVS {
                       (octave >= 0 && key + octave * 12 >= 0 && key + octave * 12 < 128)));
         }
 
+        static qint8 displayOctaveBase();
+        static void setDisplayOctaveBase(qint8 base);
+
         static MusicPitch fromString(QStringView s, bool *ok = nullptr);
         Q_INVOKABLE QString toString(Accidental accidental) const;
 

@@ -46,11 +46,8 @@ namespace SVS {
         QStringList octaveTypes;
         if (bottom() < 0)
             octaveTypes.append(R"(\?|\x{ff1f})");
-        if (bottom() < MusicPitch(MusicPitch::C, 10).pitch() && top() >= 0) {
-            octaveTypes.append(QString("[%1-%2]").arg(MusicPitch(bottom()).octave()).arg(qMin(9, MusicPitch(top()).octave())));
-        }
-        if (top() >= MusicPitch(MusicPitch::C, 10).pitch())
-            octaveTypes.append(R"(1?0?)");
+        if (top() >= 0)
+            octaveTypes.append(R"(-?\d*)");
         QRegularExpression rx(rxTemplate.arg(octaveTypes.join("|")));
         auto match = rx.match(s);
         if (!match.hasMatch())
