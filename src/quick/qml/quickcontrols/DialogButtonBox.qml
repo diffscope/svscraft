@@ -51,8 +51,7 @@ T.DialogButtonBox {
         snapMode: ListView.SnapToItem
     }
 
-    background: Rectangle {
-        implicitHeight: 60
-        color: Theme.backgroundColor(control.ThemedItem.backgroundLevel)
+    background: Item {
+        implicitHeight:60
     }
 }
