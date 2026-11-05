@@ -301,12 +301,12 @@
 <context>
     <name>MessageBoxDialog</name>
     <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="187"/>
+        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="226"/>
         <source>Hide Details...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="187"/>
+        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="226"/>
         <source>Show Details...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -314,110 +314,7 @@
 <context>
     <name>QPlatformTheme</name>
     <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="220"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="277"/>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="223"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="279"/>
-        <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="226"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="281"/>
-        <source>&amp;Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="229"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="283"/>
-        <source>Yes to &amp;All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="232"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="285"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="235"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="287"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="238"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="289"/>
-        <source>Save All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="241"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="291"/>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="244"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="293"/>
-        <source>Retry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="247"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="295"/>
-        <source>Ignore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="250"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="297"/>
-        <source>Discard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="253"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="299"/>
-        <source>&amp;No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="256"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="301"/>
-        <source>N&amp;o to All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="259"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="303"/>
-        <source>Abort</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="262"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="305"/>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="265"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="307"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="268"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="309"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="271"/>
-        <location filename="../../src/quick/qml/MessageBoxDialog.qml" line="311"/>
+        <location filename="../../src/quick/qml/DialogHelpButton.qml" line="10"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
