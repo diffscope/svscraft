@@ -10,8 +10,8 @@ import SVSCraft.UIComponents.impl
 
 Window {
     id: dialog
-    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowSystemMenuHint | (escapeButton !== 0 && buttonRepeater.model.some(v => v.id === escapeButton) ? Qt.WindowCloseButtonHint : 0)
-    width: Math.max(400, buttonLayout.implicitWidth + 24)
+    flags: Qt.Dialog | Qt.CustomizeWindowHint | Qt.WindowTitleHint | Qt.WindowSystemMenuHint | (escapeButton !== 0 && buttonIds.includes(escapeButton) ? Qt.WindowCloseButtonHint : 0)
+    width: Math.max(400, buttonBox.implicitWidth)
     minimumHeight: mainLayout.implicitHeight
     maximumHeight: mainLayout.implicitHeight
     height: mainLayout.implicitHeight
@@ -19,21 +19,38 @@ Window {
     property var icon: SVS.NoIcon
     property var buttons: SVS.Ok
     property var primaryButton: SVS.Ok
+    property bool doneByButton: false
+    readonly property var buttonIds: {
+        const ids = []
+        const flags = typeof(buttons) === "number" ? buttons
+            : buttons.reduce((flags, button) => typeof(button) === "number" ? flags | button : flags, SVS.NoButton)
+        for (let id = SVS.Ok; id <= SVS.RestoreDefaults; id *= 2) {
+            if (flags & id)
+                ids.push(id)
+        }
+        if (typeof(buttons) !== "number") {
+            for (const button of buttons) {
+                if (typeof(button) !== "number")
+                    ids.push(button.id)
+            }
+        }
+        return ids
+    }
     property var escapeButton: {
-        const a = buttonRepeater.model
+        const a = buttonIds
         for (const o of a) {
-            if (o.id === SVS.Cancel) {
+            if (o === SVS.Cancel) {
                 return SVS.Cancel
             }
         }
         if (a.length === 1) {
-            return a[0].id
+            return a[0]
         }
         let rejectButton = 0
         for (const o of a) {
-            if (o.id === SVS.Close || o.id === SVS.Abort) {
+            if (o === SVS.Close || o === SVS.Abort) {
                 if (!rejectButton) {
-                    rejectButton = o.id
+                    rejectButton = o
                 } else {
                     rejectButton = 0
                 }
@@ -57,19 +74,36 @@ Window {
     signal linkActivated(string link)
 
     onClosing: () => {
-        if (buttonLayout.doneByButton) {
-            buttonLayout.doneByButton = false
+        if (dialog.doneByButton) {
+            dialog.doneByButton = false
             return
         }
-        if (escapeButton !== 0 && buttonRepeater.model.some(v => v.id === escapeButton)) {
+        if (escapeButton !== 0 && buttonIds.includes(escapeButton)) {
             done(escapeButton)
         }
     }
 
     onVisibleChanged: () => {
         if (visible) {
+            updateDefaultButton(true)
             GlobalHelper.invokeAlertHandler(this)
         }
+    }
+
+    Component.onCompleted: updateDefaultButton()
+    onPrimaryButtonChanged: Qt.callLater(updateDefaultButton)
+
+    function updateDefaultButton(focusButton = false) {
+        const button = buttonBox.buttonsInLayoutOrder().find(button => button.messageButtonId === dialog.primaryButton) ?? null
+        buttonBox.selectDefaultButton(button)
+        if (focusButton && button && button.enabled)
+            button.forceActiveFocus()
+    }
+
+    function finish(id) {
+        doneByButton = true
+        done(id)
+        close()
     }
 
     Shortcut {
@@ -85,7 +119,7 @@ ${dialog.title}
 ${dialog.text}
 ---------------------------
 ${dialog.informativeText.length !== 0 ? `${dialog.informativeText}\n---------------------------` : ""}
-${buttonRepeater.model.map(button => button.text).join("   ")}
+${buttonBox.buttonsInLayoutOrder().map(button => button.text).join("   ")}
 ---------------------------
 ${dialog.detailedText.length !== 0 ? `${dialog.detailedText}\n---------------------------` : ""}
 `)
@@ -93,23 +127,27 @@ ${dialog.detailedText.length !== 0 ? `${dialog.detailedText}\n------------------
 
     ColumnLayout {
         id: mainLayout
+        focus: true
         Accessible.role: Accessible.AlertMessage
         width: dialog.width
         spacing: 0
         Keys.onEscapePressed: () => {
-            if (escapeButton !== 0 && buttonRepeater.model.some(v => v.id === escapeButton)) {
+            if (escapeButton !== 0 && buttonIds.includes(escapeButton)) {
                 dialog.close()
             }
         }
         Rectangle {
             color: Theme.backgroundQuaternaryColor
             Layout.fillWidth: true
-            implicitHeight: textLayout.implicitHeight + 24
+            implicitHeight: textLayout.implicitHeight + buttonBox.leftPadding + buttonBox.topPadding
             RowLayout {
                 id: textLayout
                 spacing: 12
                 anchors.fill: parent
-                anchors.margins: 12
+                anchors.leftMargin: buttonBox.leftPadding
+                anchors.rightMargin: buttonBox.rightPadding
+                anchors.topMargin: buttonBox.leftPadding
+                anchors.bottomMargin: buttonBox.topPadding
                 ColorImage {
                     visible: dialog.icon === SVS.Information || dialog.icon === SVS.Warning || dialog.icon === SVS.Critical || dialog.icon === SVS.Question || dialog.icon === SVS.Success || dialog.icon === SVS.Tip
                     Layout.alignment: Qt.AlignTop
@@ -168,16 +206,17 @@ ${dialog.detailedText.length !== 0 ? `${dialog.detailedText}\n------------------
                 }
             }
         }
-        Rectangle {
-            color: Theme.backgroundSecondaryColor
+        WindowDialogButtonBox {
+            id: buttonBox
             Layout.fillWidth: true
-            height: 52
-            RowLayout {
-                id: buttonLayout
-                property bool doneByButton: false
-                anchors.fill: parent
-                anchors.margins: 12
-                spacing: 12
+            hostWindow: dialog
+            separatorVisible: false
+            standardButtons: typeof(dialog.buttons) === "number" ? dialog.buttons
+                : dialog.buttons.reduce((flags, button) => typeof(button) === "number" ? flags | button : flags, DialogButtonBox.NoButton)
+            onCountChanged: Qt.callLater(dialog.updateDefaultButton)
+            onClicked: button => dialog.finish(button.messageButtonId)
+
+            leadingContent: [
                 Button {
                     id: showDetailsButton
                     visible: dialog.detailedText.length !== 0
@@ -194,148 +233,27 @@ ${dialog.detailedText.length !== 0 ? `${dialog.detailedText}\n------------------
                     Binding {
                         dialog.detailsVisible: showDetailsButton.checked
                     }
-                }
-                Button {
+                },
+                DialogHelpButton {
                     visible: dialog.hasContextHelp
-                    flat: true
-                    display: AbstractButton.IconOnly
-                    text: "Help"
-                    icon.source: "image://fluent-system-icons/question_circle"
-                    icon.width: 24
-                    icon.height: 24
-                    padding: 2
-                    horizontalPadding: 2
                     onClicked: dialog.contextHelpClicked()
                 }
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-                Repeater {
-                    id: buttonRepeater
-                    model: {
-                        let a = []
-                        if (typeof(dialog.buttons) === "number") {
-                            if (dialog.buttons & SVS.Reset) {
-                                a.push({id: SVS.Reset, text: qsTranslate("QPlatformTheme", "Reset")})
-                            }
-                            if (dialog.buttons & SVS.RestoreDefaults) {
-                                a.push({id: SVS.RestoreDefaults, text: qsTranslate("QPlatformTheme", "Restore Defaults")})
-                            }
-                            if (dialog.buttons & SVS.Yes) {
-                                a.push({id: SVS.Yes, text: qsTranslate("QPlatformTheme", "&Yes")})
-                            }
-                            if (dialog.buttons & SVS.YesToAll) {
-                                a.push({id: SVS.YesToAll, text: qsTranslate("QPlatformTheme", "Yes to &All")})
-                            }
-                            if (dialog.buttons & SVS.Ok) {
-                                a.push({id: SVS.Ok, text: qsTranslate("QPlatformTheme", "OK")})
-                            }
-                            if (dialog.buttons & SVS.Save) {
-                                a.push({id: SVS.Save, text: qsTranslate("QPlatformTheme", "Save")})
-                            }
-                            if (dialog.buttons & SVS.SaveAll) {
-                                a.push({id: SVS.SaveAll, text: qsTranslate("QPlatformTheme", "Save All")})
-                            }
-                            if (dialog.buttons & SVS.Open) {
-                                a.push({id: SVS.Open, text: qsTranslate("QPlatformTheme", "Open")})
-                            }
-                            if (dialog.buttons & SVS.Retry) {
-                                a.push({id: SVS.Retry, text: qsTranslate("QPlatformTheme", "Retry")})
-                            }
-                            if (dialog.buttons & SVS.Ignore) {
-                                a.push({id: SVS.Ignore, text: qsTranslate("QPlatformTheme", "Ignore")})
-                            }
-                            if (dialog.buttons & SVS.Discard) {
-                                a.push({id: SVS.Discard, text: qsTranslate("QPlatformTheme", "Discard")})
-                            }
-                            if (dialog.buttons & SVS.No) {
-                                a.push({id: SVS.No, text: qsTranslate("QPlatformTheme", "&No")})
-                            }
-                            if (dialog.buttons & SVS.NoToAll) {
-                                a.push({id: SVS.NoToAll, text: qsTranslate("QPlatformTheme", "N&o to All")})
-                            }
-                            if (dialog.buttons & SVS.Abort) {
-                                a.push({id: SVS.Abort, text: qsTranslate("QPlatformTheme", "Abort")})
-                            }
-                            if (dialog.buttons & SVS.Close) {
-                                a.push({id: SVS.Close, text: qsTranslate("QPlatformTheme", "Close")})
-                            }
-                            if (dialog.buttons & SVS.Cancel) {
-                                a.push({id: SVS.Cancel, text: qsTranslate("QPlatformTheme", "Cancel")})
-                            }
-                            if (dialog.buttons & SVS.Apply) {
-                                a.push({id: SVS.Apply, text: qsTranslate("QPlatformTheme", "Apply")})
-                            }
-                            if (dialog.buttons & SVS.Help) {
-                                a.push({id: SVS.Help, text: qsTranslate("QPlatformTheme", "Help")})
-                            }
-                        } else {
-                            for (const o of dialog.buttons) {
-                                if (typeof(o) === "number") {
-                                    if (o === SVS.Reset) {
-                                        a.push({id: SVS.Reset, text: qsTranslate("QPlatformTheme", "Reset")})
-                                    } else if (o === SVS.RestoreDefaults) {
-                                        a.push({id: SVS.RestoreDefaults, text: qsTranslate("QPlatformTheme", "Restore Defaults")})
-                                    } else if (o === SVS.Yes) {
-                                        a.push({id: SVS.Yes, text: qsTranslate("QPlatformTheme", "&Yes")})
-                                    } else if (o === SVS.YesToAll) {
-                                        a.push({id: SVS.YesToAll, text: qsTranslate("QPlatformTheme", "Yes to &All")})
-                                    } else if (o === SVS.Ok) {
-                                        a.push({id: SVS.Ok, text: qsTranslate("QPlatformTheme", "OK")})
-                                    } else if (o === SVS.Save) {
-                                        a.push({id: SVS.Save, text: qsTranslate("QPlatformTheme", "Save")})
-                                    } else if (o === SVS.SaveAll) {
-                                        a.push({id: SVS.SaveAll, text: qsTranslate("QPlatformTheme", "Save All")})
-                                    } else if (o === SVS.Open) {
-                                        a.push({id: SVS.Open, text: qsTranslate("QPlatformTheme", "Open")})
-                                    } else if (o === SVS.Retry) {
-                                        a.push({id: SVS.Retry, text: qsTranslate("QPlatformTheme", "Retry")})
-                                    } else if (o === SVS.Ignore) {
-                                        a.push({id: SVS.Ignore, text: qsTranslate("QPlatformTheme", "Ignore")})
-                                    } else if (o === SVS.Discard) {
-                                        a.push({id: SVS.Discard, text: qsTranslate("QPlatformTheme", "Discard")})
-                                    } else if (o === SVS.No) {
-                                        a.push({id: SVS.No, text: qsTranslate("QPlatformTheme", "&No")})
-                                    } else if (o === SVS.NoToAll) {
-                                        a.push({id: SVS.NoToAll, text: qsTranslate("QPlatformTheme", "N&o to All")})
-                                    } else if (o === SVS.Abort) {
-                                        a.push({id: SVS.Abort, text: qsTranslate("QPlatformTheme", "Abort")})
-                                    } else if (o === SVS.Close) {
-                                        a.push({id: SVS.Close, text: qsTranslate("QPlatformTheme", "Close")})
-                                    } else if (o === SVS.Cancel) {
-                                        a.push({id: SVS.Cancel, text: qsTranslate("QPlatformTheme", "Cancel")})
-                                    } else if (o === SVS.Apply) {
-                                        a.push({id: SVS.Apply, text: qsTranslate("QPlatformTheme", "Apply")})
-                                    } else if (o === SVS.Help) {
-                                        a.push({id: SVS.Help, text: qsTranslate("QPlatformTheme", "Help")})
-                                    }
-                                } else {
-                                    a.push(o)
-                                }
-                            }
-                        }
-                        return a
-                    }
-                    delegate: Button {
-                        required property var modelData
-                        ThemedItem.controlType: dialog.primaryButton === modelData.id ? SVS.CT_Accent : SVS.CT_Normal
-                        Layout.alignment: Qt.AlignVCenter
-                        text: modelData.text
-                        Connections {
-                            target: dialog
-                            function onVisibleChanged() {
-                                if (dialog.visible && dialog.primaryButton === modelData.id)
-                                    forceActiveFocus()
-                            }
-                        }
-                        onClicked: () => {
-                            dialog.done(modelData.id)
-                            buttonLayout.doneByButton = true
-                            dialog.close()
-                        }
-                        Keys.onReturnPressed: animateClick()
-                    }
+            ]
+
+            delegate: Button {
+                id: standardMessageButton
+                readonly property int messageButtonId: buttonBox.standardButtonId(standardMessageButton)
+                DialogButton.emphasis: dialog.primaryButton === messageButtonId ? DialogButton.Primary : DialogButton.Normal
+            }
+
+            Repeater {
+                model: typeof(dialog.buttons) === "number" ? [] : dialog.buttons.filter(button => typeof(button) !== "number")
+                delegate: Button {
+                    required property var modelData
+                    readonly property var messageButtonId: modelData.id
+                    text: modelData.text
+                    DialogButtonBox.buttonRole: modelData.role ?? DialogButtonBox.ActionRole
+                    DialogButton.emphasis: dialog.primaryButton === messageButtonId ? DialogButton.Primary : DialogButton.Normal
                 }
             }
         }
@@ -343,12 +261,14 @@ ${dialog.detailedText.length !== 0 ? `${dialog.detailedText}\n------------------
             visible: dialog.detailsVisible
             color: Theme.backgroundSecondaryColor
             Layout.fillWidth: true
-            implicitHeight: detailedTextFrame.implicitHeight + 12
+            implicitHeight: detailedTextFrame.implicitHeight + buttonBox.bottomPadding
             Frame {
                 id: detailedTextFrame
                 anchors.fill: parent
-                anchors.margins: 12
+                anchors.leftMargin: buttonBox.leftPadding
+                anchors.rightMargin: buttonBox.rightPadding
                 anchors.topMargin: 0
+                anchors.bottomMargin: buttonBox.bottomPadding
                 padding: 4
                 Label {
                     width: parent.width

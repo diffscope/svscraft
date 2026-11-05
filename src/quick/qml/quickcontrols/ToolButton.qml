@@ -37,6 +37,16 @@ T.ToolButton {
 
     font: Theme.font
 
+    Binding {
+        target: control.ThemedItem
+        property: "controlType"
+        when: control.DialogButton.effectiveEmphasis !== DialogButton.Auto
+        value: control.DialogButton.effectiveEmphasis === DialogButton.Primary ? SVS.CT_Accent
+             : control.DialogButton.effectiveEmphasis === DialogButton.Warning ? SVS.CT_Warning
+             : control.DialogButton.effectiveEmphasis === DialogButton.Error ? SVS.CT_Error
+             : SVS.CT_Normal
+    }
+
     flat: true
 
     icon.width: 16

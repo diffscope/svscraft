@@ -3,10 +3,12 @@
 
 #include <memory>
 
+#include <QAccessible>
+#include <QDebug>
+#include <QEventLoop>
+#include <QQmlComponent>
 #include <QQuickItem>
 #include <QQuickWindow>
-#include <QEventLoop>
-#include <QAccessible>
 
 #include <SVSCraftQuickImpl/private/GlobalHelper_p.h>
 
@@ -57,16 +59,26 @@ namespace SVS {
             qWarning() << "SVS::showMessageBox: QML engine is null";
             return SVSCraft::NoButton;
         }
-        QQmlComponent component(engine, ":/qt/qml/SVSCraft/UIComponents/qml/MessageBoxDialog.qml");
-        std::unique_ptr<QQuickWindow> mb(qobject_cast<QQuickWindow *>(component.createWithInitialProperties({
+        QQmlComponent component(engine, "SVSCraft.UIComponents", "MessageBoxDialog");
+        if (component.isError()) {
+            qFatal() << component.errorString();
+        }
+        QObject *object = component.createWithInitialProperties({
             {"text", title},
             {"informativeText", text},
             {"buttons", buttons.toInt()},
             {"primaryButton", defaultButton},
             {"icon", icon},
             {"transientParent", QVariant::fromValue(parent)}
-        })));
-        Q_ASSERT(mb);
+        });
+        if (!object) {
+            qFatal() << component.errorString();
+        }
+        auto window = qobject_cast<QQuickWindow *>(object);
+        if (!window) {
+            qFatal("MessageBoxDialog in SVSCraft.UIComponents is not QQuickWindow");
+        }
+        std::unique_ptr<QQuickWindow> mb(window);
         QEventLoop eventLoop;
         MessageBoxDialogDoneListener listener(&eventLoop);
         QObject::connect(mb.get(), SIGNAL(done(QVariant)), &listener, SLOT(done(QVariant)));

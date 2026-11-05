@@ -100,11 +100,7 @@ T.Dialog {
 
     footer: DialogButtonBox {
         ThemedItem.backgroundLevel: control.ThemedItem.backgroundLevel
-        topPadding: 0
-        background: Item {
-            implicitHeight: 48
-        }
-        visible: count > 0
+        visible: hasContent
     }
 
     T.Overlay.modal: Rectangle {

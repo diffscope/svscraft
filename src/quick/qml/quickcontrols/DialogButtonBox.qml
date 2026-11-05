@@ -18,40 +18,29 @@
  ******************************************************************************/
 
 import QtQuick
-import QtQuick.Templates as T
-import QtQuick.Controls.impl
 
-import SVSCraft
 import SVSCraft.UIComponents
-import SVSCraft.UIComponents.impl
 
-T.DialogButtonBox {
+DialogButtonBoxTemplate {
     id: control
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-        (control.count === 1 ? implicitContentWidth * 2 : implicitContentWidth) + leftPadding + rightPadding)
+        layoutImplicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
-        implicitContentHeight + topPadding + bottomPadding)
-    contentWidth: (contentItem as ListView)?.contentWidth
+        layoutImplicitHeight + topPadding + bottomPadding)
+    contentWidth: layoutImplicitWidth
+    contentHeight: layoutImplicitHeight
 
     spacing: 12
     padding: 12
+    topPadding: 0
     alignment: Qt.AlignRight
 
-    delegate: Button {
-        ThemedItem.controlType: T.DialogButtonBox.buttonRole === T.DialogButtonBox.AcceptRole ? SVS.CT_Accent : SVS.CT_Normal
-    }
+    delegate: Button {}
 
-    contentItem: ListView {
-        implicitWidth: contentWidth
-        model: control.contentModel
-        spacing: control.spacing
-        orientation: ListView.Horizontal
-        boundsBehavior: Flickable.StopAtBounds
-        snapMode: ListView.SnapToItem
-    }
+    contentItem: Item {}
 
     background: Item {
-        implicitHeight:60
+        implicitHeight: 48
     }
 }
