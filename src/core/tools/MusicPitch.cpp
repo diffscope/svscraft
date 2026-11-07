@@ -41,7 +41,7 @@ namespace SVS {
 
     MusicPitch MusicPitch::fromString(QStringView s, bool *ok) {
         QRegularExpression rx("^\\s*([A-G])([b#\u266d\u266f]*)\\s*(\\?|\uff1f|-?\\d*)\\s*$");
-        auto match = rx.match(s);
+        auto match = rx.matchView(s);
         if (!match.hasMatch()) {
             if (ok)
                 *ok = false;

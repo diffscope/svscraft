@@ -76,7 +76,7 @@ namespace SVS {
         Q_PROPERTY(int measure READ measure)
         Q_PROPERTY(int beat READ beat)
         Q_PROPERTY(int tick READ tick)
-        Q_PROPERTY(MusicTime musicTime READ toTime)
+        Q_PROPERTY(MusicTime musicTime READ toMusicTime)
         Q_PROPERTY(double millisecond READ millisecond)
         Q_PROPERTY(int totalTick READ totalTick CONSTANT)
         Q_PROPERTY(bool valid READ isValid CONSTANT)
@@ -143,7 +143,7 @@ namespace SVS {
         Q_INVOKABLE PersistentMusicTime nextTick() const { return operator+(-1); }
 
         Q_INVOKABLE inline QString toString(int measureWidth = 1, int beatWidth = 1, int tickWidth = 3) const {
-            return toTime().toString(measureWidth, beatWidth, tickWidth);
+            return toMusicTime().toString(measureWidth, beatWidth, tickWidth);
         }
 
         friend SVSCRAFT_CORE_EXPORT QDebug operator<<(QDebug debug, const PersistentMusicTime &mt);

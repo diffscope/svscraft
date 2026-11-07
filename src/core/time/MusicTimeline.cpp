@@ -20,6 +20,8 @@
 #include "MusicTimeline.h"
 #include "MusicTimeline_p.h"
 
+#include <utility>
+
 #include <QDataStream>
 #include <QDebug>
 #include <QRegularExpression>
@@ -88,7 +90,7 @@ namespace SVS {
 
     void MusicTimelinePrivate::timeSignatureChanged() {
         Q_Q(MusicTimeline);
-        for (auto t : qAsConst(mbtCachedMusicTimes)) {
+        for (auto t : std::as_const(mbtCachedMusicTimes)) {
             t->cache.clearMbt();
         }
         mbtCachedMusicTimes.clear();
@@ -99,7 +101,7 @@ namespace SVS {
 
     void MusicTimelinePrivate::tempoChanged() {
         Q_Q(MusicTimeline);
-        for (auto t : qAsConst(msecCachedMusicTimes)) {
+        for (auto t : std::as_const(msecCachedMusicTimes)) {
             t->cache.clearMsec();
         }
         msecCachedMusicTimes.clear();

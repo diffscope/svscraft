@@ -37,8 +37,9 @@ namespace SVS {
 
     void CommandPaletteProxyModel::setFilterText(const QString &filterText) {
         if (m_filterText != filterText) {
+            beginFilterChange();
             m_filterText = filterText;
-            invalidateFilter();
+            endFilterChange(Direction::Rows);
             emit filterTextChanged();
         }
     }

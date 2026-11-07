@@ -64,7 +64,7 @@ namespace SVS {
             *ok = false;
         QRegularExpression rx(
             R"(^\s*(-?)\s*(\d{0,10})\s*([:\x{ff1a}]?)\s*(\d{0,10})\s*([:\x{ff1a}]?)\s*(\d{0,10})\s*[.\x{3002}\x{ff0e}]?\s*(\d{0,10})\s*$)");
-        auto match = rx.match(s);
+        auto match = rx.matchView(s);
         if (!match.hasMatch()) {
             return {};
         }
