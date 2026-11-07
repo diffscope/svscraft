@@ -74,7 +74,7 @@ namespace SVS {
         };
 
         // Connect statusTipChanged signal
-        connect(this, &DescriptiveText::statusTipChanged, this, [=]() {
+        connect(this, &DescriptiveText::statusTipChanged, this, [=, this]() {
             initialUpdateContext();
             if (d->activated && !d->statusTip.isEmpty() && d->statusContext) {
                 d->statusContext->update(this, d->statusTip);
@@ -82,7 +82,7 @@ namespace SVS {
         });
 
         // Connect contextHelpTipChanged signal
-        connect(this, &DescriptiveText::contextHelpTipChanged, this, [=]() {
+        connect(this, &DescriptiveText::contextHelpTipChanged, this, [=, this]() {
             initialUpdateContext();
             if (d->activated && !d->contextHelpTip.isEmpty() && d->contextHelpContext) {
                 d->contextHelpContext->update(this, d->contextHelpTip);
@@ -90,7 +90,7 @@ namespace SVS {
         });
 
         // Connect activatedChanged signal
-        connect(this, &DescriptiveText::activatedChanged, this, [=]() {
+        connect(this, &DescriptiveText::activatedChanged, this, [=, this]() {
             initialUpdateContext();
             if (d->activated) {
                 // Push status tip if not empty
@@ -113,7 +113,7 @@ namespace SVS {
         });
 
         // Connect to item's windowChanged signal
-        connect(parent, &QQuickItem::windowChanged, this, [=](QQuickWindow *window) {
+        connect(parent, &QQuickItem::windowChanged, this, [=, this](QQuickWindow *window) {
             // Store old contexts
             StatusTextContext *oldStatusContext = d->statusContext;
             StatusTextContext *oldContextHelpContext = d->contextHelpContext;

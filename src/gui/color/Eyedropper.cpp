@@ -109,7 +109,7 @@ namespace SVS {
         Q_Q(Eyedropper);
         for (auto screen : QGuiApplication::screens()) {
             auto window = new ScreenMirrorWindow(screen, this);
-            QObject::connect(window, &QWindow::visibleChanged, q, [=](bool visible) {
+            QObject::connect(window, &QWindow::visibleChanged, q, [=, this](bool visible) {
                 if (!visible && picking) {
                     destroyWindows();
 
