@@ -10,6 +10,7 @@ import SVSCraft.UIComponents
 Menu {
     id: control
     required property DockingPanel panel
+    onAboutToShow: moveMenu.refreshDestinations()
 
     MenuItem {
         text: qsTr("Float")
@@ -30,6 +31,7 @@ Menu {
     }
 
     DockingMoveMenu {
+        id: moveMenu
         panel: control.panel
     }
 
