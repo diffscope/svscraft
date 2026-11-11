@@ -39,7 +39,7 @@ Action {
     DescriptiveAction.statusTip: menu?.DescriptiveAction.statusTip ?? ""
     DescriptiveAction.contextHelpTip: menu?.DescriptiveAction.contextHelpTip ?? ""
     property Binding binding: Binding {
-        when: action.menu.visible
+        when: action.menu?.visible ?? false
         action.menu.y: action.menuDisplay === MenuAction.Bottom ? (menu.parent?.height ?? 0) : -menu.height
     }
     onTriggered: (object) => {
