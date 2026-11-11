@@ -158,67 +158,67 @@
 <context>
     <name>DockingMoveMenu</name>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="14"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="15"/>
         <source>Move Panel</source>
         <translation type="unfinished">移动面板</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="34"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="56"/>
         <source>Trailing Direction</source>
         <translation type="unfinished">末尾方向</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="34"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="56"/>
         <source>Leading Direction</source>
         <translation type="unfinished">起始方向</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="37"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="59"/>
         <source>Start</source>
         <translation type="unfinished">起始</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="42"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="64"/>
         <source>End</source>
         <translation type="unfinished">结束</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="63"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="85"/>
         <source>Before</source>
         <translation type="unfinished">之前</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="68"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="90"/>
         <source>After</source>
         <translation type="unfinished">之后</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="83"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="110"/>
         <source>Workspace</source>
         <translation type="unfinished">工作区</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="88"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="115"/>
         <source>Fill Window</source>
         <translation type="unfinished">填满窗口</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="120"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="149"/>
         <source>Left</source>
         <translation type="unfinished">左侧</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="125"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="154"/>
         <source>Right</source>
         <translation type="unfinished">右侧</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="130"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="159"/>
         <source>Top</source>
         <translation type="unfinished">顶部</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="135"/>
+        <location filename="../../src/quickimpl/qml/DockingMoveMenu.qml" line="164"/>
         <source>Bottom</source>
         <translation type="unfinished">底部</translation>
     </message>
@@ -249,22 +249,22 @@
 <context>
     <name>DockingPanelMenu</name>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="15"/>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="16"/>
         <source>Float</source>
         <translation type="unfinished">浮动</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="21"/>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="22"/>
         <source>Hide</source>
         <translation type="unfinished">隐藏</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="21"/>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="22"/>
         <source>Show</source>
         <translation type="unfinished">显示</translation>
     </message>
     <message>
-        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="37"/>
+        <location filename="../../src/quickimpl/qml/DockingPanelMenu.qml" line="39"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
