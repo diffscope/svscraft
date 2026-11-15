@@ -35,12 +35,21 @@ T.SplitView {
         implicitWidth: Theme.splitterHandleSize
         implicitHeight: Theme.splitterHandleSize
         color: control.enabled && T.SplitHandle.pressed ? Theme.accentColor : Theme.dividerStrokeColor(control.ThemedItem.dividerStroke, Theme.splitterColor)
-        containmentMask: Item {
-            x: (handleDelegate.width - width) / 2
-            property double _size: control.ThemedItem.splitHandleEnabled ? Math.max(5, Theme.splitterHandleSize) : 0
-            implicitWidth: control.orientation === Qt.Horizontal ? _size : control.width
-            implicitHeight: control.orientation === Qt.Horizontal ? control.height : _size
-        }
+        containmentMask: handleMouse
         visible: control.ThemedItem.splitHandleVisible
+
+        MouseArea {
+            id: handleMouse
+
+            readonly property bool horizontal: control.orientation === Qt.Horizontal
+            readonly property real hitMargin: 3
+
+            enabled: control.ThemedItem.splitHandleEnabled
+            x: (handleDelegate.width - width) / 2
+            y: (handleDelegate.height - height) / 2
+            width: enabled ? handleDelegate.width + (horizontal ? 2 * hitMargin : 0) : 0
+            height: enabled ? handleDelegate.height + (horizontal ? 0 : 2 * hitMargin) : 0
+            cursorShape: horizontal ? Qt.SplitHCursor : Qt.SplitVCursor
+        }
     }
 }
